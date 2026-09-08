@@ -1,66 +1,106 @@
 <!doctype html>
-<html lang="en"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#07111f"><title>Sunday Funday IQ · Pick'em</title>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#07111f">
+<title>Sunday Funday IQ · Pick'em Coach</title>
 <style>
-:root{--bg:#07111f;--panel:#0f1d31;--panel2:#132641;--line:#243954;--text:#edf5ff;--muted:#91a7c2;--green:#32d296;--yellow:#f3c969;--red:#ff6b7a;--blue:#5ab0ff;--accent:#8ee3cf}
-*{box-sizing:border-box}body{margin:0;background:linear-gradient(180deg,#07111f,#091729 45%,#07111f);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;min-height:100vh}
+:root{--bg:#07111f;--panel:#0f1d31;--panel2:#132641;--line:#243954;--text:#edf5ff;--muted:#91a7c2;--green:#32d296;--yellow:#f3c969;--red:#ff6b7a;--blue:#5ab0ff;--accent:#8ee3cf;--purple:#a78bfa}
+*{box-sizing:border-box}
+body{margin:0;background:linear-gradient(180deg,#07111f,#091729 45%,#07111f);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;min-height:100vh}
 button,input{font:inherit}.app{max-width:1220px;margin:auto;padding:18px 14px 70px}.header{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:14px}.brand h1{font-size:24px;margin:0}.brand p{margin:4px 0 0;color:var(--muted);font-size:13px}
-.actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}.btn{border:1px solid var(--line);background:var(--panel2);color:var(--text);padding:10px 13px;border-radius:12px;font-weight:800;cursor:pointer}.btn.primary{background:var(--accent);color:#06201a;border:none}
+.actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}.btn{border:1px solid var(--line);background:var(--panel2);color:var(--text);padding:10px 13px;border-radius:12px;font-weight:800;cursor:pointer;text-decoration:none}.btn.primary{background:var(--accent);color:#06201a;border:none}.btn.danger{background:#351923;border-color:#703042}.btn:disabled{opacity:.45;cursor:not-allowed}
 .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:12px}.card{background:rgba(15,29,49,.97);border:1px solid var(--line);border-radius:16px;padding:14px}.wide{grid-column:span 12}.half{grid-column:span 6}.metric{grid-column:span 2;min-height:105px}.metric .label{color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.08em}.metric .value{font-size:27px;font-weight:900;margin-top:7px}.metric .sub{font-size:10px;color:var(--muted);margin-top:5px}
-h2{font-size:16px;margin:0 0 12px}.hero{display:flex;justify-content:space-between;gap:12px;align-items:center}.headline{font-size:18px;font-weight:900}.why{font-size:12px;color:var(--muted);margin-top:4px;max-width:900px}.pill{display:inline-block;padding:4px 8px;border-radius:999px;font-size:9px;font-weight:900;background:#203858;color:#cfe6ff;white-space:nowrap}.pill.green{background:#173d35;color:#9ff0d0}.pill.yellow{background:#473c19;color:#ffe49a}.pill.red{background:#44202a;color:#ffb3be}.pill.blue{background:#193958;color:#aad7ff}.good{color:var(--green)}.warn{color:var(--yellow)}.bad{color:var(--red)}
-.banner{display:none;padding:11px 13px;margin-bottom:12px;border:1px solid #184b45;border-radius:12px;background:#0b2b28;font-size:12px}.games{display:grid;grid-template-columns:1fr 1fr;gap:10px}.game{border:1px solid var(--line);border-radius:14px;background:#0b1829;padding:12px}.gamehead{display:flex;justify-content:space-between;color:var(--muted);font-size:9px;text-transform:uppercase;letter-spacing:.05em;margin-bottom:9px}.matchup{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:7px}.team{padding:9px;border:1px solid #203854;border-radius:10px}.team.right{text-align:right}.teamname{font-size:16px;font-weight:900}.pct{font-size:11px;color:var(--muted);margin-top:3px}.pickbtn{width:100%;margin-top:8px;border:1px solid #345170;background:#152a46;color:var(--text);padding:7px;border-radius:9px;font-weight:850;cursor:pointer}.pickbtn.selected{background:#174b40;border-color:#2b8d74;color:#b9ffe8}.at{font-size:11px;color:var(--muted)}
-.intel{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:9px}.mini{background:#101f34;border-radius:9px;padding:8px}.mini b{display:block;font-size:13px}.mini span{font-size:8px;color:var(--muted);text-transform:uppercase}.inputs{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:8px}.inputs label{font-size:8px;color:var(--muted);text-transform:uppercase}.inputs input{width:100%;margin-top:4px;background:#081422;border:1px solid #29415e;color:var(--text);border-radius:8px;padding:7px}
+h2{font-size:16px;margin:0 0 12px}.hero{display:flex;justify-content:space-between;gap:12px;align-items:center}.headline{font-size:18px;font-weight:900}.why{font-size:12px;color:var(--muted);margin-top:4px;max-width:900px;line-height:1.45}.pill{display:inline-block;padding:4px 8px;border-radius:999px;font-size:9px;font-weight:900;background:#203858;color:#cfe6ff;white-space:nowrap}.pill.green{background:#173d35;color:#9ff0d0}.pill.yellow{background:#473c19;color:#ffe49a}.pill.red{background:#44202a;color:#ffb3be}.pill.blue{background:#193958;color:#aad7ff}.pill.purple{background:#31274b;color:#d9ceff}.good{color:var(--green)}.warn{color:var(--yellow)}.bad{color:var(--red)}
+.banner{display:none;padding:11px 13px;margin-bottom:12px;border:1px solid #184b45;border-radius:12px;background:#0b2b28;font-size:12px;line-height:1.45}.banner.red{background:#351923;border-color:#703042}.banner.yellow{background:#312914;border-color:#65541b}
+.data-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.data-item{background:#0a1728;border:1px solid #203854;border-radius:12px;padding:11px}.data-item .row{display:flex;justify-content:space-between;gap:8px}.data-item b{font-size:13px}.data-item .stamp{font-size:10px;color:var(--muted);margin-top:5px;line-height:1.4}
+.decision{border:2px solid #31577d;background:linear-gradient(180deg,#112744,#0e2037)}.decision.stale{border-color:#7a5b25}.decision-title{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}.decision-title h2{font-size:18px;margin:0}.compare{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.comparebox{background:#0a1728;border:1px solid #29415e;border-radius:12px;padding:11px}.comparebox .name{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em}.comparebox .big{font-size:22px;font-weight:900;margin-top:5px}.comparebox .small{font-size:11px;color:var(--muted);margin-top:4px}
+.recs{margin-top:10px}.rec{border:1px solid #29415e;background:#0b1829;border-radius:12px;padding:11px;margin-top:8px}.rec-head{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}.rec-title{font-weight:900}.rec-action{font-size:14px;font-weight:850;margin-top:3px}.rec-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:9px}.mini{background:#101f34;border-radius:9px;padding:8px}.mini b{display:block;font-size:13px}.mini span{font-size:8px;color:var(--muted);text-transform:uppercase}.reason{font-size:11px;color:var(--muted);line-height:1.45;margin-top:8px}.decision-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.games{display:grid;grid-template-columns:1fr 1fr;gap:10px}.game{border:1px solid var(--line);border-radius:14px;background:#0b1829;padding:12px}.game.changed{border-color:#5c81ac}.gamehead{display:flex;justify-content:space-between;color:var(--muted);font-size:9px;text-transform:uppercase;letter-spacing:.05em;margin-bottom:9px}.matchup{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:7px}.team{padding:9px;border:1px solid #203854;border-radius:10px}.team.right{text-align:right}.teamname{font-size:16px;font-weight:900}.pct{font-size:11px;color:var(--muted);margin-top:3px}.pickbtn{width:100%;margin-top:8px;border:1px solid #345170;background:#152a46;color:var(--text);padding:7px;border-radius:9px;font-weight:850;cursor:pointer}.pickbtn.selected{background:#174b40;border-color:#2b8d74;color:#b9ffe8}.pickbtn.recommended{box-shadow:0 0 0 2px #5ab0ff inset}.at{font-size:11px;color:var(--muted)}
+.card-state{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:9px}.card-state .statebox{background:#0e2036;border:1px solid var(--line);border-radius:9px;padding:7px}.statebox span{display:block;font-size:8px;text-transform:uppercase;color:var(--muted)}.statebox b{display:block;font-size:11px;margin-top:3px}
+.intel{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:9px}.inputs{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:8px}.inputs label{font-size:8px;color:var(--muted);text-transform:uppercase}.inputs input{width:100%;margin-top:4px;background:#081422;border:1px solid #29415e;color:var(--text);border-radius:8px;padding:7px}
 table{width:100%;border-collapse:collapse;font-size:12px;min-width:830px}.tablewrap{overflow:auto}th{text-align:left;color:var(--muted);font-size:9px;text-transform:uppercase;letter-spacing:.06em;padding:8px;border-bottom:1px solid var(--line)}td{padding:9px 8px;border-bottom:1px solid rgba(36,57,84,.55)}.callout{background:#0a1728;border:1px solid #203854;border-radius:12px;padding:12px}.callout b{display:block;margin-bottom:5px}.note{font-size:11px;color:var(--muted);line-height:1.5}.footer{margin-top:16px;text-align:center;font-size:10px;color:#69829e}
-.info{display:inline-flex;align-items:center;justify-content:center;width:17px;height:17px;margin-left:4px;padding:0;border:1px solid #3b5878;border-radius:50%;background:#12243b;color:#b9d3ef;font-size:10px;font-weight:900;cursor:pointer;vertical-align:middle}
-.info:hover{border-color:var(--accent);color:var(--accent)}
-.help-pop{position:fixed;z-index:9999;display:none;max-width:340px;padding:12px 13px;border:1px solid #365473;border-radius:12px;background:#0b1829;color:var(--text);box-shadow:0 16px 45px rgba(0,0,0,.45);font-size:12px;line-height:1.45}
-.help-pop b{display:block;margin-bottom:4px;color:var(--accent)}
-.help-pop .close{position:absolute;right:8px;top:6px;border:0;background:transparent;color:var(--muted);font-size:16px;cursor:pointer}
-.actionhint{width:100%;font-size:10px;color:var(--muted);margin-top:2px;text-align:right}
-@media(max-width:520px){.actionhint{text-align:left}}
-.recs{margin-top:14px}
-.recgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-.rec{border:1px solid #263d58;border-radius:14px;background:#0c192a;padding:12px}
-.rec.good{border-color:#3a6d63}
-.rectitle{font-weight:900;font-size:13px;margin-bottom:5px}
-.recdelta{font-size:18px;font-weight:900;color:var(--accent);margin:4px 0}
-.recmeta{font-size:11px;color:var(--muted);line-height:1.4}
-.recactions{margin-top:9px;display:flex;gap:8px;flex-wrap:wrap}
-.recactions button{font-size:11px;padding:7px 9px}
-.lockpick{font-size:10px;padding:4px 6px;border-radius:8px;border:1px solid #35516e;background:#13243a;color:var(--text);cursor:pointer}
-.lockpick.on{border-color:var(--accent);color:var(--accent)}
-@media(max-width:760px){.recgrid{grid-template-columns:1fr}}
-
-@media(max-width:850px){.metric{grid-column:span 4}.half{grid-column:span 12}.games{grid-template-columns:1fr}}@media(max-width:520px){.metric{grid-column:span 6}.header{display:block}.actions{justify-content:flex-start;margin-top:10px}.intel,.inputs{grid-template-columns:1fr 1fr}}
-</style></head><body>
+.progress{display:none;margin-top:10px;font-size:11px;color:var(--muted)}.progress.show{display:block}.spinner{display:inline-block;width:10px;height:10px;border:2px solid #38516e;border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;margin-right:6px}@keyframes spin{to{transform:rotate(360deg)}}
+@media(max-width:850px){.metric{grid-column:span 4}.half{grid-column:span 12}.games{grid-template-columns:1fr}.rec-grid{grid-template-columns:1fr 1fr}}@media(max-width:520px){.metric{grid-column:span 6}.header{display:block}.actions{justify-content:flex-start;margin-top:10px}.intel,.inputs,.data-grid{grid-template-columns:1fr 1fr}.card-state{grid-template-columns:1fr}.compare{grid-template-columns:1fr 1fr}.btn{padding:9px 10px}}
+</style>
+</head>
+<body>
 <div class="app">
-<div class="header"><div class="brand"><h1>🏈 Sunday Funday IQ</h1><p>CBS Pick'em · Weekly confidence pool</p><p style="font-size:10px;color:#5f7898">Build 0.6 · Simulation guidance</p></div>
-<div class="actions"><a class="btn" href="../../" style="text-decoration:none;display:inline-flex;align-items:center">⌂ Home</a><input id="scanFile" type="file" accept=".json,application/json" hidden><button class="btn primary" id="importBtn">↻ Refresh CBS Data</button><button class="info" data-help-title="Refresh CBS Data" data-help="Loads a new scan from the CBS browser bridge. Your most recently saved CBS data already loads automatically when you open Pick'em IQ, so use this when you want fresh pool percentages, standings context, and market data.">i</button><button class="btn" id="optBtn">▶ Run Simulation</button><button class="info" data-help-title="Run Simulation" data-help="Runs thousands of Monte Carlo simulations using market win probabilities, CBS pick percentages, your pool size, and confidence weights. It estimates how your picks perform and tests changes that may improve your chance of finishing first or second.">i</button><button class="btn" id="saveBtn">Save Picks</button><div class="actionhint">Latest saved CBS data loads automatically when this page opens.</div></div></div>
-<div class="banner" id="banner"></div>
-<div class="card wide" style="margin-bottom:12px"><div class="hero"><div><div class="headline">Week 1 Picks</div><div class="why">Evaluate all 16 picks and confidence points together — because the goal is to finish at the top of the pool, not simply pick the most winners.</div></div><span class="pill green" id="modePill">MARKET + POOL DATA</span></div></div>
-<div class="grid">
-<div class="card metric"><div class="label">Pool</div><div class="value" id="poolSize">102</div><div class="sub">entries</div></div>
-<div class="card metric"><div class="label">Avg. Points <button class="info" data-help-title="Average Points" data-help="The average number of confidence points your current picks score across the simulations. Higher is better, but the highest average score does not always produce the best chance of finishing first or second.">i</button></div><div class="value" id="expPts">—</div><div class="sub">average simulated score</div></div>
-<div class="card metric"><div class="label">Top 2 % <button class="info" data-help-title="Top 2 %" data-help="The percentage of Monte Carlo simulations in which your picks finish first or second in this pool. This is the main weekly objective.">i</button></div><div class="value" id="top2">—</div><div class="sub">1st or 2nd in 10,000 simulations</div></div>
-<div class="card metric"><div class="label">1st Place % <button class="info" data-help-title="1st Place %" data-help="The percentage of Monte Carlo simulations in which your picks finish first outright.">i</button></div><div class="value" id="winPct">—</div><div class="sub">1st place in 10,000 simulations</div></div>
-<div class="card metric"><div class="label">Pick Popularity <button class="info" data-help-title="Pick Popularity" data-help="Shows how closely your confidence points are concentrated on teams the CBS pool is also picking heavily. A high number means your picks look more like the crowd; a lower number means they are more differentiated.">i</button></div><div class="value" id="chalk">—</div><div class="sub">how closely picks follow the pool</div></div>
-<div class="card metric"><div class="label">Tiebreaker</div><div class="value" id="tie">—</div><div class="sub">MNF market total</div></div>
-<div class="card metric"><div class="label">Pool Difference <button class="info" data-help-title="Pool Difference" data-help="Compares the market-estimated chance of your selected teams winning with how often the CBS pool is picking them, while accounting for confidence points. Positive values mean your picks have more market support than the pool popularity suggests.">i</button></div><div class="value" id="levIdx">—</div><div class="sub">market probability vs pool picks</div></div>
-<div class="card metric"><div class="label">Underdog Exposure <button class="info" data-help-title="Underdog Exposure" data-help="The share of your confidence points currently placed on teams the market considers underdogs. It helps show how much of your result depends on lower-probability outcomes.">i</button></div><div class="value" id="upsetRisk">—</div><div class="sub">points placed on underdogs</div></div>
-<div class="card half"><h2>How the simulation works <button class="info" data-help-title="How the simulation works" data-help="Market moneylines are converted into win probabilities. CBS pick percentages estimate how the rest of the pool is likely to pick. Monte Carlo simulations then play out thousands of possible weeks and compare your picks with simulated opponents.">i</button></h2><div class="callout"><b>Probability first. Differentiation second.</b><div class="note">Moneylines are converted to implied probabilities and de-vigged. CBS pick percentages estimate field ownership. The simulation creates the rest of the pool from those pick patterns and estimates your chance of finishing 1st or 2nd.</div></div></div>
-<div class="card half"><h2>Data Status <button class="info" data-help-title="Data Status" data-help="Shows when CBS data was last loaded and how much current pool and market information is available. Your most recently saved data loads automatically each time you open the module.">i</button></h2><div class="callout"><b id="statusTitle">Week 1 seeded from CBS market</b><div class="note" id="statusText">Market seed: Aug. 28, 2026. Use Refresh CBS Data after running a new CBS browser scan to update pool picks, standings context, moneylines, and the Monday-night total.</div></div></div>
-<div class="card wide"><h2>Week 1 Insights</h2><div class="intel" style="grid-template-columns:repeat(4,1fr)">
-<div class="mini"><b id="bestLev">—</b><span>best pool difference</span></div>
-<div class="mini"><b id="mostOver">—</b><span>pool may be overrating</span></div>
-<div class="mini"><b id="marketCoverage">—</b><span>games with market data <button class="info" data-help-title="Games with market data" data-help="How many of the 16 games currently have usable moneyline data for calculating market win probabilities.">i</button></span></div>
-<div class="mini"><b id="importHealth">SEED</b><span>CBS data loaded <button class="info" data-help-title="CBS data loaded" data-help="Shows how many CBS pick-percentage rows and market rows were successfully read from the latest scan. 16/16 on each side is the target.">i</button></span></div>
-</div><div class="note" id="slateNote" style="margin-top:10px">The best opportunities often come from changing confidence points before taking unnecessary upset picks.</div></div>
-<div class="card wide"><h2>Your Picks</h2><div class="games" id="games"></div></div>
-<div class="card wide"><h2>Pick Details</h2><div class="tablewrap"><table><thead><tr><th>Game</th><th>Pick</th><th>Weight</th><th>CBS%</th><th>No-vig win%</th><th>Difference</th><th>What it means</th></tr></thead><tbody id="rows"></tbody></table></div></div>
-</div><div class="footer">Refresh CBS Data close to the weekly deadline. Market prices and pool pick percentages can move.</div></div>
-<div class="help-pop" id="helpPop"><button class="close" id="helpClose" aria-label="Close">×</button><b id="helpTitle"></b><div id="helpText"></div></div>
+  <div class="header">
+    <div class="brand"><h1>🏈 Sunday Funday IQ</h1><p>CBS Pick'em · Pick'em Coach</p><p style="font-size:10px;color:#5f7898">Build 1.0 · Whole-card Top-2 optimizer</p></div>
+    <div class="actions">
+      <a class="btn" href="../../">⌂ Home</a>
+      <input id="scanFile" type="file" accept=".json,application/json" hidden>
+      <button class="btn primary" id="refreshBtn">Refresh CBS Data</button>
+      <button class="btn" id="marketBtn">Refresh Market</button>
+      <button class="btn" id="optBtn">Run Simulation</button>
+      <button class="btn" id="saveBtn">Save</button>
+    </div>
+  </div>
+
+  <div class="banner" id="banner"></div>
+
+  <div class="card wide" style="margin-bottom:12px">
+    <div class="hero">
+      <div><div class="headline">Week 1 tournament card</div><div class="why">Primary objective: maximize your probability of finishing 1st or 2nd against approximately 102 entries. Probability first. Differentiation second.</div></div>
+      <span class="pill green" id="modePill">MARKET + FIELD</span>
+    </div>
+  </div>
+
+  <div class="card wide" style="margin-bottom:12px">
+    <h2>Data freshness</h2>
+    <div class="data-grid">
+      <div class="data-item"><div class="row"><b>CBS pool data</b><span class="pill" id="cbsFreshPill">—</span></div><div class="stamp" id="cbsFreshText">Checking…</div></div>
+      <div class="data-item"><div class="row"><b>Market / odds data</b><span class="pill" id="marketFreshPill">—</span></div><div class="stamp" id="marketFreshText">Checking…</div></div>
+    </div>
+    <div class="note" id="freshnessWarning" style="margin-top:9px"></div>
+  </div>
+
+  <div class="card wide decision" id="decisionCard" style="margin-bottom:12px">
+    <div class="decision-title">
+      <div><h2 id="decisionHeadline">WHAT SHOULD I DO?</h2><div class="why" id="decisionSub">Run Simulation after refreshing your CBS card and market data.</div></div>
+      <span class="pill blue" id="decisionPill">READY</span>
+    </div>
+    <div class="compare">
+      <div class="comparebox"><div class="name">Current CBS card</div><div class="big" id="currentTop2">— Top 2</div><div class="small" id="currentWin">Win —</div></div>
+      <div class="comparebox"><div class="name">IQ recommended card</div><div class="big" id="recommendedTop2">— Top 2</div><div class="small" id="recommendedWin">Win —</div></div>
+    </div>
+    <div class="recs" id="recommendations"><div class="note" style="margin-top:10px">No recommendation yet.</div></div>
+    <div class="decision-actions">
+      <button class="btn primary" id="applyBtn" disabled>Apply Recommended Card</button>
+      <button class="btn" id="revertBtn" disabled>Revert to Original CBS Card</button>
+    </div>
+    <div class="progress" id="progress"><span class="spinner"></span><span id="progressText">Optimizing complete card…</span></div>
+  </div>
+
+  <div class="grid">
+    <div class="card metric"><div class="label">Pool</div><div class="value" id="poolSize">102</div><div class="sub">entries</div></div>
+    <div class="card metric"><div class="label">Average Score</div><div class="value" id="expPts">—</div><div class="sub">simulated confidence pts</div></div>
+    <div class="card metric"><div class="label">Top 2</div><div class="value" id="top2">—</div><div class="sub" id="top2Sub">current card</div></div>
+    <div class="card metric"><div class="label">Win</div><div class="value" id="winPct">—</div><div class="sub" id="winSub">current card</div></div>
+    <div class="card metric"><div class="label">Pick Popularity</div><div class="value" id="chalk">—</div><div class="sub">confidence-weighted CBS%</div></div>
+    <div class="card metric"><div class="label">Tiebreaker</div><div class="value" id="tie">—</div><div class="sub">MNF market total</div></div>
+
+    <div class="card half"><h2>Optimizer model</h2><div class="callout"><b>Complete-card tournament search.</b><div class="note">IQ simulates game outcomes from market probabilities, creates approximately 101 opposing CBS-style confidence cards, then searches winner flips and confidence permutations. Candidate cards are judged primarily on Top-2 probability, with Win % as the secondary objective. The final card is re-tested with a larger simulation before it is shown.</div></div></div>
+    <div class="card half"><h2>How to use this</h2><div class="callout"><b>CBS → IQ → Optimize → Review → CBS.</b><div class="note">Refresh CBS Data, refresh market prices if available, then Run Simulation. Apply Recommended Card only changes Sunday Funday IQ. It never submits picks to CBS. Use the recommendation list to make any final changes manually on CBS.</div></div></div>
+
+    <div class="card wide"><h2>Your Picks</h2><div class="games" id="games"></div></div>
+
+    <div class="card wide"><h2>Market vs Pool Analytics</h2><div class="tablewrap"><table><thead><tr><th>Game</th><th>Current pick</th><th>Confidence</th><th>CBS%</th><th>Market win%</th><th>Pool difference</th><th>IQ read</th></tr></thead><tbody id="rows"></tbody></table></div></div>
+  </div>
+
+  <div class="footer">Freshness matters. CBS ownership and betting markets move during the week. Seed/fallback data is retained only so the app can continue to function, and is explicitly labeled when used.</div>
+</div>
+
 <script>
+const TESTING=!!globalThis.__SFIQ_TESTING__;
+const STORAGE_KEY='sfiqPickemV03';
+const SEED_TS='2026-08-28T18:00:00Z';
+const CBS_FRESH_HOURS=24;
+const MARKET_FRESH_HOURS=12;
+const SEARCH_ITERS=1100;
+const FINAL_ITERS=6500;
 const SEED=[
 {id:'g1',away:'NE',home:'SEA',awayPct:18,homePct:82,awayML:164,homeML:-175,total:44.5,pick:null,weight:null},
 {id:'g2',away:'SF',home:'LAR',awayPct:15,homePct:85,awayML:168,homeML:-185,total:48.5,pick:null,weight:null},
@@ -79,148 +119,261 @@ const SEED=[
 {id:'g15',away:'DAL',home:'NYG',awayPct:76,homePct:24,awayML:-144,homeML:129,total:48.5,pick:null,weight:null},
 {id:'g16',away:'DEN',home:'KC',awayPct:42,homePct:58,awayML:126,homeML:-142,total:43.5,pick:null,weight:null}
 ];
-let state=JSON.parse((localStorage.getItem('sfiqPickemV04')||localStorage.getItem('sfiqPickemV03')||'null'))||{poolSize:102,games:SEED,importedAt:null,sim:null,importDiagnostics:null};
-const $=id=>document.getElementById(id),save=()=>localStorage.setItem('sfiqPickemV04',JSON.stringify(state));
+const clone=x=>JSON.parse(JSON.stringify(x));
+const nowIso=()=>new Date().toISOString();
+const hoursOld=ts=>!ts?Infinity:Math.max(0,(Date.now()-new Date(ts).getTime())/36e5);
 function implied(ml){if(ml==null||ml==='')return null;ml=Number(ml);return ml<0?(-ml)/((-ml)+100):100/(ml+100)}
 function market(g){const a=implied(g.awayML),h=implied(g.homeML);if(a==null||h==null)return{away:null,home:null};const s=a+h;return{away:a/s,home:h/s}}
-function side(g){return g.pick===g.away?'away':g.pick===g.home?'home':null}
-function own(g,s){return(s==='away'?g.awayPct:g.homePct)/100} function prob(g,s){return market(g)[s]}
-function edge(g,s){const p=prob(g,s);return p==null?null:p-own(g,s)}
-function edgeSafe(g,s){const e=edge(g,s);return e==null?0:e}
-function read(g,s){const e=edge(g,s);if(e==null)return{t:'NO MARKET',c:'blue'};if(e>=.10)return{t:'STRONG LEVERAGE',c:'green'};if(e>=.04)return{t:'GOOD LEVERAGE',c:'green'};if(e<=-.14)return{t:'HEAVY OVEROWN',c:'red'};if(e<=-.06)return{t:'OVEROWNED',c:'yellow'};return{t:'FAIR',c:'blue'}}
-function utility(g,s,lambda=.12){const p=prob(g,s);return p==null?own(g,s):p+lambda*(p-own(g,s))}
-function bestSide(g,lambda=.12){return utility(g,'home',lambda)>=utility(g,'away',lambda)?'home':'away'}
-function expPoints(){let x=0;for(const g of state.games){const s=side(g);if(s&&g.weight)x+=(prob(g,s)||own(g,s))*g.weight}return x}
-function weightedChalk(){let n=0,d=0;for(const g of state.games){const s=side(g);if(s&&g.weight){n+=own(g,s)*g.weight;d+=g.weight}}return d?n/d:null}
-function weightedLeverage(){let n=0,d=0;for(const g of state.games){const s=side(g),e=s?edge(g,s):null;if(s&&g.weight&&e!=null){n+=e*g.weight;d+=g.weight}}return d?n/d:null}
-function upsetExposure(){let n=0,d=0;for(const g of state.games){const s=side(g),p=s?prob(g,s):null;if(s&&g.weight){if(p!=null&&p<.5)n+=g.weight;d+=g.weight}}return d?n/d:null}
-function slateIntel(){const sides=[];for(const g of state.games){for(const s of ['away','home']){const p=prob(g,s),o=own(g,s);if(p!=null)sides.push({g,s,p,o,e:p-o,team:s==='away'?g.away:g.home})}}const best=[...sides].sort((a,b)=>b.e-a.e)[0]||null,over=[...sides].sort((a,b)=>a.e-b.e)[0]||null;return{best,over,coverage:state.games.filter(g=>market(g).home!=null).length}}
-
-function pct(x,d=0){return x==null?'—':(x*100).toFixed(d)+'%'}
-function show(t){$('banner').textContent=t;$('banner').style.display='block';setTimeout(()=>$('banner').style.display='none',6500)}
-function assignInitial(lambda=.12){state.games.forEach(g=>{const s=bestSide(g,lambda);g.pick=s==='away'?g.away:g.home});const r=[...state.games].sort((a,b)=>{const sa=side(a),sb=side(b),pa=prob(a,sa)||own(a,sa),pb=prob(b,sb)||own(b,sb);return(pb+.045*edgeSafe(b,sb))-(pa+.045*edgeSafe(a,sa))});r.forEach((g,i)=>g.weight=state.games.length-i)}
-function fieldCard(){const arr=state.games.map(g=>{const s=Math.random()<g.awayPct/100?'away':'home';const certainty=Math.max(g.awayPct,g.homePct)/100+(Math.random()-.5)*.12;return{g,s,certainty}}).sort((a,b)=>b.certainty-a.certainty);const weights=new Map();arr.forEach((x,i)=>weights.set(x.g.id,state.games.length-i));return{choices:new Map(arr.map(x=>[x.g.id,x.s])),weights}}
-function simulate(iter=3500){const N=Math.max(2,state.poolSize||102),mine=state.games.map(g=>({g,s:side(g),w:g.weight||1}));let top2=0,wins=0,total=0;for(let z=0;z<iter;z++){const fields=Array.from({length:N-1},fieldCard);let my=0;const fs=new Array(N-1).fill(0);for(const item of mine){const g=item.g,p=market(g),homeWin=Math.random()<(p.home??g.homePct/100),winner=homeWin?'home':'away';if(item.s===winner)my+=item.w;fields.forEach((f,j)=>{if(f.choices.get(g.id)===winner)fs[j]+=f.weights.get(g.id)})}const better=fs.filter(x=>x>my).length,equal=fs.filter(x=>x===my).length,tieRank=equal?Math.floor(Math.random()*(equal+1)):0,rank=better+tieRank+1;if(rank<=2)top2++;if(rank===1)wins++;total+=my}return{top2:top2/iter,win:wins/iter,avg:total/iter,iter}}
-function quickScore(){const s=simulate(700);return s.top2+.18*s.win+.00002*expPoints()}
-function optimize(){assignInitial(.12);let best=JSON.parse(JSON.stringify(state.games)),bestScore=quickScore();for(let pass=0;pass<2;pass++){for(const g of state.games){const s=side(g),opp=s==='home'?'away':'home',p=prob(g,opp);if(p==null||p<.28)continue;const old=g.pick;g.pick=opp==='home'?g.home:g.away;const sc=quickScore();if(sc>bestScore){bestScore=sc;best=JSON.parse(JSON.stringify(state.games))}g.pick=old}state.games=JSON.parse(JSON.stringify(best));const sorted=[...state.games].sort((a,b)=>(b.weight||0)-(a.weight||0));for(let i=0;i<sorted.length-1;i++){const a=sorted[i],b=sorted[i+1],wa=a.weight,wb=b.weight;a.weight=wb;b.weight=wa;const sc=quickScore();if(sc>bestScore){bestScore=sc;best=JSON.parse(JSON.stringify(state.games))}a.weight=wa;b.weight=wb}state.games=JSON.parse(JSON.stringify(best))}state.sim=simulate(10000);save();render();show('Tournament optimization complete — 10,000 final simulations against a synthetic 101-opponent field.')}
-const TEAM_ALIASES={
-PATRIOTS:'NE',NE:'NE',SEAHAWKS:'SEA',SEA:'SEA','49ERS':'SF',SF:'SF',RAMS:'LAR',LAR:'LAR',
-BUCCANEERS:'TB',TB:'TB',BENGALS:'CIN',CIN:'CIN',BILLS:'BUF',BUF:'BUF',TEXANS:'HOU',HOU:'HOU',
-RAVENS:'BAL',BAL:'BAL',COLTS:'IND',IND:'IND',BEARS:'CHI',CHI:'CHI',PANTHERS:'CAR',CAR:'CAR',
-SAINTS:'NO',NO:'NO',LIONS:'DET',DET:'DET',BROWNS:'CLE',CLE:'CLE',JAGUARS:'JAX',JAX:'JAX',JAC:'JAX',
-FALCONS:'ATL',ATL:'ATL',STEELERS:'PIT',PIT:'PIT',JETS:'NYJ',NYJ:'NYJ',TITANS:'TEN',TEN:'TEN',
-PACKERS:'GB',GB:'GB',VIKINGS:'MIN',MIN:'MIN',COMMANDERS:'WAS',WAS:'WAS',EAGLES:'PHI',PHI:'PHI',
-DOLPHINS:'MIA',MIA:'MIA',RAIDERS:'LV',LV:'LV',CARDINALS:'ARI',ARI:'ARI',CHARGERS:'LAC',LAC:'LAC',
-COWBOYS:'DAL',DAL:'DAL',GIANTS:'NYG',NYG:'NYG',BRONCOS:'DEN',DEN:'DEN',CHIEFS:'KC',KC:'KC'
-};
-function normTeam(x){return TEAM_ALIASES[String(x||'').trim().toUpperCase()]||String(x||'').trim().toUpperCase()}
-function parsePicks(text){const rx=/0-0\s*\n([A-Z0-9]+)\s*\n(\d+)%\s*\n(\d+)\s+Pts?\s*\n0-0\s*\n([A-Z0-9]+)\s*\n(\d+)%/g,out=[];let m;while((m=rx.exec(text||''))!==null)out.push({away:normTeam(m[1]),awayPct:+m[2],home:normTeam(m[4]),homePct:+m[5]});return out}
-function parsePoolSize(text){const marker=/\n([^\n\t]{2,70})\n\t?0\t0\t/g;const names=[];let m;while((m=marker.exec(text||''))!==null){const n=m[1].trim();if(!/^(PTS|YTD|PLAYERS)$/i.test(n))names.push(n)}return new Set(names).size}
-function parseOdds(text){
-  const matchups=SEED.map(g=>[g.away,g.home]),out=[];
-  const lines=String(text||'').split(/\n+/).map(x=>x.trim()).filter(Boolean);
-  const tokenAt=(team,start=0)=>{const aliases=Object.entries(TEAM_ALIASES).filter(([,v])=>v===team).map(([k])=>k);for(let i=start;i<lines.length;i++){if(aliases.includes(lines[i].toUpperCase()))return i}return-1};
-  const mlNear=(idx,limit=28)=>{for(let i=idx+1;i<Math.min(lines.length,idx+limit);i++){const m=lines[i].match(/^([+-]\d{3,4})$/);if(m)return +m[1]}return null};
-  const totalNear=(idx,limit=45)=>{for(let i=idx;i<Math.min(lines.length,idx+limit);i++){const m=lines[i].match(/^(?:O|U|o|u)?\s*(\d{2}(?:\.5)?)$/);if(m){const x=+m[1];if(x>=30&&x<=70)return x}const n=lines[i].match(/\b(?:O|U|o|u)\s*(\d{2}(?:\.5)?)\b/);if(n)return+n[1]}return null};
-  let cursor=0;
-  for(const [away,home] of matchups){
-    const ai=tokenAt(away,cursor),hi=ai>=0?tokenAt(home,ai+1):-1;
-    if(ai<0||hi<0)continue;
-    const awayML=mlNear(ai,Math.min(35,hi-ai+8)),homeML=mlNear(hi,35),total=totalNear(ai,Math.max(50,hi-ai+35));
-    if(awayML!=null&&homeML!=null){out.push({away,home,awayML,homeML,total});cursor=hi+1}
+function sideOf(g,pick=g.pick){return pick===g.away?0:pick===g.home?1:null}
+function teamFor(g,s){return s===0?g.away:g.home}
+function ownProb(g,s){return (s===0?g.awayPct:g.homePct)/100}
+function marketProb(g,s){const m=market(g);return s===0?m.away:m.home}
+function pct(x,d=1){return x==null?'—':(x*100).toFixed(d)+'%'}
+function pp(x,d=1){return (x>=0?'+':'')+(x*100).toFixed(d)+'%'}
+function moneylineText(v){return v==null?'—':(v>0?'+':'')+v}
+function sumConfidence(n){return n*(n+1)/2}
+function mulberry32(seed){return function(){let t=seed+=0x6D2B79F5;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return((t^t>>>14)>>>0)/4294967296}}
+function validConfidence(weights,n){if(!Array.isArray(weights)||weights.length!==n)return false;const s=[...weights].sort((a,b)=>a-b);return s.every((v,i)=>v===i+1)}
+function ensureValidCard(card,n){const c=clone(card);if(!validConfidence(c.weights,n)){const idx=[...Array(n).keys()].sort((a,b)=>(c.weights[b]||0)-(c.weights[a]||0));c.weights=new Array(n);idx.forEach((gameIdx,rank)=>c.weights[gameIdx]=n-rank)}return c}
+function cardFromGames(games){return ensureValidCard({choices:games.map(g=>sideOf(g)),weights:games.map(g=>Number(g.weight)||0)},games.length)}
+function applyCardToGames(games,card){games.forEach((g,i)=>{g.pick=teamFor(g,card.choices[i]);g.weight=card.weights[i]})}
+function completeCard(games){return games.length>0&&games.every(g=>sideOf(g)!=null)&&validConfidence(games.map(g=>Number(g.weight)),games.length)}
+function freshness(source,ts,threshold){const age=hoursOld(ts);if(source==='seed'||source==='fallback')return{label:'FALLBACK',cls:'red',age,current:false};if(age<=threshold)return{label:'CURRENT',cls:'green',age,current:true};return{label:'STALE',cls:'yellow',age,current:false}}
+function dataFreshness(s){return{cbs:freshness(s.cbsSource||'seed',s.cbsUpdatedAt||SEED_TS,CBS_FRESH_HOURS),market:freshness(s.marketSource||'seed',s.marketUpdatedAt||SEED_TS,MARKET_FRESH_HOURS)}}
+function objective(x){return x.top2*10000+x.win*900+x.avg*.01}
+function binaryCounts(sorted,score){let lo=0,hi=sorted.length;while(lo<hi){const m=(lo+hi)>>1;if(sorted[m]<score)lo=m+1;else hi=m}const first=lo;lo=0;hi=sorted.length;while(lo<hi){const m=(lo+hi)>>1;if(sorted[m]<=score)lo=m+1;else hi=m}return{less:first,equal:lo-first,greater:sorted.length-lo}}
+function buildWorlds(games,poolSize,iters,seed=20260908){
+  const rnd=mulberry32(seed),n=games.length,fieldN=Math.max(1,(poolSize||102)-1),worlds=new Array(iters);
+  const probs=games.map(g=>{const m=market(g);return[m.away??g.awayPct/100,m.home??g.homePct/100]});
+  for(let z=0;z<iters;z++){
+    const winners=new Uint8Array(n);for(let i=0;i<n;i++)winners[i]=rnd()<probs[i][1]?1:0;
+    const fs=new Uint16Array(fieldN);
+    for(let f=0;f<fieldN;f++){
+      const picks=new Uint8Array(n),strength=new Array(n);
+      for(let i=0;i<n;i++){const s=rnd()<games[i].awayPct/100?0:1;picks[i]=s;strength[i]={i,v:ownProb(games[i],s)+(rnd()-.5)*.18}}
+      strength.sort((a,b)=>b.v-a.v);
+      const weights=new Uint8Array(n);for(let r=0;r<n;r++)weights[strength[r].i]=n-r;
+      let score=0;for(let i=0;i<n;i++)if(picks[i]===winners[i])score+=weights[i];fs[f]=score;
+    }
+    worlds[z]={winners,field:Array.from(fs).sort((a,b)=>a-b)};
   }
-  return out
+  return worlds;
 }
-function importScan(obj){
-  const snaps=obj.snapshots||[];
-  const pickSnap=snaps.filter(s=>/\|\s*Picks/i.test(s.title||'')||/Picks$/i.test(s.title||'')).sort((a,b)=>String(b.ts).localeCompare(String(a.ts)))[0];
-  if(!pickSnap)throw new Error('No CBS Picks snapshot found.');
-  const picks=parsePicks(pickSnap.text);
-  if(picks.length!==16)throw new Error(`Parsed ${picks.length} of 16 CBS games. Scan again after the Picks page fully loads.`);
-  const oddsSnap=snaps.filter(s=>/cbssports\.com\/nfl\/odds/i.test(s.url||'')).sort((a,b)=>String(b.ts).localeCompare(String(a.ts)))[0];
-  const odds=oddsSnap?parseOdds(oddsSnap.text):[],om=new Map(odds.map(x=>[x.away+'|'+x.home,x])),old=new Map(state.games.map(x=>[x.away+'|'+x.home,x]));
+function evaluateCard(card,worlds){
+  let top2=0,win=0,total=0;
+  for(const w of worlds){
+    let mine=0;for(let i=0;i<card.choices.length;i++)if(card.choices[i]===w.winners[i])mine+=card.weights[i];
+    total+=mine;const c=binaryCounts(w.field,mine),better=c.greater,equal=c.equal;
+    let wp=0,t2=0;
+    if(better===0){wp=1/(equal+1);t2=Math.min(2,equal+1)/(equal+1)}
+    else if(better===1){t2=1/(equal+1)}
+    win+=wp;top2+=t2;
+  }
+  return{top2:top2/worlds.length,win:win/worlds.length,avg:total/worlds.length};
+}
+function optimizeConfidence(card,worlds,maxPass=2){
+  let best=ensureValidCard(card,card.choices.length),bestEval=evaluateCard(best,worlds);
+  for(let pass=0;pass<maxPass;pass++){
+    let chosen=null,chosenEval=bestEval;
+    for(let i=0;i<best.weights.length;i++)for(let j=i+1;j<best.weights.length;j++){
+      const c={choices:[...best.choices],weights:[...best.weights]};[c.weights[i],c.weights[j]]=[c.weights[j],c.weights[i]];
+      const e=evaluateCard(c,worlds);if(objective(e)>objective(chosenEval)+1e-9){chosen=c;chosenEval=e}
+    }
+    if(!chosen)break;best=chosen;bestEval=chosenEval;
+  }
+  return{card:best,eval:bestEval};
+}
+function cardKey(c){return c.choices.join('')+'|'+c.weights.join(',')}
+function searchCandidates(games,current,poolSize,opts={}){
+  const worlds=buildWorlds(games,poolSize,opts.searchIters||SEARCH_ITERS,opts.seed||20260908);
+  const base=ensureValidCard(current,games.length),baseEval=evaluateCard(base,worlds);
+  const candidates=new Map([[cardKey(base),{card:base,eval:baseEval,flips:0}]]);
+  const conf=optimizeConfidence(base,worlds,3);candidates.set(cardKey(conf.card),{card:conf.card,eval:conf.eval,flips:0});
+  let beam=[{card:conf.card,eval:conf.eval,flips:0,flipped:new Set()}];
+  for(let depth=1;depth<=3;depth++){
+    const expanded=[];
+    for(const node of beam){
+      for(let i=0;i<games.length;i++){
+        if(node.flipped.has(i))continue;
+        const alt={choices:[...node.card.choices],weights:[...node.card.weights]};alt.choices[i]=1-alt.choices[i];
+        const p=marketProb(games[i],alt.choices[i])??ownProb(games[i],alt.choices[i]);
+        const field=ownProb(games[i],alt.choices[i]);if(p<.35 && !(p>=.30 && p-field>=.15))continue;
+        const tuned=optimizeConfidence(alt,worlds,1);
+        const flipped=new Set(node.flipped);flipped.add(i);
+        expanded.push({card:tuned.card,eval:tuned.eval,flips:depth,flipped});
+      }
+    }
+    expanded.sort((a,b)=>objective(b.eval)-objective(a.eval));
+    beam=expanded.slice(0,10);
+    for(const x of beam)candidates.set(cardKey(x.card),x);
+  }
+  return{worlds,baseEval,candidates:[...candidates.values()].sort((a,b)=>objective(b.eval)-objective(a.eval)).slice(0,8)};
+}
+function runOptimizer(games,poolSize,opts={}){
+  const current=ensureValidCard(opts.currentCard||cardFromGames(games),games.length);
+  const search=searchCandidates(games,current,poolSize,opts);
+  const finalWorlds=buildWorlds(games,poolSize,opts.finalIters||FINAL_ITERS,(opts.seed||20260908)+991);
+  const currentEval=evaluateCard(current,finalWorlds);
+  let best={card:current,eval:currentEval};
+  for(const c of search.candidates){
+    const e=evaluateCard(c.card,finalWorlds);
+    if(objective(e)>objective(best.eval))best={card:c.card,eval:e};
+  }
+  // Never recommend a card that fails the final complete-card test.
+  if(best.eval.top2<currentEval.top2-1e-12)best={card:current,eval:currentEval};
+  return{current,currentEval,recommended:best.card,recommendedEval:best.eval,finalWorlds};
+}
+function cardActions(games,current,recommended,worlds){
+  let work=clone(current),prev=evaluateCard(work,worlds),actions=[];
+  for(let i=0;i<games.length;i++)if(work.choices[i]!==recommended.choices[i]){
+    const before=clone(work);work.choices[i]=recommended.choices[i];const e=evaluateCard(work,worlds);
+    actions.push({type:'FLIP',games:[i],before,after:clone(work),from:teamFor(games[i],before.choices[i]),to:teamFor(games[i],work.choices[i]),fromConf:before.weights[i],toConf:work.weights[i],beforeEval:prev,afterEval:e});prev=e;
+  }
+  for(let i=0;i<games.length;i++){
+    if(work.weights[i]===recommended.weights[i])continue;
+    const j=work.weights.findIndex((w,k)=>k!==i&&w===recommended.weights[i]);
+    if(j<0)continue;
+    const before=clone(work),wi=work.weights[i],wj=work.weights[j];[work.weights[i],work.weights[j]]=[wj,wi];const e=evaluateCard(work,worlds);
+    actions.push({type:'CONFIDENCE SWAP',games:[i,j],before,after:clone(work),from:`${teamFor(games[i],work.choices[i])} ${wi} / ${teamFor(games[j],work.choices[j])} ${wj}`,to:`${teamFor(games[i],work.choices[i])} ${wj} / ${teamFor(games[j],work.choices[j])} ${wi}`,beforeEval:prev,afterEval:e});prev=e;
+  }
+  return actions;
+}
+function recommendationClass(deltaTop2,deltaWin){if(deltaTop2>=.003||deltaWin>=.002)return['STRONG RECOMMENDATION','green'];return['OPTIONAL LEVERAGE','yellow']}
+function explainAction(a,games){
+  const dt=a.afterEval.top2-a.beforeEval.top2,dw=a.afterEval.win-a.beforeEval.win;
+  if(a.type==='FLIP'){const i=a.games[0],g=games[i],to=sideOf(g,a.to),cbs=ownProb(g,to),mp=marketProb(g,to);return`CBS has ${a.to} at ${pct(cbs,0)} while the market gives it ${pct(mp,0)}. The complete-card simulation ${dt>=0?'improves':'changes'} Top-2 probability after accounting for the rest of your card and the simulated field.`}
+  return`This keeps all 16 confidence values valid while moving more confidence toward the card construction that performed better in the tournament simulation.`;
+}
+function interestingKeeps(games,current,recommended){
+  const arr=[];for(let i=0;i<games.length;i++){if(current.choices[i]!==recommended.choices[i])continue;const s=current.choices[i],e=(marketProb(games[i],s)??ownProb(games[i],s))-ownProb(games[i],s);if(Math.abs(e)>=.07)arr.push({i,e})}
+  return arr.sort((a,b)=>Math.abs(b.e)-Math.abs(a.e)).slice(0,3);
+}
+function loadState(){
+  let old=null;if(typeof localStorage!=='undefined'){try{old=JSON.parse(localStorage.getItem(STORAGE_KEY)||'null')}catch{}}
+  const s=old||{poolSize:102,games:clone(SEED),importedAt:null,sim:null};
+  s.poolSize=s.poolSize||102;s.games=(s.games?.length? s.games:clone(SEED));
+  s.cbsSource=s.cbsSource||(s.importedAt?'stored':'seed');
+  s.cbsUpdatedAt=s.cbsUpdatedAt||s.importedAt||SEED_TS;
+  s.marketSource=s.marketSource||(s.importedAt?'stored':'seed');
+  s.marketUpdatedAt=s.marketUpdatedAt||s.importedAt||SEED_TS;
+  s.originalCard=s.originalCard||null;s.recommendedCard=s.recommendedCard||null;s.optimization=s.optimization||null;s.applied=!!s.applied;
+  return s;
+}
+let state=loadState();
+const $=id=>document.getElementById(id);
+function save(){if(typeof localStorage!=='undefined')localStorage.setItem(STORAGE_KEY,JSON.stringify(state))}
+function show(text,kind=''){const b=$('banner');b.textContent=text;b.className='banner '+kind;b.style.display='block';setTimeout(()=>b.style.display='none',7000)}
+function snapshotCard(){return cardFromGames(state.games)}
+function parsePicks(text){const rx=/0-0\s*\n([A-Z0-9]+)\s*\n(\d+)%[\s\S]{0,80}?0-0\s*\n([A-Z0-9]+)\s*\n(\d+)%/g,out=[];let m;while((m=rx.exec(text||''))!==null)out.push({away:m[1],awayPct:+m[2],home:m[3],homePct:+m[4]});return out}
+function parseOdds(text,matchups){const out=[];for(const [a,h] of matchups){const re=new RegExp('(?:^|\\n)'+a+'(?:\\s|\\n)[\\s\\S]{0,1000}?([+-]\\d{3,4})[\\s\\S]{0,1000}?(?:^|\\n)'+h+'(?:\\s|\\n)[\\s\\S]{0,1000}?([+-]\\d{3,4})','m'),m=(text||'').match(re);if(m)out.push({away:a,home:h,awayML:+m[1],homeML:+m[2]})}return out}
+function newest(arr){return [...arr].sort((a,b)=>String(b.ts||'').localeCompare(String(a.ts||'')))[0]}
+function extractStructuredCard(obj,games){
+  const seen=new Set(),cands=[];
+  function walk(x,depth=0){if(!x||depth>7||typeof x!=='object'||seen.has(x))return;seen.add(x);if(Array.isArray(x)){if(x.length===games.length&&x.every(v=>v&&typeof v==='object'))cands.push(x);for(const v of x)walk(v,depth+1)}else for(const v of Object.values(x))walk(v,depth+1)}
+  walk(obj);
+  for(const arr of cands){
+    const card=new Array(games.length).fill(null),weights=new Array(games.length).fill(null);
+    let matched=0;
+    for(const item of arr){
+      const pick=String(item.pick??item.selection??item.team??item.abbr??item.pickedTeam??'').toUpperCase();
+      const conf=Number(item.confidence??item.weight??item.points??item.value);
+      const i=games.findIndex(g=>pick===g.away||pick===g.home);
+      if(i>=0){card[i]=pick;if(Number.isFinite(conf))weights[i]=conf;matched++}
+    }
+    if(matched>=games.length-2)return{picks:card,weights};
+  }
+  return null;
+}
+async function importScan(obj){
+  const snaps=obj.snapshots||[],pickSnap=newest(snaps.filter(s=>/\|\s*Picks/i.test(s.title||'')||/Picks$/i.test(s.title||'')))||newest(snaps.filter(s=>/pickem/i.test(s.url||'')));
+  let picks=pickSnap?parsePicks(pickSnap.text):[];
+  if(!picks.length){
+    // Preserve the known Week 1 matchup structure if the newer bridge provides structured data but no visible text snapshot.
+    picks=state.games.map(g=>({away:g.away,home:g.home,awayPct:g.awayPct,homePct:g.homePct}));
+  }
+  const matchups=picks.map(p=>[p.away,p.home]),oddsSnap=newest(snaps.filter(s=>/odds/i.test(s.url||'')||/odds/i.test(s.title||''))),odds=oddsSnap?parseOdds(oddsSnap.text,matchups):[],om=new Map(odds.map(x=>[x.away+'|'+x.home,x])),old=new Map(state.games.map(x=>[x.away+'|'+x.home,x]));
   state.games=picks.map((p,i)=>{const k=p.away+'|'+p.home,prev=old.get(k)||{},o=om.get(k)||{};return{id:'g'+(i+1),...p,awayML:o.awayML??prev.awayML??null,homeML:o.homeML??prev.homeML??null,total:o.total??prev.total??null,pick:prev.pick??null,weight:prev.weight??null}});
-  const stand=snaps.filter(s=>/Weekly Standings/i.test(s.title||'')).sort((a,b)=>String(b.ts).localeCompare(String(a.ts)))[0];
-  const parsedPool=stand?parsePoolSize(stand.text):0;if(parsedPool>=20)state.poolSize=parsedPool;
-  state.importedAt=obj.exportedAt||new Date().toISOString();
-  state.importDiagnostics={picks:picks.length,odds:odds.length,pool:parsedPool||state.poolSize,hasOddsSnapshot:!!oddsSnap,hasStandings:!!stand,bridgeVersion:obj.version||'unknown'};
-  state.sim=null;assignInitial(.12);state.sim=simulate(3000);save();render();
-  show(`CBS data refreshed: ${picks.length}/16 ownership, ${odds.length}/16 market lines, pool ${state.poolSize}.`);
+  const structured=extractStructuredCard(obj,state.games);
+  if(structured){state.games.forEach((g,i)=>{if(structured.picks[i])g.pick=structured.picks[i];if(structured.weights[i])g.weight=structured.weights[i]})}
+  const stand=newest(snaps.filter(s=>/Weekly Standings/i.test(s.title||'')));if(stand){const names=[...stand.text.matchAll(/\n\n\n([^\n\t]{2,60})\n\t0\t0\t/g)].map(x=>x[1]);if(names.length>20)state.poolSize=new Set(names).size}
+  state.importedAt=obj.exportedAt||pickSnap?.ts||nowIso();state.cbsUpdatedAt=pickSnap?.ts||obj.exportedAt||nowIso();state.cbsSource='scan';
+  if(odds.length){state.marketUpdatedAt=oddsSnap?.ts||obj.exportedAt||nowIso();state.marketSource='CBS scan odds'}
+  state.originalCard=completeCard(state.games)?snapshotCard():state.originalCard;state.recommendedCard=null;state.optimization=null;state.applied=false;state.sim=null;save();render();
+  try{await refreshMarket(true)}catch{}
+  show('CBS data refreshed. Check the timestamps above before running the simulation.');
 }
-function render(){const withMarket=state.games.filter(g=>market(g).home!=null).length;$('poolSize').textContent=state.poolSize||'—';$('expPts').textContent=expPoints().toFixed(1);$('top2').textContent=state.sim?pct(state.sim.top2,1):'—';$('winPct').textContent=state.sim?pct(state.sim.win,1):'—';const wc=weightedChalk();$('chalk').textContent=wc==null?'—':pct(wc,0);const mnf=state.games[state.games.length-1];$('tie').textContent=mnf?.total?Math.round(mnf.total):'—';const wl=weightedLeverage(),ue=upsetExposure(),si=slateIntel();$('levIdx').textContent=wl==null?'—':((wl>=0?'+':'')+(wl*100).toFixed(1));$('upsetRisk').textContent=ue==null?'—':pct(ue,0);$('bestLev').textContent=si.best?`${si.best.team} ${si.best.e>=0?'+':''}${Math.round(si.best.e*100)} pts`:'—';$('mostOver').textContent=si.over?`${si.over.team} ${Math.round(si.over.e*100)} pts`:'—';$('marketCoverage').textContent=`${withMarket}/16`;$('importHealth').textContent=state.importDiagnostics?`${state.importDiagnostics.picks}/16 · ${state.importDiagnostics.odds}/16`:'SEED';$('slateNote').textContent=si.best&&si.over?`Best market-vs-pool difference: ${si.best.team} is ${Math.round(si.best.p*100)}% market vs ${Math.round(si.best.o*100)}% CBS. Pool may be overrating: ${si.over.team} is ${Math.round(si.over.o*100)}% CBS vs ${Math.round(si.over.p*100)}% market.`:'The best opportunities often come from changing confidence points before taking unnecessary upset picks.';$('modePill').textContent=withMarket===state.games.length?'MARKET + POOL DATA':withMarket?'PARTIAL MARKET DATA':'POOL DATA ONLY';$('statusTitle').textContent=state.importedAt?'CBS data refreshed':'Week 1 seeded from CBS market';const d=state.importDiagnostics;$('statusText').textContent=state.importedAt?`Last refresh: ${new Date(state.importedAt).toLocaleString()}. Ownership ${d?.picks??16}/16 · market ${d?.odds??withMarket}/16 · pool ${state.poolSize}. Seeded market values remain in place if an odds row cannot be parsed.`:'Market seed: Aug. 28, 2026. Use Refresh CBS Data after running a new CBS browser scan to update pool picks, standings context, moneylines, and the Monday-night total.';
-$('games').innerHTML=state.games.map((g,i)=>{const s=side(g),m=market(g),r=s?read(g,s):{t:'UNPICKED',c:'blue'};return `<div class="game"><div class="gamehead"><span>Game ${i+1}</span><span>${g.weight?g.weight+' confidence':'weight pending'}</span></div><div class="matchup"><div class="team"><div class="teamname">${g.away}</div><div class="pct">${g.awayPct}% CBS · ${pct(m.away,0)} market</div><button class="pickbtn ${s==='away'?'selected':''}" data-pick="${g.away}" data-id="${g.id}">${s==='away'?'✓ '+g.away:'Pick '+g.away}</button></div><div class="at">@</div><div class="team right"><div class="teamname">${g.home}</div><div class="pct">${g.homePct}% CBS · ${pct(m.home,0)} market</div><button class="pickbtn ${s==='home'?'selected':''}" data-pick="${g.home}" data-id="${g.id}">${s==='home'?'✓ '+g.home:'Pick '+g.home}</button></div></div><div class="intel"><div class="mini"><b>${g.awayML??'—'}</b><span>${g.away} ML</span></div><div class="mini"><b class="${r.c==='green'?'good':r.c==='yellow'?'warn':r.c==='red'?'bad':''}">${r.t}</b><span>IQ read</span></div><div class="mini"><b>${g.homeML??'—'}</b><span>${g.home} ML</span></div><div class="mini"><b>${g.weight||'—'}</b><span>confidence</span></div></div><div class="inputs"><label>${g.away} moneyline<input data-field="awayML" data-id="${g.id}" type="number" value="${g.awayML??''}"></label><label>${g.home} moneyline<input data-field="homeML" data-id="${g.id}" type="number" value="${g.homeML??''}"></label><label>Total<input data-field="total" data-id="${g.id}" type="number" step=".5" value="${g.total??''}"></label></div></div>`}).join('');document.querySelectorAll('[data-pick]').forEach(b=>b.onclick=()=>{const g=state.games.find(x=>x.id===b.dataset.id);g.pick=b.dataset.pick;state.sim=null;save();render()});document.querySelectorAll('input[data-field]').forEach(inp=>inp.onchange=()=>{const g=state.games.find(x=>x.id===inp.dataset.id);g[inp.dataset.field]=inp.value===''?null:+inp.value;state.sim=null;save();render()});$('rows').innerHTML=state.games.map(g=>{const s=side(g),p=s?prob(g,s):null,o=s?own(g,s):null,e=s?edge(g,s):null,r=s?read(g,s):{t:'UNPICKED',c:'blue'};return `<tr><td>${g.away} @ ${g.home}</td><td><b>${s?(s==='away'?g.away:g.home):'—'}</b></td><td>${g.weight||'—'}</td><td>${o==null?'—':pct(o,0)}</td><td>${p==null?'—':pct(p,1)}</td><td>${e==null?'—':(e>=0?'+':'')+Math.round(e*100)+' pts'}</td><td><span class="pill ${r.c}">${r.t}</span></td></tr>`}).join('')}
-$('importBtn').onclick=()=>$('scanFile').click();$('scanFile').onchange=async e=>{try{importScan(JSON.parse(await e.target.files[0].text()))}catch(err){alert('Could not import scan: '+err.message)}e.target.value=''};$('optBtn').onclick=optimize;$('saveBtn').onclick=()=>{save();show('Picks saved in this browser.')};if(!state.games.some(g=>g.pick)){assignInitial(.12);state.sim=simulate(2500);save()}render();
-
-function pct1(x){return (100*x).toFixed(1)+'%'}
-function runQuickEstimate(){
-  // Uses the same current model inputs as the dashboard; candidate values are heuristic estimates
-  // intended to guide the user toward promising reruns, not replace the full simulation.
-  const baseTop2 = Number((($('mTop2')||{}).textContent||'0').replace('%',''))/100 || 0;
-  const candidates=[];
-  const rows=[...document.querySelectorAll('tbody tr')];
-  rows.forEach((tr,idx)=>{
-    const sel=tr.querySelector('select');
-    const conf=tr.querySelector('input[type="number"]');
-    if(!sel||!conf) return;
-    const opts=[...sel.options];
-    if(opts.length<2) return;
-    const current=sel.value;
-    const alt=opts.find(o=>o.value!==current)?.value;
-    if(!alt) return;
-    // Look for visible probability / ownership figures in row text.
-    const txt=tr.innerText;
-    const nums=[...txt.matchAll(/(\d{1,3}(?:\.\d+)?)%/g)].map(m=>+m[1]/100);
-    if(nums.length>=2){
-      const market=Math.max(...nums.slice(0,2));
-      const currentProb=nums[0]||0.5;
-      const altProb=nums[1]||0.5;
-      if(altProb>currentProb+0.06){
-        const gain=Math.min(0.12,(altProb-currentProb)*0.18);
-        candidates.push({type:'pick',idx,current,alt,gain,detail:`Market support appears stronger for ${alt}.`});
-      }
+async function refreshMarket(silent=false){
+  const url='https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=2026&seasontype=2&week=1';
+  try{
+    const r=await fetch(url,{cache:'no-store'});if(!r.ok)throw new Error('HTTP '+r.status);const j=await r.json();let updated=0;
+    for(const ev of j.events||[]){const c=ev.competitions?.[0],comps=c?.competitors||[],home=comps.find(x=>x.homeAway==='home'),away=comps.find(x=>x.homeAway==='away'),abbrH=home?.team?.abbreviation,abbrA=away?.team?.abbreviation,g=state.games.find(x=>x.home===abbrH&&x.away===abbrA),o=c?.odds?.[0];if(!g||!o)continue;
+      const ah=o.awayTeamOdds||{},hh=o.homeTeamOdds||{},aml=Number(ah.moneyLine??ah.moneyline),hml=Number(hh.moneyLine??hh.moneyline);
+      if(Number.isFinite(aml)&&Number.isFinite(hml)){g.awayML=aml;g.homeML=hml;updated++}
+      if(Number.isFinite(Number(o.overUnder)))g.total=Number(o.overUnder);
     }
-    const c=+conf.value||0;
-    if(c>0 && nums.length){
-      const p=nums[0]||0.5;
-      if(p>0.72 && c<13){
-        const gain=Math.min(0.05,(p-0.65)*0.08);
-        candidates.push({type:'confidence',idx,current,from:c,to:Math.min(16,c+2),gain,detail:`${current} has a strong market win probability relative to its current confidence.`});
-      }
-    }
-  });
-  candidates.sort((a,b)=>b.gain-a.gain);
-  return {baseTop2,candidates:candidates.slice(0,4)};
+    if(!updated)throw new Error('No live moneylines were returned by the market feed.');
+    state.marketUpdatedAt=nowIso();state.marketSource='ESPN live odds';state.optimization=null;state.recommendedCard=null;state.sim=null;save();render();if(!silent)show('Market data refreshed.');
+    return true;
+  }catch(e){if(!silent)show('Live market refresh unavailable: '+e.message+'. Existing market data was preserved and its age is shown above.','yellow');return false}
 }
-function renderRecommendations(){
-  const area=$('recArea'); if(!area) return;
-  const {baseTop2,candidates}=runQuickEstimate();
-  if(!candidates.length){
-    area.innerHTML='<div class="rec"><div class="rectitle">No major change identified yet.</div><div class="recmeta">Your current inputs did not produce an obvious high-impact change. Small differences may be simulation noise.</div></div>';
-    return;
-  }
-  area.innerHTML=candidates.map((c,i)=>{
-    const est=Math.max(0,baseTop2+c.gain);
-    const delta=(c.gain*100).toFixed(1);
-    const title=c.type==='pick'?`Consider ${c.alt} instead of ${c.current}`:`Consider moving ${c.current} confidence ${c.from} → ${c.to}`;
-    return `<div class="rec ${c.gain>=0.02?'good':''}"><div class="rectitle">${title}</div><div class="recdelta">Top 2 %: ${(baseTop2*100).toFixed(1)}% → ${(est*100).toFixed(1)}%</div><div class="recmeta">Estimated improvement: +${delta} percentage points. ${c.detail}</div><div class="recactions"><button class="btn" data-rec="${i}">Apply Change</button><button class="lockpick" data-lock="${c.idx}">🔒 Keep Current Pick</button></div></div>`;
-  }).join('');
-  area.querySelectorAll('[data-rec]').forEach(btn=>btn.onclick=()=>{
-    const c=candidates[+btn.dataset.rec]; const tr=[...document.querySelectorAll('tbody tr')][c.idx];
-    if(!tr) return;
-    if(c.type==='pick'){const sel=tr.querySelector('select'); if(sel){sel.value=c.alt; sel.dispatchEvent(new Event('change',{bubbles:true}));}}
-    else {const conf=tr.querySelector('input[type="number"]'); if(conf){conf.value=c.to; conf.dispatchEvent(new Event('input',{bubbles:true}));}}
-    area.innerHTML='<div class="rec"><div class="rectitle">Change applied.</div><div class="recmeta">Run the simulation again to measure the effect with the full Monte Carlo model.</div></div>';
-  });
-  area.querySelectorAll('[data-lock]').forEach(btn=>btn.onclick=()=>{
-    btn.classList.toggle('on');
-    btn.textContent=btn.classList.contains('on')?'🔒 Pick Locked':'🔒 Keep Current Pick';
-  });
+function renderFreshness(){
+  const f=dataFreshness(state),fmt=(ts)=>new Date(ts).toLocaleString();
+  $('cbsFreshPill').textContent=f.cbs.label;$('cbsFreshPill').className='pill '+f.cbs.cls;$('cbsFreshText').textContent=`${state.cbsSource||'seed'} · ${fmt(state.cbsUpdatedAt||SEED_TS)} · ${isFinite(f.cbs.age)?f.cbs.age.toFixed(1)+'h old':'unknown age'}`;
+  $('marketFreshPill').textContent=f.market.label;$('marketFreshPill').className='pill '+f.market.cls;$('marketFreshText').textContent=`${state.marketSource||'seed'} · ${fmt(state.marketUpdatedAt||SEED_TS)} · ${isFinite(f.market.age)?f.market.age.toFixed(1)+'h old':'unknown age'}`;
+  const warnings=[];if(!f.cbs.current)warnings.push('CBS pool data is not current.');if(!f.market.current)warnings.push('Market data is not current.');if((state.marketSource||'seed')==='seed')warnings.push('The app is using the Aug. 28 seed/fallback odds.');
+  $('freshnessWarning').textContent=warnings.length?'⚠ '+warnings.join(' ')+' Simulation results and recommendations are PROVISIONAL until these inputs are refreshed.':'✓ CBS ownership and market inputs are current.';
+  $('modePill').textContent=f.cbs.current&&f.market.current?'CURRENT MARKET + FIELD':'PROVISIONAL INPUTS';$('modePill').className='pill '+(f.cbs.current&&f.market.current?'green':'yellow');
 }
-const oldOptHandler = $('optBtn') && $('optBtn').onclick;
-if($('optBtn')) $('optBtn').addEventListener('click',()=>setTimeout(renderRecommendations,150));
-
-const helpPop=$('helpPop'),helpTitle=$('helpTitle'),helpText=$('helpText');
-function closeHelp(){helpPop.style.display='none'}
-document.querySelectorAll('.info').forEach(btn=>btn.onclick=e=>{e.preventDefault();e.stopPropagation();helpTitle.textContent=btn.dataset.helpTitle||'What this means';helpText.textContent=btn.dataset.help||'';helpPop.style.display='block';const r=btn.getBoundingClientRect(),w=Math.min(340,window.innerWidth-24);helpPop.style.width=w+'px';let left=Math.min(window.innerWidth-w-12,Math.max(12,r.left));let top=r.bottom+8;if(top+helpPop.offsetHeight>window.innerHeight-12)top=Math.max(12,r.top-helpPop.offsetHeight-8);helpPop.style.left=left+'px';helpPop.style.top=top+'px'});
-$('helpClose').onclick=closeHelp;document.addEventListener('click',e=>{if(helpPop.style.display==='block'&&!helpPop.contains(e.target))closeHelp()});
-</script></body></html>
+function renderDecision(){
+  const o=state.optimization,f=dataFreshness(state),provisional=!(f.cbs.current&&f.market.current);$('decisionCard').classList.toggle('stale',provisional);
+  if(!o){$('decisionHeadline').textContent='WHAT SHOULD I DO?';$('decisionSub').textContent='Refresh the data, then Run Simulation. IQ will compare your submitted card with better complete-card alternatives.';$('decisionPill').textContent=provisional?'REFRESH DATA':'READY';$('decisionPill').className='pill '+(provisional?'yellow':'blue');$('currentTop2').textContent='— Top 2';$('currentWin').textContent='Win —';$('recommendedTop2').textContent='— Top 2';$('recommendedWin').textContent='Win —';$('recommendations').innerHTML='<div class="note" style="margin-top:10px">No recommendation yet.</div>';$('applyBtn').disabled=true;$('revertBtn').disabled=!state.originalCard;return}
+  const cur=o.currentEval,rec=o.recommendedEval,dt=rec.top2-cur.top2,dw=rec.win-cur.win,actions=o.actions||[];
+  $('currentTop2').textContent=pct(cur.top2,1)+' Top 2';$('currentWin').textContent='Win '+pct(cur.win,1);$('recommendedTop2').textContent=pct(rec.top2,1)+' Top 2';$('recommendedWin').textContent='Win '+pct(rec.win,1);
+  if(actions.length&&dt>0){$('decisionHeadline').textContent=`IQ RECOMMENDS ${actions.length} CHANGE${actions.length===1?'':'S'}`;$('decisionSub').textContent=`Recommended complete card improves Top-2 probability by ${pp(dt,1)} and Win probability by ${pp(dw,1)} in the final simulation.${provisional?' Inputs are stale, so treat this as provisional until refreshed.':''}`;$('decisionPill').textContent=provisional?'PROVISIONAL':'BETTER CARD';$('decisionPill').className='pill '+(provisional?'yellow':'green')}
+  else{$('decisionHeadline').textContent='KEEP YOUR CURRENT CARD';$('decisionSub').textContent=`IQ did not find a complete card that beat your current card enough to justify a change in the final simulation.${provisional?' Refresh stale inputs before treating that as final.':''}`;$('decisionPill').textContent=provisional?'PROVISIONAL':'KEEP';$('decisionPill').className='pill '+(provisional?'yellow':'green')}
+  let html='';
+  actions.forEach((a,idx)=>{const dt2=a.afterEval.top2-a.beforeEval.top2,dw2=a.afterEval.win-a.beforeEval.win,[label,cls]=recommendationClass(dt2,dw2);let title,action,details='';
+    if(a.type==='FLIP'){const i=a.games[0],g=state.games[i],to=sideOf(g,a.to);title='FLIP';action=`${a.from} → ${a.to}`;details=`CBS ${a.to}: ${pct(ownProb(g,to),0)} · Market ${a.to}: ${pct(marketProb(g,to),1)} · Confidence ${a.toConf}`}
+    else{title='CONFIDENCE CHANGE';action=a.to;details='Confidence values remain a valid 1–16 set.'}
+    html+=`<div class="rec"><div class="rec-head"><div><div class="rec-title">${idx+1}. ${title}</div><div class="rec-action">${action}</div></div><span class="pill ${cls}">${label}</span></div><div class="rec-grid"><div class="mini"><b>${pct(a.beforeEval.top2,1)}</b><span>Before Top 2</span></div><div class="mini"><b>${pct(a.afterEval.top2,1)}</b><span>Resulting Top 2</span></div><div class="mini"><b class="${dt2>=0?'good':'bad'}">${pp(dt2,1)}</b><span>Top 2 impact</span></div><div class="mini"><b class="${dw2>=0?'good':'bad'}">${pp(dw2,1)}</b><span>Win impact</span></div></div><div class="reason">${details}<br>${explainAction(a,state.games)}</div></div>`
+  });
+  const keeps=interestingKeeps(state.games,o.current,o.recommended);for(const k of keeps){const g=state.games[k.i],s=o.current.choices[k.i];html+=`<div class="rec"><div class="rec-head"><div><div class="rec-title">KEEP</div><div class="rec-action">${teamFor(g,s)} · ${o.current.weights[k.i]} confidence</div></div><span class="pill blue">KEEP</span></div><div class="reason">There is a notable market-vs-pool difference (${pp(k.e,0)}), but the complete-card optimizer did not improve the tournament result by flipping this game.</div></div>`}
+  $('recommendations').innerHTML=html||'<div class="note" style="margin-top:10px">No changes. Keep your submitted card.</div>';$('applyBtn').disabled=!actions.length;$('revertBtn').disabled=!state.originalCard;
+}
+function render(){
+  renderFreshness();const o=state.optimization,displayEval=o?.appliedEval||o?.currentEval||state.sim;$('poolSize').textContent=state.poolSize||'—';$('expPts').textContent=displayEval?displayEval.avg.toFixed(1):'—';$('top2').textContent=displayEval?pct(displayEval.top2,1):'—';$('winPct').textContent=displayEval?pct(displayEval.win,1):'—';
+  const f=dataFreshness(state),prov=!(f.cbs.current&&f.market.current);$('top2Sub').textContent=prov?'PROVISIONAL · stale inputs':'current IQ card';$('winSub').textContent=prov?'PROVISIONAL · stale inputs':'current IQ card';
+  let n=0,d=0;for(const g of state.games){const s=sideOf(g);if(s!=null&&g.weight){n+=ownProb(g,s)*g.weight;d+=g.weight}}$('chalk').textContent=d?pct(n/d,0):'—';const mnf=state.games[state.games.length-1];$('tie').textContent=mnf?.total?Math.round(mnf.total):'—';
+  const orig=state.originalCard,rec=state.recommendedCard;
+  $('games').innerHTML=state.games.map((g,i)=>{const s=sideOf(g),m=market(g),r=s==null?{t:'UNPICKED',c:'blue'}:(()=>{const e=(marketProb(g,s)??ownProb(g,s))-ownProb(g,s);return e>=.08?{t:'UNDER-OWNED',c:'green'}:e<=-.08?{t:'OVER-OWNED',c:'yellow'}:{t:'FAIR',c:'blue'}})(),os=orig?.choices?.[i],rs=rec?.choices?.[i],changed=rec&&(rs!==s||rec.weights[i]!==g.weight);
+    return `<div class="game ${changed?'changed':''}"><div class="gamehead"><span>Game ${i+1}</span><span>${g.weight?g.weight+' confidence':'confidence pending'}</span></div><div class="matchup"><div class="team"><div class="teamname">${g.away}</div><div class="pct">${g.awayPct}% CBS · ${pct(m.away,0)} market</div><button class="pickbtn ${s===0?'selected':''} ${rs===0?'recommended':''}" data-pick="${g.away}" data-id="${g.id}">${s===0?'✓ '+g.away:'Pick '+g.away}</button></div><div class="at">@</div><div class="team right"><div class="teamname">${g.home}</div><div class="pct">${g.homePct}% CBS · ${pct(m.home,0)} market</div><button class="pickbtn ${s===1?'selected':''} ${rs===1?'recommended':''}" data-pick="${g.home}" data-id="${g.id}">${s===1?'✓ '+g.home:'Pick '+g.home}</button></div></div>
+    <div class="card-state"><div class="statebox"><span>Original CBS</span><b>${orig?teamFor(g,os)+' · '+orig.weights[i]:'—'}</b></div><div class="statebox"><span>Current IQ</span><b>${s!=null?teamFor(g,s)+' · '+(g.weight||'—'):'—'}</b></div><div class="statebox"><span>IQ recommends</span><b>${rec?teamFor(g,rs)+' · '+rec.weights[i]:'Run Simulation'}</b></div></div>
+    <div class="intel"><div class="mini"><b>${moneylineText(g.awayML)}</b><span>${g.away} ML</span></div><div class="mini"><b class="${r.c==='green'?'good':r.c==='yellow'?'warn':''}">${r.t}</b><span>Market vs pool</span></div><div class="mini"><b>${moneylineText(g.homeML)}</b><span>${g.home} ML</span></div><div class="mini"><b>${g.weight||'—'}</b><span>confidence</span></div></div><div class="inputs"><label>${g.away} moneyline<input data-field="awayML" data-id="${g.id}" type="number" value="${g.awayML??''}"></label><label>${g.home} moneyline<input data-field="homeML" data-id="${g.id}" type="number" value="${g.homeML??''}"></label><label>Confidence<input data-field="weight" data-id="${g.id}" type="number" min="1" max="${state.games.length}" value="${g.weight??''}"></label></div></div>`}).join('');
+  document.querySelectorAll('[data-pick]').forEach(b=>b.onclick=()=>{const g=state.games.find(x=>x.id===b.dataset.id);g.pick=b.dataset.pick;state.optimization=null;state.recommendedCard=null;save();render()});
+  document.querySelectorAll('input[data-field]').forEach(inp=>inp.onchange=()=>{const g=state.games.find(x=>x.id===inp.dataset.id);g[inp.dataset.field]=inp.value===''?null:+inp.value;if(inp.dataset.field!=='weight'){state.marketSource='manual';state.marketUpdatedAt=nowIso()}state.optimization=null;state.recommendedCard=null;save();render()});
+  $('rows').innerHTML=state.games.map(g=>{const s=sideOf(g),p=s==null?null:marketProb(g,s),o=s==null?null:ownProb(g,s),e=p==null||o==null?null:p-o,read=e==null?'NO MARKET':e>=.08?'UNDER-OWNED':e<=-.08?'OVER-OWNED':'FAIR';return `<tr><td>${g.away} @ ${g.home}</td><td><b>${s==null?'—':teamFor(g,s)}</b></td><td>${g.weight||'—'}</td><td>${o==null?'—':pct(o,0)}</td><td>${p==null?'—':pct(p,1)}</td><td>${e==null?'—':pp(e,0)}</td><td><span class="pill ${e>=.08?'green':e<=-.08?'yellow':'blue'}">${read}</span></td></tr>`}).join('');
+  renderDecision();
+}
+async function runSimulation(){
+  if(!completeCard(state.games)){show('Your card must have all 16 winners selected and each confidence value 1–16 used exactly once before IQ can optimize it.','red');return}
+  const f=dataFreshness(state);if(!state.originalCard)state.originalCard=snapshotCard();const current=snapshotCard();$('optBtn').disabled=true;$('progress').classList.add('show');$('progressText').textContent='Generating field and searching complete cards…';
+  await new Promise(r=>setTimeout(r,50));
+  try{
+    const result=runOptimizer(state.games,state.poolSize,{currentCard:current,searchIters:SEARCH_ITERS,finalIters:FINAL_ITERS,seed:20260908});
+    const actions=cardActions(state.games,result.current,result.recommended,result.finalWorlds);
+    state.recommendedCard=result.recommended;state.optimization={current:result.current,currentEval:result.currentEval,recommended:result.recommended,recommendedEval:result.recommendedEval,actions,ranAt:nowIso(),provisional:!(f.cbs.current&&f.market.current)};state.sim=result.currentEval;state.applied=false;save();render();
+    show(`Simulation complete. ${SEARCH_ITERS.toLocaleString()} search worlds + ${FINAL_ITERS.toLocaleString()} final tournament worlds.`);
+  }catch(e){console.error(e);show('Optimizer error: '+e.message,'red')}
+  finally{$('optBtn').disabled=false;$('progress').classList.remove('show')}
+}
+function applyRecommended(){if(!state.recommendedCard)return;if(!state.originalCard)state.originalCard=snapshotCard();applyCardToGames(state.games,state.recommendedCard);state.applied=true;if(state.optimization)state.optimization.appliedEval=state.optimization.recommendedEval;save();render();show('Recommended card applied inside Sunday Funday IQ only. CBS was not changed.')}
+function revertOriginal(){if(!state.originalCard)return;applyCardToGames(state.games,state.originalCard);state.applied=false;if(state.optimization)delete state.optimization.appliedEval;save();render();show('Reverted to the original CBS card stored in IQ.')}
+function boot(){
+  $('refreshBtn').onclick=()=>$('scanFile').click();$('scanFile').onchange=async e=>{try{const f=e.target.files?.[0];if(f)await importScan(JSON.parse(await f.text()))}catch(err){show('Could not refresh CBS data: '+err.message,'red')}e.target.value=''};
+  $('marketBtn').onclick=()=>refreshMarket(false);$('optBtn').onclick=runSimulation;$('saveBtn').onclick=()=>{save();show('Saved locally in this browser.')};$('applyBtn').onclick=applyRecommended;$('revertBtn').onclick=revertOriginal;
+  render();
+}
+globalThis.SFIQ_TEST={validConfidence,ensureValidCard,dataFreshness,buildWorlds,evaluateCard,optimizeConfidence,runOptimizer,cardActions,marketProb,ownProb,clone};
+if(!TESTING)boot();
+</script>
+</body></html>
