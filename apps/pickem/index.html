@@ -28,7 +28,7 @@ table{width:100%;border-collapse:collapse;font-size:12px;min-width:830px}.tablew
 <body>
 <div class="app">
   <div class="header">
-    <div class="brand"><h1>🏈 Sunday Funday IQ</h1><p>CBS Pick'em · Pick'em Coach</p><p style="font-size:10px;color:#5f7898">Build 1.0.2 · CBS standings import fix</p></div>
+    <div class="brand"><h1>🏈 Sunday Funday IQ</h1><p>CBS Pick'em · Pick'em Coach</p><p style="font-size:10px;color:#5f7898">Build 1.0.3 · CBS team/order mapping fix</p></div>
     <div class="actions">
       <a class="btn" href="../../">⌂ Home</a>
       <input id="scanFile" type="file" accept=".json,application/json" hidden>
@@ -264,7 +264,14 @@ const $=id=>document.getElementById(id);
 function save(){if(typeof localStorage!=='undefined')localStorage.setItem(STORAGE_KEY,JSON.stringify(state))}
 function show(text,kind=''){const b=$('banner');b.textContent=text;b.className='banner '+kind;b.style.display='block';setTimeout(()=>b.style.display='none',7000)}
 function snapshotCard(){return cardFromGames(state.games)}
-function parsePicks(text){const rx=/0-0\s*\n([A-Z0-9]+)\s*\n(\d+)%[\s\S]{0,80}?0-0\s*\n([A-Z0-9]+)\s*\n(\d+)%/g,out=[];let m;while((m=rx.exec(text||''))!==null)out.push({away:m[1],awayPct:+m[2],home:m[3],homePct:+m[4]});return out}
+const CBS_TEAM_TO_ABBR={
+'CARDINALS':'ARI','FALCONS':'ATL','RAVENS':'BAL','BILLS':'BUF','PANTHERS':'CAR','BEARS':'CHI','BENGALS':'CIN','BROWNS':'CLE',
+'COWBOYS':'DAL','BRONCOS':'DEN','LIONS':'DET','PACKERS':'GB','TEXANS':'HOU','COLTS':'IND','JAGUARS':'JAX','CHIEFS':'KC',
+'RAIDERS':'LV','CHARGERS':'LAC','RAMS':'LAR','DOLPHINS':'MIA','VIKINGS':'MIN','PATRIOTS':'NE','SAINTS':'NO','GIANTS':'NYG',
+'JETS':'NYJ','EAGLES':'PHI','STEELERS':'PIT','49ERS':'SF','SEAHAWKS':'SEA','BUCCANEERS':'TB','TITANS':'TEN','COMMANDERS':'WAS'
+};
+function cbsTeamAbbr(x){x=String(x||'').toUpperCase().trim();return CBS_TEAM_TO_ABBR[x]||normalizeTeam(x)}
+function parsePicks(text){const rx=/0-0\s*\n([A-Z0-9]+)\s*\n(\d+)%[\s\S]{0,80}?0-0\s*\n([A-Z0-9]+)\s*\n(\d+)%/g,out=[];let m;while((m=rx.exec(text||''))!==null)out.push({away:cbsTeamAbbr(m[1]),awayPct:+m[2],home:cbsTeamAbbr(m[3]),homePct:+m[4]});return out}
 function parseOdds(text,matchups){const out=[];for(const [a,h] of matchups){const re=new RegExp('(?:^|\\n)'+a+'(?:\\s|\\n)[\\s\\S]{0,1000}?([+-]\\d{3,4})[\\s\\S]{0,1000}?(?:^|\\n)'+h+'(?:\\s|\\n)[\\s\\S]{0,1000}?([+-]\\d{3,4})','m'),m=(text||'').match(re);if(m)out.push({away:a,home:h,awayML:+m[1],homeML:+m[2]})}return out}
 function newest(arr){return [...arr].sort((a,b)=>String(b.ts||'').localeCompare(String(a.ts||'')))[0]}
 function normalizeTeam(x){x=String(x??'').toUpperCase().trim();return x==='JAC'?'JAX':x}
@@ -301,30 +308,42 @@ function resolveConfidence(item,n){
 
 function extractCardFromStandingsSnapshots(obj,games){
   const snaps=(obj?.snapshots||[]).filter(s=>/weekly standings/i.test(String(s?.title||''))||/\/standings\/weekly/i.test(String(s?.url||'')));
-  let best=null;
   for(const s of snaps){
     const text=String(s?.text||'');
-    const matches=[...text.matchAll(/(?:^|\n)\s*([A-Z]{2,3})\s*\n\s*\((\d{1,2})\)/g)];
-    if(!matches.length)continue;
 
-    // CBS hides most opponents' picks before lock, but the user's own row is visible.
-    // Find a contiguous set containing exactly one valid 1..N confidence card.
+    // Parse the 16 matchup columns shown at the top of CBS Weekly Standings.
+    const header=[];
+    const hrx=/(?:WED|THU|SUN|MON)\s+\d{1,2}:\d{2}\s+[AP]M\s*\n([A-Z]{2,3})\s*\n([A-Z]{2,3})/g;
+    let hm;while((hm=hrx.exec(text))!==null&&header.length<games.length)header.push({away:normalizeTeam(hm[1]),home:normalizeTeam(hm[2])});
+    if(header.length!==games.length)continue;
+
+    // Find a contiguous visible confidence card. Before lock, CBS exposes the user's
+    // own row while many opponents are blank, making the complete 1..16 permutation unique.
+    const matches=[...text.matchAll(/(?:^|\n)\s*([A-Z]{2,3})\s*\n\s*\((\d{1,2})\)/g)];
     for(let start=0;start<matches.length;start++){
       const chunk=matches.slice(start,start+games.length);
       if(chunk.length!==games.length)continue;
       const weights=chunk.map(m=>Number(m[2]));
       if(!validConfidence(weights,games.length))continue;
-      const picks=chunk.map(m=>normalizeTeam(m[1]));
-      const validTeams=picks.every((p,i)=>p===games[i].away||p===games[i].home);
-      if(!validTeams)continue;
-      best={picks,weights,pickCount:picks.length,weightCount:weights.length,source:'CBS Weekly Standings snapshot'};
-      break;
-    }
-    if(best)break;
-  }
-  return best;
-}
+      const rawPicks=chunk.map(m=>normalizeTeam(m[1]));
+      const valid=rawPicks.every((p,i)=>p===header[i].away||p===header[i].home);
+      if(!valid)continue;
 
+      const byGame=new Map();
+      header.forEach((h,i)=>byGame.set(h.away+'|'+h.home,{pick:rawPicks[i],weight:weights[i]}));
+      const picks=[],orderedWeights=[];
+      for(const g of games){
+        const hit=byGame.get(g.away+'|'+g.home);
+        if(!hit){picks.push(null);orderedWeights.push(null)}
+        else{picks.push(hit.pick);orderedWeights.push(hit.weight)}
+      }
+      const pc=picks.filter(Boolean).length,wc=orderedWeights.filter(v=>v!=null).length;
+      if(pc===games.length&&validConfidence(orderedWeights,games.length))
+        return {picks,weights:orderedWeights,pickCount:pc,weightCount:wc,source:'CBS Weekly Standings snapshot'};
+    }
+  }
+  return null;
+}
 function extractStructuredCard(obj,games){
   const standingsCard=extractCardFromStandingsSnapshots(obj,games);
   if(standingsCard)return standingsCard;
