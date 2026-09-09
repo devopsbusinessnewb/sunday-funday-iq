@@ -28,11 +28,12 @@ table{width:100%;border-collapse:collapse;font-size:12px;min-width:830px}.tablew
 <body>
 <div class="app">
   <div class="header">
-    <div class="brand"><h1>🏈 Sunday Funday IQ</h1><p>CBS Pick'em · Pick'em Coach</p><p style="font-size:10px;color:#5f7898">Build 1.0.5 · verified CBS market snapshot</p></div>
+    <div class="brand"><h1>🏈 Sunday Funday IQ</h1><p>CBS Pick'em · Pick'em Coach</p><p style="font-size:10px;color:#5f7898">Build 1.0.6 · CBS phone sync prototype</p></div>
     <div class="actions">
       <a class="btn" href="../../">⌂ Home</a>
       <input id="scanFile" type="file" accept=".json,application/json" hidden>
       <button class="btn primary" id="refreshBtn">Refresh CBS Data</button>
+      <button class="btn" id="phoneSyncBtn">Paste CBS Phone Sync</button>
       <button class="btn" id="marketBtn">Refresh Market</button>
       <button class="btn" id="optBtn">Run Simulation</button>
       <button class="btn" id="saveBtn">Save</button>
@@ -395,6 +396,39 @@ function extractStructuredCard(obj,games){
   return best;
 }
 function cardImportStatus(){const picks=state.games.filter(g=>sideOf(g)!=null).length,weights=state.games.map(g=>Number(g.weight)).filter(v=>Number.isInteger(v)&&v>=1&&v<=state.games.length).length,unique=new Set(state.games.map(g=>Number(g.weight)).filter(v=>Number.isInteger(v)&&v>=1&&v<=state.games.length)).size;return{picks,weights,unique,complete:picks===state.games.length&&unique===state.games.length}}
+
+const PHONE_SYNC_KEY='sfiqCbsPhoneSyncV1';
+function loadPhoneSync(){try{return JSON.parse(localStorage.getItem(PHONE_SYNC_KEY)||'{}')}catch{return{}}}
+function savePhoneSync(x){localStorage.setItem(PHONE_SYNC_KEY,JSON.stringify(x))}
+function classifyCbsCapture(text){
+  const t=String(text||'');
+  if(/Weekly Standings/i.test(t)&&/Tony Eickhoff/i.test(t))return'standings';
+  if(/16\/16 Picks/i.test(t)||(/\bPicks\b/i.test(t)&&/%/.test(t)))return'picks';
+  return null;
+}
+async function pasteCbsPhoneSync(){
+  let text='';
+  try{text=await navigator.clipboard.readText()}catch{
+    show('Paste permission was blocked. Open IQ in the browser and allow Paste when prompted.','yellow');return;
+  }
+  if(!text||text.length<100){show('Clipboard does not contain a CBS page capture.','yellow');return}
+  const kind=classifyCbsCapture(text);
+  if(!kind){show('Clipboard text is not recognized as CBS Picks or Weekly Standings.','yellow');return}
+  const cap=loadPhoneSync();cap[kind]=text;cap[kind+'At']=nowIso();savePhoneSync(cap);
+  if(!cap.picks||!cap.standings){
+    show(`Saved CBS ${kind==='picks'?'Picks':'Weekly Standings'} capture. Now capture the other CBS page and paste it here.`);
+    return;
+  }
+  const obj={
+    product:"CBS Pick'em IQ Bridge",version:"phone-sync-1",exportedAt:nowIso(),
+    snapshots:[
+      {title:"NFL Football Tourney 2026 | Picks",url:"phone://cbs/picks",text:cap.picks,ts:cap.picksAt},
+      {title:"NFL Football Tourney 2026 | Weekly Standings",url:"phone://cbs/standings",text:cap.standings,ts:cap.standingsAt}
+    ]
+  };
+  await importScan(obj);
+}
+
 async function importScan(obj){
   const snaps=obj.snapshots||[],pickSnap=newest(snaps.filter(s=>/\|\s*Picks/i.test(s.title||'')||/Picks$/i.test(s.title||'')))||newest(snaps.filter(s=>/pickem/i.test(s.url||'')));
   let picks=pickSnap?parsePicks(pickSnap.text):[];
@@ -570,6 +604,7 @@ function applyRecommended(){if(!state.recommendedCard)return;if(!state.originalC
 function revertOriginal(){if(!state.originalCard)return;applyCardToGames(state.games,state.originalCard);state.applied=false;if(state.optimization)delete state.optimization.appliedEval;save();render();show('Reverted to the original CBS card stored in IQ.')}
 function boot(){
   $('refreshBtn').onclick=()=>$('scanFile').click();$('scanFile').onchange=async e=>{try{const f=e.target.files?.[0];if(f)await importScan(JSON.parse(await f.text()))}catch(err){show('Could not refresh CBS data: '+err.message,'red')}e.target.value=''};
+  $('phoneSyncBtn').onclick=pasteCbsPhoneSync;
   $('marketBtn').onclick=()=>refreshMarket(false);$('optBtn').onclick=runSimulation;$('saveBtn').onclick=()=>{save();show('Saved locally in this browser.')};$('applyBtn').onclick=applyRecommended;$('revertBtn').onclick=revertOriginal;
   render();
 }
