@@ -28,7 +28,7 @@ table{width:100%;border-collapse:collapse;font-size:12px;min-width:830px}.tablew
 <body>
 <div class="app">
   <div class="header">
-    <div class="brand"><h1>🏈 Sunday Funday IQ</h1><p>CBS Pick'em · Pick'em Coach</p><p style="font-size:10px;color:#5f7898">Build 1.0 · Whole-card Top-2 optimizer</p></div>
+    <div class="brand"><h1>🏈 Sunday Funday IQ</h1><p>CBS Pick'em · Pick'em Coach</p><p style="font-size:10px;color:#5f7898">Build 1.0.1 · CBS card import fix</p></div>
     <div class="actions">
       <a class="btn" href="../../">⌂ Home</a>
       <input id="scanFile" type="file" accept=".json,application/json" hidden>
@@ -267,23 +267,74 @@ function snapshotCard(){return cardFromGames(state.games)}
 function parsePicks(text){const rx=/0-0\s*\n([A-Z0-9]+)\s*\n(\d+)%[\s\S]{0,80}?0-0\s*\n([A-Z0-9]+)\s*\n(\d+)%/g,out=[];let m;while((m=rx.exec(text||''))!==null)out.push({away:m[1],awayPct:+m[2],home:m[3],homePct:+m[4]});return out}
 function parseOdds(text,matchups){const out=[];for(const [a,h] of matchups){const re=new RegExp('(?:^|\\n)'+a+'(?:\\s|\\n)[\\s\\S]{0,1000}?([+-]\\d{3,4})[\\s\\S]{0,1000}?(?:^|\\n)'+h+'(?:\\s|\\n)[\\s\\S]{0,1000}?([+-]\\d{3,4})','m'),m=(text||'').match(re);if(m)out.push({away:a,home:h,awayML:+m[1],homeML:+m[2]})}return out}
 function newest(arr){return [...arr].sort((a,b)=>String(b.ts||'').localeCompare(String(a.ts||'')))[0]}
-function extractStructuredCard(obj,games){
-  const seen=new Set(),cands=[];
-  function walk(x,depth=0){if(!x||depth>7||typeof x!=='object'||seen.has(x))return;seen.add(x);if(Array.isArray(x)){if(x.length===games.length&&x.every(v=>v&&typeof v==='object'))cands.push(x);for(const v of x)walk(v,depth+1)}else for(const v of Object.values(x))walk(v,depth+1)}
-  walk(obj);
-  for(const arr of cands){
-    const card=new Array(games.length).fill(null),weights=new Array(games.length).fill(null);
-    let matched=0;
-    for(const item of arr){
-      const pick=String(item.pick??item.selection??item.team??item.abbr??item.pickedTeam??'').toUpperCase();
-      const conf=Number(item.confidence??item.weight??item.points??item.value);
-      const i=games.findIndex(g=>pick===g.away||pick===g.home);
-      if(i>=0){card[i]=pick;if(Number.isFinite(conf))weights[i]=conf;matched++}
-    }
-    if(matched>=games.length-2)return{picks:card,weights};
-  }
+function normalizeTeam(x){x=String(x??'').toUpperCase().trim();return x==='JAC'?'JAX':x}
+function deepObjects(root,maxDepth=14){
+  const out=[],seen=new Set();
+  function walk(x,d=0){if(x==null||d>maxDepth||typeof x!=='object'||seen.has(x))return;seen.add(x);out.push(x);if(Array.isArray(x)){for(const v of x)walk(v,d+1)}else for(const v of Object.values(x))walk(v,d+1)}
+  walk(root);return out;
+}
+function parseCaptureBodies(obj){
+  const roots=[obj];
+  for(const c of obj?.captures||[]){if(typeof c?.body!=='string')continue;try{roots.push(JSON.parse(c.body))}catch{}}
+  return roots;
+}
+function numberByKeys(x,re){
+  let found=null;
+  function walk(v,d=0){if(found!=null||v==null||d>7||typeof v!=='object')return;if(Array.isArray(v)){for(const z of v)walk(z,d+1);return}for(const [k,z] of Object.entries(v)){if(re.test(k)&&Number.isFinite(Number(z))){found=Number(z);return}walk(z,d+1)}}
+  walk(x);return found;
+}
+function stringValues(x){const out=[];function walk(v,d=0){if(v==null||d>7)return;if(typeof v==='string'){out.push(normalizeTeam(v));return}if(Array.isArray(v)){for(const z of v)walk(z,d+1);return}if(typeof v==='object')for(const z of Object.values(v))walk(z,d+1)}walk(x);return out}
+function numericValues(x){const out=[];function walk(v,d=0){if(v==null||d>7)return;if(typeof v==='number'&&Number.isFinite(v)){out.push(v);return}if(Array.isArray(v)){for(const z of v)walk(z,d+1);return}if(typeof v==='object')for(const z of Object.values(v))walk(z,d+1)}walk(x);return out}
+function resolvePickForGame(item,g,eventMeta){
+  const direct=[item?.pick,item?.selection,item?.team,item?.abbr,item?.pickedTeam,item?.selectedTeam,item?.pickInfo?.team,item?.pickInfo?.selectedTeam,item?.pickInfo?.selection,item?.pickInfo?.pick].map(normalizeTeam);
+  if(direct.includes(g.away))return g.away;if(direct.includes(g.home))return g.home;
+  const strs=stringValues(item);if(strs.includes(g.away)&&!strs.includes(g.home))return g.away;if(strs.includes(g.home)&&!strs.includes(g.away))return g.home;
+  if(eventMeta){const nums=numericValues(item),aid=Number(eventMeta.awayTeamId),hid=Number(eventMeta.homeTeamId);if(Number.isFinite(aid)&&nums.includes(aid)&&!(Number.isFinite(hid)&&nums.includes(hid)))return g.away;if(Number.isFinite(hid)&&nums.includes(hid)&&!(Number.isFinite(aid)&&nums.includes(aid)))return g.home}
   return null;
 }
+function resolveConfidence(item,n){
+  const direct=[item?.confidence,item?.weight,item?.points,item?.pointValue,item?.confidencePoints,item?.pickInfo?.confidence,item?.pickInfo?.weight,item?.pickInfo?.points,item?.pickInfo?.pointValue].map(Number).find(v=>Number.isInteger(v)&&v>=1&&v<=n);
+  if(direct!=null)return direct;
+  const keyed=numberByKeys(item,/(confidence|weight|pointValue|confidencePoints|points)/i);if(Number.isInteger(keyed)&&keyed>=1&&keyed<=n)return keyed;
+  return null;
+}
+function extractStructuredCard(obj,games){
+  const n=games.length,roots=parseCaptureBodies(obj),eventBySlot=new Map(),candidateArrays=[];
+  // Learn CBS event -> team mapping anywhere it appears in the scan.
+  for(const root of roots){
+    for(const o of deepObjects(root)){
+      if(o&&typeof o==='object'&&!Array.isArray(o)&&o.cbsEventId!=null&&o.awayTeam&&o.homeTeam){
+        eventBySlot.set(Number(o.cbsEventId),{away:normalizeTeam(o.awayTeam?.abbrev),home:normalizeTeam(o.homeTeam?.abbrev),awayTeamId:o.awayTeam?.cbsTeamId,homeTeamId:o.homeTeam?.cbsTeamId});
+      }
+      if(Array.isArray(o)){
+        const slotCount=o.filter(v=>v&&typeof v==='object'&&v.cbsSlotId!=null).length;
+        if(slotCount>=Math.max(4,n/2))candidateArrays.push({arr:o,score:slotCount});
+        if(o.length===n&&o.every(v=>v&&typeof v==='object'))candidateArrays.push({arr:o,score:1});
+      }
+      if(o&&typeof o==='object'&&!Array.isArray(o)&&o.entry?.isMine===true&&Array.isArray(o.picks))candidateArrays.push({arr:o.picks,score:100});
+      if(o&&typeof o==='object'&&!Array.isArray(o)&&o.isMine===true&&Array.isArray(o.picks))candidateArrays.push({arr:o.picks,score:100});
+    }
+  }
+  candidateArrays.sort((a,b)=>b.score-a.score);
+  let best={picks:new Array(n).fill(null),weights:new Array(n).fill(null),pickCount:0,weightCount:0,source:'none'};
+  for(const {arr,score} of candidateArrays){
+    const picks=new Array(n).fill(null),weights=new Array(n).fill(null);
+    for(const item of arr){
+      let i=-1,meta=null;
+      const slot=Number(item?.cbsSlotId??item?.eventId??item?.cbsEventId);
+      if(Number.isFinite(slot)&&eventBySlot.has(slot)){meta=eventBySlot.get(slot);i=games.findIndex(g=>g.away===meta.away&&g.home===meta.home)}
+      if(i<0){const direct=normalizeTeam(item?.away);const directH=normalizeTeam(item?.home);if(direct&&directH)i=games.findIndex(g=>g.away===direct&&g.home===directH)}
+      let p=null;if(i>=0)p=resolvePickForGame(item,games[i],meta);
+      if(i<0){const possible=games.map((g,idx)=>({idx,p:resolvePickForGame(item,g,null)})).filter(x=>x.p);if(possible.length===1){i=possible[0].idx;p=possible[0].p}}
+      if(i>=0){if(p)picks[i]=p;const w=resolveConfidence(item,n);if(w!=null)weights[i]=w}
+    }
+    const pc=picks.filter(Boolean).length,wc=weights.filter(v=>v!=null).length;
+    if(pc+wc>best.pickCount+best.weightCount||(pc+wc===best.pickCount+best.weightCount&&score>0))best={picks,weights,pickCount:pc,weightCount:wc,source:score>=100?'my CBS entry':'structured CBS data'};
+    if(pc===n&&validConfidence(weights,n))return best;
+  }
+  return best;
+}
+function cardImportStatus(){const picks=state.games.filter(g=>sideOf(g)!=null).length,weights=state.games.map(g=>Number(g.weight)).filter(v=>Number.isInteger(v)&&v>=1&&v<=state.games.length).length,unique=new Set(state.games.map(g=>Number(g.weight)).filter(v=>Number.isInteger(v)&&v>=1&&v<=state.games.length)).size;return{picks,weights,unique,complete:picks===state.games.length&&unique===state.games.length}}
 async function importScan(obj){
   const snaps=obj.snapshots||[],pickSnap=newest(snaps.filter(s=>/\|\s*Picks/i.test(s.title||'')||/Picks$/i.test(s.title||'')))||newest(snaps.filter(s=>/pickem/i.test(s.url||'')));
   let picks=pickSnap?parsePicks(pickSnap.text):[];
@@ -294,13 +345,13 @@ async function importScan(obj){
   const matchups=picks.map(p=>[p.away,p.home]),oddsSnap=newest(snaps.filter(s=>/odds/i.test(s.url||'')||/odds/i.test(s.title||''))),odds=oddsSnap?parseOdds(oddsSnap.text,matchups):[],om=new Map(odds.map(x=>[x.away+'|'+x.home,x])),old=new Map(state.games.map(x=>[x.away+'|'+x.home,x]));
   state.games=picks.map((p,i)=>{const k=p.away+'|'+p.home,prev=old.get(k)||{},o=om.get(k)||{};return{id:'g'+(i+1),...p,awayML:o.awayML??prev.awayML??null,homeML:o.homeML??prev.homeML??null,total:o.total??prev.total??null,pick:prev.pick??null,weight:prev.weight??null}});
   const structured=extractStructuredCard(obj,state.games);
-  if(structured){state.games.forEach((g,i)=>{if(structured.picks[i])g.pick=structured.picks[i];if(structured.weights[i])g.weight=structured.weights[i]})}
+  if(structured){state.games.forEach((g,i)=>{if(structured.picks[i])g.pick=structured.picks[i];if(structured.weights[i]!=null)g.weight=structured.weights[i]})}
   const stand=newest(snaps.filter(s=>/Weekly Standings/i.test(s.title||'')));if(stand){const names=[...stand.text.matchAll(/\n\n\n([^\n\t]{2,60})\n\t0\t0\t/g)].map(x=>x[1]);if(names.length>20)state.poolSize=new Set(names).size}
   state.importedAt=obj.exportedAt||pickSnap?.ts||nowIso();state.cbsUpdatedAt=pickSnap?.ts||obj.exportedAt||nowIso();state.cbsSource='scan';
   if(odds.length){state.marketUpdatedAt=oddsSnap?.ts||obj.exportedAt||nowIso();state.marketSource='CBS scan odds'}
   state.originalCard=completeCard(state.games)?snapshotCard():state.originalCard;state.recommendedCard=null;state.optimization=null;state.applied=false;state.sim=null;save();render();
   try{await refreshMarket(true)}catch{}
-  show('CBS data refreshed. Check the timestamps above before running the simulation.');
+  const cis=cardImportStatus();if(cis.complete)show(`CBS data refreshed — imported ${cis.picks}/${state.games.length} picks and all ${cis.unique} confidence values.`);else show(`CBS data refreshed, but your submitted card was only partially captured (${cis.picks}/${state.games.length} picks, ${cis.unique}/${state.games.length} unique confidence values). Run a fresh Bridge scan from the CBS Picks page and re-import it.`,'yellow');
 }
 async function refreshMarket(silent=false){
   const url='https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=2026&seasontype=2&week=1';
@@ -355,7 +406,7 @@ function render(){
   renderDecision();
 }
 async function runSimulation(){
-  if(!completeCard(state.games)){show('Your card must have all 16 winners selected and each confidence value 1–16 used exactly once before IQ can optimize it.','red');return}
+  if(!completeCard(state.games)){const cis=cardImportStatus();show(`IQ imported ${cis.picks}/${state.games.length} winners and ${cis.unique}/${state.games.length} unique confidence values. CBS itself may be complete; this means the scan did not include the full submitted card. Refresh CBS Data with a scan taken while the CBS Picks page is open.`,'red');return}
   const f=dataFreshness(state);if(!state.originalCard)state.originalCard=snapshotCard();const current=snapshotCard();$('optBtn').disabled=true;$('progress').classList.add('show');$('progressText').textContent='Generating field and searching complete cards…';
   await new Promise(r=>setTimeout(r,50));
   try{
