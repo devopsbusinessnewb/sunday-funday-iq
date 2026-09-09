@@ -28,7 +28,7 @@ table{width:100%;border-collapse:collapse;font-size:12px;min-width:830px}.tablew
 <body>
 <div class="app">
   <div class="header">
-    <div class="brand"><h1>🏈 Sunday Funday IQ</h1><p>CBS Pick'em · Pick'em Coach</p><p style="font-size:10px;color:#5f7898">Build 1.0.4 · live market refresh fix</p></div>
+    <div class="brand"><h1>🏈 Sunday Funday IQ</h1><p>CBS Pick'em · Pick'em Coach</p><p style="font-size:10px;color:#5f7898">Build 1.0.5 · verified CBS market snapshot</p></div>
     <div class="actions">
       <a class="btn" href="../../">⌂ Home</a>
       <input id="scanFile" type="file" accept=".json,application/json" hidden>
@@ -99,6 +99,18 @@ const STORAGE_KEY='sfiqPickemV03';
 const SEED_TS='2026-08-28T18:00:00Z';
 const CBS_FRESH_HOURS=24;
 const MARKET_FRESH_HOURS=12;
+
+const VERIFIED_MARKET_SNAPSHOT={
+  source:'CBS Sports odds snapshot',
+  capturedAt:'2026-09-09T00:55:00Z',
+  games:[
+    ['NE','SEA',150,-170,44.5],['SF','LAR',172,-198,48.5],['TB','CIN',170,-200,50.5],['BUF','HOU',-118,102,44.5],
+    ['BAL','IND',-175,152,47.5],['CHI','CAR',-164,140,47.5],['NO','DET',270,-310,49.5],['CLE','JAX',350,-435,40.5],
+    ['ATL','PIT',155,-178,41.5],['NYJ','TEN',106,-122,39.5],['GB','MIN',102,-118,46.5],['WAS','PHI',194,-218,44.5],
+    ['MIA','LV',154,-178,40.5],['ARI','LAC',410,-485,47.5],['DAL','NYG',-154,137,48.0],['DEN','KC',124,-142,43.5]
+  ]
+};
+
 const SEARCH_ITERS=1100;
 const FINAL_ITERS=6500;
 const SEED=[
@@ -138,7 +150,7 @@ function ensureValidCard(card,n){const c=clone(card);if(!validConfidence(c.weigh
 function cardFromGames(games){return ensureValidCard({choices:games.map(g=>sideOf(g)),weights:games.map(g=>Number(g.weight)||0)},games.length)}
 function applyCardToGames(games,card){games.forEach((g,i)=>{g.pick=teamFor(g,card.choices[i]);g.weight=card.weights[i]})}
 function completeCard(games){return games.length>0&&games.every(g=>sideOf(g)!=null)&&validConfidence(games.map(g=>Number(g.weight)),games.length)}
-function freshness(source,ts,threshold){const age=hoursOld(ts);if(source==='seed'||source==='fallback')return{label:'FALLBACK',cls:'red',age,current:false};if(age<=threshold)return{label:'CURRENT',cls:'green',age,current:true};return{label:'STALE',cls:'yellow',age,current:false}}
+function freshness(source,ts,threshold){const age=hoursOld(ts);if(source==='seed'||source==='fallback')return{label:'FALLBACK',cls:'red',age,current:false};if(source==='CBS Sports odds snapshot'&&age<=30)return{label:'SNAPSHOT',cls:'green',age,current:true};if(age<=threshold)return{label:'CURRENT',cls:'green',age,current:true};return{label:'STALE',cls:'yellow',age,current:false}}
 function dataFreshness(s){return{cbs:freshness(s.cbsSource||'seed',s.cbsUpdatedAt||SEED_TS,CBS_FRESH_HOURS),market:freshness(s.marketSource||'seed',s.marketUpdatedAt||SEED_TS,MARKET_FRESH_HOURS)}}
 function objective(x){return x.top2*10000+x.win*900+x.avg*.01}
 function binaryCounts(sorted,score){let lo=0,hi=sorted.length;while(lo<hi){const m=(lo+hi)>>1;if(sorted[m]<score)lo=m+1;else hi=m}const first=lo;lo=0;hi=sorted.length;while(lo<hi){const m=(lo+hi)>>1;if(sorted[m]<=score)lo=m+1;else hi=m}return{less:first,equal:lo-first,greater:sorted.length-lo}}
@@ -401,6 +413,24 @@ async function importScan(obj){
   try{await refreshMarket(true)}catch{}
   const cis=cardImportStatus();if(cis.complete)show(`CBS data refreshed — imported ${cis.picks}/${state.games.length} picks and all ${cis.unique} confidence values.`);else show(`CBS data refreshed, but IQ could only map ${cis.picks}/${state.games.length} picks and ${cis.unique}/${state.games.length} confidence values. Open CBS Picks and Weekly Standings before creating the scan, then re-import it.`,'yellow');
 }
+
+function applyVerifiedMarketSnapshot({silent=false}={}){
+  let updated=0;
+  for(const [away,home,awayML,homeML,total] of VERIFIED_MARKET_SNAPSHOT.games){
+    const g=state.games.find(x=>x.away===away&&x.home===home);if(!g)continue;
+    g.awayML=awayML;g.homeML=homeML;g.total=total;updated++;
+  }
+  if(updated){
+    state.marketUpdatedAt=VERIFIED_MARKET_SNAPSHOT.capturedAt;
+    state.marketSource=VERIFIED_MARKET_SNAPSHOT.source;
+    state.recommendedCard=null;state.optimization=null;state.sim=null;
+    save();render();
+    if(!silent)show(`Loaded verified CBS Sports market snapshot: ${updated}/${state.games.length} games. Snapshot captured Sep. 8 at 7:55 PM CT.`);
+    return true;
+  }
+  return false;
+}
+
 async function refreshMarket(silent=false){
   const aliases={
     'ARIZONA CARDINALS':'ARI','ATLANTA FALCONS':'ATL','BALTIMORE RAVENS':'BAL','BUFFALO BILLS':'BUF','CAROLINA PANTHERS':'CAR',
@@ -482,15 +512,16 @@ async function refreshMarket(silent=false){
     if(!silent)show(`Market refreshed from ${source}: ${updated}/${state.games.length} games updated.`);
     return true;
   }
-  if(!silent)show('Live market refresh unavailable. Existing market data was preserved and its age is shown above.','yellow');
+  if(applyVerifiedMarketSnapshot({silent}))return true;
+  if(!silent)show('Live market refresh unavailable and the verified snapshot could not be applied. Existing market data was preserved.','yellow');
   return false;
 }
 function renderFreshness(){
   const f=dataFreshness(state),fmt=(ts)=>new Date(ts).toLocaleString();
   $('cbsFreshPill').textContent=f.cbs.label;$('cbsFreshPill').className='pill '+f.cbs.cls;$('cbsFreshText').textContent=`${state.cbsSource||'seed'} · ${fmt(state.cbsUpdatedAt||SEED_TS)} · ${isFinite(f.cbs.age)?f.cbs.age.toFixed(1)+'h old':'unknown age'}`;
   $('marketFreshPill').textContent=f.market.label;$('marketFreshPill').className='pill '+f.market.cls;$('marketFreshText').textContent=`${state.marketSource||'seed'} · ${fmt(state.marketUpdatedAt||SEED_TS)} · ${isFinite(f.market.age)?f.market.age.toFixed(1)+'h old':'unknown age'}`;
-  const warnings=[];if(!f.cbs.current)warnings.push('CBS pool data is not current.');if(!f.market.current)warnings.push('Market data is not current.');if((state.marketSource||'seed')==='seed')warnings.push('The app is using the Aug. 28 seed/fallback odds.');
-  $('freshnessWarning').textContent=warnings.length?'⚠ '+warnings.join(' ')+' Simulation results and recommendations are PROVISIONAL until these inputs are refreshed.':'✓ CBS ownership and market inputs are current.';
+  const warnings=[];if(!f.cbs.current)warnings.push('CBS pool data is not current.');if(!f.market.current)warnings.push('Market data is not current.');else if(f.market.label==='SNAPSHOT')warnings.push('Market uses a verified CBS Sports snapshot captured tonight; it is not live auto-refresh.');if((state.marketSource||'seed')==='seed')warnings.push('The app is using the Aug. 28 seed/fallback odds.');
+  $('freshnessWarning').textContent=warnings.length?'⚠ '+warnings.join(' ')+(f.cbs.current&&f.market.current?'':' Simulation results and recommendations are PROVISIONAL until these inputs are refreshed.'):'✓ CBS ownership and market inputs are current.';
   $('modePill').textContent=f.cbs.current&&f.market.current?'CURRENT MARKET + FIELD':'PROVISIONAL INPUTS';$('modePill').className='pill '+(f.cbs.current&&f.market.current?'green':'yellow');
 }
 function renderDecision(){
