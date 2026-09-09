@@ -28,7 +28,7 @@ table{width:100%;border-collapse:collapse;font-size:12px;min-width:830px}.tablew
 <body>
 <div class="app">
   <div class="header">
-    <div class="brand"><h1>🏈 Sunday Funday IQ</h1><p>CBS Pick'em · Pick'em Coach</p><p style="font-size:10px;color:#5f7898">Build 1.0.3 · CBS team/order mapping fix</p></div>
+    <div class="brand"><h1>🏈 Sunday Funday IQ</h1><p>CBS Pick'em · Pick'em Coach</p><p style="font-size:10px;color:#5f7898">Build 1.0.4 · live market refresh fix</p></div>
     <div class="actions">
       <a class="btn" href="../../">⌂ Home</a>
       <input id="scanFile" type="file" accept=".json,application/json" hidden>
@@ -82,7 +82,7 @@ table{width:100%;border-collapse:collapse;font-size:12px;min-width:830px}.tablew
     <div class="card metric"><div class="label">Pick Popularity</div><div class="value" id="chalk">—</div><div class="sub">confidence-weighted CBS%</div></div>
     <div class="card metric"><div class="label">Tiebreaker</div><div class="value" id="tie">—</div><div class="sub">MNF market total</div></div>
 
-    <div class="card half"><h2>Optimizer model</h2><div class="callout"><b>Complete-card tournament search.</b><div class="note">IQ simulates game outcomes from market probabilities, creates approximately 101 opposing CBS-style confidence cards, then searches winner flips and confidence permutations. Candidate cards are judged primarily on Top-2 probability, with Win % as the secondary objective. The final card is re-tested with a larger simulation before it is shown.</div></div></div>
+    <div class="card half"><h2>Optimizer model</h2><div class="callout"><b>Complete-card tournament search.</b><div class="note">IQ simulates game outcomes from market probabilities, creates approximately 101 opposing CBS-style confidence cards, then searches winner flips and confidence permutations. Candidate cards are judged primarily on Top-2 probability, with Win % as the secondary objective. Live odds refresh uses a public market feed with ESPN as fallback. The final card is re-tested with a larger simulation before it is shown.</div></div></div>
     <div class="card half"><h2>How to use this</h2><div class="callout"><b>CBS → IQ → Optimize → Review → CBS.</b><div class="note">Refresh CBS Data, refresh market prices if available, then Run Simulation. Apply Recommended Card only changes Sunday Funday IQ. It never submits picks to CBS. Use the recommendation list to make any final changes manually on CBS.</div></div></div>
 
     <div class="card wide"><h2>Your Picks</h2><div class="games" id="games"></div></div>
@@ -402,18 +402,88 @@ async function importScan(obj){
   const cis=cardImportStatus();if(cis.complete)show(`CBS data refreshed — imported ${cis.picks}/${state.games.length} picks and all ${cis.unique} confidence values.`);else show(`CBS data refreshed, but IQ could only map ${cis.picks}/${state.games.length} picks and ${cis.unique}/${state.games.length} confidence values. Open CBS Picks and Weekly Standings before creating the scan, then re-import it.`,'yellow');
 }
 async function refreshMarket(silent=false){
-  const url='https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=2026&seasontype=2&week=1';
+  const aliases={
+    'ARIZONA CARDINALS':'ARI','ATLANTA FALCONS':'ATL','BALTIMORE RAVENS':'BAL','BUFFALO BILLS':'BUF','CAROLINA PANTHERS':'CAR',
+    'CHICAGO BEARS':'CHI','CINCINNATI BENGALS':'CIN','CLEVELAND BROWNS':'CLE','DALLAS COWBOYS':'DAL','DENVER BRONCOS':'DEN',
+    'DETROIT LIONS':'DET','GREEN BAY PACKERS':'GB','HOUSTON TEXANS':'HOU','INDIANAPOLIS COLTS':'IND','JACKSONVILLE JAGUARS':'JAX',
+    'KANSAS CITY CHIEFS':'KC','LAS VEGAS RAIDERS':'LV','LOS ANGELES CHARGERS':'LAC','LOS ANGELES RAMS':'LAR','MIAMI DOLPHINS':'MIA',
+    'MINNESOTA VIKINGS':'MIN','NEW ENGLAND PATRIOTS':'NE','NEW ORLEANS SAINTS':'NO','NEW YORK GIANTS':'NYG','NEW YORK JETS':'NYJ',
+    'PHILADELPHIA EAGLES':'PHI','PITTSBURGH STEELERS':'PIT','SAN FRANCISCO 49ERS':'SF','SEATTLE SEAHAWKS':'SEA',
+    'TAMPA BAY BUCCANEERS':'TB','TENNESSEE TITANS':'TEN','WASHINGTON COMMANDERS':'WAS'
+  };
+  const ab=x=>aliases[String(x||'').toUpperCase().trim()]||normalizeTeam(x);
+  const american=v=>{v=Number(v);return Number.isFinite(v)?v:null};
+  let updated=0, source='';
+
+  // Primary: public, CORS-enabled live odds feed. No API key required.
   try{
-    const r=await fetch(url,{cache:'no-store'});if(!r.ok)throw new Error('HTTP '+r.status);const j=await r.json();let updated=0;
-    for(const ev of j.events||[]){const c=ev.competitions?.[0],comps=c?.competitors||[],home=comps.find(x=>x.homeAway==='home'),away=comps.find(x=>x.homeAway==='away'),abbrH=home?.team?.abbreviation,abbrA=away?.team?.abbreviation,g=state.games.find(x=>x.home===abbrH&&x.away===abbrA),o=c?.odds?.[0];if(!g||!o)continue;
-      const ah=o.awayTeamOdds||{},hh=o.homeTeamOdds||{},aml=Number(ah.moneyLine??ah.moneyline),hml=Number(hh.moneyLine??hh.moneyline);
-      if(Number.isFinite(aml)&&Number.isFinite(hml)){g.awayML=aml;g.homeML=hml;updated++}
-      if(Number.isFinite(Number(o.overUnder)))g.total=Number(o.overUnder);
+    const r=await fetch('https://1.ml/api/v1/odds?league=nfl&limit=100',{cache:'no-store'});
+    if(r.ok){
+      const data=await r.json(), rows=Array.isArray(data)?data:(data.games||data.data||[]);
+      for(const row of rows){
+        const away=ab(row.away_team||row.awayTeam||row.away?.name||row.teams?.away?.name);
+        const home=ab(row.home_team||row.homeTeam||row.home?.name||row.teams?.home?.name);
+        const g=state.games.find(x=>x.away===away&&x.home===home); if(!g)continue;
+
+        let awayML=null,homeML=null,total=null;
+        const books=row.bookmakers||row.sportsbooks||row.books||[];
+        const chosen=Array.isArray(books)&&books.length?books[0]:row;
+        const markets=chosen.markets||row.markets||[];
+        if(Array.isArray(markets)){
+          const h2h=markets.find(x=>/h2h|moneyline/i.test(String(x.key||x.type||x.name||'')));
+          const totals=markets.find(x=>/total/i.test(String(x.key||x.type||x.name||'')));
+          for(const o of h2h?.outcomes||[]){
+            const team=ab(o.name||o.team||o.label); const price=american(o.price??o.odds??o.american);
+            if(team===away)awayML=price;if(team===home)homeML=price;
+          }
+          const over=(totals?.outcomes||[]).find(o=>/over/i.test(String(o.name||o.label||'')));
+          if(over)total=Number(over.point??over.total??over.line);
+        }
+        // Alternate simple shapes
+        awayML ??= american(row.away_ml??row.awayMoneyline??row.away?.moneyline??row.away?.odds);
+        homeML ??= american(row.home_ml??row.homeMoneyline??row.home?.moneyline??row.home?.odds);
+        total ??= Number(row.total??row.over_under??row.overUnder);
+
+        if(Number.isFinite(awayML)&&Number.isFinite(homeML)){
+          g.awayML=awayML;g.homeML=homeML;if(Number.isFinite(total))g.total=total;updated++;
+        }
+      }
+      if(updated){source='1.ML live odds'}
     }
-    if(!updated)throw new Error('No live moneylines were returned by the market feed.');
-    state.marketUpdatedAt=nowIso();state.marketSource='ESPN live odds';state.optimization=null;state.recommendedCard=null;state.sim=null;save();render();if(!silent)show('Market data refreshed.');
+  }catch(e){console.warn('1.ML market refresh failed',e)}
+
+  // Fallback: ESPN public scoreboard if the primary feed did not populate games.
+  if(!updated){
+    try{
+      const r=await fetch('https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=2026&seasontype=2&week=1',{cache:'no-store'});
+      if(r.ok){
+        const data=await r.json();
+        for(const ev of data.events||[]){
+          const comp=ev.competitions?.[0]; if(!comp)continue;
+          const cs=comp.competitors||[];
+          const awayC=cs.find(c=>c.homeAway==='away'),homeC=cs.find(c=>c.homeAway==='home');
+          const away=ab(awayC?.team?.displayName||awayC?.team?.abbreviation),home=ab(homeC?.team?.displayName||homeC?.team?.abbreviation);
+          const g=state.games.find(x=>x.away===away&&x.home===home);if(!g)continue;
+          const o=comp.odds?.[0];
+          const awayML=american(o?.awayTeamOdds?.moneyLine??o?.awayTeamOdds?.moneyline);
+          const homeML=american(o?.homeTeamOdds?.moneyLine??o?.homeTeamOdds?.moneyline);
+          if(Number.isFinite(awayML)&&Number.isFinite(homeML)){
+            g.awayML=awayML;g.homeML=homeML;
+            const t=Number(o?.overUnder);if(Number.isFinite(t))g.total=t;updated++;
+          }
+        }
+        if(updated)source='ESPN live odds';
+      }
+    }catch(e){console.warn('ESPN market refresh failed',e)}
+  }
+
+  if(updated){
+    state.marketUpdatedAt=nowIso();state.marketSource=source;state.recommendedCard=null;state.optimization=null;state.sim=null;save();render();
+    if(!silent)show(`Market refreshed from ${source}: ${updated}/${state.games.length} games updated.`);
     return true;
-  }catch(e){if(!silent)show('Live market refresh unavailable: '+e.message+'. Existing market data was preserved and its age is shown above.','yellow');return false}
+  }
+  if(!silent)show('Live market refresh unavailable. Existing market data was preserved and its age is shown above.','yellow');
+  return false;
 }
 function renderFreshness(){
   const f=dataFreshness(state),fmt=(ts)=>new Date(ts).toLocaleString();
