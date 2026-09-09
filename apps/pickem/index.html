@@ -28,7 +28,7 @@ table{width:100%;border-collapse:collapse;font-size:12px;min-width:830px}.tablew
 <body>
 <div class="app">
   <div class="header">
-    <div class="brand"><h1>🏈 Sunday Funday IQ</h1><p>CBS Pick'em · Pick'em Coach</p><p style="font-size:10px;color:#5f7898">Build 1.0.1 · CBS card import fix</p></div>
+    <div class="brand"><h1>🏈 Sunday Funday IQ</h1><p>CBS Pick'em · Pick'em Coach</p><p style="font-size:10px;color:#5f7898">Build 1.0.2 · CBS standings import fix</p></div>
     <div class="actions">
       <a class="btn" href="../../">⌂ Home</a>
       <input id="scanFile" type="file" accept=".json,application/json" hidden>
@@ -298,7 +298,36 @@ function resolveConfidence(item,n){
   const keyed=numberByKeys(item,/(confidence|weight|pointValue|confidencePoints|points)/i);if(Number.isInteger(keyed)&&keyed>=1&&keyed<=n)return keyed;
   return null;
 }
+
+function extractCardFromStandingsSnapshots(obj,games){
+  const snaps=(obj?.snapshots||[]).filter(s=>/weekly standings/i.test(String(s?.title||''))||/\/standings\/weekly/i.test(String(s?.url||'')));
+  let best=null;
+  for(const s of snaps){
+    const text=String(s?.text||'');
+    const matches=[...text.matchAll(/(?:^|\n)\s*([A-Z]{2,3})\s*\n\s*\((\d{1,2})\)/g)];
+    if(!matches.length)continue;
+
+    // CBS hides most opponents' picks before lock, but the user's own row is visible.
+    // Find a contiguous set containing exactly one valid 1..N confidence card.
+    for(let start=0;start<matches.length;start++){
+      const chunk=matches.slice(start,start+games.length);
+      if(chunk.length!==games.length)continue;
+      const weights=chunk.map(m=>Number(m[2]));
+      if(!validConfidence(weights,games.length))continue;
+      const picks=chunk.map(m=>normalizeTeam(m[1]));
+      const validTeams=picks.every((p,i)=>p===games[i].away||p===games[i].home);
+      if(!validTeams)continue;
+      best={picks,weights,pickCount:picks.length,weightCount:weights.length,source:'CBS Weekly Standings snapshot'};
+      break;
+    }
+    if(best)break;
+  }
+  return best;
+}
+
 function extractStructuredCard(obj,games){
+  const standingsCard=extractCardFromStandingsSnapshots(obj,games);
+  if(standingsCard)return standingsCard;
   const n=games.length,roots=parseCaptureBodies(obj),eventBySlot=new Map(),candidateArrays=[];
   // Learn CBS event -> team mapping anywhere it appears in the scan.
   for(const root of roots){
@@ -351,7 +380,7 @@ async function importScan(obj){
   if(odds.length){state.marketUpdatedAt=oddsSnap?.ts||obj.exportedAt||nowIso();state.marketSource='CBS scan odds'}
   state.originalCard=completeCard(state.games)?snapshotCard():state.originalCard;state.recommendedCard=null;state.optimization=null;state.applied=false;state.sim=null;save();render();
   try{await refreshMarket(true)}catch{}
-  const cis=cardImportStatus();if(cis.complete)show(`CBS data refreshed — imported ${cis.picks}/${state.games.length} picks and all ${cis.unique} confidence values.`);else show(`CBS data refreshed, but your submitted card was only partially captured (${cis.picks}/${state.games.length} picks, ${cis.unique}/${state.games.length} unique confidence values). Run a fresh Bridge scan from the CBS Picks page and re-import it.`,'yellow');
+  const cis=cardImportStatus();if(cis.complete)show(`CBS data refreshed — imported ${cis.picks}/${state.games.length} picks and all ${cis.unique} confidence values.`);else show(`CBS data refreshed, but IQ could only map ${cis.picks}/${state.games.length} picks and ${cis.unique}/${state.games.length} confidence values. Open CBS Picks and Weekly Standings before creating the scan, then re-import it.`,'yellow');
 }
 async function refreshMarket(silent=false){
   const url='https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=2026&seasontype=2&week=1';
