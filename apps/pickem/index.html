@@ -28,7 +28,7 @@ table{width:100%;border-collapse:collapse;font-size:12px;min-width:830px}.tablew
 <body>
 <div class="app">
   <div class="header">
-    <div class="brand"><h1>🏈 Sunday Funday IQ</h1><p>CBS Pick'em · Pick'em Coach</p><p style="font-size:10px;color:#5f7898">Build 1.1.1 · field model guardrail</p></div>
+    <div class="brand"><h1>🏈 Sunday Funday IQ</h1><p>CBS Pick'em · Pick'em Coach</p><p style="font-size:10px;color:#5f7898">Build 1.1.2 · postgame CBS import fix</p></div>
     <div class="actions">
       <a class="btn" href="../../">⌂ Home</a>
       <input id="scanFile" type="file" accept=".json,application/json" hidden>
@@ -133,6 +133,24 @@ const SEED=[
 {id:'g16',away:'DEN',home:'KC',awayPct:42,homePct:58,awayML:126,homeML:-142,total:43.5,pick:null,weight:null}
 ];
 const clone=x=>JSON.parse(JSON.stringify(x));
+
+function restoreFullWeekState(){
+  if(!state||!Array.isArray(state.games)||state.games.length>=SEED.length)return;
+  const current=new Map(state.games.map(g=>[g.away+'|'+g.home,g]));
+  const prior=state.originalCard&&Array.isArray(state.originalCard.choices)&&state.originalCard.choices.length===SEED.length
+    ?state.originalCard:null;
+  state.games=SEED.map((seed,i)=>{
+    const hit=current.get(seed.away+'|'+seed.home);
+    if(hit)return {...seed,...hit,id:seed.id};
+    const g={...seed};
+    if(prior){
+      g.pick=teamFor(g,prior.choices[i]);
+      g.weight=prior.weights[i];
+    }
+    return g;
+  });
+}
+
 const nowIso=()=>new Date().toISOString();
 const hoursOld=ts=>!ts?Infinity:Math.max(0,(Date.now()-new Date(ts).getTime())/36e5);
 function implied(ml){if(ml==null||ml==='')return null;ml=Number(ml);return ml<0?(-ml)/((-ml)+100):100/(ml+100)}
@@ -345,6 +363,7 @@ function loadState(){
   return s;
 }
 let state=loadState();
+restoreFullWeekState();
 const $=id=>document.getElementById(id);
 function save(){if(typeof localStorage!=='undefined')localStorage.setItem(STORAGE_KEY,JSON.stringify(state))}
 function show(text,kind=''){const b=$('banner');b.textContent=text;b.className='banner '+kind;b.style.display='block';setTimeout(()=>b.style.display='none',7000)}
@@ -393,36 +412,50 @@ function resolveConfidence(item,n){
 
 function extractCardFromStandingsSnapshots(obj,games){
   const snaps=(obj?.snapshots||[]).filter(s=>/weekly standings/i.test(String(s?.title||''))||/\/standings\/weekly/i.test(String(s?.url||'')));
+  const lockedWeights=new Set(games.filter(g=>isLocked(g)&&Number.isInteger(Number(g.weight))).map(g=>Number(g.weight)));
+  const unlocked=games.filter(g=>!isLocked(g));
+  const expectedRemaining=[...Array(games.length).keys()].map(i=>i+1).filter(w=>!lockedWeights.has(w)).sort((a,b)=>a-b);
+
   for(const s of snaps){
     const text=String(s?.text||'');
-
-    // Parse the 16 matchup columns shown at the top of CBS Weekly Standings.
     const header=[];
     const hrx=/(?:WED|THU|SUN|MON)\s+\d{1,2}:\d{2}\s+[AP]M\s*\n([A-Z]{2,3})\s*\n([A-Z]{2,3})/g;
-    let hm;while((hm=hrx.exec(text))!==null&&header.length<games.length)header.push({away:normalizeTeam(hm[1]),home:normalizeTeam(hm[2])});
-    if(header.length!==games.length)continue;
+    let hm;
+    while((hm=hrx.exec(text))!==null&&header.length<games.length)
+      header.push({away:normalizeTeam(hm[1]),home:normalizeTeam(hm[2])});
 
-    // Find a contiguous visible confidence card. Before lock, CBS exposes the user's
-    // own row while many opponents are blank, making the complete 1..16 permutation unique.
+    // CBS removes completed games from some postgame standings views.
+    const targetCount=header.length===games.length?games.length:
+      (header.length===unlocked.length?unlocked.length:0);
+    if(!targetCount)continue;
+
     const matches=[...text.matchAll(/(?:^|\n)\s*([A-Z]{2,3})\s*\n\s*\((\d{1,2})\)/g)];
     for(let start=0;start<matches.length;start++){
-      const chunk=matches.slice(start,start+games.length);
-      if(chunk.length!==games.length)continue;
-      const weights=chunk.map(m=>Number(m[2]));
-      if(!validConfidence(weights,games.length))continue;
-      const rawPicks=chunk.map(m=>normalizeTeam(m[1]));
+      const chunk=matches.slice(start,start+targetCount);
+      if(chunk.length!==targetCount)continue;
+      const weights=chunk.map(x=>Number(x[2]));
+      const sorted=[...weights].sort((a,b)=>a-b);
+      const validWeights=targetCount===games.length
+        ?validConfidence(weights,games.length)
+        :sorted.length===expectedRemaining.length&&sorted.every((v,i)=>v===expectedRemaining[i]);
+      if(!validWeights)continue;
+
+      const rawPicks=chunk.map(x=>normalizeTeam(x[1]));
       const valid=rawPicks.every((p,i)=>p===header[i].away||p===header[i].home);
       if(!valid)continue;
 
       const byGame=new Map();
       header.forEach((h,i)=>byGame.set(h.away+'|'+h.home,{pick:rawPicks[i],weight:weights[i]}));
+
       const picks=[],orderedWeights=[];
       for(const g of games){
         const hit=byGame.get(g.away+'|'+g.home);
-        if(!hit){picks.push(null);orderedWeights.push(null)}
-        else{picks.push(hit.pick);orderedWeights.push(hit.weight)}
+        if(hit){picks.push(hit.pick);orderedWeights.push(hit.weight)}
+        else if(isLocked(g)){picks.push(g.pick);orderedWeights.push(Number(g.weight))}
+        else{picks.push(null);orderedWeights.push(null)}
       }
-      const pc=picks.filter(Boolean).length,wc=orderedWeights.filter(v=>v!=null).length;
+      const pc=picks.filter(Boolean).length;
+      const wc=orderedWeights.filter(v=>v!=null).length;
       if(pc===games.length&&validConfidence(orderedWeights,games.length))
         return {picks,weights:orderedWeights,pickCount:pc,weightCount:wc,source:'CBS Weekly Standings snapshot'};
     }
@@ -434,26 +467,37 @@ function extractFieldModel(obj,games){
   const snaps=(obj?.snapshots||[]).filter(s=>/weekly standings/i.test(String(s?.title||''))||/\/standings\/weekly/i.test(String(s?.url||'')));
   const stand=newest(snaps); if(!stand)return null;
   const text=String(stand.text||''),n=games.length;
+  const unlocked=games.filter(g=>!isLocked(g));
 
   const header=[];
   const hrx=/(?:WED|THU|SUN|MON)\s+\d{1,2}:\d{2}\s+[AP]M\s*\n([A-Z]{2,3})\s*\n([A-Z]{2,3})/g;
-  let hm; while((hm=hrx.exec(text))!==null&&header.length<n)header.push({away:normalizeTeam(hm[1]),home:normalizeTeam(hm[2])});
-  if(header.length!==n)return null;
+  let hm;
+  while((hm=hrx.exec(text))!==null&&header.length<n)
+    header.push({away:normalizeTeam(hm[1]),home:normalizeTeam(hm[2])});
+
+  if(header.length!==n && header.length!==unlocked.length)return null;
 
   const defaultWeightByKey={};
-  header.forEach((h,i)=>defaultWeightByKey[h.away+'|'+h.home]=n-i);
+  if(header.length===n){
+    header.forEach((h,i)=>defaultWeightByKey[h.away+'|'+h.home]=n-i);
+  }else{
+    // With one completed game removed, remaining schedule defaults are 15..1.
+    header.forEach((h,i)=>defaultWeightByKey[h.away+'|'+h.home]=header.length-i);
+    const locked=games.filter(g=>isLocked(g));
+    if(locked.length===1)defaultWeightByKey[locked[0].away+'|'+locked[0].home]=n;
+  }
 
   const teamToKey=new Map();
-  for(const h of header){
-    const key=h.away+'|'+h.home;
-    teamToKey.set(h.away,key); teamToKey.set(h.home,key);
+  for(const g of games){
+    const key=g.away+'|'+g.home;
+    teamToKey.set(g.away,key);teamToKey.set(g.home,key);
   }
 
   const observationsByKey={};
   const rx=/(?:^|\n)\s*([A-Z]{2,3})\s*\n\s*\((\d{1,2})\)/g;
-  let m;
-  while((m=rx.exec(text))!==null){
-    const team=normalizeTeam(m[1]),weight=Number(m[2]),key=teamToKey.get(team);
+  let mm;
+  while((mm=rx.exec(text))!==null){
+    const team=normalizeTeam(mm[1]),weight=Number(mm[2]),key=teamToKey.get(team);
     if(!key||!Number.isInteger(weight)||weight<1||weight>n)continue;
     (observationsByKey[key]??=[]).push({pick:team,weight});
   }
@@ -466,21 +510,21 @@ function extractFieldModel(obj,games){
     locked.push({
       key,gameId:g.id,away:g.away,home:g.home,winner:g.winner,
       defaultWeight:def,observations:obs,
-      defaultCount:obs.filter(o=>o.weight===def).length,
+      defaultCount:def?obs.filter(o=>o.weight===def).length:0,
       totalObserved:obs.length
     });
   }
   if(!locked.length)return null;
+
   locked.sort((a,b)=>b.totalObserved-a.totalObserved);
   const primary=locked[0];
   return{
     source:'CBS Weekly Standings',
     capturedAt:stand.ts||obj?.exportedAt||nowIso(),
-    schedule:header.map((h,i)=>({...h,defaultWeight:n-i})),
-    locked,
-    primaryGameId:primary.gameId,
+    schedule:header.map((h,i)=>({...h,defaultWeight:defaultWeightByKey[h.away+'|'+h.home]})),
+    locked,primaryGameId:primary.gameId,
     observedEntries:primary.totalObserved,
-    defaultShare:primary.totalObserved?primary.defaultCount/primary.totalObserved:null
+    defaultShare:primary.defaultWeight&&primary.totalObserved?primary.defaultCount/primary.totalObserved:null
   };
 }
 
@@ -563,8 +607,20 @@ async function importScan(obj){
     // Preserve the known Week 1 matchup structure if the newer bridge provides structured data but no visible text snapshot.
     picks=state.games.map(g=>({away:g.away,home:g.home,awayPct:g.awayPct,homePct:g.homePct}));
   }
+  restoreFullWeekState();
   const matchups=picks.map(p=>[p.away,p.home]),oddsSnap=newest(snaps.filter(s=>/odds/i.test(s.url||'')||/odds/i.test(s.title||''))),odds=oddsSnap?parseOdds(oddsSnap.text,matchups):[],om=new Map(odds.map(x=>[x.away+'|'+x.home,x])),old=new Map(state.games.map(x=>[x.away+'|'+x.home,x]));
-  state.games=picks.map((p,i)=>{const k=p.away+'|'+p.home,prev=old.get(k)||{},o=om.get(k)||{};return{id:'g'+(i+1),...p,awayML:o.awayML??prev.awayML??null,homeML:o.homeML??prev.homeML??null,total:o.total??prev.total??null,pick:prev.pick??null,weight:prev.weight??null,locked:prev.locked??false,completed:prev.completed??false,winner:prev.winner??null,statusText:prev.statusText??''}});
+  if(picks.length===state.games.length){
+    state.games=picks.map((p,i)=>{const k=p.away+'|'+p.home,prev=old.get(k)||{},o=om.get(k)||{};return{id:'g'+(i+1),...p,awayML:o.awayML??prev.awayML??null,homeML:o.homeML??prev.homeML??null,total:o.total??prev.total??null,pick:prev.pick??null,weight:prev.weight??null,locked:prev.locked??false,completed:prev.completed??false,winner:prev.winner??null,statusText:prev.statusText??''}});
+  }else{
+    // Postgame CBS often removes completed games from Picks. Merge remaining games into the
+    // full week and preserve locked picks/results/confidence.
+    for(const p of picks){
+      const k=p.away+'|'+p.home,idx=state.games.findIndex(g=>g.away===p.away&&g.home===p.home);
+      if(idx<0)continue;
+      const prev=state.games[idx],o=om.get(k)||{};
+      state.games[idx]={...prev,...p,awayML:o.awayML??prev.awayML??null,homeML:o.homeML??prev.homeML??null,total:o.total??prev.total??null};
+    }
+  }
   const structured=extractStructuredCard(obj,state.games);
   if(structured){state.games.forEach((g,i)=>{if(structured.picks[i])g.pick=structured.picks[i];if(structured.weights[i]!=null)g.weight=structured.weights[i]})}
   const stand=newest(snaps.filter(s=>/Weekly Standings/i.test(s.title||'')));if(stand){const names=[...stand.text.matchAll(/\n\n\n([^\n\t]{2,60})\n\t0\t0\t/g)].map(x=>x[1]);if(names.length>20)state.poolSize=new Set(names).size}
@@ -575,7 +631,7 @@ async function importScan(obj){
   state.fieldModel=extractFieldModel(obj,state.games);save();
   render();
   try{await refreshMarket(true)}catch{}
-  const cis=cardImportStatus();if(cis.complete)show(`CBS data refreshed — imported ${cis.picks}/${state.games.length} picks and all ${cis.unique} confidence values.`);else show(`CBS data refreshed, but IQ could only map ${cis.picks}/${state.games.length} picks and ${cis.unique}/${state.games.length} confidence values. Open CBS Picks and Weekly Standings before creating the scan, then re-import it.`,'yellow');
+  const cis=cardImportStatus();if(cis.complete)show(`CBS data refreshed — imported ${cis.picks}/${state.games.length} picks and all ${cis.unique} confidence values.`);else show(`CBS data refreshed, but IQ could only reconstruct ${cis.picks}/${state.games.length} picks and ${cis.unique}/${state.games.length} confidence values. Completed games are preserved automatically; if this still appears, create one new scan with Picks and Weekly Standings open.`,'yellow');
 }
 
 function applyVerifiedMarketSnapshot({silent=false}={}){
