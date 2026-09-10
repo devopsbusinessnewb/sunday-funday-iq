@@ -28,7 +28,7 @@ table{width:100%;border-collapse:collapse;font-size:12px;min-width:830px}.tablew
 <body>
 <div class="app">
   <div class="header">
-    <div class="brand"><h1>🏈 Sunday Funday IQ</h1><p>CBS Pick'em · Pick'em Coach</p><p style="font-size:10px;color:#5f7898">Build 1.1.3 · locked-confidence repair</p></div>
+    <div class="brand"><h1>🏈 Sunday Funday IQ</h1><p>CBS Pick'em · Pick'em Coach</p><p style="font-size:10px;color:#5f7898">Build 1.1.4 · preserve locked CBS confidence</p></div>
     <div class="actions">
       <a class="btn" href="../../">⌂ Home</a>
       <input id="scanFile" type="file" accept=".json,application/json" hidden>
@@ -364,11 +364,42 @@ function loadState(){
 }
 let state=loadState();
 restoreFullWeekState();
-if(repairLockedConfidenceCollision()){save();}
+let __repaired=false;if(repairKnownWeek1LockedSeattle())__repaired=true;if(repairLockedConfidenceCollision())__repaired=true;if(__repaired)save();
 const $=id=>document.getElementById(id);
 function save(){if(typeof localStorage!=='undefined')localStorage.setItem(STORAGE_KEY,JSON.stringify(state))}
 function show(text,kind=''){const b=$('banner');b.textContent=text;b.className='banner '+kind;b.style.display='block';setTimeout(()=>b.style.display='none',7000)}
 function snapshotCard(){return cardFromGames(state.games)}
+
+function snapshotLockedGames(){
+  const out={};
+  for(const g of state.games||[]){
+    if(isLocked(g)){
+      out[g.away+'|'+g.home]={
+        pick:g.pick,
+        weight:g.weight,
+        locked:g.locked,
+        completed:g.completed,
+        winner:g.winner,
+        statusText:g.statusText
+      };
+    }
+  }
+  return out;
+}
+function restoreLockedGames(lockSnap){
+  if(!lockSnap)return;
+  for(const g of state.games||[]){
+    const x=lockSnap[g.away+'|'+g.home];
+    if(!x)continue;
+    g.pick=x.pick;
+    g.weight=x.weight;
+    g.locked=x.locked;
+    g.completed=x.completed;
+    g.winner=x.winner;
+    g.statusText=x.statusText;
+  }
+}
+
 const CBS_TEAM_TO_ABBR={
 'CARDINALS':'ARI','FALCONS':'ATL','RAVENS':'BAL','BILLS':'BUF','PANTHERS':'CAR','BEARS':'CHI','BENGALS':'CIN','BROWNS':'CLE',
 'COWBOYS':'DAL','BRONCOS':'DEN','LIONS':'DET','PACKERS':'GB','TEXANS':'HOU','COLTS':'IND','JAGUARS':'JAX','CHIEFS':'KC',
@@ -568,6 +599,29 @@ function extractStructuredCard(obj,games){
   return best;
 }
 function cardImportStatus(){const picks=state.games.filter(g=>sideOf(g)!=null).length,weights=state.games.map(g=>Number(g.weight)).filter(v=>Number.isInteger(v)&&v>=1&&v<=state.games.length).length,unique=new Set(state.games.map(g=>Number(g.weight)).filter(v=>Number.isInteger(v)&&v>=1&&v<=state.games.length)).size;return{picks,weights,unique,complete:picks===state.games.length&&unique===state.games.length}}
+
+function repairKnownWeek1LockedSeattle(){
+  const g=(state.games||[]).find(x=>x.away==='NE'&&x.home==='SEA');
+  if(!g||!g.completed||g.winner!==1)return false;
+  if(Number(g.weight)!==16)return false;
+  g.pick='SEA';
+  g.weight=9;
+  g.locked=true;
+  const n=state.games.length;
+  const counts=new Map();
+  for(const x of state.games){
+    const v=Number(x.weight);
+    if(Number.isInteger(v)&&v>=1&&v<=n)counts.set(v,(counts.get(v)||0)+1);
+  }
+  const missing=[...Array(n).keys()].map(i=>i+1).filter(v=>!counts.has(v));
+  const duplicateNine=(counts.get(9)||0)>1;
+  if(missing.length===1&&duplicateNine){
+    const idx=state.games.findIndex(x=>x!==g&&!isLocked(x)&&Number(x.weight)===9);
+    if(idx>=0)state.games[idx].weight=missing[0];
+  }
+  return true;
+}
+
 function repairLockedConfidenceCollision(){
   const n=state.games.length;
   const locked=state.games.filter(g=>isLocked(g)&&Number.isInteger(Number(g.weight)));
@@ -627,6 +681,7 @@ async function pasteCbsPhoneSync(){
 }
 
 async function importScan(obj){
+  const lockedBeforeImport=snapshotLockedGames();
   const snaps=obj.snapshots||[],pickSnap=newest(snaps.filter(s=>/\|\s*Picks/i.test(s.title||'')||/Picks$/i.test(s.title||'')))||newest(snaps.filter(s=>/pickem/i.test(s.url||'')));
   let picks=pickSnap?parsePicks(pickSnap.text):[];
   if(!picks.length){
@@ -648,13 +703,19 @@ async function importScan(obj){
     }
   }
   const structured=extractStructuredCard(obj,state.games);
-  if(structured){state.games.forEach((g,i)=>{if(structured.picks[i])g.pick=structured.picks[i];if(structured.weights[i]!=null)g.weight=structured.weights[i]})}
+  if(structured){state.games.forEach((g,i)=>{
+    if(isLocked(g))return;
+    if(structured.picks[i])g.pick=structured.picks[i];
+    if(structured.weights[i]!=null)g.weight=structured.weights[i];
+  })}
+  restoreLockedGames(lockedBeforeImport);
   repairLockedConfidenceCollision();
   const stand=newest(snaps.filter(s=>/Weekly Standings/i.test(s.title||'')));if(stand){const names=[...stand.text.matchAll(/\n\n\n([^\n\t]{2,60})\n\t0\t0\t/g)].map(x=>x[1]);if(names.length>20)state.poolSize=new Set(names).size}
   state.importedAt=obj.exportedAt||pickSnap?.ts||nowIso();state.cbsUpdatedAt=pickSnap?.ts||obj.exportedAt||nowIso();state.cbsSource='scan';
   if(odds.length){state.marketUpdatedAt=oddsSnap?.ts||obj.exportedAt||nowIso();state.marketSource='CBS scan odds'}
   state.originalCard=completeCard(state.games)?snapshotCard():state.originalCard;state.recommendedCard=null;state.optimization=null;state.applied=false;state.sim=null;save();
   try{await refreshResults(true)}catch{}
+  restoreLockedGames(lockedBeforeImport);
   repairLockedConfidenceCollision();
   state.fieldModel=extractFieldModel(obj,state.games);save();
   render();
@@ -829,7 +890,10 @@ function render(){
 }
 async function runSimulation(){
   await refreshResults(true);
-  if(repairLockedConfidenceCollision())save();
+  let repaired=false;
+  if(repairKnownWeek1LockedSeattle())repaired=true;
+  if(repairLockedConfidenceCollision())repaired=true;
+  if(repaired)save();
   render();
   if(!state.fieldModel?.observedEntries){
     show('Field model not loaded yet. Tap Refresh CBS Data and import one fresh bridge JSON, then run the simulation again.','yellow');
