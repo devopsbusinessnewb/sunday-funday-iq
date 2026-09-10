@@ -28,7 +28,7 @@ table{width:100%;border-collapse:collapse;font-size:12px;min-width:830px}.tablew
 <body>
 <div class="app">
   <div class="header">
-    <div class="brand"><h1>🏈 Sunday Funday IQ</h1><p>CBS Pick'em · Pick'em Coach</p><p style="font-size:10px;color:#5f7898">Build 1.0.9 · stable optimizer + clearer card instructions</p></div>
+    <div class="brand"><h1>🏈 Sunday Funday IQ</h1><p>CBS Pick'em · Pick'em Coach</p><p style="font-size:10px;color:#5f7898">Build 1.1.0 · CBS field model v2</p></div>
     <div class="actions">
       <a class="btn" href="../../">⌂ Home</a>
       <input id="scanFile" type="file" accept=".json,application/json" hidden>
@@ -83,7 +83,7 @@ table{width:100%;border-collapse:collapse;font-size:12px;min-width:830px}.tablew
     <div class="card metric"><div class="label">Pick Popularity</div><div class="value" id="chalk">—</div><div class="sub">confidence-weighted CBS%</div></div>
     <div class="card metric"><div class="label">Tiebreaker</div><div class="value" id="tie">—</div><div class="sub">MNF market total</div></div>
 
-    <div class="card half"><h2>Optimizer model</h2><div class="callout"><b>State-aware tournament search.</b><div class="note">IQ locks games that have started, fixes completed results, then simulates only the remaining uncertainty from market probabilities. It creates opposing CBS-style confidence cards and searches only changes that are still legally available. Candidate cards are judged primarily on Top-2 probability, with Win % as the secondary objective. Live odds refresh uses a public market feed with ESPN as fallback. The final card is re-tested with a larger simulation before it is shown.</div></div></div>
+    <div class="card half"><h2>Optimizer model</h2><div class="callout"><b>State-aware tournament search.</b><div class="note">IQ locks games that have started, fixes completed results, then simulates only the remaining uncertainty from market probabilities. It anchors opponent behavior to confidence values actually revealed in CBS Weekly Standings, including the CBS default schedule-order behavior when observed, then simulates only the still-hidden portions of opponent cards. Candidate cards are judged primarily on Top-2 probability, with Win % as the secondary objective. Live odds refresh uses a public market feed with ESPN as fallback. The final card is re-tested with a larger simulation before it is shown.</div></div></div>
     <div class="card half"><h2>How to use this</h2><div class="callout"><b>CBS → IQ → Optimize → Review → CBS.</b><div class="note">Refresh CBS Data, refresh market prices if available, then Run Simulation. Apply Recommended Card only changes Sunday Funday IQ. It never submits picks to CBS. Use the recommendation list to make any final changes manually on CBS.</div></div></div>
 
     <div class="card wide"><h2>Your Picks</h2><div class="games" id="games"></div></div>
@@ -185,18 +185,59 @@ function freshness(source,ts,threshold){const age=hoursOld(ts);if(source==='seed
 function dataFreshness(s){return{cbs:freshness(s.cbsSource||'seed',s.cbsUpdatedAt||SEED_TS,CBS_FRESH_HOURS),market:freshness(s.marketSource||'seed',s.marketUpdatedAt||SEED_TS,MARKET_FRESH_HOURS)}}
 function objective(x){return x.top2*10000+x.win*900+x.avg*.01}
 function binaryCounts(sorted,score){let lo=0,hi=sorted.length;while(lo<hi){const m=(lo+hi)>>1;if(sorted[m]<score)lo=m+1;else hi=m}const first=lo;lo=0;hi=sorted.length;while(lo<hi){const m=(lo+hi)>>1;if(sorted[m]<=score)lo=m+1;else hi=m}return{less:first,equal:lo-first,greater:sorted.length-lo}}
-function buildWorlds(games,poolSize,iters,seed=20260908){
+function buildWorlds(games,poolSize,iters,seed=20260908,fieldModel=null){
   const rnd=mulberry32(seed),n=games.length,fieldN=Math.max(1,(poolSize||102)-1),worlds=new Array(iters);
   const probs=games.map(g=>{const m=market(g);return[m.away??g.awayPct/100,m.home??g.homePct/100]});
+  const scheduleMap=new Map((fieldModel?.schedule||[]).map(x=>[x.away+'|'+x.home,x.defaultWeight]));
+  const primary=(fieldModel?.locked||[]).find(x=>x.gameId===fieldModel?.primaryGameId)||fieldModel?.locked?.[0]||null;
+  const primaryIdx=primary?games.findIndex(g=>g.id===primary.gameId):-1;
+  const empirical=primary?.observations||[];
+
   for(let z=0;z<iters;z++){
-    const winners=new Uint8Array(n);for(let i=0;i<n;i++){const fw=fixedWinner(games[i]);winners[i]=fw==null?(rnd()<probs[i][1]?1:0):fw;}
+    const winners=new Uint8Array(n);
+    for(let i=0;i<n;i++){
+      const fw=fixedWinner(games[i]);
+      winners[i]=fw==null?(rnd()<probs[i][1]?1:0):fw;
+    }
+
     const fs=new Uint16Array(fieldN);
     for(let f=0;f<fieldN;f++){
-      const picks=new Uint8Array(n),strength=new Array(n);
-      for(let i=0;i<n;i++){const s=rnd()<games[i].awayPct/100?0:1;picks[i]=s;strength[i]={i,v:ownProb(games[i],s)+(rnd()-.5)*.18}}
-      strength.sort((a,b)=>b.v-a.v);
-      const weights=new Uint8Array(n);for(let r=0;r<n;r++)weights[strength[r].i]=n-r;
-      let score=0;for(let i=0;i<n;i++)if(picks[i]===winners[i])score+=weights[i];fs[f]=score;
+      const picks=new Uint8Array(n),weights=new Uint8Array(n);
+      const used=new Set();
+      let defaultBehavior=false;
+
+      if(primaryIdx>=0&&empirical.length){
+        const o=empirical[Math.floor(rnd()*empirical.length)];
+        const g=games[primaryIdx];
+        picks[primaryIdx]=o.pick===g.home?1:0;
+        weights[primaryIdx]=o.weight;
+        used.add(o.weight);
+        defaultBehavior=o.weight===primary.defaultWeight;
+      }
+
+      for(let i=0;i<n;i++){
+        if(i===primaryIdx)continue;
+        picks[i]=rnd()<games[i].awayPct/100?0:1;
+      }
+
+      const openIdx=[...Array(n).keys()].filter(i=>i!==primaryIdx);
+      if(defaultBehavior){
+        for(const i of openIdx){
+          const key=games[i].away+'|'+games[i].home;
+          const want=scheduleMap.get(key);
+          if(want&&!used.has(want)){weights[i]=want;used.add(want)}
+        }
+        const leftovers=[...Array(n).keys()].map(i=>i+1).filter(w=>!used.has(w)).sort((a,b)=>b-a);
+        let p=0; for(const i of openIdx)if(!weights[i])weights[i]=leftovers[p++];
+      }else{
+        const strength=openIdx.map(i=>({i,v:ownProb(games[i],picks[i])+(rnd()-.5)*.18})).sort((a,b)=>b.v-a.v);
+        const remaining=[...Array(n).keys()].map(i=>i+1).filter(w=>!used.has(w)).sort((a,b)=>b-a);
+        strength.forEach((x,r)=>weights[x.i]=remaining[r]);
+      }
+
+      let score=0;
+      for(let i=0;i<n;i++)if(picks[i]===winners[i])score+=weights[i];
+      fs[f]=score;
     }
     worlds[z]={winners,field:Array.from(fs).sort((a,b)=>a-b)};
   }
@@ -229,7 +270,7 @@ function optimizeConfidence(card,worlds,maxPass=2,locked=new Set()){
 }
 function cardKey(c){return c.choices.join('')+'|'+c.weights.join(',')}
 function searchCandidates(games,current,poolSize,opts={}){
-  const worlds=buildWorlds(games,poolSize,opts.searchIters||SEARCH_ITERS,opts.seed||20260908);
+  const worlds=buildWorlds(games,poolSize,opts.searchIters||SEARCH_ITERS,opts.seed||20260908,opts.fieldModel||null);
   const locked=lockedIndices(games),base=ensureValidCard(current,games.length),baseEval=evaluateCard(base,worlds);
   const candidates=new Map([[cardKey(base),{card:base,eval:baseEval,flips:0}]]);
   const conf=optimizeConfidence(base,worlds,3,locked);candidates.set(cardKey(conf.card),{card:conf.card,eval:conf.eval,flips:0});
@@ -256,7 +297,7 @@ function searchCandidates(games,current,poolSize,opts={}){
 function runOptimizer(games,poolSize,opts={}){
   const current=ensureValidCard(opts.currentCard||cardFromGames(games),games.length);
   const search=searchCandidates(games,current,poolSize,opts);
-  const finalWorlds=buildWorlds(games,poolSize,opts.finalIters||FINAL_ITERS,(opts.seed||20260908)+991);
+  const finalWorlds=buildWorlds(games,poolSize,opts.finalIters||FINAL_ITERS,(opts.seed||20260908)+991,opts.fieldModel||null);
   const currentEval=evaluateCard(current,finalWorlds);
   let best={card:current,eval:currentEval};
   for(const c of search.candidates){
@@ -388,6 +429,61 @@ function extractCardFromStandingsSnapshots(obj,games){
   }
   return null;
 }
+
+function extractFieldModel(obj,games){
+  const snaps=(obj?.snapshots||[]).filter(s=>/weekly standings/i.test(String(s?.title||''))||/\/standings\/weekly/i.test(String(s?.url||'')));
+  const stand=newest(snaps); if(!stand)return null;
+  const text=String(stand.text||''),n=games.length;
+
+  const header=[];
+  const hrx=/(?:WED|THU|SUN|MON)\s+\d{1,2}:\d{2}\s+[AP]M\s*\n([A-Z]{2,3})\s*\n([A-Z]{2,3})/g;
+  let hm; while((hm=hrx.exec(text))!==null&&header.length<n)header.push({away:normalizeTeam(hm[1]),home:normalizeTeam(hm[2])});
+  if(header.length!==n)return null;
+
+  const defaultWeightByKey={};
+  header.forEach((h,i)=>defaultWeightByKey[h.away+'|'+h.home]=n-i);
+
+  const teamToKey=new Map();
+  for(const h of header){
+    const key=h.away+'|'+h.home;
+    teamToKey.set(h.away,key); teamToKey.set(h.home,key);
+  }
+
+  const observationsByKey={};
+  const rx=/(?:^|\n)\s*([A-Z]{2,3})\s*\n\s*\((\d{1,2})\)/g;
+  let m;
+  while((m=rx.exec(text))!==null){
+    const team=normalizeTeam(m[1]),weight=Number(m[2]),key=teamToKey.get(team);
+    if(!key||!Number.isInteger(weight)||weight<1||weight>n)continue;
+    (observationsByKey[key]??=[]).push({pick:team,weight});
+  }
+
+  const locked=[];
+  for(const g of games){
+    if(!isLocked(g))continue;
+    const key=g.away+'|'+g.home,obs=observationsByKey[key]||[],def=defaultWeightByKey[key];
+    if(!obs.length)continue;
+    locked.push({
+      key,gameId:g.id,away:g.away,home:g.home,winner:g.winner,
+      defaultWeight:def,observations:obs,
+      defaultCount:obs.filter(o=>o.weight===def).length,
+      totalObserved:obs.length
+    });
+  }
+  if(!locked.length)return null;
+  locked.sort((a,b)=>b.totalObserved-a.totalObserved);
+  const primary=locked[0];
+  return{
+    source:'CBS Weekly Standings',
+    capturedAt:stand.ts||obj?.exportedAt||nowIso(),
+    schedule:header.map((h,i)=>({...h,defaultWeight:n-i})),
+    locked,
+    primaryGameId:primary.gameId,
+    observedEntries:primary.totalObserved,
+    defaultShare:primary.totalObserved?primary.defaultCount/primary.totalObserved:null
+  };
+}
+
 function extractStructuredCard(obj,games){
   const standingsCard=extractCardFromStandingsSnapshots(obj,games);
   if(standingsCard)return standingsCard;
@@ -476,6 +572,7 @@ async function importScan(obj){
   if(odds.length){state.marketUpdatedAt=oddsSnap?.ts||obj.exportedAt||nowIso();state.marketSource='CBS scan odds'}
   state.originalCard=completeCard(state.games)?snapshotCard():state.originalCard;state.recommendedCard=null;state.optimization=null;state.applied=false;state.sim=null;save();
   try{await refreshResults(true)}catch{}
+  state.fieldModel=extractFieldModel(obj,state.games);save();
   render();
   try{await refreshMarket(true)}catch{}
   const cis=cardImportStatus();if(cis.complete)show(`CBS data refreshed — imported ${cis.picks}/${state.games.length} picks and all ${cis.unique} confidence values.`);else show(`CBS data refreshed, but IQ could only map ${cis.picks}/${state.games.length} picks and ${cis.unique}/${state.games.length} confidence values. Open CBS Picks and Weekly Standings before creating the scan, then re-import it.`,'yellow');
@@ -620,6 +717,14 @@ function renderDecision(){
   const keeps=interestingKeeps(state.games,o.current,o.recommended);for(const k of keeps){const g=state.games[k.i],s=o.current.choices[k.i];html+=`<div class="rec"><div class="rec-head"><div><div class="rec-title">KEEP</div><div class="rec-action">${teamFor(g,s)} · ${o.current.weights[k.i]} confidence</div></div><span class="pill blue">KEEP</span></div><div class="reason">Keep the pick on ${teamFor(g,s)}. The market-vs-pool difference is ${pp(k.e,0)}, but IQ did not improve the final card by changing the winner. If IQ changes this team’s confidence, that separate confidence instruction appears above.</div></div>`}
   $('recommendations').innerHTML=html||'<div class="note" style="margin-top:10px">No changes. Keep your submitted card.</div>';$('applyBtn').disabled=!actions.length;$('revertBtn').disabled=!state.originalCard;
 }
+
+function fieldModelSummary(){
+  const fm=state.fieldModel;
+  if(!fm||!fm.observedEntries)return'Field model: synthetic fallback.';
+  const pctDefault=fm.defaultShare==null?'—':Math.round(fm.defaultShare*100)+'%';
+  return`Field model: ${fm.observedEntries} revealed CBS entries observed; ${pctDefault} used the default confidence on the locked game.`;
+}
+
 function render(){
   renderFreshness();const o=state.optimization,displayEval=o?.appliedEval||o?.currentEval||state.sim;$('poolSize').textContent=state.poolSize||'—';$('expPts').textContent=displayEval?displayEval.avg.toFixed(1):'—';$('top2').textContent=displayEval?pct(displayEval.top2,1):'—';$('winPct').textContent=displayEval?pct(displayEval.win,1):'—';
   const f=dataFreshness(state),prov=!(f.cbs.current&&f.market.current);$('top2Sub').textContent=prov?'PROVISIONAL · stale inputs':'current IQ card';$('winSub').textContent=prov?'PROVISIONAL · stale inputs':'current IQ card';
@@ -640,7 +745,7 @@ async function runSimulation(){
   const f=dataFreshness(state);if(!state.originalCard)state.originalCard=snapshotCard();const current=snapshotCard();$('optBtn').disabled=true;$('progress').classList.add('show');$('progressText').textContent='Locking completed games and optimizing the remaining card…';
   await new Promise(r=>setTimeout(r,50));
   try{
-    const result=runOptimizer(state.games,state.poolSize,{currentCard:current,searchIters:SEARCH_ITERS,finalIters:FINAL_ITERS,seed:20260908});
+    const result=runOptimizer(state.games,state.poolSize,{currentCard:current,searchIters:SEARCH_ITERS,finalIters:FINAL_ITERS,seed:20260908,fieldModel:state.fieldModel||null});
     const actions=cardActions(state.games,result.current,result.recommended,result.finalWorlds);
     state.recommendedCard=result.recommended;state.optimization={current:result.current,currentEval:result.currentEval,recommended:result.recommended,recommendedEval:result.recommendedEval,actions,ranAt:nowIso(),provisional:!(f.cbs.current&&f.market.current)};state.sim=result.currentEval;state.applied=false;save();render();
     show(`Simulation complete. ${state.games.filter(g=>g.locked).length} locked game(s) frozen; remaining card optimized.`);
