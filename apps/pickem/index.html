@@ -28,11 +28,12 @@ table{width:100%;border-collapse:collapse;font-size:12px;min-width:830px}.tablew
 <body>
 <div class="app">
   <div class="header">
-    <div class="brand"><h1>🏈 Sunday Funday IQ</h1><p>CBS Pick'em · Pick'em Coach</p><p style="font-size:10px;color:#5f7898">Build 1.0.5 · verified CBS market snapshot</p></div>
+    <div class="brand"><h1>🏈 Sunday Funday IQ</h1><p>CBS Pick'em · Pick'em Coach</p><p style="font-size:10px;color:#5f7898">Build 1.0.7 · postgame lock + clear recommendations</p></div>
     <div class="actions">
       <a class="btn" href="../../">⌂ Home</a>
       <input id="scanFile" type="file" accept=".json,application/json" hidden>
       <button class="btn primary" id="refreshBtn">Refresh CBS Data</button>
+      <button class="btn" id="phoneSyncBtn">Paste CBS Phone Sync</button>
       <button class="btn" id="marketBtn">Refresh Market</button>
       <button class="btn" id="optBtn">Run Simulation</button>
       <button class="btn" id="saveBtn">Save</button>
@@ -82,7 +83,7 @@ table{width:100%;border-collapse:collapse;font-size:12px;min-width:830px}.tablew
     <div class="card metric"><div class="label">Pick Popularity</div><div class="value" id="chalk">—</div><div class="sub">confidence-weighted CBS%</div></div>
     <div class="card metric"><div class="label">Tiebreaker</div><div class="value" id="tie">—</div><div class="sub">MNF market total</div></div>
 
-    <div class="card half"><h2>Optimizer model</h2><div class="callout"><b>Complete-card tournament search.</b><div class="note">IQ simulates game outcomes from market probabilities, creates approximately 101 opposing CBS-style confidence cards, then searches winner flips and confidence permutations. Candidate cards are judged primarily on Top-2 probability, with Win % as the secondary objective. Live odds refresh uses a public market feed with ESPN as fallback. The final card is re-tested with a larger simulation before it is shown.</div></div></div>
+    <div class="card half"><h2>Optimizer model</h2><div class="callout"><b>State-aware tournament search.</b><div class="note">IQ locks games that have started, fixes completed results, then simulates only the remaining uncertainty from market probabilities. It creates opposing CBS-style confidence cards and searches only changes that are still legally available. Candidate cards are judged primarily on Top-2 probability, with Win % as the secondary objective. Live odds refresh uses a public market feed with ESPN as fallback. The final card is re-tested with a larger simulation before it is shown.</div></div></div>
     <div class="card half"><h2>How to use this</h2><div class="callout"><b>CBS → IQ → Optimize → Review → CBS.</b><div class="note">Refresh CBS Data, refresh market prices if available, then Run Simulation. Apply Recommended Card only changes Sunday Funday IQ. It never submits picks to CBS. Use the recommendation list to make any final changes manually on CBS.</div></div></div>
 
     <div class="card wide"><h2>Your Picks</h2><div class="games" id="games"></div></div>
@@ -140,6 +141,36 @@ function sideOf(g,pick=g.pick){return pick===g.away?0:pick===g.home?1:null}
 function teamFor(g,s){return s===0?g.away:g.home}
 function ownProb(g,s){return (s===0?g.awayPct:g.homePct)/100}
 function marketProb(g,s){const m=market(g);return s===0?m.away:m.home}
+
+function isLocked(g){return !!g.locked}
+function fixedWinner(g){return g.completed && (g.winner===0||g.winner===1)?g.winner:null}
+function lockedIndices(games){return new Set(games.map((g,i)=>isLocked(g)?i:-1).filter(i=>i>=0))}
+async function refreshResults(silent=true){
+  let updated=0;
+  try{
+    const r=await fetch('https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=2026&seasontype=2&week=1',{cache:'no-store'});
+    if(!r.ok)throw new Error('ESPN '+r.status);
+    const data=await r.json();
+    for(const ev of data.events||[]){
+      const comp=ev.competitions?.[0];if(!comp)continue;
+      const cs=comp.competitors||[];
+      const ac=cs.find(c=>c.homeAway==='away'),hc=cs.find(c=>c.homeAway==='home');
+      const away=normalizeTeam(ac?.team?.abbreviation),home=normalizeTeam(hc?.team?.abbreviation);
+      const g=state.games.find(x=>x.away===away&&x.home===home);if(!g)continue;
+      const st=comp.status?.type||ev.status?.type||{};
+      const completed=!!st.completed,started=completed||String(st.state||'').toLowerCase()==='in';
+      g.locked=started;g.completed=completed;g.statusText=st.shortDetail||st.detail||st.description||'';
+      if(completed){
+        if(ac?.winner===true)g.winner=0;else if(hc?.winner===true)g.winner=1;
+        else{const as=Number(ac?.score),hs=Number(hc?.score);if(Number.isFinite(as)&&Number.isFinite(hs)&&as!==hs)g.winner=as>hs?0:1}
+      }else g.winner=null;
+      updated++;
+    }
+    state.resultsUpdatedAt=nowIso();state.resultsSource='ESPN scoreboard';save();
+    if(!silent)show(`Game results refreshed: ${state.games.filter(g=>g.locked).length} locked, ${state.games.filter(g=>g.completed).length} final.`);
+    return updated;
+  }catch(e){console.warn('Results refresh failed',e);if(!silent)show('Could not refresh game results. Existing lock state was preserved.','yellow');return 0}
+}
 function pct(x,d=1){return x==null?'—':(x*100).toFixed(d)+'%'}
 function pp(x,d=1){return (x>=0?'+':'')+(x*100).toFixed(d)+'%'}
 function moneylineText(v){return v==null?'—':(v>0?'+':'')+v}
@@ -158,7 +189,7 @@ function buildWorlds(games,poolSize,iters,seed=20260908){
   const rnd=mulberry32(seed),n=games.length,fieldN=Math.max(1,(poolSize||102)-1),worlds=new Array(iters);
   const probs=games.map(g=>{const m=market(g);return[m.away??g.awayPct/100,m.home??g.homePct/100]});
   for(let z=0;z<iters;z++){
-    const winners=new Uint8Array(n);for(let i=0;i<n;i++)winners[i]=rnd()<probs[i][1]?1:0;
+    const winners=new Uint8Array(n);for(let i=0;i<n;i++){const fw=fixedWinner(games[i]);winners[i]=fw==null?(rnd()<probs[i][1]?1:0):fw;}
     const fs=new Uint16Array(fieldN);
     for(let f=0;f<fieldN;f++){
       const picks=new Uint8Array(n),strength=new Array(n);
@@ -183,11 +214,12 @@ function evaluateCard(card,worlds){
   }
   return{top2:top2/worlds.length,win:win/worlds.length,avg:total/worlds.length};
 }
-function optimizeConfidence(card,worlds,maxPass=2){
+function optimizeConfidence(card,worlds,maxPass=2,locked=new Set()){
   let best=ensureValidCard(card,card.choices.length),bestEval=evaluateCard(best,worlds);
   for(let pass=0;pass<maxPass;pass++){
     let chosen=null,chosenEval=bestEval;
     for(let i=0;i<best.weights.length;i++)for(let j=i+1;j<best.weights.length;j++){
+      if(locked.has(i)||locked.has(j))continue;
       const c={choices:[...best.choices],weights:[...best.weights]};[c.weights[i],c.weights[j]]=[c.weights[j],c.weights[i]];
       const e=evaluateCard(c,worlds);if(objective(e)>objective(chosenEval)+1e-9){chosen=c;chosenEval=e}
     }
@@ -198,19 +230,19 @@ function optimizeConfidence(card,worlds,maxPass=2){
 function cardKey(c){return c.choices.join('')+'|'+c.weights.join(',')}
 function searchCandidates(games,current,poolSize,opts={}){
   const worlds=buildWorlds(games,poolSize,opts.searchIters||SEARCH_ITERS,opts.seed||20260908);
-  const base=ensureValidCard(current,games.length),baseEval=evaluateCard(base,worlds);
+  const locked=lockedIndices(games),base=ensureValidCard(current,games.length),baseEval=evaluateCard(base,worlds);
   const candidates=new Map([[cardKey(base),{card:base,eval:baseEval,flips:0}]]);
-  const conf=optimizeConfidence(base,worlds,3);candidates.set(cardKey(conf.card),{card:conf.card,eval:conf.eval,flips:0});
+  const conf=optimizeConfidence(base,worlds,3,locked);candidates.set(cardKey(conf.card),{card:conf.card,eval:conf.eval,flips:0});
   let beam=[{card:conf.card,eval:conf.eval,flips:0,flipped:new Set()}];
   for(let depth=1;depth<=3;depth++){
     const expanded=[];
     for(const node of beam){
       for(let i=0;i<games.length;i++){
-        if(node.flipped.has(i))continue;
+        if(locked.has(i)||node.flipped.has(i))continue;
         const alt={choices:[...node.card.choices],weights:[...node.card.weights]};alt.choices[i]=1-alt.choices[i];
         const p=marketProb(games[i],alt.choices[i])??ownProb(games[i],alt.choices[i]);
         const field=ownProb(games[i],alt.choices[i]);if(p<.35 && !(p>=.30 && p-field>=.15))continue;
-        const tuned=optimizeConfidence(alt,worlds,1);
+        const tuned=optimizeConfidence(alt,worlds,1,locked);
         const flipped=new Set(node.flipped);flipped.add(i);
         expanded.push({card:tuned.card,eval:tuned.eval,flips:depth,flipped});
       }
@@ -228,36 +260,36 @@ function runOptimizer(games,poolSize,opts={}){
   const currentEval=evaluateCard(current,finalWorlds);
   let best={card:current,eval:currentEval};
   for(const c of search.candidates){
-    const e=evaluateCard(c.card,finalWorlds);
-    if(objective(e)>objective(best.eval))best={card:c.card,eval:e};
+    const safe=clone(c.card);for(let i=0;i<games.length;i++)if(isLocked(games[i])){safe.choices[i]=current.choices[i];safe.weights[i]=current.weights[i]}
+    const e=evaluateCard(safe,finalWorlds);
+    if(objective(e)>objective(best.eval))best={card:safe,eval:e};
   }
   // Never recommend a card that fails the final complete-card test.
   if(best.eval.top2<currentEval.top2-1e-12)best={card:current,eval:currentEval};
   return{current,currentEval,recommended:best.card,recommendedEval:best.eval,finalWorlds};
 }
 function cardActions(games,current,recommended,worlds){
-  let work=clone(current),prev=evaluateCard(work,worlds),actions=[];
-  for(let i=0;i<games.length;i++)if(work.choices[i]!==recommended.choices[i]){
-    const before=clone(work);work.choices[i]=recommended.choices[i];const e=evaluateCard(work,worlds);
-    actions.push({type:'FLIP',games:[i],before,after:clone(work),from:teamFor(games[i],before.choices[i]),to:teamFor(games[i],work.choices[i]),fromConf:before.weights[i],toConf:work.weights[i],beforeEval:prev,afterEval:e});prev=e;
-  }
+  const actions=[];
   for(let i=0;i<games.length;i++){
-    if(work.weights[i]===recommended.weights[i])continue;
-    const j=work.weights.findIndex((w,k)=>k!==i&&w===recommended.weights[i]);
-    if(j<0)continue;
-    const before=clone(work),wi=work.weights[i],wj=work.weights[j];[work.weights[i],work.weights[j]]=[wj,wi];const e=evaluateCard(work,worlds);
-    actions.push({type:'CONFIDENCE SWAP',games:[i,j],before,after:clone(work),from:`${teamFor(games[i],work.choices[i])} ${wi} / ${teamFor(games[j],work.choices[j])} ${wj}`,to:`${teamFor(games[i],work.choices[i])} ${wj} / ${teamFor(games[j],work.choices[j])} ${wi}`,beforeEval:prev,afterEval:e});prev=e;
+    if(isLocked(games[i]))continue;
+    const pickChanged=current.choices[i]!==recommended.choices[i],confChanged=current.weights[i]!==recommended.weights[i];
+    if(!pickChanged&&!confChanged)continue;
+    actions.push({
+      type:pickChanged?'FLIP':'CONFIDENCE',games:[i],
+      fromPick:teamFor(games[i],current.choices[i]),toPick:teamFor(games[i],recommended.choices[i]),
+      fromConf:current.weights[i],toConf:recommended.weights[i]
+    });
   }
   return actions;
 }
-function recommendationClass(deltaTop2,deltaWin){if(deltaTop2>=.003||deltaWin>=.002)return['STRONG RECOMMENDATION','green'];return['OPTIONAL LEVERAGE','yellow']}
+function recommendationClass(a){if(a.type==='FLIP')return['PICK CHANGE','green'];return['CONFIDENCE CHANGE','blue']}
 function explainAction(a,games){
   const dt=a.afterEval.top2-a.beforeEval.top2,dw=a.afterEval.win-a.beforeEval.win;
   if(a.type==='FLIP'){const i=a.games[0],g=games[i],to=sideOf(g,a.to),cbs=ownProb(g,to),mp=marketProb(g,to);return`CBS has ${a.to} at ${pct(cbs,0)} while the market gives it ${pct(mp,0)}. The complete-card simulation ${dt>=0?'improves':'changes'} Top-2 probability after accounting for the rest of your card and the simulated field.`}
   return`This keeps all 16 confidence values valid while moving more confidence toward the card construction that performed better in the tournament simulation.`;
 }
 function interestingKeeps(games,current,recommended){
-  const arr=[];for(let i=0;i<games.length;i++){if(current.choices[i]!==recommended.choices[i])continue;const s=current.choices[i],e=(marketProb(games[i],s)??ownProb(games[i],s))-ownProb(games[i],s);if(Math.abs(e)>=.07)arr.push({i,e})}
+  const arr=[];for(let i=0;i<games.length;i++){if(isLocked(games[i])||current.choices[i]!==recommended.choices[i])continue;const s=current.choices[i],e=(marketProb(games[i],s)??ownProb(games[i],s))-ownProb(games[i],s);if(Math.abs(e)>=.07)arr.push({i,e})}
   return arr.sort((a,b)=>Math.abs(b.e)-Math.abs(a.e)).slice(0,3);
 }
 function loadState(){
@@ -395,6 +427,39 @@ function extractStructuredCard(obj,games){
   return best;
 }
 function cardImportStatus(){const picks=state.games.filter(g=>sideOf(g)!=null).length,weights=state.games.map(g=>Number(g.weight)).filter(v=>Number.isInteger(v)&&v>=1&&v<=state.games.length).length,unique=new Set(state.games.map(g=>Number(g.weight)).filter(v=>Number.isInteger(v)&&v>=1&&v<=state.games.length)).size;return{picks,weights,unique,complete:picks===state.games.length&&unique===state.games.length}}
+
+const PHONE_SYNC_KEY='sfiqCbsPhoneSyncV1';
+function loadPhoneSync(){try{return JSON.parse(localStorage.getItem(PHONE_SYNC_KEY)||'{}')}catch{return{}}}
+function savePhoneSync(x){localStorage.setItem(PHONE_SYNC_KEY,JSON.stringify(x))}
+function classifyCbsCapture(text){
+  const t=String(text||'');
+  if(/Weekly Standings/i.test(t)&&/Tony Eickhoff/i.test(t))return'standings';
+  if(/16\/16 Picks/i.test(t)||(/\bPicks\b/i.test(t)&&/%/.test(t)))return'picks';
+  return null;
+}
+async function pasteCbsPhoneSync(){
+  let text='';
+  try{text=await navigator.clipboard.readText()}catch{
+    show('Paste permission was blocked. Open IQ in the browser and allow Paste when prompted.','yellow');return;
+  }
+  if(!text||text.length<100){show('Clipboard does not contain a CBS page capture.','yellow');return}
+  const kind=classifyCbsCapture(text);
+  if(!kind){show('Clipboard text is not recognized as CBS Picks or Weekly Standings.','yellow');return}
+  const cap=loadPhoneSync();cap[kind]=text;cap[kind+'At']=nowIso();savePhoneSync(cap);
+  if(!cap.picks||!cap.standings){
+    show(`Saved CBS ${kind==='picks'?'Picks':'Weekly Standings'} capture. Now capture the other CBS page and paste it here.`);
+    return;
+  }
+  const obj={
+    product:"CBS Pick'em IQ Bridge",version:"phone-sync-1",exportedAt:nowIso(),
+    snapshots:[
+      {title:"NFL Football Tourney 2026 | Picks",url:"phone://cbs/picks",text:cap.picks,ts:cap.picksAt},
+      {title:"NFL Football Tourney 2026 | Weekly Standings",url:"phone://cbs/standings",text:cap.standings,ts:cap.standingsAt}
+    ]
+  };
+  await importScan(obj);
+}
+
 async function importScan(obj){
   const snaps=obj.snapshots||[],pickSnap=newest(snaps.filter(s=>/\|\s*Picks/i.test(s.title||'')||/Picks$/i.test(s.title||'')))||newest(snaps.filter(s=>/pickem/i.test(s.url||'')));
   let picks=pickSnap?parsePicks(pickSnap.text):[];
@@ -403,13 +468,15 @@ async function importScan(obj){
     picks=state.games.map(g=>({away:g.away,home:g.home,awayPct:g.awayPct,homePct:g.homePct}));
   }
   const matchups=picks.map(p=>[p.away,p.home]),oddsSnap=newest(snaps.filter(s=>/odds/i.test(s.url||'')||/odds/i.test(s.title||''))),odds=oddsSnap?parseOdds(oddsSnap.text,matchups):[],om=new Map(odds.map(x=>[x.away+'|'+x.home,x])),old=new Map(state.games.map(x=>[x.away+'|'+x.home,x]));
-  state.games=picks.map((p,i)=>{const k=p.away+'|'+p.home,prev=old.get(k)||{},o=om.get(k)||{};return{id:'g'+(i+1),...p,awayML:o.awayML??prev.awayML??null,homeML:o.homeML??prev.homeML??null,total:o.total??prev.total??null,pick:prev.pick??null,weight:prev.weight??null}});
+  state.games=picks.map((p,i)=>{const k=p.away+'|'+p.home,prev=old.get(k)||{},o=om.get(k)||{};return{id:'g'+(i+1),...p,awayML:o.awayML??prev.awayML??null,homeML:o.homeML??prev.homeML??null,total:o.total??prev.total??null,pick:prev.pick??null,weight:prev.weight??null,locked:prev.locked??false,completed:prev.completed??false,winner:prev.winner??null,statusText:prev.statusText??''}});
   const structured=extractStructuredCard(obj,state.games);
   if(structured){state.games.forEach((g,i)=>{if(structured.picks[i])g.pick=structured.picks[i];if(structured.weights[i]!=null)g.weight=structured.weights[i]})}
   const stand=newest(snaps.filter(s=>/Weekly Standings/i.test(s.title||'')));if(stand){const names=[...stand.text.matchAll(/\n\n\n([^\n\t]{2,60})\n\t0\t0\t/g)].map(x=>x[1]);if(names.length>20)state.poolSize=new Set(names).size}
   state.importedAt=obj.exportedAt||pickSnap?.ts||nowIso();state.cbsUpdatedAt=pickSnap?.ts||obj.exportedAt||nowIso();state.cbsSource='scan';
   if(odds.length){state.marketUpdatedAt=oddsSnap?.ts||obj.exportedAt||nowIso();state.marketSource='CBS scan odds'}
-  state.originalCard=completeCard(state.games)?snapshotCard():state.originalCard;state.recommendedCard=null;state.optimization=null;state.applied=false;state.sim=null;save();render();
+  state.originalCard=completeCard(state.games)?snapshotCard():state.originalCard;state.recommendedCard=null;state.optimization=null;state.applied=false;state.sim=null;save();
+  try{await refreshResults(true)}catch{}
+  render();
   try{await refreshMarket(true)}catch{}
   const cis=cardImportStatus();if(cis.complete)show(`CBS data refreshed — imported ${cis.picks}/${state.games.length} picks and all ${cis.unique} confidence values.`);else show(`CBS data refreshed, but IQ could only map ${cis.picks}/${state.games.length} picks and ${cis.unique}/${state.games.length} confidence values. Open CBS Picks and Weekly Standings before creating the scan, then re-import it.`,'yellow');
 }
@@ -521,7 +588,7 @@ function renderFreshness(){
   $('cbsFreshPill').textContent=f.cbs.label;$('cbsFreshPill').className='pill '+f.cbs.cls;$('cbsFreshText').textContent=`${state.cbsSource||'seed'} · ${fmt(state.cbsUpdatedAt||SEED_TS)} · ${isFinite(f.cbs.age)?f.cbs.age.toFixed(1)+'h old':'unknown age'}`;
   $('marketFreshPill').textContent=f.market.label;$('marketFreshPill').className='pill '+f.market.cls;$('marketFreshText').textContent=`${state.marketSource||'seed'} · ${fmt(state.marketUpdatedAt||SEED_TS)} · ${isFinite(f.market.age)?f.market.age.toFixed(1)+'h old':'unknown age'}`;
   const warnings=[];if(!f.cbs.current)warnings.push('CBS pool data is not current.');if(!f.market.current)warnings.push('Market data is not current.');else if(f.market.label==='SNAPSHOT')warnings.push('Market uses a verified CBS Sports snapshot captured tonight; it is not live auto-refresh.');if((state.marketSource||'seed')==='seed')warnings.push('The app is using the Aug. 28 seed/fallback odds.');
-  $('freshnessWarning').textContent=warnings.length?'⚠ '+warnings.join(' ')+(f.cbs.current&&f.market.current?'':' Simulation results and recommendations are PROVISIONAL until these inputs are refreshed.'):'✓ CBS ownership and market inputs are current.';
+  const locked=state.games.filter(g=>g.locked).length,finals=state.games.filter(g=>g.completed).length;const gameState=locked?` Game state: ${locked} locked, ${finals} final.`:'';$('freshnessWarning').textContent=(warnings.length?'⚠ '+warnings.join(' ')+(f.cbs.current&&f.market.current?'':' Simulation results and recommendations are PROVISIONAL until these inputs are refreshed.'):'✓ CBS ownership and market inputs are current.')+gameState;
   $('modePill').textContent=f.cbs.current&&f.market.current?'CURRENT MARKET + FIELD':'PROVISIONAL INPUTS';$('modePill').className='pill '+(f.cbs.current&&f.market.current?'green':'yellow');
 }
 function renderDecision(){
@@ -531,11 +598,24 @@ function renderDecision(){
   $('currentTop2').textContent=pct(cur.top2,1)+' Top 2';$('currentWin').textContent='Win '+pct(cur.win,1);$('recommendedTop2').textContent=pct(rec.top2,1)+' Top 2';$('recommendedWin').textContent='Win '+pct(rec.win,1);
   if(actions.length&&dt>0){$('decisionHeadline').textContent=`IQ RECOMMENDS ${actions.length} CHANGE${actions.length===1?'':'S'}`;$('decisionSub').textContent=`Recommended complete card improves Top-2 probability by ${pp(dt,1)} and Win probability by ${pp(dw,1)} in the final simulation.${provisional?' Inputs are stale, so treat this as provisional until refreshed.':''}`;$('decisionPill').textContent=provisional?'PROVISIONAL':'BETTER CARD';$('decisionPill').className='pill '+(provisional?'yellow':'green')}
   else{$('decisionHeadline').textContent='KEEP YOUR CURRENT CARD';$('decisionSub').textContent=`IQ did not find a complete card that beat your current card enough to justify a change in the final simulation.${provisional?' Refresh stale inputs before treating that as final.':''}`;$('decisionPill').textContent=provisional?'PROVISIONAL':'KEEP';$('decisionPill').className='pill '+(provisional?'yellow':'green')}
+  const locked=state.games.map((g,i)=>({g,i})).filter(x=>x.g.locked);
   let html='';
-  actions.forEach((a,idx)=>{const dt2=a.afterEval.top2-a.beforeEval.top2,dw2=a.afterEval.win-a.beforeEval.win,[label,cls]=recommendationClass(dt2,dw2);let title,action,details='';
-    if(a.type==='FLIP'){const i=a.games[0],g=state.games[i],to=sideOf(g,a.to);title='FLIP';action=`${a.from} → ${a.to}`;details=`CBS ${a.to}: ${pct(ownProb(g,to),0)} · Market ${a.to}: ${pct(marketProb(g,to),1)} · Confidence ${a.toConf}`}
-    else{title='CONFIDENCE CHANGE';action=a.to;details='Confidence values remain a valid 1–16 set.'}
-    html+=`<div class="rec"><div class="rec-head"><div><div class="rec-title">${idx+1}. ${title}</div><div class="rec-action">${action}</div></div><span class="pill ${cls}">${label}</span></div><div class="rec-grid"><div class="mini"><b>${pct(a.beforeEval.top2,1)}</b><span>Before Top 2</span></div><div class="mini"><b>${pct(a.afterEval.top2,1)}</b><span>Resulting Top 2</span></div><div class="mini"><b class="${dt2>=0?'good':'bad'}">${pp(dt2,1)}</b><span>Top 2 impact</span></div><div class="mini"><b class="${dw2>=0?'good':'bad'}">${pp(dw2,1)}</b><span>Win impact</span></div></div><div class="reason">${details}<br>${explainAction(a,state.games)}</div></div>`
+  if(locked.length){
+    const finals=locked.filter(x=>x.g.completed).map(({g,i})=>{const s=o.current.choices[i],won=fixedWinner(g)===s;return `${teamFor(g,s)} · ${o.current.weights[i]} ${won?'✓ WON':'✕ LOST'}`});
+    html+=`<div class="rec"><div class="rec-head"><div><div class="rec-title">LOCKED RESULTS</div><div class="rec-action">${locked.length} game${locked.length===1?'':'s'} frozen</div></div><span class="pill green">LOCKED</span></div><div class="reason">${finals.length?finals.join(' · '):'Started games cannot be changed.'} Locked picks and confidence values are excluded from optimization.</div></div>`;
+  }
+  if(actions.length){
+    html+=`<div class="note" style="margin-top:10px"><b>FINAL CARD CHANGES — apply these together.</b> These are direct Current CBS → Recommended values, not sequential swaps.</div>`;
+  }
+  actions.forEach((a,idx)=>{
+    const i=a.games[0],g=state.games[i],[label,cls]=recommendationClass(a);
+    if(a.type==='FLIP'){
+      const to=sideOf(g,a.toPick);
+      html+=`<div class="rec"><div class="rec-head"><div><div class="rec-title">${idx+1}. FLIP PICK</div><div class="change-line">${a.fromPick} → ${a.toPick}</div><div class="change-sub">Confidence: ${a.fromConf} → ${a.toConf}</div></div><span class="pill ${cls}">${label}</span></div><div class="reason">CBS ${a.toPick}: ${pct(ownProb(g,to),0)} · Market ${a.toPick}: ${pct(marketProb(g,to),1)}. This change is part of the jointly optimized final card.</div></div>`;
+    }else{
+      const delta=a.toConf-a.fromConf;
+      html+=`<div class="rec"><div class="rec-head"><div><div class="rec-title">${idx+1}. CHANGE CONFIDENCE</div><div class="change-line">${a.fromPick}: ${a.fromConf} → ${a.toConf} <span class="${delta>0?'good':delta<0?'bad':''}">(${delta>0?'+':''}${delta})</span></div><div class="change-sub">Keep pick: ${a.fromPick}</div></div><span class="pill ${cls}">${label}</span></div><div class="reason">This is the final recommended confidence for ${a.fromPick}. It is not a sequential swap. Apply the full recommended card together so the 1–16 confidence set remains valid.</div></div>`;
+    }
   });
   const keeps=interestingKeeps(state.games,o.current,o.recommended);for(const k of keeps){const g=state.games[k.i],s=o.current.choices[k.i];html+=`<div class="rec"><div class="rec-head"><div><div class="rec-title">KEEP</div><div class="rec-action">${teamFor(g,s)} · ${o.current.weights[k.i]} confidence</div></div><span class="pill blue">KEEP</span></div><div class="reason">There is a notable market-vs-pool difference (${pp(k.e,0)}), but the complete-card optimizer did not improve the tournament result by flipping this game.</div></div>`}
   $('recommendations').innerHTML=html||'<div class="note" style="margin-top:10px">No changes. Keep your submitted card.</div>';$('applyBtn').disabled=!actions.length;$('revertBtn').disabled=!state.originalCard;
@@ -546,34 +626,36 @@ function render(){
   let n=0,d=0;for(const g of state.games){const s=sideOf(g);if(s!=null&&g.weight){n+=ownProb(g,s)*g.weight;d+=g.weight}}$('chalk').textContent=d?pct(n/d,0):'—';const mnf=state.games[state.games.length-1];$('tie').textContent=mnf?.total?Math.round(mnf.total):'—';
   const orig=state.originalCard,rec=state.recommendedCard;
   $('games').innerHTML=state.games.map((g,i)=>{const s=sideOf(g),m=market(g),r=s==null?{t:'UNPICKED',c:'blue'}:(()=>{const e=(marketProb(g,s)??ownProb(g,s))-ownProb(g,s);return e>=.08?{t:'UNDER-OWNED',c:'green'}:e<=-.08?{t:'OVER-OWNED',c:'yellow'}:{t:'FAIR',c:'blue'}})(),os=orig?.choices?.[i],rs=rec?.choices?.[i],changed=rec&&(rs!==s||rec.weights[i]!==g.weight);
-    return `<div class="game ${changed?'changed':''}"><div class="gamehead"><span>Game ${i+1}</span><span>${g.weight?g.weight+' confidence':'confidence pending'}</span></div><div class="matchup"><div class="team"><div class="teamname">${g.away}</div><div class="pct">${g.awayPct}% CBS · ${pct(m.away,0)} market</div><button class="pickbtn ${s===0?'selected':''} ${rs===0?'recommended':''}" data-pick="${g.away}" data-id="${g.id}">${s===0?'✓ '+g.away:'Pick '+g.away}</button></div><div class="at">@</div><div class="team right"><div class="teamname">${g.home}</div><div class="pct">${g.homePct}% CBS · ${pct(m.home,0)} market</div><button class="pickbtn ${s===1?'selected':''} ${rs===1?'recommended':''}" data-pick="${g.home}" data-id="${g.id}">${s===1?'✓ '+g.home:'Pick '+g.home}</button></div></div>
+    return `<div class="game ${changed?'changed':''} ${g.locked?'locked':''}"><div class="gamehead"><span>Game ${i+1}</span><span>${g.weight?g.weight+' confidence':'confidence pending'}</span></div><div class="matchup"><div class="team"><div class="teamname">${g.away}</div><div class="pct">${g.awayPct}% CBS · ${pct(m.away,0)} market</div><button class="pickbtn ${s===0?'selected':''} ${rs===0?'recommended':''}" data-pick="${g.away}" data-id="${g.id}" ${g.locked?'disabled':''}>${s===0?'✓ '+g.away:'Pick '+g.away}</button></div><div class="at">@</div><div class="team right"><div class="teamname">${g.home}</div><div class="pct">${g.homePct}% CBS · ${pct(m.home,0)} market</div><button class="pickbtn ${s===1?'selected':''} ${rs===1?'recommended':''}" data-pick="${g.home}" data-id="${g.id}" ${g.locked?'disabled':''}>${s===1?'✓ '+g.home:'Pick '+g.home}</button></div></div>${g.locked?`<div class="lockedbar">🔒 ${g.completed?'FINAL':'STARTED'}${g.statusText?' · '+g.statusText:''}${g.completed&&fixedWinner(g)!=null?' · Winner: '+teamFor(g,fixedWinner(g)):''}</div>`:''}
     <div class="card-state"><div class="statebox"><span>Original CBS</span><b>${orig?teamFor(g,os)+' · '+orig.weights[i]:'—'}</b></div><div class="statebox"><span>Current IQ</span><b>${s!=null?teamFor(g,s)+' · '+(g.weight||'—'):'—'}</b></div><div class="statebox"><span>IQ recommends</span><b>${rec?teamFor(g,rs)+' · '+rec.weights[i]:'Run Simulation'}</b></div></div>
-    <div class="intel"><div class="mini"><b>${moneylineText(g.awayML)}</b><span>${g.away} ML</span></div><div class="mini"><b class="${r.c==='green'?'good':r.c==='yellow'?'warn':''}">${r.t}</b><span>Market vs pool</span></div><div class="mini"><b>${moneylineText(g.homeML)}</b><span>${g.home} ML</span></div><div class="mini"><b>${g.weight||'—'}</b><span>confidence</span></div></div><div class="inputs"><label>${g.away} moneyline<input data-field="awayML" data-id="${g.id}" type="number" value="${g.awayML??''}"></label><label>${g.home} moneyline<input data-field="homeML" data-id="${g.id}" type="number" value="${g.homeML??''}"></label><label>Confidence<input data-field="weight" data-id="${g.id}" type="number" min="1" max="${state.games.length}" value="${g.weight??''}"></label></div></div>`}).join('');
+    <div class="intel"><div class="mini"><b>${moneylineText(g.awayML)}</b><span>${g.away} ML</span></div><div class="mini"><b class="${r.c==='green'?'good':r.c==='yellow'?'warn':''}">${r.t}</b><span>Market vs pool</span></div><div class="mini"><b>${moneylineText(g.homeML)}</b><span>${g.home} ML</span></div><div class="mini"><b>${g.weight||'—'}</b><span>confidence</span></div></div><div class="inputs"><label>${g.away} moneyline<input data-field="awayML" data-id="${g.id}" type="number" value="${g.awayML??''}"></label><label>${g.home} moneyline<input data-field="homeML" data-id="${g.id}" type="number" value="${g.homeML??''}"></label><label>Confidence<input data-field="weight" data-id="${g.id}" type="number" min="1" max="${state.games.length}" value="${g.weight??''}" ${g.locked?'disabled':''}></label></div></div>`}).join('');
   document.querySelectorAll('[data-pick]').forEach(b=>b.onclick=()=>{const g=state.games.find(x=>x.id===b.dataset.id);g.pick=b.dataset.pick;state.optimization=null;state.recommendedCard=null;save();render()});
   document.querySelectorAll('input[data-field]').forEach(inp=>inp.onchange=()=>{const g=state.games.find(x=>x.id===inp.dataset.id);g[inp.dataset.field]=inp.value===''?null:+inp.value;if(inp.dataset.field!=='weight'){state.marketSource='manual';state.marketUpdatedAt=nowIso()}state.optimization=null;state.recommendedCard=null;save();render()});
   $('rows').innerHTML=state.games.map(g=>{const s=sideOf(g),p=s==null?null:marketProb(g,s),o=s==null?null:ownProb(g,s),e=p==null||o==null?null:p-o,read=e==null?'NO MARKET':e>=.08?'UNDER-OWNED':e<=-.08?'OVER-OWNED':'FAIR';return `<tr><td>${g.away} @ ${g.home}</td><td><b>${s==null?'—':teamFor(g,s)}</b></td><td>${g.weight||'—'}</td><td>${o==null?'—':pct(o,0)}</td><td>${p==null?'—':pct(p,1)}</td><td>${e==null?'—':pp(e,0)}</td><td><span class="pill ${e>=.08?'green':e<=-.08?'yellow':'blue'}">${read}</span></td></tr>`}).join('');
   renderDecision();
 }
 async function runSimulation(){
+  await refreshResults(true);render();
   if(!completeCard(state.games)){const cis=cardImportStatus();show(`IQ imported ${cis.picks}/${state.games.length} winners and ${cis.unique}/${state.games.length} unique confidence values. CBS itself may be complete; this means the scan did not include the full submitted card. Refresh CBS Data with a scan taken while the CBS Picks page is open.`,'red');return}
-  const f=dataFreshness(state);if(!state.originalCard)state.originalCard=snapshotCard();const current=snapshotCard();$('optBtn').disabled=true;$('progress').classList.add('show');$('progressText').textContent='Generating field and searching complete cards…';
+  const f=dataFreshness(state);if(!state.originalCard)state.originalCard=snapshotCard();const current=snapshotCard();$('optBtn').disabled=true;$('progress').classList.add('show');$('progressText').textContent='Locking completed games and optimizing the remaining card…';
   await new Promise(r=>setTimeout(r,50));
   try{
     const result=runOptimizer(state.games,state.poolSize,{currentCard:current,searchIters:SEARCH_ITERS,finalIters:FINAL_ITERS,seed:20260908});
     const actions=cardActions(state.games,result.current,result.recommended,result.finalWorlds);
     state.recommendedCard=result.recommended;state.optimization={current:result.current,currentEval:result.currentEval,recommended:result.recommended,recommendedEval:result.recommendedEval,actions,ranAt:nowIso(),provisional:!(f.cbs.current&&f.market.current)};state.sim=result.currentEval;state.applied=false;save();render();
-    show(`Simulation complete. ${SEARCH_ITERS.toLocaleString()} search worlds + ${FINAL_ITERS.toLocaleString()} final tournament worlds.`);
+    show(`Simulation complete. ${state.games.filter(g=>g.locked).length} locked game(s) frozen; remaining card optimized.`);
   }catch(e){console.error(e);show('Optimizer error: '+e.message,'red')}
   finally{$('optBtn').disabled=false;$('progress').classList.remove('show')}
 }
-function applyRecommended(){if(!state.recommendedCard)return;if(!state.originalCard)state.originalCard=snapshotCard();applyCardToGames(state.games,state.recommendedCard);state.applied=true;if(state.optimization)state.optimization.appliedEval=state.optimization.recommendedEval;save();render();show('Recommended card applied inside Sunday Funday IQ only. CBS was not changed.')}
+function applyRecommended(){if(!state.recommendedCard)return;if(!state.originalCard)state.originalCard=snapshotCard();const before=snapshotCard();applyCardToGames(state.games,state.recommendedCard);state.games.forEach((g,i)=>{if(isLocked(g)){g.pick=teamFor(g,before.choices[i]);g.weight=before.weights[i]}});state.applied=true;if(state.optimization)state.optimization.appliedEval=state.optimization.recommendedEval;save();render();show('Recommended card applied inside Sunday Funday IQ only. CBS was not changed.')}
 function revertOriginal(){if(!state.originalCard)return;applyCardToGames(state.games,state.originalCard);state.applied=false;if(state.optimization)delete state.optimization.appliedEval;save();render();show('Reverted to the original CBS card stored in IQ.')}
 function boot(){
   $('refreshBtn').onclick=()=>$('scanFile').click();$('scanFile').onchange=async e=>{try{const f=e.target.files?.[0];if(f)await importScan(JSON.parse(await f.text()))}catch(err){show('Could not refresh CBS data: '+err.message,'red')}e.target.value=''};
+  $('phoneSyncBtn').onclick=pasteCbsPhoneSync;
   $('marketBtn').onclick=()=>refreshMarket(false);$('optBtn').onclick=runSimulation;$('saveBtn').onclick=()=>{save();show('Saved locally in this browser.')};$('applyBtn').onclick=applyRecommended;$('revertBtn').onclick=revertOriginal;
   render();
 }
-globalThis.SFIQ_TEST={validConfidence,ensureValidCard,dataFreshness,buildWorlds,evaluateCard,optimizeConfidence,runOptimizer,cardActions,marketProb,ownProb,clone};
+globalThis.SFIQ_TEST={validConfidence,ensureValidCard,dataFreshness,buildWorlds,evaluateCard,optimizeConfidence,runOptimizer,cardActions,marketProb,ownProb,clone,refreshResults,isLocked,fixedWinner};
 if(!TESTING)boot();
 </script>
 </body></html>
