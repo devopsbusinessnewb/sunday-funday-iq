@@ -28,7 +28,7 @@ table{width:100%;border-collapse:collapse;font-size:12px;min-width:830px}.tablew
 <body>
 <div class="app">
   <div class="header">
-    <div class="brand"><h1>🏈 Sunday Funday IQ</h1><p>CBS Pick'em · Pick'em Coach</p><p style="font-size:10px;color:#5f7898">Build 1.0.8 · optimizer sanity + recommendation clarity</p></div>
+    <div class="brand"><h1>🏈 Sunday Funday IQ</h1><p>CBS Pick'em · Pick'em Coach</p><p style="font-size:10px;color:#5f7898">Build 1.0.9 · stable optimizer + clearer card instructions</p></div>
     <div class="actions">
       <a class="btn" href="../../">⌂ Home</a>
       <input id="scanFile" type="file" accept=".json,application/json" hidden>
@@ -268,60 +268,16 @@ function runOptimizer(games,poolSize,opts={}){
   if(best.eval.top2<currentEval.top2-1e-12)best={card:current,eval:currentEval};
   return{current,currentEval,recommended:best.card,recommendedEval:best.eval,finalWorlds};
 }
-
-function finalRecommendedForGame(g){
-  const rec=state.recommendedCard;
-  if(!rec)return null;
-  const i=state.games.findIndex(x=>x.id===g.id);
-  if(i<0)return null;
-  return {pick:rec.picks?.[i]??g.pick,weight:rec.weights?.[i]??g.weight};
-}
-function cardActions(games,current,recommended,finalWorlds){
+function cardActions(games,current,recommended,worlds){
   const actions=[];
-  let running=current;
-  const locked=new Set(games.map((g,i)=>g.locked?i:-1).filter(i=>i>=0));
-  const baseEval=evaluateCard(games,current,finalWorlds);
-
   for(let i=0;i<games.length;i++){
-    if(locked.has(i))continue;
-    const g=games[i];
-    const cp=current.picks[i],rp=recommended.picks[i],cw=current.weights[i],rw=recommended.weights[i];
-    if(cp===rp && cw===rw)continue;
-
-    const test={picks:[...running.picks],weights:[...running.weights]};
-    test.picks[i]=rp; test.weights[i]=rw;
-    // preserve a valid confidence permutation by swapping the displaced recommended weight
-    if(cw!==rw){
-      const j=test.weights.findIndex((w,k)=>k!==i&&w===rw);
-      if(j>=0)test.weights[j]=cw;
-    }
-    const before=evaluateCard(games,running,finalWorlds);
-    const after=evaluateCard(games,test,finalWorlds);
-    const dTop=after.top2-before.top2,dWin=after.win-before.win;
-
-    const finalOnlyPositive=(recommended.top2??0)>=(baseEval.top2??0);
-    const standalonePositive=dTop>0 || (Math.abs(dTop)<1e-9 && dWin>0);
-
-    let type=cp!==rp?'pick':'confidence';
-    let label=type==='pick'?'PICK CHANGE':'CONFIDENCE CHANGE';
-    let strength='PACKAGE CHANGE';
-
-    if(standalonePositive){
-      if(dTop>=0.005 || dWin>=0.005) strength='STRONG RECOMMENDATION';
-      else strength='OPTIONAL';
-      running=test;
-    } else {
-      strength='PACKAGE ONLY';
-    }
-
+    if(isLocked(games[i]))continue;
+    const pickChanged=current.choices[i]!==recommended.choices[i],confChanged=current.weights[i]!==recommended.weights[i];
+    if(!pickChanged&&!confChanged)continue;
     actions.push({
-      i,type,label,strength,
-      fromPick:cp,toPick:rp,fromWeight:cw,toWeight:rw,
-      beforeTop2:before.top2,afterTop2:after.top2,deltaTop2:dTop,deltaWin:dWin,
-      packageOnly:!standalonePositive,
-      note:!standalonePositive
-        ?'This individual move did not improve the card by itself. It appears only because the jointly optimized final card performed better as a package. Do not apply this move alone.'
-        :'This move improved the simulated card on its own and is also part of the final recommended card.'
+      type:pickChanged?'FLIP':'CONFIDENCE',games:[i],
+      fromPick:teamFor(games[i],current.choices[i]),toPick:teamFor(games[i],recommended.choices[i]),
+      fromConf:current.weights[i],toConf:recommended.weights[i]
     });
   }
   return actions;
@@ -646,22 +602,22 @@ function renderDecision(){
   let html='';
   if(locked.length){
     const finals=locked.filter(x=>x.g.completed).map(({g,i})=>{const s=o.current.choices[i],won=fixedWinner(g)===s;return `${teamFor(g,s)} · ${o.current.weights[i]} ${won?'✓ WON':'✕ LOST'}`});
-    html+=`<div class="rec"><div class="rec-head"><div><div class="rec-title">LOCKED RESULTS</div><div class="rec-action">${locked.length} game${locked.length===1?'':'s'} frozen</div></div><span class="pill green">LOCKED</span></div><div class="reason">${finals.length?finals.join(' · '):'Started games cannot be changed.'} Locked picks, results, and confidence values are excluded from optimization.</div></div>`;
+    html+=`<div class="rec"><div class="rec-head"><div><div class="rec-title">LOCKED RESULTS</div><div class="rec-action">${locked.length} game${locked.length===1?'':'s'} frozen</div></div><span class="pill green">LOCKED</span></div><div class="reason">${finals.length?finals.join(' · '):'Started games cannot be changed.'} Locked picks and confidence values are excluded from optimization.</div></div>`;
   }
   if(actions.length){
-    html+=`<div class="note" style="margin-top:10px"><b>FINAL CARD CHANGES — apply these together.<div id="optimizerSanity" style="margin-top:8px"></div></b> These are direct Current CBS → Recommended values, not sequential swaps.</div>`;
+    html+=`<div class="note" style="margin-top:10px"><b>FINAL RECOMMENDED CARD — make all listed changes together.</b> Each line shows CURRENT CBS → FINAL IQ. Confidence numbers are final destinations, not one-at-a-time swaps.</div>`;
   }
   actions.forEach((a,idx)=>{
     const i=a.games[0],g=state.games[i],[label,cls]=recommendationClass(a);
     if(a.type==='FLIP'){
       const to=sideOf(g,a.toPick);
-      html+=`<div class="rec"><div class="rec-head"><div><div class="rec-title">${idx+1}. FLIP PICK</div><div class="change-line">${a.fromPick} → ${a.toPick}</div><div class="change-sub">Confidence: ${a.fromConf} → ${a.toConf}</div></div><span class="pill ${cls}">${label}</span></div><div class="reason">CBS ${a.toPick}: ${pct(ownProb(g,to),0)} · Market ${a.toPick}: ${pct(marketProb(g,to),1)}. This change is part of the jointly optimized final card.</div></div>`;
+      html+=`<div class="rec"><div class="rec-head"><div><div class="rec-title">${idx+1}. FLIP PICK</div><div class="change-line">${a.fromPick} → ${a.toPick}</div><div class="change-sub">Confidence: ${a.fromConf} → ${a.toConf}</div></div><span class="pill ${cls}">${label}</span></div><div class="reason">CBS ${a.toPick}: ${pct(ownProb(g,to),0)} · Market ${a.toPick}: ${pct(marketProb(g,to),1)}. Final IQ card: pick ${a.toPick} at confidence ${a.toConf}. Make this together with the other listed changes.</div></div>`;
     }else{
       const delta=a.toConf-a.fromConf;
-      html+=`<div class="rec"><div class="rec-head"><div><div class="rec-title">${idx+1}. CHANGE CONFIDENCE</div><div class="change-line">${a.fromPick}: ${a.fromConf} → ${a.toConf} <span class="${delta>0?'good':delta<0?'bad':''}">(${delta>0?'+':''}${delta})</span></div><div class="change-sub">Keep pick: ${a.fromPick}</div></div><span class="pill ${cls}">${label}</span></div><div class="reason">This is the final recommended confidence for ${a.fromPick}. It is not a sequential swap. Apply the full recommended card together so the 1–16 confidence set remains valid.</div></div>`;
+      html+=`<div class="rec"><div class="rec-head"><div><div class="rec-title">${idx+1}. CHANGE CONFIDENCE</div><div class="change-line">${a.fromPick}: ${a.fromConf} → ${a.toConf} <span class="${delta>0?'good':delta<0?'bad':''}">(${delta>0?'+':''}${delta})</span></div><div class="change-sub">Keep pick: ${a.fromPick}</div></div><span class="pill ${cls}">${label}</span></div><div class="reason">Set ${a.fromPick} directly to ${a.toConf}. Do not interpret this as a swap with another team. Make every listed confidence change together; the finished card will still use 1–16 exactly once.</div></div>`;
     }
   });
-  const keeps=interestingKeeps(state.games,o.current,o.recommended);for(const k of keeps){const g=state.games[k.i],s=o.current.choices[k.i];html+=`<div class="rec"><div class="rec-head"><div><div class="rec-title">KEEP</div><div class="rec-action">${teamFor(g,s)} · ${o.current.weights[k.i]} confidence</div></div><span class="pill blue">KEEP</span></div><div class="reason">There is a notable market-vs-pool difference (${pp(k.e,0)}), but the complete-card optimizer did not improve the tournament result by flipping this game.</div></div>`}
+  const keeps=interestingKeeps(state.games,o.current,o.recommended);for(const k of keeps){const g=state.games[k.i],s=o.current.choices[k.i];html+=`<div class="rec"><div class="rec-head"><div><div class="rec-title">KEEP</div><div class="rec-action">${teamFor(g,s)} · ${o.current.weights[k.i]} confidence</div></div><span class="pill blue">KEEP</span></div><div class="reason">Keep the pick on ${teamFor(g,s)}. The market-vs-pool difference is ${pp(k.e,0)}, but IQ did not improve the final card by changing the winner. If IQ changes this team’s confidence, that separate confidence instruction appears above.</div></div>`}
   $('recommendations').innerHTML=html||'<div class="note" style="margin-top:10px">No changes. Keep your submitted card.</div>';$('applyBtn').disabled=!actions.length;$('revertBtn').disabled=!state.originalCard;
 }
 function render(){
