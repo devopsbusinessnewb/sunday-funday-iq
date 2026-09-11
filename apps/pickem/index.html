@@ -28,12 +28,11 @@ table{width:100%;border-collapse:collapse;font-size:12px;min-width:830px}.tablew
 <body>
 <div class="app">
   <div class="header">
-    <div class="brand"><h1>🏈 Sunday Funday IQ</h1><p>CBS Pick'em · Pick'em Coach</p><p style="font-size:10px;color:#5f7898">Build 1.1.5 · current CBS market snapshot</p></div>
+    <div class="brand"><h1>🏈 Sunday Funday IQ</h1><p>CBS Pick'em · Pick'em Coach</p><p style="font-size:10px;color:#5f7898">Build 1.1.6 · streamlined controls</p></div>
     <div class="actions">
       <a class="btn" href="../../">⌂ Home</a>
       <input id="scanFile" type="file" accept=".json,application/json" hidden>
       <button class="btn primary" id="refreshBtn">Refresh CBS Data</button>
-      <button class="btn" id="phoneSyncBtn">Paste CBS Phone Sync</button>
       <button class="btn" id="marketBtn">Refresh Market</button>
       <button class="btn" id="optBtn">Run Simulation</button>
       <button class="btn" id="saveBtn">Save</button>
@@ -669,72 +668,6 @@ function classifyCbsCapture(text){
   if(/16\/16 Picks/i.test(t)||(/\bPicks\b/i.test(t)&&/%/.test(t)))return'picks';
   return null;
 }
-async function pasteCbsPhoneSync(){
-  let text='';
-  try{text=await navigator.clipboard.readText()}catch{
-    show('Paste permission was blocked. Open IQ in the browser and allow Paste when prompted.','yellow');return;
-  }
-  if(!text||text.length<100){show('Clipboard does not contain a CBS page capture.','yellow');return}
-  const kind=classifyCbsCapture(text);
-  if(!kind){show('Clipboard text is not recognized as CBS Picks or Weekly Standings.','yellow');return}
-  const cap=loadPhoneSync();cap[kind]=text;cap[kind+'At']=nowIso();savePhoneSync(cap);
-  if(!cap.picks||!cap.standings){
-    show(`Saved CBS ${kind==='picks'?'Picks':'Weekly Standings'} capture. Now capture the other CBS page and paste it here.`);
-    return;
-  }
-  const obj={
-    product:"CBS Pick'em IQ Bridge",version:"phone-sync-1",exportedAt:nowIso(),
-    snapshots:[
-      {title:"NFL Football Tourney 2026 | Picks",url:"phone://cbs/picks",text:cap.picks,ts:cap.picksAt},
-      {title:"NFL Football Tourney 2026 | Weekly Standings",url:"phone://cbs/standings",text:cap.standings,ts:cap.standingsAt}
-    ]
-  };
-  await importScan(obj);
-}
-
-async function importScan(obj){
-  const lockedBeforeImport=snapshotLockedGames();
-  const snaps=obj.snapshots||[],pickSnap=newest(snaps.filter(s=>/\|\s*Picks/i.test(s.title||'')||/Picks$/i.test(s.title||'')))||newest(snaps.filter(s=>/pickem/i.test(s.url||'')));
-  let picks=pickSnap?parsePicks(pickSnap.text):[];
-  if(!picks.length){
-    // Preserve the known Week 1 matchup structure if the newer bridge provides structured data but no visible text snapshot.
-    picks=state.games.map(g=>({away:g.away,home:g.home,awayPct:g.awayPct,homePct:g.homePct}));
-  }
-  restoreFullWeekState();
-  const matchups=picks.map(p=>[p.away,p.home]),oddsSnap=newest(snaps.filter(s=>/odds/i.test(s.url||'')||/odds/i.test(s.title||''))),odds=oddsSnap?parseOdds(oddsSnap.text,matchups):[],om=new Map(odds.map(x=>[x.away+'|'+x.home,x])),old=new Map(state.games.map(x=>[x.away+'|'+x.home,x]));
-  if(picks.length===state.games.length){
-    state.games=picks.map((p,i)=>{const k=p.away+'|'+p.home,prev=old.get(k)||{},o=om.get(k)||{};return{id:'g'+(i+1),...p,awayML:o.awayML??prev.awayML??null,homeML:o.homeML??prev.homeML??null,total:o.total??prev.total??null,pick:prev.pick??null,weight:prev.weight??null,locked:prev.locked??false,completed:prev.completed??false,winner:prev.winner??null,statusText:prev.statusText??''}});
-  }else{
-    // Postgame CBS often removes completed games from Picks. Merge remaining games into the
-    // full week and preserve locked picks/results/confidence.
-    for(const p of picks){
-      const k=p.away+'|'+p.home,idx=state.games.findIndex(g=>g.away===p.away&&g.home===p.home);
-      if(idx<0)continue;
-      const prev=state.games[idx],o=om.get(k)||{};
-      state.games[idx]={...prev,...p,awayML:o.awayML??prev.awayML??null,homeML:o.homeML??prev.homeML??null,total:o.total??prev.total??null};
-    }
-  }
-  const structured=extractStructuredCard(obj,state.games);
-  if(structured){state.games.forEach((g,i)=>{
-    if(isLocked(g))return;
-    if(structured.picks[i])g.pick=structured.picks[i];
-    if(structured.weights[i]!=null)g.weight=structured.weights[i];
-  })}
-  restoreLockedGames(lockedBeforeImport);
-  repairLockedConfidenceCollision();
-  const stand=newest(snaps.filter(s=>/Weekly Standings/i.test(s.title||'')));if(stand){const names=[...stand.text.matchAll(/\n\n\n([^\n\t]{2,60})\n\t0\t0\t/g)].map(x=>x[1]);if(names.length>20)state.poolSize=new Set(names).size}
-  state.importedAt=obj.exportedAt||pickSnap?.ts||nowIso();state.cbsUpdatedAt=pickSnap?.ts||obj.exportedAt||nowIso();state.cbsSource='scan';
-  if(odds.length){state.marketUpdatedAt=oddsSnap?.ts||obj.exportedAt||nowIso();state.marketSource='CBS scan odds'}
-  state.originalCard=completeCard(state.games)?snapshotCard():state.originalCard;state.recommendedCard=null;state.optimization=null;state.applied=false;state.sim=null;save();
-  try{await refreshResults(true)}catch{}
-  restoreLockedGames(lockedBeforeImport);
-  repairLockedConfidenceCollision();
-  state.fieldModel=extractFieldModel(obj,state.games);save();
-  render();
-  try{await refreshMarket(true)}catch{}
-  const cis=cardImportStatus();if(cis.complete)show(`CBS data refreshed — imported ${cis.picks}/${state.games.length} picks and all ${cis.unique} confidence values.`);else show(`CBS data refreshed, but IQ could only reconstruct ${cis.picks}/${state.games.length} picks and ${cis.unique}/${state.games.length} confidence values. Completed games are preserved automatically; if this still appears, create one new scan with Picks and Weekly Standings open.`,'yellow');
-}
-
 function applyVerifiedMarketSnapshot({silent=false}={}){
   let updated=0;
   for(const [away,home,awayML,homeML,total] of VERIFIED_MARKET_SNAPSHOT.games){
@@ -926,7 +859,6 @@ function applyRecommended(){if(!state.recommendedCard)return;if(!state.originalC
 function revertOriginal(){if(!state.originalCard)return;applyCardToGames(state.games,state.originalCard);state.applied=false;if(state.optimization)delete state.optimization.appliedEval;save();render();show('Reverted to the original CBS card stored in IQ.')}
 function boot(){
   $('refreshBtn').onclick=()=>$('scanFile').click();$('scanFile').onchange=async e=>{try{const f=e.target.files?.[0];if(f)await importScan(JSON.parse(await f.text()))}catch(err){show('Could not refresh CBS data: '+err.message,'red')}e.target.value=''};
-  $('phoneSyncBtn').onclick=pasteCbsPhoneSync;
   $('marketBtn').onclick=()=>refreshMarket(false);$('optBtn').onclick=runSimulation;$('saveBtn').onclick=()=>{save();show('Saved locally in this browser.')};$('applyBtn').onclick=applyRecommended;$('revertBtn').onclick=revertOriginal;
   render();
 }
