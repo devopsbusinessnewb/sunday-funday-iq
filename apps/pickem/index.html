@@ -28,7 +28,7 @@ table{width:100%;border-collapse:collapse;font-size:12px;min-width:830px}.tablew
 <body>
 <div class="app">
   <div class="header">
-    <div class="brand"><h1>🏈 Sunday Funday IQ</h1><p>CBS Pick'em · Pick'em Coach</p><p style="font-size:10px;color:#5f7898">Build 1.1.4 · preserve locked CBS confidence</p></div>
+    <div class="brand"><h1>🏈 Sunday Funday IQ</h1><p>CBS Pick'em · Pick'em Coach</p><p style="font-size:10px;color:#5f7898">Build 1.1.5 · current CBS market snapshot</p></div>
     <div class="actions">
       <a class="btn" href="../../">⌂ Home</a>
       <input id="scanFile" type="file" accept=".json,application/json" hidden>
@@ -103,12 +103,24 @@ const MARKET_FRESH_HOURS=12;
 
 const VERIFIED_MARKET_SNAPSHOT={
   source:'CBS Sports odds snapshot',
-  capturedAt:'2026-09-09T00:55:00Z',
+  capturedAt:'2026-09-10T11:43:00Z',
   games:[
-    ['NE','SEA',150,-170,44.5],['SF','LAR',172,-198,48.5],['TB','CIN',170,-200,50.5],['BUF','HOU',-118,102,44.5],
-    ['BAL','IND',-175,152,47.5],['CHI','CAR',-164,140,47.5],['NO','DET',270,-310,49.5],['CLE','JAX',350,-435,40.5],
-    ['ATL','PIT',155,-178,41.5],['NYJ','TEN',106,-122,39.5],['GB','MIN',102,-118,46.5],['WAS','PHI',194,-218,44.5],
-    ['MIA','LV',154,-178,40.5],['ARI','LAC',410,-485,47.5],['DAL','NYG',-154,137,48.0],['DEN','KC',124,-142,43.5]
+    ['NE','SEA',152,-170,44.5],
+    ['SF','LAR',176,-198,48.5],
+    ['TB','CIN',168,-198,50.5],
+    ['BUF','HOU',-120,102,44.5],
+    ['BAL','IND',-175,155,47.5],
+    ['CHI','CAR',-162,140,47.5],
+    ['NO','DET',270,-310,49.5],
+    ['CLE','JAX',350,-435,40.5],
+    ['ATL','PIT',155,-178,42.5],
+    ['NYJ','TEN',106,-124,38.5],
+    ['GB','MIN',105,-120,46.5],
+    ['WAS','PHI',194,-218,44.5],
+    ['MIA','LV',145,-166,40.5],
+    ['ARI','LAC',420,-500,47.5],
+    ['DAL','NYG',-154,137,48.5],
+    ['DEN','KC',130,-142,43.5]
   ]
 };
 
@@ -734,7 +746,7 @@ function applyVerifiedMarketSnapshot({silent=false}={}){
     state.marketSource=VERIFIED_MARKET_SNAPSHOT.source;
     state.recommendedCard=null;state.optimization=null;state.sim=null;
     save();render();
-    if(!silent)show(`Loaded verified CBS Sports market snapshot: ${updated}/${state.games.length} games. Snapshot captured Sep. 8 at 7:55 PM CT.`);
+    if(!silent)show(`Loaded verified CBS Sports market snapshot: ${updated}/${state.games.length} games. Snapshot captured Sep. 10 at 6:43 AM CT.`);
     return true;
   }
   return false;
