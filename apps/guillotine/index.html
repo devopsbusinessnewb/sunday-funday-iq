@@ -95,8 +95,9 @@ select,input{width:100%;margin-top:4px;background:#0a1728;border:1px solid var(-
 <body>
 <div class="app" id="app">
   <div class="header">
-    <div class="brand"><h1>🏈 Sunday Funday IQ</h1><p id="leagueTitle">Loading league…</p><p style="margin:3px 0 0;color:#5f7898;font-size:10px">Chop Suey module · Build 2.8 · LIVE MODE</p></div>
+    <div class="brand"><h1>🏈 Sunday Funday IQ</h1><p id="leagueTitle">Loading league…</p><p style="margin:3px 0 0;color:#5f7898;font-size:10px">Chop Suey module · Build 2.9 · live scoring cleanup</p></div>
     <div class="actions">
+      <a class="btn" href="../../">⌂ Home</a>
       <button class="btn" id="sundayBtn">Live Mode</button>
       <button class="btn" id="settingsBtn">Settings</button>
       <button class="btn primary" id="refreshBtn">↻ Refresh</button>
@@ -108,9 +109,6 @@ select,input{width:100%;margin-top:4px;background:#0a1728;border:1px solid var(-
   <div id="setup" class="card">
     <div class="controls">
       <label>My team<select id="teamSelect"><option>Loading teams…</option></select></label>
-      <label>Projected rank<input id="projRank" type="number" min="1" max="18" value="4"></label>
-      <label>My projected points<input id="myProj" type="number" step=".01" value="95.79"></label>
-      <label>Projected chop line<input id="chopProj" type="number" step=".01" value="84.88"></label>
       <label>Sleeper “safe” %<input id="safePct" type="number" step="1" min="0" max="100" value="61"></label>
       <label>Starting FAAB<input id="startFaab" type="number" value="1000"></label>
     </div>
@@ -126,21 +124,21 @@ select,input{width:100%;margin-top:4px;background:#0a1728;border:1px solid var(-
 
   <div class="card wide sunday-only" style="margin-bottom:12px">
     <div class="reco">
-      <div><div class="headline" id="sundayDecision">Live Mode</div><div class="why" id="sundayDecisionWhy">Live weekly guidance will appear once scoring starts.</div></div>
+      <div><div class="headline" id="sundayDecision">Live Mode</div><div class="why" id="sundayDecisionWhy">Live score, current rank, and chop watch will appear once scoring starts.</div></div>
       <div class="action"><span class="pill green" id="sundayDecisionPill">HOLD</span></div>
     </div>
   </div>
 
   <div class="grid">
-    <div class="card metric normal-only"><div class="label">Projected Rank</div><div class="value" id="rankVal">—</div><div class="sub">manual Sleeper input</div></div>
-    <div class="card metric normal-only"><div class="label">Projected Pts</div><div class="value" id="projVal">—</div><div class="sub" id="projSub">vs projected chop</div></div>
-    <div class="card metric"><div class="label">Live Projected Rank</div><div class="value" id="liveRank">—</div><div class="sub">current score + remaining projection</div></div>
-    <div class="card metric"><div class="label">Projected Cushion</div><div class="value" id="liveCushion">—</div><div class="sub">projected points above chop</div></div>
+    <div class="card metric normal-only"><div class="label">Current Week Rank</div><div class="value" id="rankVal">—</div><div class="sub">live Sleeper scoring</div></div>
+    <div class="card metric normal-only"><div class="label">Current Score</div><div class="value" id="projVal">—</div><div class="sub" id="projSub">points scored this week</div></div>
+    <div class="card metric sunday-only"><div class="label">Current Live Rank</div><div class="value" id="liveRank">—</div><div class="sub">actual points scored</div></div>
+    <div class="card metric"><div class="label">Projected Safety Cushion</div><div class="value" id="liveCushion">—</div><div class="sub">projected points above chop</div></div>
     <div class="card metric normal-only"><div class="label">FAAB</div><div class="value" id="faabVal">$1,000</div><div class="sub" id="faabSub">100% remaining</div></div>
     <div class="card metric normal-only"><div class="label">Teams Alive</div><div class="value" id="teamsVal">18</div><div class="sub" id="weekVal">Week 1</div></div>
 
     <div class="card wide sunday-only">
-      <h2>Live Survival Console</h2>
+      <h2>Live Scoreboard & Chop Watch</h2>
       <div class="kpirow" id="sundayKpis"></div>
       <div style="margin-top:12px" id="sundayBottom"></div>
     </div>
@@ -216,7 +214,7 @@ const BYE={
   ARI:14,DAL:14
 };
 let state={league:null,users:[],rosters:[],matchups:[],previousMatchups:[],players:{},transactions:[],historicalTransactions:[],drafts:[],draftPicks:[],projections:{},week:1,nflState:null};
-let prefs=JSON.parse(localStorage.getItem("gwPrefs")||'{"rosterId":null,"projRank":4,"myProj":95.79,"chopProj":84.88,"safePct":61,"startFaab":1000}');
+let prefs=JSON.parse(localStorage.getItem("gwPrefs")||'{"rosterId":null,"safePct":61,"startFaab":1000}');
 
 const $=id=>document.getElementById(id);
 const money=n=>"$"+Number(n||0).toLocaleString();
@@ -341,32 +339,40 @@ async function load(){
 function buildTeamSelect(){
   const s=$("teamSelect");s.innerHTML="";
   state.rosters.forEach(r=>{const o=document.createElement("option");o.value=r.roster_id;o.textContent=teamName(rosterUser(r));if(String(r.roster_id)===String(prefs.rosterId))o.selected=true;s.appendChild(o)});
-  $("projRank").value=prefs.projRank||4;$("myProj").value=prefs.myProj||95.79;$("chopProj").value=prefs.chopProj||84.88;
   $("safePct").value=prefs.safePct||61;$("startFaab").value=prefs.startFaab||1000;
 }
 function scoredTeams(){
   return state.rosters.filter(activeRoster).map(r=>({r,m:matchupFor(r.roster_id),pts:Number(matchupFor(r.roster_id)?.points||0)})).sort((a,b)=>b.pts-a.pts);
 }
 function recommendation(scored,mine){
-  const mineIdx=scored.findIndex(x=>x.r.roster_id===mine.roster_id);
-  const rank=mineIdx>=0?mineIdx+1:99;const n=scored.length;
-  const mineProj=mineIdx>=0?Number(scored[mineIdx].proj??scored[mineIdx].pts):0;
-  const chopProj=n?Number(scored[n-1].proj??scored[n-1].pts):0;
+  const current=scoredTeams();
+  const currentIdx=current.findIndex(x=>x.r.roster_id===mine.roster_id);
+  const currentRank=currentIdx>=0?currentIdx+1:null;
+  const currentPts=currentIdx>=0?current[currentIdx].pts:0;
+  const projected=[...scored].sort((a,b)=>(b.proj??0)-(a.proj??0)||(b.pts??0)-(a.pts??0));
+  const pIdx=projected.findIndex(x=>x.r.roster_id===mine.roster_id);
+  const mineProj=pIdx>=0?Number(projected[pIdx].proj??currentPts):currentPts;
+  const chopProj=projected.length?Number(projected[projected.length-1].proj??0):0;
   const gap=mineProj-chopProj;
   const myfaab=faabRemaining(mine);
+  const started=current.some(x=>x.pts!==0);
   let title,why,pill,cls;
-  if(rank>=Math.max(1,n-2)||gap<4){
-    title="🔴 Survival first — be willing to spend";
-    why=`Projected ${rank}/${n} with only ${gap.toFixed(1)} points of cushion. Protect the season before the bankroll.`;
-    pill="SURVIVE";cls="red";
-  }else if(rank>=Math.max(1,n-5)||gap<8){
-    title="🟡 Watch closely — selective upgrades";
-    why=`Projected ${rank}/${n}, +${gap.toFixed(1)} above chop. Preserve FAAB unless an upgrade materially raises the floor.`;
+  if(!started){
+    title="Pregame — no action required";
+    why=`Lineup has not started scoring yet. Preserve ${money(myfaab)} FAAB and use the roster/market sections for decisions.`;
+    pill="PREGAME";cls="";
+  }else if(gap<5){
+    title="🔴 Chop risk — monitor closely";
+    why=`You are currently ${currentRank||"—"}/${current.length} with ${currentPts.toFixed(2)} scored and only ${gap.toFixed(1)} projected points above the chop line. Most weekly moves may already be locked; this is a risk alert, not a command to force a transaction.`;
+    pill="RISK";cls="red";
+  }else if(gap<12){
+    title="🟡 Monitor the chop race";
+    why=`You are currently ${currentRank||"—"}/${current.length} with ${currentPts.toFixed(2)} scored and a projected ${gap.toFixed(1)}-point cushion. No reason to manufacture a move; watch the live chop line.`;
     pill="WATCH";cls="yellow";
   }else{
-    title="🟢 Comfortable — preserve FAAB";
-    why=`Projected ${rank}/${n}, +${gap.toFixed(1)} above chop with ${money(myfaab)} available. No reason to force upgrades.`;
-    pill="HOLD";cls="green";
+    title="🟢 No action needed — monitor";
+    why=`You are currently ${currentRank||"—"}/${current.length} with ${currentPts.toFixed(2)} scored and a projected ${gap.toFixed(1)}-point cushion. With games live, preserve FAAB and simply monitor the chop race unless a real lineup decision remains.`;
+    pill="MONITOR";cls="green";
   }
   $("recommendation").textContent=title;$("recommendationWhy").textContent=why;
   $("recommendationPill").textContent=pill;$("recommendationPill").className=`pill ${cls}`;
@@ -376,16 +382,16 @@ function render(){
   const scored=scoredTeams();const started=scored.some(x=>x.pts!==0);
   const projected=liveProjectedTeams();
   const myPts=Number(matchupFor(mine.roster_id)?.points||0);
-  const myIdx=projected.findIndex(x=>x.r.roster_id===mine.roster_id);
+  const currentIdx=scored.findIndex(x=>x.r.roster_id===mine.roster_id);
+  const myProjIdx=projected.findIndex(x=>x.r.roster_id===mine.roster_id);
   const liveChop=projected.length?projected[projected.length-1].proj:0;
-  const myLiveProj=myIdx>=0?projected[myIdx].proj:myPts;
+  const myLiveProj=myProjIdx>=0?projected[myProjIdx].proj:myPts;
   const cushion=myLiveProj-liveChop;const faab=faabRemaining(mine);
 
-  $("rankVal").textContent=`${myIdx>=0?myIdx+1:"—"} / ${projected.length}`;
-  $("projVal").textContent=Number(prefs.myProj||0).toFixed(1);
-  const pg=Number(prefs.myProj||0)-Number(prefs.chopProj||0);
-  $("projSub").textContent=`${pg>=0?"+":""}${pg.toFixed(1)} vs projected chop`;
-  $("liveRank").textContent=myIdx>=0?`${myIdx+1} / ${projected.length}`:"—";
+  $("rankVal").textContent=currentIdx>=0?`${currentIdx+1} / ${scored.length}`:"—";
+  $("projVal").textContent=myPts.toFixed(2);
+  $("projSub").textContent="points scored this week";
+  $("liveRank").textContent=currentIdx>=0?`${currentIdx+1} / ${scored.length}`:"—";
   $("liveRank").style.fontSize="28px";
   $("liveCushion").textContent=`${cushion>=0?"+":""}${cushion.toFixed(1)}`;
   $("liveCushion").className="value "+(cushion>=10?"good":cushion>=5?"warn":"bad");
@@ -397,8 +403,18 @@ function render(){
 }
 function renderRoster(mine){
   const starters=new Set((matchupFor(mine.roster_id)?.starters||mine.starters||[]).map(String));
-  const ids=mine.players||[];
-  $("roster").innerHTML=ids.map(id=>{
+  const ids=(mine.players||[]).map(String);
+  const posOrder={QB:0,RB:1,WR:2,TE:3,K:4,DEF:5,DST:5};
+  const starterIds=ids.filter(id=>starters.has(id)).sort((a,b)=>{
+    const pa=(playerMeta(a).position||"").toUpperCase(),pb=(playerMeta(b).position||"").toUpperCase();
+    return (posOrder[pa]??4)-(posOrder[pb]??4);
+  });
+  const benchIds=ids.filter(id=>!starters.has(id)).sort((a,b)=>{
+    const pa=(playerMeta(a).position||"").toUpperCase(),pb=(playerMeta(b).position||"").toUpperCase();
+    return (posOrder[pa]??9)-(posOrder[pb]??9)||playerName(a).localeCompare(playerName(b));
+  });
+  const ordered=[...starterIds,...benchIds];
+  $("roster").innerHTML=ordered.map(id=>{
     const p=playerMeta(id),isStarter=starters.has(String(id)),bye=BYE[p.team],inj=p.injury_status?` · ${p.injury_status}`:"";
     return `<div class="player"><div class="top"><span class="name">${playerName(id)}</span><span class="pill ${isStarter?"green":""}">${isStarter?"START":"BENCH"}</span></div>
       <div class="meta">${p.position||""} · ${p.team||"FA"}${bye?` · Bye ${bye}`:""}${inj}</div></div>`
@@ -721,80 +737,71 @@ function renderChoppedMarket(){
 function renderSunday(projected,mine,started){
   const myMatch=matchupFor(mine.roster_id)||{};
   const myPts=Number(myMatch.points||0);
-  const ranked=[...projected].sort((a,b)=>(b.proj??0)-(a.proj??0)||(b.pts??0)-(a.pts??0));
-  const myRank=ranked.findIndex(x=>x.r.roster_id===mine.roster_id)+1;
-  const myProj=myRank>0?Number(ranked[myRank-1].proj||myPts):myPts;
-  const chopTeam=ranked[ranked.length-1];
-  const chopProj=Number(chopTeam?.proj||0);
+  const live=scoredTeams();
+  const liveRank=live.findIndex(x=>x.r.roster_id===mine.roster_id)+1;
+  const rankedProj=[...projected].sort((a,b)=>(b.proj??0)-(a.proj??0)||(b.pts??0)-(a.pts??0));
+  const myProjRow=rankedProj.find(x=>x.r.roster_id===mine.roster_id);
+  const myProj=Number(myProjRow?.proj??myPts);
+  const chopProj=Number(rankedProj[rankedProj.length-1]?.proj||0);
   const cushion=myProj-chopProj;
-
   const myStarters=(myMatch.starters||mine.starters||[]).map(String);
   const ptsMap=myMatch.players_points||{};
   const myRemaining=myStarters.filter(id=>!Object.prototype.hasOwnProperty.call(ptsMap,id)||Number(ptsMap[id]||0)===0).length;
 
-  const rankWithRemain=ranked.map(x=>{
+  $("sundayKpis").innerHTML=[
+    ["Live score",myPts.toFixed(2)],
+    ["Current rank",liveRank>0?`${liveRank}/${live.length}`:"—"],
+    ["Projected finish",myProj.toFixed(2)],
+    ["Projected chop",chopProj.toFixed(2)],
+    ["Safety cushion",`${cushion>=0?"+":""}${cushion.toFixed(2)}`],
+    ["Starters remaining",myRemaining]
+  ].map(([a,b])=>`<div class="kpi"><b>${b}</b><span>${a}</span></div>`).join("");
+
+  // Mirror the useful Sleeper view: current live standings from 1 down, based on actual points scored.
+  const currentRows=live.map((x,i)=>{
     const m=x.m||{};
     const starters=(m.starters||x.r.starters||[]).map(String);
     const pmap=m.players_points||{};
     const remaining=starters.filter(id=>!Object.prototype.hasOwnProperty.call(pmap,id)||Number(pmap[id]||0)===0).length;
-    return {...x,remaining};
+    return {...x,rank:i+1,remaining};
   });
-
-  $("sundayKpis").innerHTML=[
-    ["Live score",myPts.toFixed(2)],
-    ["Live proj rank",myRank>0?`${myRank}/${ranked.length}`:"—"],
-    ["Projected total",myProj.toFixed(2)],
-    ["Projected chop",chopProj.toFixed(2)],
-    ["Proj cushion",`${cushion>=0?"+":""}${cushion.toFixed(2)}`],
-    ["My remaining",myRemaining]
-  ].map(([a,b])=>`<div class="kpi"><b>${b}</b><span>${a}</span></div>`).join("");
-
-  // Show the meaningful chop race: lowest projected finish first, matching the way
-  // managers think about the Sleeper Chop screen rather than season standings.
-  const danger=[...rankWithRemain].slice(-6).reverse();
-  $("sundayBottom").innerHTML=danger.map((x,i)=>{
+  $("sundayBottom").innerHTML=`<div class="intel-note" style="margin-bottom:8px">Current live standings — actual Sleeper points, highest score first.</div>`+currentRows.map(x=>{
     const me=x.r.roster_id===mine.roster_id;
-    return `<div class="player" style="margin-bottom:7px">
-      <div class="top"><span class="name">${ranked.length-i}. ${teamName(rosterUser(x.r))}${me?" · YOU":""}</span><b>${Number(x.proj||0).toFixed(2)}</b></div>
-      <div class="meta">${Number(x.pts||0).toFixed(2)} scored · ${x.remaining} starter${x.remaining===1?"":"s"} remaining</div>
-    </div>`
+    const chop=x.rank===currentRows.length;
+    return `<div class="player" style="margin-bottom:7px${me?";border-color:#56d9c2":""}">
+      <div class="top"><span class="name">${x.rank}. ${teamName(rosterUser(x.r))}${me?" · YOU":""}</span><b>${x.pts.toFixed(2)}</b></div>
+      <div class="meta">${chop?"CURRENT CHOP · ":""}${x.remaining} starter${x.remaining===1?"":"s"} remaining</div>
+    </div>`;
   }).join("");
 
   let decision,why,pill,cls;
-  const dangerThreshold=Math.max(1,ranked.length-3);
-  if(myRank>=dangerThreshold || cushion<5){
-    decision="🔴 NEED UPSIDE";
-    why=`Live projection has you ${myRank}/${ranked.length}, only ${cushion.toFixed(1)} above the projected chop. Favor ceiling in any remaining lineup decisions.`;
-    pill="UPSIDE";cls="red";
-  }else if(cushion<12 || myRank>=Math.ceil(ranked.length*.65)){
-    decision="🟡 HOLD / STAY BALANCED";
-    why=`Live projection has you ${myRank}/${ranked.length}, +${cushion.toFixed(1)} above the projected chop. Avoid unnecessary gambles, but watch the teams near the cut line.`;
-    pill="HOLD";cls="yellow";
+  if(!started){
+    decision="Pregame — monitor lineup";
+    why="Scoring has not started yet. Use Live Mode once games begin.";pill="PREGAME";cls="";
+  }else if(cushion<5){
+    decision="🔴 AT RISK — WATCH CHOP LINE";
+    why=`You are currently ${liveRank}/${live.length} with ${myPts.toFixed(2)} points and only ${cushion.toFixed(1)} projected points above the chop. Most weekly moves may already be locked; treat this as a survival warning, not a prompt to force a move.`;pill="RISK";cls="red";
+  }else if(cushion<12){
+    decision="🟡 WATCH THE CHOP RACE";
+    why=`You are currently ${liveRank}/${live.length} with ${myPts.toFixed(2)} points and a projected ${cushion.toFixed(1)}-point cushion. No unnecessary move is implied; keep monitoring live scores.`;pill="WATCH";cls="yellow";
   }else{
-    decision="🟢 PLAY FLOOR";
-    why=`Live projection has you ${myRank}/${ranked.length}, +${cushion.toFixed(1)} above the projected chop. Prioritize stable volume and avoid unnecessary variance.`;
-    pill="FLOOR";cls="green";
+    decision="🟢 NO ACTION NEEDED";
+    why=`You are currently ${liveRank}/${live.length} with ${myPts.toFixed(2)} points and a projected ${cushion.toFixed(1)}-point cushion. Games are live, so the useful action is simply to monitor the chop race and preserve FAAB unless a real lineup decision remains.`;pill="MONITOR";cls="green";
   }
-  $("sundayDecision").textContent=decision;
-  $("sundayDecisionWhy").textContent=why;
-  $("sundayDecisionPill").textContent=pill;
-  $("sundayDecisionPill").className=`pill ${cls}`;
+  $("sundayDecision").textContent=decision;$("sundayDecisionWhy").textContent=why;$("sundayDecisionPill").textContent=pill;$("sundayDecisionPill").className=`pill ${cls}`;
 
-  const closest=danger.slice(0,4);
+  const currentChop=currentRows[currentRows.length-1];
+  const chopProjTeam=rankedProj[rankedProj.length-1];
   $("sundayContext").innerHTML=`
-    <div class="player">
-      <div class="top"><span class="name">Projected chop: ${teamName(rosterUser(chopTeam.r))}</span><span class="pill red">${chopProj.toFixed(2)}</span></div>
-      <div class="meta">${Number(chopTeam.pts||0).toFixed(2)} scored · ${closest[0]?.remaining??0} starters remaining</div>
-    </div>
-    <div style="height:8px"></div>
-    ${closest.map(x=>`<div class="player" style="margin-bottom:7px"><div class="top"><span class="name">${teamName(rosterUser(x.r))}</span><span>${Number(x.proj||0).toFixed(2)}</span></div><div class="meta">${Number(x.pts||0).toFixed(2)} scored · ${x.remaining} remaining</div></div>`).join("")}`;
+    <div class="player" style="margin-bottom:8px"><div class="top"><span class="name">Current chop: ${currentChop?teamName(rosterUser(currentChop.r)):"—"}</span><span class="pill red">${currentChop?currentChop.pts.toFixed(2):"0.00"}</span></div><div class="meta">Based on actual points scored right now.</div></div>
+    <div class="player"><div class="top"><span class="name">Projected chop: ${chopProjTeam?teamName(rosterUser(chopProjTeam.r)):"—"}</span><span class="pill yellow">${chopProj.toFixed(2)}</span></div><div class="meta">Projection is a secondary risk signal only — it does not replace the live Sleeper ranking.</div></div>`;
 }
+
 $("refreshBtn").onclick=load;
 $("settingsBtn").onclick=()=>{$("setup").style.display=$("setup").style.display==="none"?"block":"none"};
 $("sundayBtn").onclick=()=>{$("app").classList.toggle("sunday");$("sundayBtn").classList.toggle("active");$("sundayBtn").textContent=$("app").classList.contains("sunday")?"Exit Live":"Live Mode"};
 $("saveBtn").onclick=()=>{
-  prefs={rosterId:$("teamSelect").value,projRank:Number($("projRank").value||0),myProj:Number($("myProj").value||0),
-    chopProj:Number($("chopProj").value||0),safePct:Number($("safePct").value||0),startFaab:Number($("startFaab").value||1000)};
+  prefs={rosterId:$("teamSelect").value,safePct:Number($("safePct").value||0),startFaab:Number($("startFaab").value||1000)};
   localStorage.setItem("gwPrefs",JSON.stringify(prefs));$("setup").style.display="none";render();
 };
 load();
