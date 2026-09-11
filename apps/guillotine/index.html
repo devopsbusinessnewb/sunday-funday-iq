@@ -95,9 +95,9 @@ select,input{width:100%;margin-top:4px;background:#0a1728;border:1px solid var(-
 <body>
 <div class="app" id="app">
   <div class="header">
-    <div class="brand"><h1>🏈 Sunday Funday IQ</h1><p id="leagueTitle">Loading league…</p><p style="margin:3px 0 0;color:#5f7898;font-size:10px">Chop Suey module · Build 2.7 · VERIFIED</p></div>
-    <div class="actions"><a class="btn" href="../../" style="text-decoration:none;display:inline-flex;align-items:center">⌂ Home</a>
-      <button class="btn" id="sundayBtn">Sunday Mode</button>
+    <div class="brand"><h1>🏈 Sunday Funday IQ</h1><p id="leagueTitle">Loading league…</p><p style="margin:3px 0 0;color:#5f7898;font-size:10px">Chop Suey module · Build 2.8 · LIVE MODE</p></div>
+    <div class="actions">
+      <button class="btn" id="sundayBtn">Live Mode</button>
       <button class="btn" id="settingsBtn">Settings</button>
       <button class="btn primary" id="refreshBtn">↻ Refresh</button>
     </div>
@@ -126,7 +126,7 @@ select,input{width:100%;margin-top:4px;background:#0a1728;border:1px solid var(-
 
   <div class="card wide sunday-only" style="margin-bottom:12px">
     <div class="reco">
-      <div><div class="headline" id="sundayDecision">Sunday Mode</div><div class="why" id="sundayDecisionWhy">Live game-day guidance will appear once scoring starts.</div></div>
+      <div><div class="headline" id="sundayDecision">Live Mode</div><div class="why" id="sundayDecisionWhy">Live weekly guidance will appear once scoring starts.</div></div>
       <div class="action"><span class="pill green" id="sundayDecisionPill">HOLD</span></div>
     </div>
   </div>
@@ -134,13 +134,13 @@ select,input{width:100%;margin-top:4px;background:#0a1728;border:1px solid var(-
   <div class="grid">
     <div class="card metric normal-only"><div class="label">Projected Rank</div><div class="value" id="rankVal">—</div><div class="sub">manual Sleeper input</div></div>
     <div class="card metric normal-only"><div class="label">Projected Pts</div><div class="value" id="projVal">—</div><div class="sub" id="projSub">vs projected chop</div></div>
-    <div class="card metric"><div class="label">Live Rank</div><div class="value" id="liveRank">—</div><div class="sub">current Sleeper scoring</div></div>
-    <div class="card metric"><div class="label">Live Cushion</div><div class="value" id="liveCushion">—</div><div class="sub">points above current chop</div></div>
+    <div class="card metric"><div class="label">Live Projected Rank</div><div class="value" id="liveRank">—</div><div class="sub">current score + remaining projection</div></div>
+    <div class="card metric"><div class="label">Projected Cushion</div><div class="value" id="liveCushion">—</div><div class="sub">projected points above chop</div></div>
     <div class="card metric normal-only"><div class="label">FAAB</div><div class="value" id="faabVal">$1,000</div><div class="sub" id="faabSub">100% remaining</div></div>
     <div class="card metric normal-only"><div class="label">Teams Alive</div><div class="value" id="teamsVal">18</div><div class="sub" id="weekVal">Week 1</div></div>
 
     <div class="card wide sunday-only">
-      <h2>Sunday Survival Console</h2>
+      <h2>Live Survival Console</h2>
       <div class="kpirow" id="sundayKpis"></div>
       <div style="margin-top:12px" id="sundayBottom"></div>
     </div>
@@ -215,7 +215,7 @@ const BYE={
   BAL:13,IND:13,LV:13,NYJ:13,
   ARI:14,DAL:14
 };
-let state={league:null,users:[],rosters:[],matchups:[],previousMatchups:[],players:{},transactions:[],historicalTransactions:[],drafts:[],draftPicks:[],week:1,nflState:null};
+let state={league:null,users:[],rosters:[],matchups:[],previousMatchups:[],players:{},transactions:[],historicalTransactions:[],drafts:[],draftPicks:[],projections:{},week:1,nflState:null};
 let prefs=JSON.parse(localStorage.getItem("gwPrefs")||'{"rosterId":null,"projRank":4,"myProj":95.79,"chopProj":84.88,"safePct":61,"startFaab":1000}');
 
 const $=id=>document.getElementById(id);
@@ -235,6 +235,51 @@ async function getJson(url,timeout=10000){
   const c=new AbortController();const t=setTimeout(()=>c.abort(),timeout);
   try{const r=await fetch(url,{cache:"no-store",signal:c.signal});if(!r.ok)throw new Error(`${r.status} ${r.statusText}`);return await r.json()}
   finally{clearTimeout(t)}
+}
+
+async function loadWeeklyProjections(){
+  const season=state.league?.season||state.nflState?.season||2026;
+  const seasonType=String(state.nflState?.season_type||'regular').toLowerCase();
+  const urls=[
+    `https://api.sleeper.app/projections/nfl/${season}/${state.week}?season_type=${encodeURIComponent(seasonType)}`,
+    `https://api.sleeper.com/projections/nfl/${season}/${state.week}?season_type=${encodeURIComponent(seasonType)}`
+  ];
+  for(const url of urls){
+    try{
+      const rows=await getJson(url,12000);
+      if(Array.isArray(rows)&&rows.length){
+        const map={};
+        rows.forEach(x=>{const id=String(x.player_id??x.player?.player_id??x.player?.id??'');if(id)map[id]=x});
+        if(Object.keys(map).length){state.projections=map;return true}
+      }
+    }catch(e){console.warn('Sleeper projections unavailable',url,e)}
+  }
+  state.projections={};return false;
+}
+function projectionPoints(id){
+  const x=state.projections?.[String(id)];if(!x)return 0;
+  const s=x.stats||x;
+  for(const k of ['pts_ppr','pts_half_ppr','pts_std','fantasy_points']){
+    const v=Number(s?.[k]);if(Number.isFinite(v)&&v!==0)return v;
+  }
+  return 0;
+}
+function teamLiveProjection(r){
+  const m=matchupFor(r.roster_id)||{};
+  const starters=(m.starters||r.starters||[]).map(String);
+  const ptsMap=m.players_points||{};
+  let projected=Number(m.points||0);
+  for(const id of starters){
+    const hasLive=Object.prototype.hasOwnProperty.call(ptsMap,id);
+    const live=Number(ptsMap[id]||0);
+    // Sleeper exposes a weekly player projection; use it only for players who have not
+    // yet produced a live scoring entry. This mirrors the chop screen's current+remaining view.
+    if(!hasLive || live===0)projected+=projectionPoints(id);
+  }
+  return projected;
+}
+function liveProjectedTeams(){
+  return state.rosters.filter(activeRoster).map(r=>({r,m:matchupFor(r.roster_id),pts:Number(matchupFor(r.roster_id)?.points||0),proj:teamLiveProjection(r)})).sort((a,b)=>b.proj-a.proj||b.pts-a.pts);
 }
 
 async function load(){
@@ -271,6 +316,7 @@ async function load(){
     state.drafts=await getJson(`${API}/league/${LEAGUE_ID}/drafts`).catch(()=>[]);
     const draftId=state.league?.draft_id || state.drafts?.[0]?.draft_id;
     state.draftPicks=draftId?await getJson(`${API}/draft/${draftId}/picks`).catch(()=>[]):[];
+    await loadWeeklyProjections();
 
     buildTeamSelect();
     if(!prefs.rosterId){$("setup").style.display="block";$("recommendation").textContent="Choose your team once";$("recommendationWhy").textContent="Your selection will persist on this device."}
@@ -279,7 +325,7 @@ async function load(){
         render();
       }catch(e){
         console.error("Dashboard render error",e);
-        showError("Dashboard error: "+e.message+" · Build 2.7");
+        showError("Dashboard error: "+e.message+" · Build 2.8");
         $("recommendation").textContent="Dashboard rendering issue";
         $("recommendationWhy").textContent="Sleeper data loaded, but one dashboard panel failed to render.";
       }
@@ -302,8 +348,11 @@ function scoredTeams(){
   return state.rosters.filter(activeRoster).map(r=>({r,m:matchupFor(r.roster_id),pts:Number(matchupFor(r.roster_id)?.points||0)})).sort((a,b)=>b.pts-a.pts);
 }
 function recommendation(scored,mine){
-  const gap=Number(prefs.myProj||0)-Number(prefs.chopProj||0);
-  const rank=Number(prefs.projRank||99);const n=scored.length;
+  const mineIdx=scored.findIndex(x=>x.r.roster_id===mine.roster_id);
+  const rank=mineIdx>=0?mineIdx+1:99;const n=scored.length;
+  const mineProj=mineIdx>=0?Number(scored[mineIdx].proj??scored[mineIdx].pts):0;
+  const chopProj=n?Number(scored[n-1].proj??scored[n-1].pts):0;
+  const gap=mineProj-chopProj;
   const myfaab=faabRemaining(mine);
   let title,why,pill,cls;
   if(rank>=Math.max(1,n-2)||gap<4){
@@ -325,23 +374,26 @@ function recommendation(scored,mine){
 function render(){
   const mine=myRoster();if(!mine){$("setup").style.display="block";return}
   const scored=scoredTeams();const started=scored.some(x=>x.pts!==0);
+  const projected=liveProjectedTeams();
   const myPts=Number(matchupFor(mine.roster_id)?.points||0);
-  const myIdx=scored.findIndex(x=>x.r.roster_id===mine.roster_id);
-  const chop=scored.length?scored[scored.length-1].pts:0;const cushion=myPts-chop;const faab=faabRemaining(mine);
+  const myIdx=projected.findIndex(x=>x.r.roster_id===mine.roster_id);
+  const liveChop=projected.length?projected[projected.length-1].proj:0;
+  const myLiveProj=myIdx>=0?projected[myIdx].proj:myPts;
+  const cushion=myLiveProj-liveChop;const faab=faabRemaining(mine);
 
-  $("rankVal").textContent=`${prefs.projRank||"—"} / ${scored.length}`;
+  $("rankVal").textContent=`${myIdx>=0?myIdx+1:"—"} / ${projected.length}`;
   $("projVal").textContent=Number(prefs.myProj||0).toFixed(1);
   const pg=Number(prefs.myProj||0)-Number(prefs.chopProj||0);
   $("projSub").textContent=`${pg>=0?"+":""}${pg.toFixed(1)} vs projected chop`;
-  $("liveRank").textContent=started&&myIdx>=0?`${myIdx+1} / ${scored.length}`:"Not started";
-  $("liveRank").style.fontSize=started?"28px":"20px";
-  $("liveCushion").textContent=started?`${cushion>=0?"+":""}${cushion.toFixed(1)}`:"—";
-  $("liveCushion").className="value "+(started?(cushion>=10?"good":cushion>=5?"warn":"bad"):"");
+  $("liveRank").textContent=myIdx>=0?`${myIdx+1} / ${projected.length}`:"—";
+  $("liveRank").style.fontSize="28px";
+  $("liveCushion").textContent=`${cushion>=0?"+":""}${cushion.toFixed(1)}`;
+  $("liveCushion").className="value "+(cushion>=10?"good":cushion>=5?"warn":"bad");
   $("faabVal").textContent=money(faab);$("faabSub").textContent=`${Math.round(100*faab/Number(prefs.startFaab||1000))}% remaining`;
   $("teamsVal").textContent=scored.length;$("weekVal").textContent=`Week ${state.week}`;
 
-  recommendation(scored,mine);renderRoster(mine);renderChop(scored,mine,started);
-  renderFaabIntelligence(mine);renderByeRadar(mine);renderTransactions();renderChoppedMarket();renderSunday(scored,mine,started);
+  recommendation(projected,mine);renderRoster(mine);renderChop(projected,mine,started);
+  renderFaabIntelligence(mine);renderByeRadar(mine);renderTransactions();renderChoppedMarket();renderSunday(projected,mine,started);
 }
 function renderRoster(mine){
   const starters=new Set((matchupFor(mine.roster_id)?.starters||mine.starters||[]).map(String));
@@ -364,9 +416,9 @@ function renderChop(scored,mine,started){
     return `<div class="player" style="margin-bottom:7px">
       <div class="top">
         <span class="name">${teamName(rosterUser(x.r))}${me?" · YOU":""}</span>
-        <span class="pill ${i===0?"red":""}">${x.pts.toFixed(2)}</span>
+        <span class="pill ${i===0?"red":""}">${(x.proj??x.pts).toFixed(2)}</span>
       </div>
-      <div class="meta">${i===0?"Current chop position":"+"+(x.pts-bottom[0].pts).toFixed(2)+" above chop"}</div>
+      <div class="meta">${i===0?"Projected chop position":"+"+((x.proj??x.pts)-(bottom[0].proj??bottom[0].pts)).toFixed(2)+" above chop"}</div>
     </div>`;
   }).join("");
 }
@@ -666,66 +718,61 @@ function renderChoppedMarket(){
       </div>`;
     }).join("") || '<div class="empty">No fantasy-position players found on chopped roster.</div>'}`;
 }
-function renderSunday(scored,mine,started){
+function renderSunday(projected,mine,started){
   const myMatch=matchupFor(mine.roster_id)||{};
   const myPts=Number(myMatch.points||0);
-  const bottom=[...scored].slice(-5).reverse();
-  const chop=bottom[0]?.pts||0;
-  const myRank=scored.findIndex(x=>x.r.roster_id===mine.roster_id)+1;
-  const myStarters=(myMatch.starters||mine.starters||[]).map(String);
-  const scoredStarterIds=new Set(Object.keys(myMatch.players_points||{}).filter(id=>Number(myMatch.players_points[id]||0)!==0));
-  const myRemaining=myStarters.filter(id=>!scoredStarterIds.has(id)).length;
+  const ranked=[...projected].sort((a,b)=>(b.proj??0)-(a.proj??0)||(b.pts??0)-(a.pts??0));
+  const myRank=ranked.findIndex(x=>x.r.roster_id===mine.roster_id)+1;
+  const myProj=myRank>0?Number(ranked[myRank-1].proj||myPts):myPts;
+  const chopTeam=ranked[ranked.length-1];
+  const chopProj=Number(chopTeam?.proj||0);
+  const cushion=myProj-chopProj;
 
-  const bottomWithRemain=bottom.map(x=>{
+  const myStarters=(myMatch.starters||mine.starters||[]).map(String);
+  const ptsMap=myMatch.players_points||{};
+  const myRemaining=myStarters.filter(id=>!Object.prototype.hasOwnProperty.call(ptsMap,id)||Number(ptsMap[id]||0)===0).length;
+
+  const rankWithRemain=ranked.map(x=>{
     const m=x.m||{};
     const starters=(m.starters||x.r.starters||[]).map(String);
-    const ptsMap=m.players_points||{};
-    const remaining=starters.filter(id=>Number(ptsMap[id]||0)===0).length;
+    const pmap=m.players_points||{};
+    const remaining=starters.filter(id=>!Object.prototype.hasOwnProperty.call(pmap,id)||Number(pmap[id]||0)===0).length;
     return {...x,remaining};
   });
 
   $("sundayKpis").innerHTML=[
-    ["My score",started?myPts.toFixed(2):"0.00"],
-    ["Current rank",started?`${myRank}/${scored.length}`:"—"],
-    ["Current chop",started?chop.toFixed(2):"—"],
-    ["Cushion",started?((myPts-chop)>=0?"+":"")+(myPts-chop).toFixed(2):"—"],
-    ["My remaining",myRemaining],
-    ["Proj finish",`${prefs.projRank}/${scored.length}`]
+    ["Live score",myPts.toFixed(2)],
+    ["Live proj rank",myRank>0?`${myRank}/${ranked.length}`:"—"],
+    ["Projected total",myProj.toFixed(2)],
+    ["Projected chop",chopProj.toFixed(2)],
+    ["Proj cushion",`${cushion>=0?"+":""}${cushion.toFixed(2)}`],
+    ["My remaining",myRemaining]
   ].map(([a,b])=>`<div class="kpi"><b>${b}</b><span>${a}</span></div>`).join("");
 
-  $("sundayBottom").innerHTML=started
-    ? bottomWithRemain.map((x,i)=>{
-        const me=x.r.roster_id===mine.roster_id;
-        return `<div class="player" style="margin-bottom:7px">
-          <div class="top"><span class="name">${i+1}. ${teamName(rosterUser(x.r))}${me?" · YOU":""}</span><b>${x.pts.toFixed(2)}</b></div>
-          <div class="meta">${x.remaining} starter${x.remaining===1?"":"s"} remaining</div>
-        </div>`
-      }).join("")
-    : '<div class="empty">Live chop ranking activates when Week 1 scoring starts.</div>';
+  // Show the meaningful chop race: lowest projected finish first, matching the way
+  // managers think about the Sleeper Chop screen rather than season standings.
+  const danger=[...rankWithRemain].slice(-6).reverse();
+  $("sundayBottom").innerHTML=danger.map((x,i)=>{
+    const me=x.r.roster_id===mine.roster_id;
+    return `<div class="player" style="margin-bottom:7px">
+      <div class="top"><span class="name">${ranked.length-i}. ${teamName(rosterUser(x.r))}${me?" · YOU":""}</span><b>${Number(x.proj||0).toFixed(2)}</b></div>
+      <div class="meta">${Number(x.pts||0).toFixed(2)} scored · ${x.remaining} starter${x.remaining===1?"":"s"} remaining</div>
+    </div>`
+  }).join("");
 
-  if(!started){
-    $("sundayDecision").textContent="Pregame — no action needed";
-    $("sundayDecisionWhy").textContent=`Projected ${prefs.projRank}/${scored.length}, ${Number(prefs.myProj||0)-Number(prefs.chopProj||0)>=0?"+":""}${(Number(prefs.myProj||0)-Number(prefs.chopProj||0)).toFixed(1)} above projected chop.`;
-    $("sundayDecisionPill").textContent="HOLD";
-    $("sundayDecisionPill").className="pill green";
-    $("sundayContext").innerHTML='<div class="empty">Once games start, this panel will focus on live rank, cushion, and how many starters the bottom teams still have remaining.</div>';
-    return;
-  }
-
-  const cushion=myPts-chop;
-  const dangerThreshold=Math.max(1,scored.length-3);
   let decision,why,pill,cls;
+  const dangerThreshold=Math.max(1,ranked.length-3);
   if(myRank>=dangerThreshold || cushion<5){
     decision="🔴 NEED UPSIDE";
-    why=`You are ${myRank}/${scored.length} with only ${cushion.toFixed(1)} points above the chop. Favor ceiling over floor in any remaining lineup decisions.`;
+    why=`Live projection has you ${myRank}/${ranked.length}, only ${cushion.toFixed(1)} above the projected chop. Favor ceiling in any remaining lineup decisions.`;
     pill="UPSIDE";cls="red";
-  }else if(cushion<12 || myRank>=Math.ceil(scored.length*.65)){
+  }else if(cushion<12 || myRank>=Math.ceil(ranked.length*.65)){
     decision="🟡 HOLD / STAY BALANCED";
-    why=`You are ${myRank}/${scored.length}, +${cushion.toFixed(1)} above the chop. Avoid unnecessary gambles, but keep an eye on the bottom teams' remaining players.`;
+    why=`Live projection has you ${myRank}/${ranked.length}, +${cushion.toFixed(1)} above the projected chop. Avoid unnecessary gambles, but watch the teams near the cut line.`;
     pill="HOLD";cls="yellow";
   }else{
     decision="🟢 PLAY FLOOR";
-    why=`You are ${myRank}/${scored.length}, +${cushion.toFixed(1)} above the chop. Prioritize stable volume and avoid unnecessary variance.`;
+    why=`Live projection has you ${myRank}/${ranked.length}, +${cushion.toFixed(1)} above the projected chop. Prioritize stable volume and avoid unnecessary variance.`;
     pill="FLOOR";cls="green";
   }
   $("sundayDecision").textContent=decision;
@@ -733,20 +780,18 @@ function renderSunday(scored,mine,started){
   $("sundayDecisionPill").textContent=pill;
   $("sundayDecisionPill").className=`pill ${cls}`;
 
-  const chopTeam=bottomWithRemain[0];
-  const closest=bottomWithRemain.slice(0,3);
+  const closest=danger.slice(0,4);
   $("sundayContext").innerHTML=`
     <div class="player">
-      <div class="top"><span class="name">Current chop: ${teamName(rosterUser(chopTeam.r))}</span><span class="pill red">${chopTeam.pts.toFixed(2)}</span></div>
-      <div class="meta">${chopTeam.remaining} starter${chopTeam.remaining===1?"":"s"} remaining</div>
+      <div class="top"><span class="name">Projected chop: ${teamName(rosterUser(chopTeam.r))}</span><span class="pill red">${chopProj.toFixed(2)}</span></div>
+      <div class="meta">${Number(chopTeam.pts||0).toFixed(2)} scored · ${closest[0]?.remaining??0} starters remaining</div>
     </div>
     <div style="height:8px"></div>
-    ${closest.map(x=>`<div class="player" style="margin-bottom:7px"><div class="top"><span class="name">${teamName(rosterUser(x.r))}</span><span>${x.pts.toFixed(2)}</span></div><div class="meta">${x.remaining} remaining</div></div>`).join("")}`;
+    ${closest.map(x=>`<div class="player" style="margin-bottom:7px"><div class="top"><span class="name">${teamName(rosterUser(x.r))}</span><span>${Number(x.proj||0).toFixed(2)}</span></div><div class="meta">${Number(x.pts||0).toFixed(2)} scored · ${x.remaining} remaining</div></div>`).join("")}`;
 }
-
 $("refreshBtn").onclick=load;
 $("settingsBtn").onclick=()=>{$("setup").style.display=$("setup").style.display==="none"?"block":"none"};
-$("sundayBtn").onclick=()=>{$("app").classList.toggle("sunday");$("sundayBtn").classList.toggle("active");$("sundayBtn").textContent=$("app").classList.contains("sunday")?"Exit Sunday":"Sunday Mode"};
+$("sundayBtn").onclick=()=>{$("app").classList.toggle("sunday");$("sundayBtn").classList.toggle("active");$("sundayBtn").textContent=$("app").classList.contains("sunday")?"Exit Live":"Live Mode"};
 $("saveBtn").onclick=()=>{
   prefs={rosterId:$("teamSelect").value,projRank:Number($("projRank").value||0),myProj:Number($("myProj").value||0),
     chopProj:Number($("chopProj").value||0),safePct:Number($("safePct").value||0),startFaab:Number($("startFaab").value||1000)};
