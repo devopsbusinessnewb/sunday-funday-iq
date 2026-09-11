@@ -95,7 +95,7 @@ select,input{width:100%;margin-top:4px;background:#0a1728;border:1px solid var(-
 <body>
 <div class="app" id="app">
   <div class="header">
-    <div class="brand"><h1>🏈 Sunday Funday IQ</h1><p id="leagueTitle">Loading league…</p><p style="margin:3px 0 0;color:#5f7898;font-size:10px">Chop Suey module · Build 2.10 · dual live + projected survival view</p></div>
+    <div class="brand"><h1>🏈 Sunday Funday IQ</h1><p id="leagueTitle">Loading league…</p><p style="margin:3px 0 0;color:#5f7898;font-size:10px">Chop Suey module · Build 2.11 · compact live chop board</p></div>
     <div class="actions">
       <a class="btn" href="../../">⌂ Home</a>
       <button class="btn" id="sundayBtn">Live Mode</button>
@@ -115,17 +115,10 @@ select,input{width:100%;margin-top:4px;background:#0a1728;border:1px solid var(-
     <div style="margin-top:10px"><button class="btn primary" id="saveBtn">Save dashboard settings</button></div>
   </div>
 
-  <div class="card wide normal-only" style="margin-bottom:12px">
-    <div class="reco">
-      <div><div class="headline" id="recommendation">Loading recommendation…</div><div class="why" id="recommendationWhy"></div></div>
+  <div class="card wide normal-only" style="margin-bottom:12px;padding:14px 16px">
+    <div class="reco" style="align-items:center">
+      <div><div class="headline" id="recommendation" style="font-size:18px">Loading weekly posture…</div><div class="why" id="recommendationWhy" style="margin-top:4px"></div></div>
       <div class="action"><span class="pill green" id="recommendationPill">HOLD</span></div>
-    </div>
-  </div>
-
-  <div class="card wide sunday-only" style="margin-bottom:12px">
-    <div class="reco">
-      <div><div class="headline" id="sundayDecision">Live Mode</div><div class="why" id="sundayDecisionWhy">Live score, current rank, and chop watch will appear once scoring starts.</div></div>
-      <div class="action"><span class="pill green" id="sundayDecisionPill">HOLD</span></div>
     </div>
   </div>
 
@@ -141,13 +134,12 @@ select,input{width:100%;margin-top:4px;background:#0a1728;border:1px solid var(-
     <div class="card metric normal-only"><div class="label">Teams Alive</div><div class="value" id="teamsVal">18</div><div class="sub" id="weekVal">Week 1</div></div>
 
     <div class="card wide sunday-only">
-      <h2>Live Scoreboard & Chop Watch</h2>
-      <div class="kpirow" id="sundayKpis"></div>
-      <div style="margin-top:12px" id="sundayBottom"></div>
+      <h2>Live Chop Board</h2>
+      <div id="sundayBottom"></div>
     </div>
 
     <div class="card wide sunday-only">
-      <h2>What Matters Now</h2>
+      <h2>What to Watch</h2>
       <div id="sundayContext"><div class="empty">Games have not started.</div></div>
     </div>
 
@@ -361,21 +353,21 @@ function recommendation(scored,mine){
   const started=current.some(x=>x.pts!==0);
   let title,why,pill,cls;
   if(!started){
-    title="Pregame — no action required";
-    why=`Lineup has not started scoring yet. Preserve ${money(myfaab)} FAAB and use the roster/market sections for decisions.`;
-    pill="PREGAME";cls="";
+    title="Weekly posture: preserve FAAB";
+    why=`Pregame projection ${pIdx>=0?pIdx+1:"—"}/${projected.length}, ${gap>=0?"+":""}${gap.toFixed(1)} vs projected chop. Spend only for a clear starter upgrade.`;
+    pill="HOLD";cls="green";
   }else if(gap<5){
-    title="🔴 Chop risk — monitor closely";
-    why=`Current score rank ${currentRank||"—"}/${current.length}; projected survival rank ${pIdx>=0?pIdx+1:"—"}/${projected.length}. You have ${currentPts.toFixed(2)} scored and only ${gap.toFixed(1)} projected points above the chop line. Most weekly moves may already be locked; this is a risk alert, not a command to force a transaction.`;
+    title="Weekly posture: survival risk";
+    why=`Score rank ${currentRank||"—"}/${current.length} · projected ${pIdx>=0?pIdx+1:"—"}/${projected.length} · ${gap.toFixed(1)} pts above chop. Protect survival first.`;
     pill="RISK";cls="red";
   }else if(gap<12){
-    title="🟡 Monitor the chop race";
-    why=`Current score rank ${currentRank||"—"}/${current.length}; projected survival rank ${pIdx>=0?pIdx+1:"—"}/${projected.length}. You have ${currentPts.toFixed(2)} scored and a projected ${gap.toFixed(1)}-point cushion. No reason to manufacture a move; watch the live chop line.`;
+    title="Weekly posture: selective upgrades";
+    why=`Score rank ${currentRank||"—"}/${current.length} · projected ${pIdx>=0?pIdx+1:"—"}/${projected.length} · +${gap.toFixed(1)} vs chop. Preserve ${money(myfaab)} unless an upgrade materially improves your lineup.`;
     pill="WATCH";cls="yellow";
   }else{
-    title="🟢 No action needed — monitor";
-    why=`Current score rank ${currentRank||"—"}/${current.length}; projected survival rank ${pIdx>=0?pIdx+1:"—"}/${projected.length}. You have ${currentPts.toFixed(2)} scored and a projected ${gap.toFixed(1)}-point cushion. With games live, preserve FAAB and simply monitor the chop race unless a real lineup decision remains.`;
-    pill="MONITOR";cls="green";
+    title="Weekly posture: preserve FAAB";
+    why=`Score rank ${currentRank||"—"}/${current.length} · projected ${pIdx>=0?pIdx+1:"—"}/${projected.length} · +${gap.toFixed(1)} vs chop. No need to spend for marginal upgrades.`;
+    pill="HOLD";cls="green";
   }
   $("recommendation").textContent=title;$("recommendationWhy").textContent=why;
   $("recommendationPill").textContent=pill;$("recommendationPill").className=`pill ${cls}`;
@@ -756,15 +748,7 @@ function renderSunday(projected,mine,started){
   const myRemaining=myStarters.filter(id=>!Object.prototype.hasOwnProperty.call(ptsMap,id)||Number(ptsMap[id]||0)===0).length;
 
   const projectedRank=rankedProj.findIndex(x=>x.r.roster_id===mine.roster_id)+1;
-  $("sundayKpis").innerHTML=[
-    ["Current score rank",liveRank>0?`${liveRank}/${live.length}`:"—"],
-    ["Live score",myPts.toFixed(2)],
-    ["Projected survival rank",projectedRank>0?`${projectedRank}/${rankedProj.length}`:"—"],
-    ["Projected total",myProj.toFixed(2)],
-    ["Projected chop",chopProj.toFixed(2)],
-    ["Projected cushion",`${cushion>=0?"+":""}${cushion.toFixed(2)}`],
-    ["Starters remaining",myRemaining]
-  ].map(([a,b])=>`<div class="kpi"><b>${b}</b><span>${a}</span></div>`).join("");
+
 
   // Mirror the useful Sleeper view: current live standings from 1 down, based on actual points scored.
   const currentRows=live.map((x,i)=>{
@@ -803,27 +787,16 @@ function renderSunday(projected,mine,started){
     }).join("")}
   `;
 
-  let decision,why,pill,cls;
-  if(!started){
-    decision="Pregame — monitor lineup";
-    why="Scoring has not started yet. Use Live Mode once games begin.";pill="PREGAME";cls="";
-  }else if(cushion<5){
-    decision="🔴 AT RISK — WATCH CHOP LINE";
-    why=`Current score rank: ${liveRank}/${live.length}. Projected survival rank: ${projectedRank}/${rankedProj.length}. You have ${myPts.toFixed(2)} points and only ${cushion.toFixed(1)} projected points above the chop. Most weekly moves may already be locked; treat this as a survival warning, not a prompt to force a move.`;pill="RISK";cls="red";
-  }else if(cushion<12){
-    decision="🟡 WATCH THE CHOP RACE";
-    why=`Current score rank: ${liveRank}/${live.length}. Projected survival rank: ${projectedRank}/${rankedProj.length}. You have ${myPts.toFixed(2)} points and a projected ${cushion.toFixed(1)}-point cushion. No unnecessary move is implied; keep monitoring both the live score and projected chop race.`;pill="WATCH";cls="yellow";
-  }else{
-    decision="🟢 NO ACTION NEEDED";
-    why=`Current score rank: ${liveRank}/${live.length}. Projected survival rank: ${projectedRank}/${rankedProj.length}. You have ${myPts.toFixed(2)} points and a projected ${cushion.toFixed(1)}-point cushion. Read those together: current score tells you where you stand now; projection tells you how exposed you are to the chop as the remaining games play out.`;pill="MONITOR";cls="green";
-  }
-  $("sundayDecision").textContent=decision;$("sundayDecisionWhy").textContent=why;$("sundayDecisionPill").textContent=pill;$("sundayDecisionPill").className=`pill ${cls}`;
+
 
   const currentChop=currentRows[currentRows.length-1];
   const chopProjTeam=rankedProj[rankedProj.length-1];
+  const bubble=projectedRows.length>1?projectedRows[projectedRows.length-2]:null;
   $("sundayContext").innerHTML=`
-    <div class="player" style="margin-bottom:8px"><div class="top"><span class="name">Current chop: ${currentChop?teamName(rosterUser(currentChop.r)):"—"}</span><span class="pill red">${currentChop?currentChop.pts.toFixed(2):"0.00"}</span></div><div class="meta">Based on actual points scored right now.</div></div>
-    <div class="player"><div class="top"><span class="name">Projected chop: ${chopProjTeam?teamName(rosterUser(chopProjTeam.r)):"—"}</span><span class="pill yellow">${chopProj.toFixed(2)}</span></div><div class="meta">Projection is a secondary risk signal only — it does not replace the live Sleeper ranking.</div></div>`;
+    <div class="player" style="margin-bottom:8px"><div class="top"><span class="name">Current chop · ${currentChop?teamName(rosterUser(currentChop.r)):"—"}</span><b>${currentChop?currentChop.pts.toFixed(2):"0.00"}</b></div><div class="meta">Lowest actual score right now.</div></div>
+    <div class="player" style="margin-bottom:8px"><div class="top"><span class="name">Projected chop · ${chopProjTeam?teamName(rosterUser(chopProjTeam.r)):"—"}</span><b>${chopProj.toFixed(2)}</b></div><div class="meta">Projected lowest weekly finish.</div></div>
+    ${bubble?`<div class="player" style="margin-bottom:8px"><div class="top"><span class="name">Bubble · ${teamName(rosterUser(bubble.r))}</span><b>${Number(bubble.proj||0).toFixed(2)}</b></div><div class="meta">Second-lowest projected finish; useful marker for how tight the chop race is.</div></div>`:""}
+    <div class="player" style="border-color:${cushion<5?"#a94a58":cushion<12?"#9b7b24":"#56d9c2"}"><div class="top"><span class="name">YOU · ${projectedRank}/${rankedProj.length} projected</span><b>${cushion>=0?"+":""}${cushion.toFixed(2)}</b></div><div class="meta">Your projected cushion above the chop. This is the number to watch as games move.</div></div>`;
 }
 
 $("refreshBtn").onclick=load;
