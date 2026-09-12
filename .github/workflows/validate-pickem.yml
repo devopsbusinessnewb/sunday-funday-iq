@@ -1,0 +1,40 @@
+name: Validate Pickem
+
+on:
+  push:
+    paths:
+      - 'apps/pickem/**'
+      - 'data/live/cbs-pickem.json'
+      - 'tests/**'
+      - '.github/workflows/validate-pickem.yml'
+  pull_request:
+    paths:
+      - 'apps/pickem/**'
+      - 'data/live/cbs-pickem.json'
+      - 'tests/**'
+      - '.github/workflows/validate-pickem.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  regression:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch repository
+        shell: bash
+        run: git clone --depth 1 "https://github.com/${GITHUB_REPOSITORY}.git" repo
+      - name: Check JavaScript syntax
+        shell: bash
+        run: |
+          cd repo
+          python - <<'PY2'
+          from pathlib import Path
+          s=Path('apps/pickem/index.html').read_text()
+          Path('/tmp/pickem.js').write_text(s.split('<script>',1)[1].rsplit('</script>',1)[0])
+          PY2
+          node --check /tmp/pickem.js
+      - name: Run CBS regression suite
+        shell: bash
+        run: cd repo && node tests/pickem-regression.js
