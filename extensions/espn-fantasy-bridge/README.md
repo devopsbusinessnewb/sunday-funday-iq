@@ -21,11 +21,10 @@ That means there is no JSON download, rename, drag/drop, GitHub Desktop commit, 
 Load `extensions/espn-fantasy-bridge` as an unpacked Chrome extension from `chrome://extensions/` with Developer mode enabled.
 
 ## Local IQ sync
-`Start ESPN IQ Sync.cmd` launches the local receiver with automatic GitHub push enabled. The underlying command is:
+`Start ESPN IQ Sync.cmd` launches the native Windows PowerShell receiver with automatic GitHub push enabled. Python is not required. The underlying command is:
 
 ```bat
-set SFIQ_AUTO_PUSH=1
-python tools\espn-bridge-server.py
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File "tools\espn-bridge-server.ps1"
 ```
 
 The server binds only to `127.0.0.1:43127`, validates the normalized payload, and rejects payloads containing credential-like keys such as `espn_s2`, `SWID`, `Cookie`, or `Authorization`.

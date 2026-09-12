@@ -7,6 +7,7 @@ on:
       - 'extensions/espn-fantasy-bridge/**'
       - 'tools/espn-sync.py'
       - 'tools/espn-bridge-server.py'
+      - 'tools/espn-bridge-server.ps1'
       - 'Start ESPN IQ Sync.cmd'
       - 'data/examples/espn-snapshot.example.json'
       - 'docs/ESPN.md'
@@ -17,6 +18,7 @@ on:
       - 'extensions/espn-fantasy-bridge/**'
       - 'tools/espn-sync.py'
       - 'tools/espn-bridge-server.py'
+      - 'tools/espn-bridge-server.ps1'
       - 'Start ESPN IQ Sync.cmd'
       - 'data/examples/espn-snapshot.example.json'
       - 'docs/ESPN.md'
@@ -82,8 +84,12 @@ jobs:
           assert "run_git('push','origin','main'" in server
           assert "run_git('pull','--rebase','--autostash','origin','main'" in server
           launcher=Path('Start ESPN IQ Sync.cmd').read_text()
-          assert 'set SFIQ_AUTO_PUSH=1' in launcher
-          assert 'python tools\\espn-bridge-server.py' in launcher
+          assert 'powershell.exe' in launcher
+          assert 'espn-bridge-server.ps1' in launcher
+          ps=Path('tools/espn-bridge-server.ps1').read_text().lower()
+          assert '[system.net.sockets.tcplistener]' in ps
+          assert "@('push', 'origin', 'main')" in ps
+          assert "@('pull', '--rebase', '--autostash', 'origin', 'main')" in ps
           PY
       - name: Exercise ESPN receiver, commit, push, and remote-advance retry
         shell: bash
