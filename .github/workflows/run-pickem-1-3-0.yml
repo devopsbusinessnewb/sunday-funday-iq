@@ -1,0 +1,38 @@
+name: Run Pickem 1.3.0 Migration
+
+on:
+  push:
+    paths:
+      - '.github/workflows/run-pickem-1-3-0.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Apply migration, test, and commit
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          BRANCH: sfiq/pickem-1-3-0
+        shell: bash
+        run: |
+          set -euo pipefail
+          git clone --depth 1 --branch "$BRANCH" "https://x-access-token:$GH_TOKEN@github.com/$REPO.git" repo
+          cd repo
+          python tools/apply-pickem-1-3-0.py
+          python - <<'PY'
+          from pathlib import Path
+          s=Path('apps/pickem/index.html').read_text()
+          Path('/tmp/pickem.js').write_text(s.split('<script>',1)[1].rsplit('</script>',1)[0])
+          PY
+          node --check /tmp/pickem.js
+          node tests/pickem-regression.js
+          git config user.name 'Sunday Funday IQ Bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add apps/pickem/index.html data/live/cbs-pickem.json tests docs/DEPLOYMENT.md
+          git commit -m '1.3.0 Separate CBS live data and add regression tests'
+          git push origin "$BRANCH"
