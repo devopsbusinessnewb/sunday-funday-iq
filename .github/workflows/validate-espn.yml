@@ -85,3 +85,6 @@ jobs:
           assert 'set SFIQ_AUTO_PUSH=1' in launcher
           assert 'python tools\\espn-bridge-server.py' in launcher
           PY
+      - name: Exercise ESPN receiver, commit, push, and remote-advance retry
+        shell: bash
+        run: python tests/espn-auto-sync-integration.py
