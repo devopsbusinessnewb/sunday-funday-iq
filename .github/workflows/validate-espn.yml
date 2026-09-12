@@ -7,6 +7,7 @@ on:
       - 'extensions/espn-fantasy-bridge/**'
       - 'tools/espn-sync.py'
       - 'tools/espn-bridge-server.py'
+      - 'Start ESPN IQ Sync.cmd'
       - 'data/examples/espn-snapshot.example.json'
       - 'docs/ESPN.md'
       - '.github/workflows/validate-espn.yml'
@@ -16,6 +17,7 @@ on:
       - 'extensions/espn-fantasy-bridge/**'
       - 'tools/espn-sync.py'
       - 'tools/espn-bridge-server.py'
+      - 'Start ESPN IQ Sync.cmd'
       - 'data/examples/espn-snapshot.example.json'
       - 'docs/ESPN.md'
       - '.github/workflows/validate-espn.yml'
@@ -52,6 +54,7 @@ jobs:
           from pathlib import Path
           manifest=json.loads(Path('extensions/espn-fantasy-bridge/manifest.json').read_text())
           assert manifest['manifest_version']==3
+          assert manifest['version']=='0.4.0'
           assert 'scripting' in manifest['permissions']
           assert 'https://fantasy.espn.com/*' in manifest['host_permissions']
           js=Path('extensions/espn-fantasy-bridge/popup.js').read_text().lower()
@@ -60,7 +63,7 @@ jobs:
           assert 'document.cookie' not in js
           assert 'chrome.cookies' not in js
           PY
-      - name: Check private collectors and local sync service
+      - name: Check private collectors and automatic local sync
         shell: bash
         run: |
           python -m py_compile tools/espn-sync.py tools/espn-bridge-server.py
@@ -76,4 +79,9 @@ jobs:
           server=Path('tools/espn-bridge-server.py').read_text().lower()
           assert "('127.0.0.1',43127)" in server
           assert "forbidden = ('espn_s2','swid','cookie','authorization')" in server
+          assert "run_git('push','origin','main'" in server
+          assert "run_git('pull','--rebase','--autostash','origin','main'" in server
+          launcher=Path('Start ESPN IQ Sync.cmd').read_text()
+          assert 'set SFIQ_AUTO_PUSH=1' in launcher
+          assert 'python tools\\espn-bridge-server.py' in launcher
           PY
