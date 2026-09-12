@@ -4,14 +4,18 @@ on:
   push:
     paths:
       - 'apps/espn/**'
+      - 'extensions/espn-fantasy-bridge/**'
       - 'tools/espn-sync.py'
+      - 'tools/espn-bridge-server.py'
       - 'data/examples/espn-snapshot.example.json'
       - 'docs/ESPN.md'
       - '.github/workflows/validate-espn.yml'
   pull_request:
     paths:
       - 'apps/espn/**'
+      - 'extensions/espn-fantasy-bridge/**'
       - 'tools/espn-sync.py'
+      - 'tools/espn-bridge-server.py'
       - 'data/examples/espn-snapshot.example.json'
       - 'docs/ESPN.md'
       - '.github/workflows/validate-espn.yml'
@@ -39,10 +43,27 @@ jobs:
           assert 'ESPN_SWID' not in s and 'ESPN_S2' not in s
           PY
           node --check /tmp/espn.js
-      - name: Check private collector syntax and contract
+      - name: Check ESPN browser bridge
         shell: bash
         run: |
-          python -m py_compile tools/espn-sync.py
+          node --check extensions/espn-fantasy-bridge/popup.js
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          manifest=json.loads(Path('extensions/espn-fantasy-bridge/manifest.json').read_text())
+          assert manifest['manifest_version']==3
+          assert 'scripting' in manifest['permissions']
+          assert 'https://fantasy.espn.com/*' in manifest['host_permissions']
+          js=Path('extensions/espn-fantasy-bridge/popup.js').read_text().lower()
+          assert "credentials:'include'" in js
+          assert 'chrome.scripting.executescript' in js
+          assert 'document.cookie' not in js
+          assert 'chrome.cookies' not in js
+          PY
+      - name: Check private collectors and local sync service
+        shell: bash
+        run: |
+          python -m py_compile tools/espn-sync.py tools/espn-bridge-server.py
           python - <<'PY'
           import json
           from pathlib import Path
@@ -52,4 +73,7 @@ jobs:
           assert 'espn_s2' not in Path('data/examples/espn-snapshot.example.json').read_text().lower()
           c=Path('tools/espn-sync.py').read_text()
           assert "pos_names={1:'QB',2:'RB',3:'WR',4:'TE',5:'K',16:'D/ST'}" in c
+          server=Path('tools/espn-bridge-server.py').read_text().lower()
+          assert "('127.0.0.1',43127)" in server
+          assert "forbidden = ('espn_s2','swid','cookie','authorization')" in server
           PY
