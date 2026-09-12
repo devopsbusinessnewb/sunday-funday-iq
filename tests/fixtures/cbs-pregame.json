@@ -1,0 +1,13 @@
+{
+  "product": "CBS Pick'em IQ Bridge",
+  "version": "regression-pregame",
+  "exportedAt": "2026-09-09T00:05:26.669Z",
+  "snapshots": [
+    {
+      "title": "NFL Football Tourney 2026 | Weekly Standings",
+      "url": "https://picks.cbssports.com/football/pickem/pools/test/standings/weekly",
+      "ts": "2026-09-09T00:05:18.446Z",
+      "text": "SUN 12:00 PM\nNE\nSEA\nSUN 12:00 PM\nSF\nLAR\nSUN 12:00 PM\nTB\nCIN\nSUN 12:00 PM\nBUF\nHOU\nSUN 12:00 PM\nBAL\nIND\nSUN 12:00 PM\nCHI\nCAR\nSUN 12:00 PM\nNO\nDET\nSUN 12:00 PM\nCLE\nJAC\nSUN 12:00 PM\nATL\nPIT\nSUN 12:00 PM\nNYJ\nTEN\nSUN 12:00 PM\nGB\nMIN\nSUN 12:00 PM\nWAS\nPHI\nSUN 12:00 PM\nMIA\nLV\nSUN 12:00 PM\nARI\nLAC\nSUN 12:00 PM\nDAL\nNYG\nSUN 12:00 PM\nDEN\nKC\n\nTony Eickhoff\n\t0\t0\t\nSEA\n(1)\n\t\nLAR\n(15)\n\t\nCIN\n(14)\n\t\nBUF\n(13)\n\t\nBAL\n(11)\n\t\nCAR\n(10)\n\t\nDET\n(16)\n\t\nJAX\n(9)\n\t\nPIT\n(7)\n\t\nTEN\n(6)\n\t\nGB\n(5)\n\t\nPHI\n(12)\n\t\nLV\n(3)\n\t\nLAC\n(8)\n\t\nDAL\n(4)\n\t\nKC\n(2)"
+    }
+  ]
+}
