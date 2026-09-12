@@ -33,7 +33,9 @@ jobs:
           s=Path('apps/espn/index.html').read_text()
           js=s.split('<script>',1)[1].rsplit('</script>',1)[0]
           Path('/tmp/espn.js').write_text(js)
-          assert 'Build 0.1.0' in s
+          assert 'Build 0.2.0' in s
+          assert 'function decisions()' in s
+          assert 'function bestSwap' in s
           assert 'ESPN_SWID' not in s and 'ESPN_S2' not in s
           PY
           node --check /tmp/espn.js
@@ -48,4 +50,6 @@ jobs:
           assert d['meta']['status']=='connected'
           assert isinstance(d['lineup'],list) and isinstance(d['bench'],list)
           assert 'espn_s2' not in Path('data/examples/espn-snapshot.example.json').read_text().lower()
+          c=Path('tools/espn-sync.py').read_text()
+          assert "pos_names={1:'QB',2:'RB',3:'WR',4:'TE',5:'K',16:'D/ST'}" in c
           PY
