@@ -3,7 +3,8 @@
 
 Listens only on 127.0.0.1:43127. Accepts sanitized ESPN snapshots from the
 Chrome extension and writes data/live/espn.json inside the Sunday Funday IQ
-repo. Optionally commits and pushes the data file when SFIQ_AUTO_PUSH=1.
+repo. When SFIQ_AUTO_PUSH=1, each changed snapshot is committed and pushed to
+main automatically.
 
 No ESPN cookies or credentials are accepted or stored.
 """
@@ -15,6 +16,9 @@ ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / 'data' / 'live' / 'espn.json'
 AUTO_PUSH = os.environ.get('SFIQ_AUTO_PUSH','0') == '1'
 FORBIDDEN = ('espn_s2','swid','cookie','authorization')
+
+def run_git(*args, check=True):
+    return subprocess.run(['git', *args], cwd=ROOT, check=check, text=True, capture_output=True)
 
 def contains_forbidden(value):
     text = json.dumps(value).lower()
@@ -28,14 +32,33 @@ def validate(snapshot):
     if not isinstance(snapshot.get('bench'), list): raise ValueError('Missing bench array')
     if not snapshot.get('team',{}).get('name'): raise ValueError('Missing team name')
 
-def maybe_push():
-    if not AUTO_PUSH: return {'pushed': False, 'reason': 'SFIQ_AUTO_PUSH is not enabled'}
-    subprocess.run(['git','add',str(OUTPUT.relative_to(ROOT))], cwd=ROOT, check=True)
-    diff = subprocess.run(['git','diff','--cached','--quiet'], cwd=ROOT)
-    if diff.returncode == 0: return {'pushed': False, 'reason': 'No ESPN data changes'}
-    subprocess.run(['git','commit','-m','data: refresh ESPN snapshot'], cwd=ROOT, check=True)
-    subprocess.run(['git','push','origin','main'], cwd=ROOT, check=True)
-    return {'pushed': True}
+def push_snapshot():
+    if not AUTO_PUSH:
+        return {'pushed': False, 'reason': 'SFIQ_AUTO_PUSH is not enabled'}
+
+    rel = str(OUTPUT.relative_to(ROOT)).replace('\\','/')
+    run_git('add', rel)
+    if run_git('diff','--cached','--quiet', check=False).returncode == 0:
+        return {'pushed': False, 'reason': 'No ESPN data changes'}
+
+    week = 'unknown'
+    try:
+        week = str(json.loads(OUTPUT.read_text(encoding='utf-8')).get('meta',{}).get('week','unknown'))
+    except Exception:
+        pass
+    run_git('commit','-m',f'data: refresh ESPN week {week}')
+
+    push = run_git('push','origin','main', check=False)
+    if push.returncode != 0:
+        # Handle the common case where main moved since the last local pull.
+        rebase = run_git('pull','--rebase','--autostash','origin','main', check=False)
+        if rebase.returncode != 0:
+            raise RuntimeError('ESPN snapshot committed locally, but GitHub sync needs attention: ' + (rebase.stderr.strip() or rebase.stdout.strip()))
+        push = run_git('push','origin','main', check=False)
+        if push.returncode != 0:
+            raise RuntimeError('ESPN snapshot committed locally, but push failed: ' + (push.stderr.strip() or push.stdout.strip()))
+
+    return {'pushed': True, 'commit': run_git('rev-parse','--short','HEAD').stdout.strip()}
 
 class Handler(BaseHTTPRequestHandler):
     def _cors(self):
@@ -54,7 +77,7 @@ class Handler(BaseHTTPRequestHandler):
             validate(snapshot)
             OUTPUT.parent.mkdir(parents=True, exist_ok=True)
             OUTPUT.write_text(json.dumps(snapshot, indent=2) + '\n', encoding='utf-8')
-            result = maybe_push()
+            result = push_snapshot()
             body = json.dumps({'ok': True, 'path': str(OUTPUT.relative_to(ROOT)), **result}).encode()
             self.send_response(200); self._cors(); self.send_header('Content-Type','application/json'); self.end_headers(); self.wfile.write(body)
         except Exception as e:
@@ -66,4 +89,5 @@ class Handler(BaseHTTPRequestHandler):
 if __name__ == '__main__':
     print(f'ESPN IQ sync listening on http://127.0.0.1:43127 -> {OUTPUT}')
     print('Auto-push:', 'ON' if AUTO_PUSH else 'OFF')
+    print('Leave this window open while using the ESPN IQ Bridge.')
     HTTPServer(('127.0.0.1',43127), Handler).serve_forever()
