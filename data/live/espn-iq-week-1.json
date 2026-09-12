@@ -1,0 +1,185 @@
+{
+  "meta": {
+    "source": "ESPN browser bridge",
+    "status": "connected",
+    "updatedAt": "2026-09-12T13:38:39.261Z",
+    "season": 2026,
+    "week": 1,
+    "leagueId": "896942321",
+    "teamId": "3"
+  },
+  "league": {
+    "name": "FC Fantasy Football",
+    "scoring": "ESPN league scoring",
+    "waivers": "FAAB $100",
+    "playoffs": "ESPN playoff settings"
+  },
+  "team": {
+    "name": "Sunday Funday",
+    "record": "0-0",
+    "standing": 11,
+    "faabRemaining": 100,
+    "score": 0,
+    "projection": 125.90839114
+  },
+  "opponent": {
+    "name": "Kurt Warner Brothers",
+    "score": 0,
+    "projection": 116.19050641
+  },
+  "lineup": [
+    {
+      "slot": "WR",
+      "name": "CeeDee Lamb",
+      "pos": "WR",
+      "team": "6",
+      "status": "ACTIVE",
+      "projection": 17.26,
+      "points": 0,
+      "starter": true
+    },
+    {
+      "slot": "RB",
+      "name": "Ashton Jeanty",
+      "pos": "RB",
+      "team": "13",
+      "status": "ACTIVE",
+      "projection": 18.3,
+      "points": 0,
+      "starter": true
+    },
+    {
+      "slot": "WR",
+      "name": "DeVonta Smith",
+      "pos": "WR",
+      "team": "21",
+      "status": "ACTIVE",
+      "projection": 14.8,
+      "points": 0,
+      "starter": true
+    },
+    {
+      "slot": "FLEX",
+      "name": "Jameson Williams",
+      "pos": "WR",
+      "team": "8",
+      "status": "ACTIVE",
+      "projection": 12.12,
+      "points": 0,
+      "starter": true
+    },
+    {
+      "slot": "RB",
+      "name": "Rhamondre Stevenson",
+      "pos": "RB",
+      "team": "17",
+      "status": "ACTIVE",
+      "projection": 13.97,
+      "points": 14.5,
+      "starter": true
+    },
+    {
+      "slot": "TE",
+      "name": "Sam LaPorta",
+      "pos": "TE",
+      "team": "8",
+      "status": "ACTIVE",
+      "projection": 10.95,
+      "points": 0,
+      "starter": true
+    },
+    {
+      "slot": "QB",
+      "name": "Patrick Mahomes",
+      "pos": "QB",
+      "team": "12",
+      "status": "ACTIVE",
+      "projection": 15.48,
+      "points": 0,
+      "starter": true
+    },
+    {
+      "slot": "D/ST",
+      "name": "Seahawks D/ST",
+      "pos": "D/ST",
+      "team": "26",
+      "status": "Active",
+      "projection": 7.22,
+      "points": 14,
+      "starter": true
+    },
+    {
+      "slot": "K",
+      "name": "Tyler Loop",
+      "pos": "K",
+      "team": "33",
+      "status": "ACTIVE",
+      "projection": 8.49,
+      "points": 0,
+      "starter": true
+    }
+  ],
+  "bench": [
+    {
+      "slot": "BENCH",
+      "name": "Quinshon Judkins",
+      "pos": "RB",
+      "team": "5",
+      "status": "ACTIVE",
+      "projection": 13.15,
+      "points": 0,
+      "starter": false
+    },
+    {
+      "slot": "BENCH",
+      "name": "Christian Watson",
+      "pos": "WR",
+      "team": "9",
+      "status": "ACTIVE",
+      "projection": 10.91,
+      "points": 0,
+      "starter": false
+    },
+    {
+      "slot": "BENCH",
+      "name": "RJ Harvey",
+      "pos": "RB",
+      "team": "7",
+      "status": "ACTIVE",
+      "projection": 8.47,
+      "points": 0,
+      "starter": false
+    },
+    {
+      "slot": "BENCH",
+      "name": "KC Concepcion",
+      "pos": "WR",
+      "team": "5",
+      "status": "ACTIVE",
+      "projection": 9.08,
+      "points": 0,
+      "starter": false
+    },
+    {
+      "slot": "BENCH",
+      "name": "Baker Mayfield",
+      "pos": "QB",
+      "team": "27",
+      "status": "ACTIVE",
+      "projection": 16.28,
+      "points": 0,
+      "starter": false
+    },
+    {
+      "slot": "BENCH",
+      "name": "T.J. Hockenson",
+      "pos": "TE",
+      "team": "16",
+      "status": "ACTIVE",
+      "projection": 9.2,
+      "points": 0,
+      "starter": false
+    }
+  ],
+  "watch": []
+}
