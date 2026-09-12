@@ -1,0 +1,11 @@
+{
+  "name": "Sunday Funday IQ",
+  "short_name": "Sunday Funday IQ",
+  "start_url": "/sunday-funday-iq/",
+  "display": "standalone",
+  "background_color": "#07111f",
+  "theme_color": "#07111f",
+  "icons": [
+    {"src":"/sunday-funday-iq/apple-touch-icon.png","sizes":"180x180","type":"image/png","purpose":"any"}
+  ]
+}
