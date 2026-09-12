@@ -2,8 +2,7 @@
 """Private ESPN Fantasy collector for Sunday Funday IQ.
 
 Credentials are read only from environment variables and are never written to output.
-This script is intended to run on a trusted private machine (future mini PC/server),
-not in GitHub Pages and not in a public GitHub Action.
+This script is intended to run on a trusted private machine, not in GitHub Pages.
 
 Required environment variables:
   ESPN_LEAGUE_ID
@@ -34,7 +33,7 @@ if not all([LEAGUE_ID,TEAM_ID,SWID,ESPN_S2]):
 BASE=f'https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/{SEASON}/segments/0/leagues/{LEAGUE_ID}'
 VIEWS=['mSettings','mTeam','mRoster','mMatchup','mMatchupScore']
 url=BASE+'?'+urlencode([('view',v) for v in VIEWS]+[('scoringPeriodId',WEEK)])
-req=Request(url,headers={'Cookie':f'espn_s2={ESPN_S2}; SWID={SWID}','User-Agent':'Sunday-Funday-IQ/0.1'})
+req=Request(url,headers={'Cookie':f'espn_s2={ESPN_S2}; SWID={SWID}','User-Agent':'Sunday-Funday-IQ/0.2'})
 with urlopen(req,timeout=30) as r:
     raw=json.load(r)
 
@@ -60,7 +59,8 @@ if match:
         opp_id=int(match.get('home',{}).get('teamId',-1));my_side='away'
 opp=teams.get(opp_id,{}) if opp_id else {}
 
-slot_names={0:'QB',2:'RB',4:'WR',6:'TE',16:'D/ST',17:'K',23:'FLEX',20:'BENCH',21:'IR'}
+slot_names={0:'QB',2:'RB',4:'WR',6:'TE',16:'D/ST',17:'K',20:'BENCH',21:'IR',23:'FLEX'}
+pos_names={1:'QB',2:'RB',3:'WR',4:'TE',5:'K',16:'D/ST'}
 
 def player_row(entry):
     p=entry.get('playerPoolEntry',{}).get('player',{})
@@ -71,15 +71,17 @@ def player_row(entry):
         if int(s.get('scoringPeriodId',-1))!=WEEK: continue
         if s.get('statSourceId')==1: proj=float(s.get('appliedTotal',0) or 0)
         if s.get('statSourceId')==0: pts=float(s.get('appliedTotal',0) or 0)
+    pos_id=p.get('defaultPositionId')
     return {
         'slot':slot_names.get(slot,str(slot)),
         'name':p.get('fullName','Unknown'),
-        'pos':p.get('defaultPositionId'),
-        'team':p.get('proTeamId'),
+        'pos':pos_names.get(pos_id,str(pos_id) if pos_id is not None else '—'),
+        'teamId':p.get('proTeamId'),
         'status':p.get('injuryStatus') or 'Active',
         'projection':round(proj,2),
         'points':round(pts,2),
-        'starter':slot not in (20,21)
+        'starter':slot not in (20,21),
+        'eligibleSlots':[slot_names.get(int(x),str(x)) for x in (p.get('eligibleSlots') or [])]
     }
 
 entries=me.get('roster',{}).get('entries',[])
@@ -105,12 +107,37 @@ faab=me.get('transactionCounter',{}).get('acquisitionBudgetSpent')
 faab_limit=settings.get('acquisitionSettings',{}).get('acquisitionBudget')
 faab_remaining=(faab_limit-faab) if isinstance(faab_limit,(int,float)) and isinstance(faab,(int,float)) else None
 
+roster_settings=settings.get('rosterSettings',{})
+scoring_type='PPR' if settings.get('scoringSettings',{}).get('scoringItems') else 'ESPN scoring'
+
 snapshot={
     'meta':{'source':'ESPN private collector','status':'connected','updatedAt':datetime.now(timezone.utc).isoformat(),'season':SEASON,'week':WEEK},
-    'league':{'name':settings.get('name') or 'ESPN Fantasy','scoring':'ESPN league scoring','waivers':'FAAB / ESPN waiver rules','playoffs':'League playoff settings synced privately'},
-    'team':{'name':me.get('name') or me.get('abbrev') or 'Your Team','record':f"{record.get('wins',0)}-{record.get('losses',0)}",'standing':me.get('playoffSeed'),'faabRemaining':faab_remaining,'score':my_match.get('totalPoints',0),'projection':my_match.get('totalProjectedPointsLive',0)},
-    'opponent':{'name':opp.get('name') or opp.get('abbrev') or 'Opponent','score':opp_match.get('totalPoints',0),'projection':opp_match.get('totalProjectedPointsLive',0)},
-    'lineup':lineup,'bench':bench,'watch':watch
+    'league':{
+        'name':settings.get('name') or 'ESPN Fantasy',
+        'scoring':scoring_type,
+        'waivers':f"FAAB ${faab_limit}" if isinstance(faab_limit,(int,float)) else 'ESPN waiver rules',
+        'playoffs':'League playoff settings synced privately',
+        'teamCount':len(teams),
+        'rosterSize':sum((roster_settings.get('lineupSlotCounts') or {}).values()) if roster_settings.get('lineupSlotCounts') else None
+    },
+    'team':{
+        'id':team_id,
+        'name':me.get('name') or me.get('abbrev') or 'Your Team',
+        'record':f"{record.get('wins',0)}-{record.get('losses',0)}",
+        'standing':me.get('playoffSeed'),
+        'faabRemaining':faab_remaining,
+        'score':my_match.get('totalPoints',0),
+        'projection':my_match.get('totalProjectedPointsLive',0)
+    },
+    'opponent':{
+        'id':opp_id,
+        'name':opp.get('name') or opp.get('abbrev') or 'Opponent',
+        'score':opp_match.get('totalPoints',0),
+        'projection':opp_match.get('totalProjectedPointsLive',0)
+    },
+    'lineup':lineup,
+    'bench':bench,
+    'watch':watch
 }
 
 with open(OUTPUT,'w',encoding='utf-8') as f: json.dump(snapshot,f,indent=2)
