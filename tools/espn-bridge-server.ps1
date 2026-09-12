@@ -6,8 +6,18 @@ $Port = 43127
 $Utf8 = New-Object System.Text.UTF8Encoding($false)
 
 function Invoke-Git([string[]]$GitArgs) {
-    $text = (& git @GitArgs 2>&1 | Out-String).Trim()
-    [pscustomobject]@{ Code = $LASTEXITCODE; Text = $text }
+    # Windows Git writes harmless messages (for example, LF/CRLF notices) to
+    # stderr even when it succeeds. Do not let PowerShell promote those notices
+    # to terminating errors; Git's exit code is the source of truth.
+    $previousPreference = $ErrorActionPreference
+    try {
+        $ErrorActionPreference = 'Continue'
+        $lines = & git @GitArgs 2>&1
+        $code = $LASTEXITCODE
+    } finally {
+        $ErrorActionPreference = $previousPreference
+    }
+    [pscustomobject]@{ Code = $code; Text = (($lines | Out-String).Trim()) }
 }
 
 function Write-Response($Stream, [int]$Status, [string]$Body) {
