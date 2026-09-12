@@ -1,0 +1,37 @@
+{
+  "meta": {
+    "source": "ESPN private collector",
+    "status": "connected",
+    "updatedAt": "2026-09-12T04:40:00Z",
+    "season": 2026,
+    "week": 1
+  },
+  "league": {
+    "name": "ESPN Fantasy",
+    "scoring": "PPR",
+    "waivers": "FAAB",
+    "playoffs": "League settings synced privately"
+  },
+  "team": {
+    "name": "Your Team",
+    "record": "0-0",
+    "standing": 1,
+    "faabRemaining": 100,
+    "score": 0,
+    "projection": 110.4
+  },
+  "opponent": {
+    "name": "Opponent",
+    "score": 0,
+    "projection": 105.2
+  },
+  "lineup": [
+    {"slot":"QB","name":"Example QB","pos":"QB","team":"DET","status":"Active","projection":21.3,"points":0,"starter":true}
+  ],
+  "bench": [
+    {"slot":"BENCH","name":"Example Bench","pos":"WR","team":"DET","status":"Active","projection":10.2,"points":0,"starter":false}
+  ],
+  "watch": [
+    {"priority":"medium","title":"Example lineup flag","detail":"This is the normalized decision-support contract, not live ESPN data."}
+  ]
+}
