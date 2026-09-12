@@ -28,7 +28,7 @@ table{width:100%;border-collapse:collapse;font-size:12px;min-width:830px}.tablew
 <body>
 <div class="app">
   <div class="header">
-    <div class="brand"><h1>🏈 Sunday Funday IQ</h1><p>CBS Pick'em · Pick'em Coach</p><p style="font-size:10px;color:#5f7898">Build 1.1.9 · embedded postgame CBS snapshot</p></div>
+    <div class="brand"><h1>🏈 Sunday Funday IQ</h1><p>CBS Pick'em · Pick'em Coach</p><p style="font-size:10px;color:#5f7898">Build 1.2.0 · clearer KEEP recommendations</p></div>
     <div class="actions">
       <a class="btn" href="../../">⌂ Home</a>
       <input id="scanFile" type="file" accept=".json,application/json" hidden>
@@ -917,7 +917,7 @@ function renderDecision(){
       html+=`<div class="rec"><div class="rec-head"><div><div class="rec-title">${idx+1}. CHANGE CONFIDENCE</div><div class="change-line">${a.fromPick}: ${a.fromConf} → ${a.toConf} <span class="${delta>0?'good':delta<0?'bad':''}">(${delta>0?'+':''}${delta})</span></div><div class="change-sub">Keep pick: ${a.fromPick}</div></div><span class="pill ${cls}">${label}</span></div><div class="reason">Set ${a.fromPick} directly to ${a.toConf}. Do not interpret this as a swap with another team. Make every listed confidence change together; the finished card will still use 1–16 exactly once.</div></div>`;
     }
   });
-  const keeps=interestingKeeps(state.games,o.current,o.recommended);for(const k of keeps){const g=state.games[k.i],s=o.current.choices[k.i];html+=`<div class="rec"><div class="rec-head"><div><div class="rec-title">KEEP</div><div class="rec-action">${teamFor(g,s)} · ${o.current.weights[k.i]} confidence</div></div><span class="pill blue">KEEP</span></div><div class="reason">Keep the pick on ${teamFor(g,s)}. The market-vs-pool difference is ${pp(k.e,0)}, but IQ did not improve the final card by changing the winner. If IQ changes this team’s confidence, that separate confidence instruction appears above.</div></div>`}
+  const keeps=interestingKeeps(state.games,o.current,o.recommended);for(const k of keeps){const g=state.games[k.i],s=o.current.choices[k.i],team=teamFor(g,s),curConf=o.current.weights[k.i],recConf=o.recommended.weights[k.i],confChanged=curConf!==recConf;html+=`<div class="rec"><div class="rec-head"><div><div class="rec-title">KEEP PICK</div><div class="rec-action">${team}</div><div class="change-sub">${confChanged?`Confidence: ${curConf} → ${recConf}`:`Confidence stays ${curConf}`}</div></div><span class="pill blue">KEEP</span></div><div class="reason">Keep the winner on ${team}. The market-vs-pool difference is ${pp(k.e,0)}, but IQ did not improve the final card by changing the pick.${confChanged?` IQ does recommend changing ${team} confidence from ${curConf} to ${recConf}; that same confidence change is listed above and ${recConf} is the final IQ value.`:` IQ also keeps ${team} at confidence ${curConf}.`}</div></div>`}
   $('recommendations').innerHTML=html||'<div class="note" style="margin-top:10px">No changes. Keep your submitted card.</div>';$('applyBtn').disabled=!actions.length;$('revertBtn').disabled=!state.originalCard;
 }
 
