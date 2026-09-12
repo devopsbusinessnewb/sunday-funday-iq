@@ -1,0 +1,16 @@
+{
+  "manifest_version": 3,
+  "name": "ESPN Fantasy IQ Bridge",
+  "version": "0.3.0",
+  "description": "Captures a sanitized ESPN Fantasy snapshot for Sunday Funday IQ using your existing ESPN browser session.",
+  "permissions": ["storage", "downloads", "activeTab", "scripting"],
+  "host_permissions": [
+    "https://fantasy.espn.com/*",
+    "https://lm-api-reads.fantasy.espn.com/*",
+    "http://127.0.0.1:43127/*"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "ESPN Fantasy IQ Bridge"
+  }
+}
