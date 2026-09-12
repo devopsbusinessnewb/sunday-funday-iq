@@ -1,0 +1,1 @@
+The production iOS icon must be a real PNG whose bytes begin with the PNG signature. Do not replace it with text/base64 contents.
