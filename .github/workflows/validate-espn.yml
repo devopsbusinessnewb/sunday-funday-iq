@@ -41,7 +41,7 @@ jobs:
           s=Path('apps/espn/index.html').read_text()
           js=s.split('<script>',1)[1].rsplit('</script>',1)[0]
           Path('/tmp/espn.js').write_text(js)
-          assert 'Build 0.2.0' in s
+          assert 'Build 0.3.0' in s
           assert 'function decisions()' in s
           assert 'function bestSwap' in s
           assert 'ESPN_SWID' not in s and 'ESPN_S2' not in s
