@@ -857,8 +857,8 @@ async function refreshMarket(silent=false){
           const away=ab(awayC?.team?.displayName||awayC?.team?.abbreviation),home=ab(homeC?.team?.displayName||homeC?.team?.abbreviation);
           const g=state.games.find(x=>x.away===away&&x.home===home);if(!g)continue;
           const o=comp.odds?.[0];
-          const awayML=american(o?.awayTeamOdds?.moneyLine??o?.awayTeamOdds?.moneyline);
-          const homeML=american(o?.homeTeamOdds?.moneyLine??o?.homeTeamOdds?.moneyline);
+          const awayML=american(o?.awayTeamOdds?.moneyLine??o?.awayTeamOdds?.moneyline??o?.moneyline?.away?.close?.odds);
+          const homeML=american(o?.homeTeamOdds?.moneyLine??o?.homeTeamOdds?.moneyline??o?.moneyline?.home?.close?.odds);
           if(Number.isFinite(awayML)&&Number.isFinite(homeML)){
             g.awayML=awayML;g.homeML=homeML;
             const t=Number(o?.overUnder);if(Number.isFinite(t))g.total=t;updated++;
