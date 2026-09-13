@@ -3,7 +3,7 @@ const vm=require('vm');
 const path=require('path');
 const root=path.resolve(__dirname,'..');
 const html=fs.readFileSync(path.join(root,'apps/pickem/index.html'),'utf8');
-if(!html.includes('Build 1.3.0')) throw new Error('Expected Pickem Build 1.3.0');
+if(!html.includes('Build 1.3.1')) throw new Error('Expected Pickem Build 1.3.1');
 if(html.includes('EMBEDDED_CBS_SCAN')) throw new Error('CBS live scan must not be embedded in app code');
 if(!html.includes("LIVE_CBS_URL='../../data/live/cbs-pickem.json'")) throw new Error('Live CBS data URL missing');
 const js=html.split('<script>',2)[1].split('</script>',1)[0];
@@ -23,4 +23,8 @@ const live=JSON.parse(fs.readFileSync(path.join(root,'data/live/cbs-pickem.json'
 if(liveCard.pickCount!==16||liveCard.weightCount!==16)throw new Error(`published live CBS: ${liveCard.pickCount}/${liveCard.weightCount}`);
 if(new Set(liveCard.weights).size!==16||liveCard.weights.some(x=>x<1||x>16))throw new Error('published live CBS: confidence values must be unique 1–16');
 if(liveCard.picks.some((pick,i)=>pick!==postGames[i].away&&pick!==postGames[i].home))throw new Error('published live CBS: invalid matchup pick');
-console.log('Pickem regression suite passed: pregame 16/16, postgame 16/16, published live 16/16, field model 92.');
+const stableOpts={currentCard:{choices:expectedPost.picks.map((p,i)=>p===postGames[i].away?0:1),weights:expectedPost.weights},searchIters:120,finalIters:300,seed:20260908,fieldModel:fm};
+const first=t.runOptimizer(postGames,93,stableOpts),second=t.runOptimizer(postGames,93,{...stableOpts,currentCard:first.recommended});
+if(JSON.stringify(first.recommended)!==JSON.stringify(second.recommended))throw new Error('optimizer recommendation is path-dependent');
+if(t.cardActions(postGames,second.current,second.recommended,second.finalWorlds).length)throw new Error('applied recommendation produces reversal advice');
+console.log('Pickem regression suite passed: imports valid, live card flexible, recommendations stable after application.');
