@@ -19,6 +19,8 @@ assertCard('pregame',t.extractStructuredCard(pre,clone(t.SEED)),expectedPre);
 const postGames=clone(t.SEED);for(const g of postGames){if(g.away==='NE'&&g.home==='SEA')Object.assign(g,{pick:'SEA',weight:9,locked:true,completed:true,winner:1,statusText:'Final 10-13'});if(g.away==='SF'&&g.home==='LAR')Object.assign(g,{pick:'SF',weight:1,locked:true,completed:true,winner:0,statusText:'Final 27-7'})}
 assertCard('postgame',t.extractStructuredCard(post,postGames),expectedPost);
 const fm=t.extractFieldModel(post,postGames);if(!fm||fm.observedEntries!==92)throw new Error(`field model expected 92, got ${fm?.observedEntries}`);
-const live=JSON.parse(fs.readFileSync(path.join(root,'data/live/cbs-pickem.json'),'utf8'));assertCard('published live CBS',t.extractStructuredCard(live,postGames),expectedPost);
+const live=JSON.parse(fs.readFileSync(path.join(root,'data/live/cbs-pickem.json'),'utf8')),liveCard=t.extractStructuredCard(live,postGames);
+if(liveCard.pickCount!==16||liveCard.weightCount!==16)throw new Error(`published live CBS: ${liveCard.pickCount}/${liveCard.weightCount}`);
+if(new Set(liveCard.weights).size!==16||liveCard.weights.some(x=>x<1||x>16))throw new Error('published live CBS: confidence values must be unique 1–16');
+if(liveCard.picks.some((pick,i)=>pick!==postGames[i].away&&pick!==postGames[i].home))throw new Error('published live CBS: invalid matchup pick');
 console.log('Pickem regression suite passed: pregame 16/16, postgame 16/16, published live 16/16, field model 92.');
-
