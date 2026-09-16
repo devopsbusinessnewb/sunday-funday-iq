@@ -1,0 +1,51 @@
+name: Validate Yahoo
+
+on:
+  push:
+    paths:
+      - 'apps/yahoo/**'
+      - 'tools/yahoo-sync.py'
+      - 'data/live/yahoo.json'
+      - 'data/examples/yahoo-snapshot.example.json'
+      - 'tests/yahoo-regression.py'
+      - 'docs/YAHOO.md'
+      - '.github/workflows/validate-yahoo.yml'
+  pull_request:
+    paths:
+      - 'apps/yahoo/**'
+      - 'tools/yahoo-sync.py'
+      - 'data/live/yahoo.json'
+      - 'data/examples/yahoo-snapshot.example.json'
+      - 'tests/yahoo-regression.py'
+      - 'docs/YAHOO.md'
+      - '.github/workflows/validate-yahoo.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout triggering commit
+        uses: actions/checkout@v4
+      - name: Validate Yahoo collector and public contract
+        shell: bash
+        run: |
+          python -m py_compile tools/yahoo-sync.py
+          python tests/yahoo-regression.py
+      - name: Reject Yahoo secrets in public assets
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          public=[Path('apps/yahoo/index.html'),Path('data/live/yahoo.json'),Path('data/examples/yahoo-snapshot.example.json')]
+          text='\n'.join(p.read_text().lower() for p in public)
+          forbidden=['refresh_token','access_token','client_secret','yahoo_client_secret','authorization: bearer','consumer_secret']
+          leaked=[x for x in forbidden if x in text]
+          assert not leaked, f'Forbidden Yahoo credential markers in public assets: {leaked}'
+          collector=Path('tools/yahoo-sync.py').read_text()
+          assert 'TOKEN_PATH' in collector and '.sunday-funday-iq' in collector
+          assert 'assert_sanitized' in collector
+          assert 'git("push", "origin", "main")' in collector
+          PY

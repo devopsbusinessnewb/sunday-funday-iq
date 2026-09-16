@@ -1,0 +1,15 @@
+{
+  "meta": {"source":"Yahoo Fantasy API","status":"connected","updatedAt":"2026-09-15T23:00:00+00:00","season":2026,"week":2,"contractVersion":1},
+  "league": {"key":"461.l.12345","name":"Example Yahoo League","teamCount":12,"scoring":"Head-to-Head · PPR","waivers":"FAAB","faabBudget":100},
+  "team": {"key":"461.l.12345.t.6","name":"Example Team","record":"1-0","standing":3,"faabRemaining":93,"score":18.4,"projection":118.2},
+  "opponent": {"key":"461.l.12345.t.2","name":"Example Opponent","score":12.1,"projection":114.9},
+  "lineup": [
+    {"playerKey":"461.p.1001","slot":"QB","name":"Example Quarterback","pos":"QB","nflTeam":"DET","status":"Active","projection":21.4,"points":0,"gameState":"upcoming","locked":false,"eligiblePositions":["QB"]},
+    {"playerKey":"461.p.1002","slot":"FLEX","name":"Example Starter","pos":"WR","nflTeam":"DET","status":"Questionable","projection":11.2,"points":0,"gameState":"upcoming","locked":false,"eligiblePositions":["RB","WR","TE"]}
+  ],
+  "bench": [
+    {"playerKey":"461.p.1003","slot":"BN","name":"Example Bench WR","pos":"WR","nflTeam":"GB","status":"Active","projection":14.1,"points":0,"gameState":"upcoming","locked":false,"eligiblePositions":["WR","FLEX"]}
+  ],
+  "waivers": [],
+  "watch": []
+}
