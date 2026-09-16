@@ -1,0 +1,17 @@
+{
+  "meta": {
+    "source": "Yahoo Fantasy API",
+    "status": "awaiting_oauth",
+    "updatedAt": null,
+    "season": 2026,
+    "week": null,
+    "contractVersion": 1
+  },
+  "league": {},
+  "team": {},
+  "opponent": {},
+  "lineup": [],
+  "bench": [],
+  "waivers": [],
+  "watch": []
+}
