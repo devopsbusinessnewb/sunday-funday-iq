@@ -8,7 +8,7 @@ Market input: Week 2 consensus moneylines published from the current FOX Sports 
 
 ## Submitted CBS card
 
-| Confidence | Pick | Matchup | CBS pick share |
+| Confidence | Pick | Matchup | CBS-wide pick share |
 |---:|---|---|---:|
 | 16 | CIN | CIN @ HOU | 37% |
 | 15 | PIT | PIT @ NE | 25% |
@@ -62,7 +62,7 @@ Simulation: 1,100 search worlds and 6,500 final evaluation worlds using the stab
 
 ## Interpretation note
 
-This is the first Week 2 recommendation set. It is preserved exactly as generated so it can be scored after the week. The CBS ownership percentages and submitted card came from Tony's six mobile screenshots. Weekly Standings data was not available, so the opponent field used the optimizer's synthetic fallback. Reruns should use the same stable optimizer and should not reverse after the full recommended card is applied.
+This is the first Week 2 recommendation set. It is preserved exactly as generated so it can be scored after the week. The CBS-wide ownership percentages and submitted card came from Tony's six mobile screenshots. These percentages are not the distribution within Tony's pool. Weekly Standings data was not available, so the opponent field used the optimizer's synthetic fallback. Reruns should use the same stable optimizer and should not reverse after the full recommended card is applied.
 
 
 ## Recommendation Set 2 — Detroit protected
@@ -72,7 +72,7 @@ Build: 1.4.4
 Pool size: 94 entries, confirmed from Weekly Standings screenshots.  
 Constraint: DET at confidence 2 is protected. IQ may not flip Detroit or move its confidence value.
 
-The standings screenshots revealed Tony's submitted DET (2), but opponent selections remained locked. The opponent field therefore still uses CBS ownership percentages and synthetic confidence placement.
+The standings screenshots revealed Tony's submitted DET (2), but opponent selections remained locked. The opponent field therefore uses CBS-wide ownership percentages as a provisional proxy plus synthetic confidence placement; it does not know this pool's actual pick distribution.
 
 | Metric | Submitted | Recommended |
 |---|---:|---:|
@@ -140,6 +140,11 @@ Constraint: Detroit must remain the selected team; its confidence may move.
 
 ### Why Detroit moves to 16
 
-The objective is weekly first/second place, not median score. CBS ownership shows only 9% on Detroit. Once Detroit is mandatory, assigning maximum confidence creates high-variance tournament leverage: a Detroit win separates Tony sharply from most of the field, while a Detroit loss creates substantially more downside at 16 than at 2. The optimizer explicitly accepts that downside and a lower average-point projection than Set 2 in exchange for higher modeled Top-2 and Win probabilities.
+The objective is weekly first/second place, not median score. CBS-wide ownership shows 9% on Detroit; Tony's pool-specific Detroit ownership is unknown until kickoff. Once Detroit is mandatory, assigning maximum confidence creates high-variance tournament leverage: a Detroit win separates Tony sharply from most of the field, while a Detroit loss creates substantially more downside at 16 than at 2. The optimizer explicitly accepts that downside and a lower average-point projection than Set 2 in exchange for higher modeled Top-2 and Win probabilities.
 
 Set 3 supersedes Set 2 for current decision support. Sets 1 and 2 remain preserved for post-week comparison.
+
+
+## Data correction — 2026-09-17
+
+The 9% Detroit figure is the pick distribution across CBS, not Tony's 94-entry pool. Pool selections remain hidden until the game starts. Recommendation Set 3 is therefore a sensitivity result under a CBS-wide proxy, not a pool-specific conclusion. Its DET-at-16 recommendation should not be treated as reliable without knowing how closely this pool resembles the CBS-wide population.
