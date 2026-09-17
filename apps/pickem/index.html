@@ -28,7 +28,7 @@ table{width:100%;border-collapse:collapse;font-size:12px;min-width:830px}.tablew
 <body>
 <div class="app">
   <div class="header">
-    <div class="brand"><h1>🏈 Sunday Funday IQ</h1><p>CBS Pick'em · Pick'em Coach</p><p style="font-size:10px;color:#5f7898">Build 1.4.2 · Week 2 screenshot import</p></div>
+    <div class="brand"><h1>🏈 Sunday Funday IQ</h1><p>CBS Pick'em · Pick'em Coach</p><p style="font-size:10px;color:#5f7898">Build 1.4.3 · Week 2 live card</p></div>
     <div class="actions">
       <a class="btn" href="../../">⌂ Home</a>
       <input id="scanFile" type="file" accept=".json,application/json" hidden>
@@ -766,7 +766,10 @@ async function importScan(obj){
     picks=state.games.map(g=>({away:g.away,home:g.home,awayPct:g.awayPct,homePct:g.homePct}));
   }
   restoreFullWeekState();
-  const matchups=picks.map(p=>[p.away,p.home]),oddsSnap=newest(snaps.filter(s=>/odds/i.test(s.url||'')||/odds/i.test(s.title||''))),odds=oddsSnap?parseOdds(oddsSnap.text,matchups):[],om=new Map(odds.map(x=>[x.away+'|'+x.home,x])),old=new Map(state.games.map(x=>[x.away+'|'+x.home,x]));
+  const matchups=picks.map(p=>[p.away,p.home]),oddsSnap=newest(snaps.filter(s=>/odds/i.test(s.url||'')||/odds/i.test(s.title||'')));
+  let odds=oddsSnap?parseOdds(oddsSnap.text,matchups):[];
+  if(Array.isArray(obj.market))odds=[...odds,...obj.market.map(x=>({...x,away:normalizeTeam(x.away),home:normalizeTeam(x.home)}))];
+  const om=new Map(odds.map(x=>[x.away+'|'+x.home,x])),old=new Map(state.games.map(x=>[x.away+'|'+x.home,x]));
   if(picks.length===state.games.length){
     state.games=picks.map((p,i)=>{const k=p.away+'|'+p.home,prev=old.get(k)||{},o=om.get(k)||{};return{id:'g'+(i+1),...p,awayML:o.awayML??prev.awayML??null,homeML:o.homeML??prev.homeML??null,total:o.total??prev.total??null,pick:prev.pick??null,weight:prev.weight??null,locked:prev.locked??false,completed:prev.completed??false,winner:prev.winner??null,statusText:prev.statusText??''}});
   }else{
@@ -789,7 +792,7 @@ async function importScan(obj){
   repairLockedConfidenceCollision();
   const stand=newest(snaps.filter(s=>/Weekly Standings/i.test(s.title||'')));if(stand){const names=[...stand.text.matchAll(/\n\n\n([^\n\t]{2,60})\n\t0\t0\t/g)].map(x=>x[1]);if(names.length>20)state.poolSize=new Set(names).size}
   state.importedAt=obj.exportedAt||pickSnap?.ts||nowIso();state.cbsUpdatedAt=pickSnap?.ts||obj.exportedAt||nowIso();state.cbsSource='scan';
-  if(odds.length){state.marketUpdatedAt=oddsSnap?.ts||obj.exportedAt||nowIso();state.marketSource='CBS scan odds'}
+  if(odds.length){state.marketUpdatedAt=obj.marketCapturedAt||oddsSnap?.ts||obj.exportedAt||nowIso();state.marketSource=obj.marketSource||'CBS scan odds'}
   state.originalCard=completeCard(state.games)?snapshotCard():state.originalCard;state.recommendedCard=null;state.optimization=null;state.applied=false;state.sim=null;save();
   try{await refreshResults(true)}catch{}
   restoreLockedGames(lockedBeforeImport);
