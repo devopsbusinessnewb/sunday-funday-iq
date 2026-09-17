@@ -28,7 +28,7 @@ table{width:100%;border-collapse:collapse;font-size:12px;min-width:830px}.tablew
 <body>
 <div class="app">
   <div class="header">
-    <div class="brand"><h1>🏈 Sunday Funday IQ</h1><p>CBS Pick'em · Pick'em Coach</p><p style="font-size:10px;color:#5f7898">Build 1.4.6 · CBS-wide proxy labeled</p></div>
+    <div class="brand"><h1>🏈 Sunday Funday IQ</h1><p>CBS Pick'em · Pick'em Coach</p><p style="font-size:10px;color:#5f7898">Build 1.4.7 · pool-field status corrected</p></div>
     <div class="actions">
       <a class="btn" href="../../">⌂ Home</a>
       <input id="scanFile" type="file" accept=".json,application/json" hidden>
@@ -919,10 +919,11 @@ function renderFreshness(){
     ?` Field model: ${state.fieldModel.observedEntries} revealed CBS entries; ${Math.round((state.fieldModel.defaultShare||0)*100)}% default-confidence on the locked game.`
     :' Field model: CBS-wide pick percentages are being used as a proxy because this pool hides opponent picks until kickoff.';
   $('freshnessWarning').textContent=(warnings.length?'⚠ '+warnings.join(' ')+(f.cbs.current&&f.market.current?'':' Simulation results and recommendations are PROVISIONAL until these inputs are refreshed.'):'✓ CBS ownership and market inputs are current.')+gameState+fieldState;
-  $('modePill').textContent=f.cbs.current&&f.market.current?'CURRENT MARKET + FIELD':'PROVISIONAL INPUTS';$('modePill').className='pill '+(f.cbs.current&&f.market.current?'green':'yellow');
+  const fieldCurrent=!!state.fieldModel?.observedEntries,allCurrent=f.cbs.current&&f.market.current&&fieldCurrent;
+  $('modePill').textContent=allCurrent?'CURRENT MARKET + FIELD':'PROVISIONAL · CBS-WIDE PROXY';$('modePill').className='pill '+(allCurrent?'green':'yellow');
 }
 function renderDecision(){
-  const o=state.optimization,f=dataFreshness(state),provisional=!(f.cbs.current&&f.market.current);$('decisionCard').classList.toggle('stale',provisional);
+  const o=state.optimization,f=dataFreshness(state),provisional=!(f.cbs.current&&f.market.current&&state.fieldModel?.observedEntries);$('decisionCard').classList.toggle('stale',provisional);
   if(!o){$('decisionHeadline').textContent='WHAT SHOULD I DO?';$('decisionSub').textContent='Refresh the data, then Run Simulation. IQ will compare your submitted card with better complete-card alternatives.';$('decisionPill').textContent=provisional?'REFRESH DATA':'READY';$('decisionPill').className='pill '+(provisional?'yellow':'blue');$('currentTop2').textContent='— Top 2';$('currentWin').textContent='Win —';$('recommendedTop2').textContent='— Top 2';$('recommendedWin').textContent='Win —';$('recommendations').innerHTML='<div class="note" style="margin-top:10px">No recommendation yet.</div>';$('applyBtn').disabled=true;$('revertBtn').disabled=!state.originalCard;return}
   const cur=o.currentEval,rec=o.recommendedEval,dt=rec.top2-cur.top2,dw=rec.win-cur.win,actions=o.actions||[];
   $('currentTop2').textContent=pct(cur.top2,1)+' Top 2';$('currentWin').textContent='Win '+pct(cur.win,1);$('recommendedTop2').textContent=pct(rec.top2,1)+' Top 2';$('recommendedWin').textContent='Win '+pct(rec.win,1);
@@ -989,7 +990,7 @@ async function runSimulation(){
   try{
     const result=runOptimizer(state.games,state.poolSize,{currentCard:current,searchIters:SEARCH_ITERS,finalIters:FINAL_ITERS,seed:20260908,fieldModel:state.fieldModel||null});
     const actions=cardActions(state.games,result.current,result.recommended,result.finalWorlds);
-    state.recommendedCard=result.recommended;state.optimization={current:result.current,currentEval:result.currentEval,recommended:result.recommended,recommendedEval:result.recommendedEval,actions,ranAt:nowIso(),provisional:!(f.cbs.current&&f.market.current)};state.sim=result.currentEval;state.applied=false;save();render();
+    state.recommendedCard=result.recommended;state.optimization={current:result.current,currentEval:result.currentEval,recommended:result.recommended,recommendedEval:result.recommendedEval,actions,ranAt:nowIso(),provisional:!(f.cbs.current&&f.market.current&&state.fieldModel?.observedEntries)};state.sim=result.currentEval;state.applied=false;save();render();
     show(`Simulation complete. ${state.games.filter(g=>g.locked).length} locked game(s) frozen; remaining card optimized.`);
   }catch(e){console.error(e);show('Optimizer error: '+e.message,'red')}
   finally{$('optBtn').disabled=false;$('progress').classList.remove('show')}
