@@ -1,7 +1,7 @@
 {
   "product": "CBS Pick'em IQ Bridge",
   "version": "0.4.0-screenshot",
-  "exportedAt": "2026-09-17T23:15:00Z",
+  "exportedAt": "2026-09-17T23:25:00Z",
   "privacy": "Reconstructed from user-provided CBS Picks screenshots. No credentials, cookies, or authorization data.",
   "source": "CBS mobile Picks and Weekly Standings screenshots supplied by Tony Eickhoff",
   "tiebreaker": 41,
@@ -144,7 +144,13 @@
     "fixedPicks": [
       "DET"
     ],
-    "note": "Detroit must remain selected. Confidence may be optimized."
+    "fixedConfidence": [
+      {
+        "team": "DET",
+        "confidence": 2
+      }
+    ],
+    "note": "Detroit remains selected at confidence 2 while pool-specific ownership is hidden. CBS-wide ownership is only a provisional proxy."
   },
   "standingsSummary": {
     "capturedAt": "2026-09-17T23:09:00Z",
