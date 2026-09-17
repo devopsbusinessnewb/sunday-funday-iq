@@ -28,12 +28,11 @@ table{width:100%;border-collapse:collapse;font-size:12px;min-width:830px}.tablew
 <body>
 <div class="app">
   <div class="header">
-    <div class="brand"><h1>🏈 Sunday Funday IQ</h1><p>CBS Pick'em · Pick'em Coach</p><p style="font-size:10px;color:#5f7898">Build 1.4.0 · iPhone CBS sync restored</p></div>
+    <div class="brand"><h1>🏈 Sunday Funday IQ</h1><p>CBS Pick'em · Pick'em Coach</p><p style="font-size:10px;color:#5f7898">Build 1.4.1 · JSON import workflow</p></div>
     <div class="actions">
       <a class="btn" href="../../">⌂ Home</a>
       <input id="scanFile" type="file" accept=".json,application/json" hidden>
       <button class="btn primary" id="refreshBtn">Refresh CBS Data</button>
-      <button class="btn primary" id="phoneSyncBtn">Paste CBS Phone Sync</button>
       <button class="btn" id="marketBtn">Refresh Market</button>
       <button class="btn" id="optBtn">Run Simulation</button>
       <button class="btn" id="saveBtn">Save</button>
@@ -1003,7 +1002,6 @@ async function loadPublishedCbs({silent=true,onlyIfNewer=true}={}){
 async function boot(){
   $('refreshBtn').onclick=async()=>{const got=await loadPublishedCbs({silent:false,onlyIfNewer:true});if(!got)$('scanFile').click()};$('scanFile').onchange=async e=>{try{const f=e.target.files?.[0];if(f)await importScan(JSON.parse(await f.text()))}catch(err){show('Could not refresh CBS data: '+err.message,'red')}e.target.value=''};
   $('marketBtn').onclick=()=>refreshMarket(false);$('optBtn').onclick=runSimulation;$('saveBtn').onclick=()=>{save();show('Saved locally in this browser.')};$('applyBtn').onclick=applyRecommended;$('revertBtn').onclick=revertOriginal;
-  $('phoneSyncBtn').onclick=pasteCbsPhoneSync;
   render();
   await loadPublishedCbs({silent:true,onlyIfNewer:true});
 }
