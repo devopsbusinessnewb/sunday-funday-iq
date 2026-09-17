@@ -788,8 +788,8 @@ async function importScan(obj){
     if(structured.picks[i])g.pick=structured.picks[i];
     if(structured.weights[i]!=null)g.weight=structured.weights[i];
   })}
-  const fixed=new Set((obj?.constraints?.fixedCards||[]).map(x=>normalizeTeam(x.team)));
-  state.games.forEach(g=>g.protected=fixed.has(g.pick)&&Number(g.weight)===(obj.constraints.fixedCards.find(x=>normalizeTeam(x.team)===g.pick)?.confidence));
+  const fixedCards=obj?.constraints?.fixedCards||[],fixed=new Set(fixedCards.map(x=>normalizeTeam(x.team)));
+  state.games.forEach(g=>g.protected=fixed.has(g.pick)&&Number(g.weight)===(fixedCards.find(x=>normalizeTeam(x.team)===g.pick)?.confidence));
   restoreLockedGames(lockedBeforeImport);
   repairLockedConfidenceCollision();
   const stand=newest(snaps.filter(s=>/Weekly Standings/i.test(s.title||'')));if(stand){const names=[...stand.text.matchAll(/\n\n\n([^\n\t]{2,60})\n\t0\t0\t/g)].map(x=>x[1]);if(names.length>20)state.poolSize=new Set(names).size}
