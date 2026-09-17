@@ -28,7 +28,7 @@ table{width:100%;border-collapse:collapse;font-size:12px;min-width:830px}.tablew
 <body>
 <div class="app">
   <div class="header">
-    <div class="brand"><h1>🏈 Sunday Funday IQ</h1><p>CBS Pick'em · Pick'em Coach</p><p style="font-size:10px;color:#5f7898">Build 1.4.5 · protected team picks</p></div>
+    <div class="brand"><h1>🏈 Sunday Funday IQ</h1><p>CBS Pick'em · Pick'em Coach</p><p style="font-size:10px;color:#5f7898">Build 1.4.6 · CBS-wide proxy labeled</p></div>
     <div class="actions">
       <a class="btn" href="../../">⌂ Home</a>
       <input id="scanFile" type="file" accept=".json,application/json" hidden>
@@ -917,7 +917,7 @@ function renderFreshness(){
   const locked=state.games.filter(g=>g.locked).length,finals=state.games.filter(g=>g.completed).length;const gameState=locked?` Game state: ${locked} locked, ${finals} final.`:'';
   const fieldState=state.fieldModel?.observedEntries
     ?` Field model: ${state.fieldModel.observedEntries} revealed CBS entries; ${Math.round((state.fieldModel.defaultShare||0)*100)}% default-confidence on the locked game.`
-    :' Field model NOT LOADED — refresh CBS data once after installing this build.';
+    :' Field model: CBS-wide pick percentages are being used as a proxy because this pool hides opponent picks until kickoff.';
   $('freshnessWarning').textContent=(warnings.length?'⚠ '+warnings.join(' ')+(f.cbs.current&&f.market.current?'':' Simulation results and recommendations are PROVISIONAL until these inputs are refreshed.'):'✓ CBS ownership and market inputs are current.')+gameState+fieldState;
   $('modePill').textContent=f.cbs.current&&f.market.current?'CURRENT MARKET + FIELD':'PROVISIONAL INPUTS';$('modePill').className='pill '+(f.cbs.current&&f.market.current?'green':'yellow');
 }
@@ -953,7 +953,7 @@ function renderDecision(){
 
 function fieldModelSummary(){
   const fm=state.fieldModel;
-  if(!fm||!fm.observedEntries)return'Field model: synthetic fallback.';
+  if(!fm||!fm.observedEntries)return'Field model: provisional CBS-wide ownership proxy; pool picks remain hidden until kickoff.';
   const pctDefault=fm.defaultShare==null?'—':Math.round(fm.defaultShare*100)+'%';
   return`Field model: ${fm.observedEntries} revealed CBS entries observed; ${pctDefault} used the default confidence on the locked game.`;
 }
@@ -981,7 +981,7 @@ async function runSimulation(){
   if(repaired)save();
   render();
   if(!state.fieldModel?.observedEntries){
-    show('Weekly Standings field data is not available yet. IQ will use its synthetic field model for this simulation.','yellow');
+    show('Pool-specific picks are still hidden. IQ is using CBS-wide pick percentages as a provisional proxy—not your pool’s actual distribution.','yellow');
   }
   if(!completeCard(state.games)){const cis=cardImportStatus();show(`IQ imported ${cis.picks}/${state.games.length} winners and ${cis.unique}/${state.games.length} unique confidence values. CBS itself may be complete; this means the scan did not include the full submitted card. Refresh CBS Data with a scan taken while the CBS Picks page is open.`,'red');return}
   const f=dataFreshness(state);if(!state.originalCard)state.originalCard=snapshotCard();const current=snapshotCard();$('optBtn').disabled=true;$('progress').classList.add('show');$('progressText').textContent='Locking completed games and optimizing the remaining card…';
