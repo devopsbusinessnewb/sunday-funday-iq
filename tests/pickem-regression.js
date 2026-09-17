@@ -3,7 +3,7 @@ const vm=require('vm');
 const path=require('path');
 const root=path.resolve(__dirname,'..');
 const html=fs.readFileSync(path.join(root,'apps/pickem/index.html'),'utf8');
-if(!html.includes('Build 1.4.7')) throw new Error('Expected Pickem Build 1.4.7');
+if(!html.includes('Build 1.4.8')) throw new Error('Expected Pickem Build 1.4.8');
 if(html.includes('EMBEDDED_CBS_SCAN')) throw new Error('CBS live scan must not be embedded in app code');
 if(!html.includes("LIVE_CBS_URL='../../data/live/cbs-pickem.json'")) throw new Error('Live CBS data URL missing');
 if(html.includes('id="phoneSyncBtn"')||html.includes("$('phoneSyncBtn').onclick=pasteCbsPhoneSync"))throw new Error('Unused iPhone shortcut control must stay removed');
@@ -35,7 +35,7 @@ const stableOpts={currentCard:{choices:expectedPost.picks.map((p,i)=>p===postGam
 const first=t.runOptimizer(postGames,93,stableOpts),second=t.runOptimizer(postGames,93,{...stableOpts,currentCard:first.recommended});
 if(JSON.stringify(first.recommended)!==JSON.stringify(second.recommended))throw new Error('optimizer recommendation is path-dependent');
 if(t.cardActions(postGames,second.current,second.recommended,second.finalWorlds).length)throw new Error('applied recommendation produces reversal advice');
-const protectedGames=clone(postGames);protectedGames[2].protectedPick=true;
+const protectedGames=clone(postGames);protectedGames[2].protectedPick=true;protectedGames[2].protectedConfidence=true;
 const protectedRun=t.runOptimizer(protectedGames,93,{...stableOpts,searchIters:60,finalIters:120});
-if(protectedRun.recommended.choices[2]!==stableOpts.currentCard.choices[2])throw new Error('protected pick changed');
+if(protectedRun.recommended.choices[2]!==stableOpts.currentCard.choices[2]||protectedRun.recommended.weights[2]!==stableOpts.currentCard.weights[2])throw new Error('protected pick or confidence changed');
 console.log('Pickem regression suite passed: imports valid, live card flexible, recommendations stable after application.');
