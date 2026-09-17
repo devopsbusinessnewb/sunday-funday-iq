@@ -102,3 +102,44 @@ The standings screenshots revealed Tony's submitted DET (2), but opponent select
 | 1 | KC | IND @ KC | Keep KC; 3 → 1 |
 
 Set 2 supersedes Set 1 for decision support because it incorporates Tony's explicit Detroit constraint and the corrected 94-entry pool size. Both sets remain recorded for post-week analysis.
+
+
+## Recommendation Set 3 — Detroit pick protected, confidence flexible
+
+Captured: 2026-09-17 23:17 UTC  
+Build: 1.4.5  
+Pool size: 94 entries.  
+Constraint: Detroit must remain the selected team; its confidence may move.
+
+| Metric | Submitted | Recommended |
+|---|---:|---:|
+| Top 2 | 4.7% | 16.2% |
+| Win | 3.7% | 10.3% |
+| Average confidence points | 72.8 | 91.9 |
+
+### Final recommended card
+
+| Confidence | Pick | Matchup | Change from submitted |
+|---:|---|---|---|
+| 16 | DET | DET @ BUF | Keep DET; 2 → 16 |
+| 15 | LAC | LV @ LAC | Flip LV → LAC; 7 → 15 |
+| 14 | SF | MIA @ SF | Keep SF; 4 → 14 |
+| 13 | LAR | NYG @ LAR | Flip NYG → LAR; 1 → 13 |
+| 12 | BAL | NO @ BAL | No change |
+| 11 | TB | CLE @ TB | Keep TB; 14 → 11 |
+| 10 | PHI | PHI @ TEN | Keep PHI; 9 → 10 |
+| 9 | KC | IND @ KC | Keep KC; 3 → 9 |
+| 8 | SEA | SEA @ ARI | Keep SEA; 5 → 8 |
+| 7 | CHI | MIN @ CHI | Flip MIN → CHI; 11 → 7 |
+| 6 | GB | GB @ NYJ | Flip NYJ → GB; 10 → 6 |
+| 5 | DAL | WAS @ DAL | Keep DAL; 6 → 5 |
+| 4 | NE | PIT @ NE | Flip PIT → NE; 15 → 4 |
+| 3 | CAR | CAR @ ATL | Keep CAR; 13 → 3 |
+| 2 | HOU | CIN @ HOU | Flip CIN → HOU; 16 → 2 |
+| 1 | DEN | JAX @ DEN | Flip JAX → DEN; 8 → 1 |
+
+### Why Detroit moves to 16
+
+The objective is weekly first/second place, not median score. CBS ownership shows only 9% on Detroit. Once Detroit is mandatory, assigning maximum confidence creates high-variance tournament leverage: a Detroit win separates Tony from most of the field, while a Detroit loss already hurts the card regardless of whether it carries 2 or 16. The optimizer accepts a lower average-point projection than Set 2 in exchange for a higher modeled Top-2 and Win probability.
+
+Set 3 supersedes Set 2 for current decision support. Sets 1 and 2 remain preserved for post-week comparison.
