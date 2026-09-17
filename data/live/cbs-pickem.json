@@ -1,9 +1,9 @@
 {
   "product": "CBS Pick'em IQ Bridge",
   "version": "0.4.0-screenshot",
-  "exportedAt": "2026-09-17T22:57:00Z",
+  "exportedAt": "2026-09-17T23:09:00Z",
   "privacy": "Reconstructed from user-provided CBS Picks screenshots. No credentials, cookies, or authorization data.",
-  "source": "CBS mobile screenshots supplied by Tony Eickhoff",
+  "source": "CBS mobile Picks and Weekly Standings screenshots supplied by Tony Eickhoff",
   "tiebreaker": 41,
   "graphqlSummary": [],
   "captures": [
@@ -138,5 +138,26 @@
       "homeML": -360,
       "total": 48.5
     }
-  ]
+  ],
+  "poolSize": 94,
+  "constraints": {
+    "fixedCards": [
+      {
+        "team": "DET",
+        "confidence": 2,
+        "reason": "User will not pick against Detroit; confidence intentionally reduced to manage risk."
+      }
+    ]
+  },
+  "standingsSummary": {
+    "capturedAt": "2026-09-17T23:09:00Z",
+    "week": 2,
+    "entries": 94,
+    "user": "Tony Eickhoff",
+    "ytdPoints": 108,
+    "weekPoints": 0,
+    "visiblePick": "DET",
+    "visibleConfidence": 2,
+    "opponentPicksHidden": true
+  }
 }
