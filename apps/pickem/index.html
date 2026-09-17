@@ -28,7 +28,7 @@ table{width:100%;border-collapse:collapse;font-size:12px;min-width:830px}.tablew
 <body>
 <div class="app">
   <div class="header">
-    <div class="brand"><h1>🏈 Sunday Funday IQ</h1><p>CBS Pick'em · Pick'em Coach</p><p style="font-size:10px;color:#5f7898">Build 1.4.4 · protected fan picks</p></div>
+    <div class="brand"><h1>🏈 Sunday Funday IQ</h1><p>CBS Pick'em · Pick'em Coach</p><p style="font-size:10px;color:#5f7898">Build 1.4.5 · protected team picks</p></div>
     <div class="actions">
       <a class="btn" href="../../">⌂ Home</a>
       <input id="scanFile" type="file" accept=".json,application/json" hidden>
@@ -174,7 +174,7 @@ function marketProb(g,s){const m=market(g);return s===0?m.away:m.home}
 
 function isLocked(g){return !!g.locked}
 function fixedWinner(g){return g.completed && (g.winner===0||g.winner===1)?g.winner:null}
-function lockedIndices(games){return new Set(games.map((g,i)=>(isLocked(g)||g.protected)?i:-1).filter(i=>i>=0))}
+function lockedIndices(games){return new Set(games.map((g,i)=>isLocked(g)?i:-1).filter(i=>i>=0))}
 async function refreshResults(silent=true){
   let updated=0;
   try{
@@ -309,7 +309,7 @@ function searchCandidates(games,current,poolSize,opts={}){
     const expanded=[];
     for(const node of beam){
       for(let i=0;i<games.length;i++){
-        if(locked.has(i)||node.flipped.has(i))continue;
+        if(locked.has(i)||games[i].protectedPick||node.flipped.has(i))continue;
         const alt={choices:[...node.card.choices],weights:[...node.card.weights]};alt.choices[i]=1-alt.choices[i];
         const p=marketProb(games[i],alt.choices[i])??ownProb(games[i],alt.choices[i]);
         const field=ownProb(games[i],alt.choices[i]);if(p<.35 && !(p>=.30 && p-field>=.15))continue;
@@ -351,7 +351,7 @@ function runOptimizer(games,poolSize,opts={}){
 function cardActions(games,current,recommended,worlds){
   const actions=[];
   for(let i=0;i<games.length;i++){
-    if(isLocked(games[i])||games[i].protected)continue;
+    if(isLocked(games[i]))continue;
     const pickChanged=current.choices[i]!==recommended.choices[i],confChanged=current.weights[i]!==recommended.weights[i];
     if(!pickChanged&&!confChanged)continue;
     actions.push({
@@ -788,8 +788,8 @@ async function importScan(obj){
     if(structured.picks[i])g.pick=structured.picks[i];
     if(structured.weights[i]!=null)g.weight=structured.weights[i];
   })}
-  const fixedCards=obj?.constraints?.fixedCards||[],fixed=new Set(fixedCards.map(x=>normalizeTeam(x.team)));
-  state.games.forEach(g=>g.protected=fixed.has(g.pick)&&Number(g.weight)===(fixedCards.find(x=>normalizeTeam(x.team)===g.pick)?.confidence));
+  const fixedPicks=new Set((obj?.constraints?.fixedPicks||[]).map(normalizeTeam));
+  state.games.forEach(g=>g.protectedPick=fixedPicks.has(g.pick));
   restoreLockedGames(lockedBeforeImport);
   repairLockedConfidenceCollision();
   const stand=newest(snaps.filter(s=>/Weekly Standings/i.test(s.title||'')));if(stand){const names=[...stand.text.matchAll(/\n\n\n([^\n\t]{2,60})\n\t0\t0\t/g)].map(x=>x[1]);if(names.length>20)state.poolSize=new Set(names).size}
@@ -965,7 +965,7 @@ function render(){
   let n=0,d=0;for(const g of state.games){const s=sideOf(g);if(s!=null&&g.weight){n+=ownProb(g,s)*g.weight;d+=g.weight}}$('chalk').textContent=d?pct(n/d,0):'—';const mnf=state.games[state.games.length-1];$('tie').textContent=mnf?.total?Math.round(mnf.total):'—';
   const orig=state.originalCard,rec=state.recommendedCard;
   $('games').innerHTML=state.games.map((g,i)=>{const s=sideOf(g),m=market(g),r=s==null?{t:'UNPICKED',c:'blue'}:(()=>{const e=(marketProb(g,s)??ownProb(g,s))-ownProb(g,s);return e>=.08?{t:'UNDER-OWNED',c:'green'}:e<=-.08?{t:'OVER-OWNED',c:'yellow'}:{t:'FAIR',c:'blue'}})(),os=orig?.choices?.[i],rs=rec?.choices?.[i],changed=rec&&(rs!==s||rec.weights[i]!==g.weight);
-    return `<div class="game ${changed?'changed':''} ${g.locked?'locked':''}"><div class="gamehead"><span>Game ${i+1}</span><span>${g.weight?g.weight+' confidence':'confidence pending'}${g.protected?' · protected':''}</span></div><div class="matchup"><div class="team"><div class="teamname">${g.away}</div><div class="pct">${g.awayPct}% CBS · ${pct(m.away,0)} market</div><button class="pickbtn ${s===0?'selected':''} ${rs===0?'recommended':''}" data-pick="${g.away}" data-id="${g.id}" ${g.locked?'disabled':''}>${s===0?'✓ '+g.away:'Pick '+g.away}</button></div><div class="at">@</div><div class="team right"><div class="teamname">${g.home}</div><div class="pct">${g.homePct}% CBS · ${pct(m.home,0)} market</div><button class="pickbtn ${s===1?'selected':''} ${rs===1?'recommended':''}" data-pick="${g.home}" data-id="${g.id}" ${g.locked?'disabled':''}>${s===1?'✓ '+g.home:'Pick '+g.home}</button></div></div>${g.locked?`<div class="lockedbar">🔒 ${g.completed?'FINAL':'STARTED'}${g.statusText?' · '+g.statusText:''}${g.completed&&fixedWinner(g)!=null?' · Winner: '+teamFor(g,fixedWinner(g)):''}</div>`:''}
+    return `<div class="game ${changed?'changed':''} ${g.locked?'locked':''}"><div class="gamehead"><span>Game ${i+1}</span><span>${g.weight?g.weight+' confidence':'confidence pending'}${g.protectedPick?' · pick protected':''}</span></div><div class="matchup"><div class="team"><div class="teamname">${g.away}</div><div class="pct">${g.awayPct}% CBS · ${pct(m.away,0)} market</div><button class="pickbtn ${s===0?'selected':''} ${rs===0?'recommended':''}" data-pick="${g.away}" data-id="${g.id}" ${g.locked?'disabled':''}>${s===0?'✓ '+g.away:'Pick '+g.away}</button></div><div class="at">@</div><div class="team right"><div class="teamname">${g.home}</div><div class="pct">${g.homePct}% CBS · ${pct(m.home,0)} market</div><button class="pickbtn ${s===1?'selected':''} ${rs===1?'recommended':''}" data-pick="${g.home}" data-id="${g.id}" ${g.locked?'disabled':''}>${s===1?'✓ '+g.home:'Pick '+g.home}</button></div></div>${g.locked?`<div class="lockedbar">🔒 ${g.completed?'FINAL':'STARTED'}${g.statusText?' · '+g.statusText:''}${g.completed&&fixedWinner(g)!=null?' · Winner: '+teamFor(g,fixedWinner(g)):''}</div>`:''}
     <div class="card-state"><div class="statebox"><span>Original CBS</span><b>${orig?teamFor(g,os)+' · '+orig.weights[i]:'—'}</b></div><div class="statebox"><span>Current IQ</span><b>${s!=null?teamFor(g,s)+' · '+(g.weight||'—'):'—'}</b></div><div class="statebox"><span>IQ recommends</span><b>${rec?teamFor(g,rs)+' · '+rec.weights[i]:'Run Simulation'}</b></div></div>
     <div class="intel"><div class="mini"><b>${moneylineText(g.awayML)}</b><span>${g.away} ML</span></div><div class="mini"><b class="${r.c==='green'?'good':r.c==='yellow'?'warn':''}">${r.t}</b><span>Market vs pool</span></div><div class="mini"><b>${moneylineText(g.homeML)}</b><span>${g.home} ML</span></div><div class="mini"><b>${g.weight||'—'}</b><span>confidence</span></div></div><div class="inputs"><label>${g.away} moneyline<input data-field="awayML" data-id="${g.id}" type="number" value="${g.awayML??''}"></label><label>${g.home} moneyline<input data-field="homeML" data-id="${g.id}" type="number" value="${g.homeML??''}"></label><label>Confidence<input data-field="weight" data-id="${g.id}" type="number" min="1" max="${state.games.length}" value="${g.weight??''}" ${g.locked?'disabled':''}></label></div></div>`}).join('');
   document.querySelectorAll('[data-pick]').forEach(b=>b.onclick=()=>{const g=state.games.find(x=>x.id===b.dataset.id);g.pick=b.dataset.pick;state.optimization=null;state.recommendedCard=null;save();render()});
