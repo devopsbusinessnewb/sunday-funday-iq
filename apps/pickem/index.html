@@ -28,7 +28,7 @@ table{width:100%;border-collapse:collapse;font-size:12px;min-width:830px}.tablew
 <body>
 <div class="app">
   <div class="header">
-    <div class="brand"><h1>🏈 Sunday Funday IQ</h1><p>CBS Pick'em · Pick'em Coach</p><p style="font-size:10px;color:#5f7898">Build 1.4.1 · JSON import workflow</p></div>
+    <div class="brand"><h1>🏈 Sunday Funday IQ</h1><p>CBS Pick'em · Pick'em Coach</p><p style="font-size:10px;color:#5f7898">Build 1.4.2 · Week 2 screenshot import</p></div>
     <div class="actions">
       <a class="btn" href="../../">⌂ Home</a>
       <input id="scanFile" type="file" accept=".json,application/json" hidden>
@@ -428,7 +428,7 @@ const CBS_TEAM_TO_ABBR={
 'JETS':'NYJ','EAGLES':'PHI','STEELERS':'PIT','49ERS':'SF','SEAHAWKS':'SEA','BUCCANEERS':'TB','TITANS':'TEN','COMMANDERS':'WAS'
 };
 function cbsTeamAbbr(x){x=String(x||'').toUpperCase().trim();return CBS_TEAM_TO_ABBR[x]||normalizeTeam(x)}
-function parsePicks(text){const rx=/0-0\s*\n([A-Z0-9]+)\s*\n(\d+)%[\s\S]{0,80}?0-0\s*\n([A-Z0-9]+)\s*\n(\d+)%/g,out=[];let m;while((m=rx.exec(text||''))!==null)out.push({away:cbsTeamAbbr(m[1]),awayPct:+m[2],home:cbsTeamAbbr(m[3]),homePct:+m[4]});return out}
+function parsePicks(text){const record='\\d+-\\d+(?:-\\d+)?',rx=new RegExp(record+'\\s*\\n([A-Z0-9]+)\\s*\\n(\\d+)%[\\s\\S]{0,80}?'+record+'\\s*\\n([A-Z0-9]+)\\s*\\n(\\d+)%','g'),out=[];let m;while((m=rx.exec(text||''))!==null)out.push({away:cbsTeamAbbr(m[1]),awayPct:+m[2],home:cbsTeamAbbr(m[3]),homePct:+m[4]});return out}
 function parseOdds(text,matchups){const out=[];for(const [a,h] of matchups){const re=new RegExp('(?:^|\\n)'+a+'(?:\\s|\\n)[\\s\\S]{0,1000}?([+-]\\d{3,4})[\\s\\S]{0,1000}?(?:^|\\n)'+h+'(?:\\s|\\n)[\\s\\S]{0,1000}?([+-]\\d{3,4})','m'),m=(text||'').match(re);if(m)out.push({away:a,home:h,awayML:+m[1],homeML:+m[2]})}return out}
 function newest(arr){return [...arr].sort((a,b)=>String(b.ts||'').localeCompare(String(a.ts||'')))[0]}
 function normalizeTeam(x){x=String(x??'').toUpperCase().trim();return x==='JAC'?'JAX':x}
@@ -975,8 +975,7 @@ async function runSimulation(){
   if(repaired)save();
   render();
   if(!state.fieldModel?.observedEntries){
-    show('Field model not loaded yet. Tap Refresh CBS Data and import one fresh bridge JSON, then run the simulation again.','yellow');
-    return;
+    show('Weekly Standings field data is not available yet. IQ will use its synthetic field model for this simulation.','yellow');
   }
   if(!completeCard(state.games)){const cis=cardImportStatus();show(`IQ imported ${cis.picks}/${state.games.length} winners and ${cis.unique}/${state.games.length} unique confidence values. CBS itself may be complete; this means the scan did not include the full submitted card. Refresh CBS Data with a scan taken while the CBS Picks page is open.`,'red');return}
   const f=dataFreshness(state);if(!state.originalCard)state.originalCard=snapshotCard();const current=snapshotCard();$('optBtn').disabled=true;$('progress').classList.add('show');$('progressText').textContent='Locking completed games and optimizing the remaining card…';
