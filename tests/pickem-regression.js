@@ -3,7 +3,7 @@ const vm=require('vm');
 const path=require('path');
 const root=path.resolve(__dirname,'..');
 const html=fs.readFileSync(path.join(root,'apps/pickem/index.html'),'utf8');
-if(!html.includes('Build 1.4.2')) throw new Error('Expected Pickem Build 1.4.2');
+if(!html.includes('Build 1.4.3')) throw new Error('Expected Pickem Build 1.4.2');
 if(html.includes('EMBEDDED_CBS_SCAN')) throw new Error('CBS live scan must not be embedded in app code');
 if(!html.includes("LIVE_CBS_URL='../../data/live/cbs-pickem.json'")) throw new Error('Live CBS data URL missing');
 if(html.includes('id="phoneSyncBtn"')||html.includes("$('phoneSyncBtn').onclick=pasteCbsPhoneSync"))throw new Error('Unused iPhone shortcut control must stay removed');
