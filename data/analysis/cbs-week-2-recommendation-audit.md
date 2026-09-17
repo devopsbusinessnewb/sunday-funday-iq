@@ -140,6 +140,6 @@ Constraint: Detroit must remain the selected team; its confidence may move.
 
 ### Why Detroit moves to 16
 
-The objective is weekly first/second place, not median score. CBS ownership shows only 9% on Detroit. Once Detroit is mandatory, assigning maximum confidence creates high-variance tournament leverage: a Detroit win separates Tony from most of the field, while a Detroit loss already hurts the card regardless of whether it carries 2 or 16. The optimizer accepts a lower average-point projection than Set 2 in exchange for a higher modeled Top-2 and Win probability.
+The objective is weekly first/second place, not median score. CBS ownership shows only 9% on Detroit. Once Detroit is mandatory, assigning maximum confidence creates high-variance tournament leverage: a Detroit win separates Tony sharply from most of the field, while a Detroit loss creates substantially more downside at 16 than at 2. The optimizer explicitly accepts that downside and a lower average-point projection than Set 2 in exchange for higher modeled Top-2 and Win probabilities.
 
 Set 3 supersedes Set 2 for current decision support. Sets 1 and 2 remain preserved for post-week comparison.
