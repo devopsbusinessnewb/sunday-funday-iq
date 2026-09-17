@@ -9,7 +9,8 @@
 :root{--bg:#07111f;--panel:#0f1d31;--panel2:#132641;--line:#243954;--text:#edf5ff;--muted:#91a7c2;--green:#32d296;--yellow:#f3c969;--red:#ff6b7a;--blue:#5ab0ff;--accent:#8ee3cf;--purple:#a78bfa}
 *{box-sizing:border-box}
 body{margin:0;background:linear-gradient(180deg,#07111f,#091729 45%,#07111f);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;min-height:100vh}
-button,input{font:inherit}.app{max-width:1220px;margin:auto;padding:18px 14px 70px}.header{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:14px}.brand h1{font-size:24px;margin:0}.brand p{margin:4px 0 0;color:var(--muted);font-size:13px}
+body::before{content:"";position:fixed;z-index:9999;top:0;left:0;right:0;height:env(safe-area-inset-top);background:#07111f;pointer-events:none}
+button,input{font:inherit}.app{max-width:1220px;margin:auto;padding:calc(18px + env(safe-area-inset-top)) 14px calc(70px + env(safe-area-inset-bottom))}.header{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:14px}.brand h1{font-size:24px;margin:0}.brand p{margin:4px 0 0;color:var(--muted);font-size:13px}
 .actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}.btn{border:1px solid var(--line);background:var(--panel2);color:var(--text);padding:10px 13px;border-radius:12px;font-weight:800;cursor:pointer;text-decoration:none}.btn.primary{background:var(--accent);color:#06201a;border:none}.btn.danger{background:#351923;border-color:#703042}.btn:disabled{opacity:.45;cursor:not-allowed}
 .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:12px}.card{background:rgba(15,29,49,.97);border:1px solid var(--line);border-radius:16px;padding:14px}.wide{grid-column:span 12}.half{grid-column:span 6}.metric{grid-column:span 2;min-height:105px}.metric .label{color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.08em}.metric .value{font-size:27px;font-weight:900;margin-top:7px}.metric .sub{font-size:10px;color:var(--muted);margin-top:5px}
 h2{font-size:16px;margin:0 0 12px}.hero{display:flex;justify-content:space-between;gap:12px;align-items:center}.headline{font-size:18px;font-weight:900}.why{font-size:12px;color:var(--muted);margin-top:4px;max-width:900px;line-height:1.45}.pill{display:inline-block;padding:4px 8px;border-radius:999px;font-size:9px;font-weight:900;background:#203858;color:#cfe6ff;white-space:nowrap}.pill.green{background:#173d35;color:#9ff0d0}.pill.yellow{background:#473c19;color:#ffe49a}.pill.red{background:#44202a;color:#ffb3be}.pill.blue{background:#193958;color:#aad7ff}.pill.purple{background:#31274b;color:#d9ceff}.good{color:var(--green)}.warn{color:var(--yellow)}.bad{color:var(--red)}
@@ -28,7 +29,7 @@ table{width:100%;border-collapse:collapse;font-size:12px;min-width:830px}.tablew
 <body>
 <div class="app">
   <div class="header">
-    <div class="brand"><h1>🏈 Sunday Funday IQ</h1><p>CBS Pick'em · Pick'em Coach</p><p style="font-size:10px;color:#5f7898">Build 1.4.8 · provisional confidence lock</p></div>
+    <div class="brand"><h1>🏈 Sunday Funday IQ</h1><p>CBS Pick'em · Pick'em Coach</p><p style="font-size:10px;color:#5f7898">Build 1.4.9 · iPhone safe area + fresh lock</p></div>
     <div class="actions">
       <a class="btn" href="../../">⌂ Home</a>
       <input id="scanFile" type="file" accept=".json,application/json" hidden>
