@@ -63,3 +63,42 @@ Simulation: 1,100 search worlds and 6,500 final evaluation worlds using the stab
 ## Interpretation note
 
 This is the first Week 2 recommendation set. It is preserved exactly as generated so it can be scored after the week. The CBS ownership percentages and submitted card came from Tony's six mobile screenshots. Weekly Standings data was not available, so the opponent field used the optimizer's synthetic fallback. Reruns should use the same stable optimizer and should not reverse after the full recommended card is applied.
+
+
+## Recommendation Set 2 — Detroit protected
+
+Captured: 2026-09-17 23:11 UTC  
+Build: 1.4.4  
+Pool size: 94 entries, confirmed from Weekly Standings screenshots.  
+Constraint: DET at confidence 2 is protected. IQ may not flip Detroit or move its confidence value.
+
+The standings screenshots revealed Tony's submitted DET (2), but opponent selections remained locked. The opponent field therefore still uses CBS ownership percentages and synthetic confidence placement.
+
+| Metric | Submitted | Recommended |
+|---|---:|---:|
+| Top 2 | 4.7% | 13.8% |
+| Win | 3.7% | 9.3% |
+| Average confidence points | 72.8 | 94.5 |
+
+### Constrained final card
+
+| Confidence | Pick | Matchup | Change from submitted |
+|---:|---|---|---|
+| 16 | LAR | NYG @ LAR | Flip NYG → LAR; 1 → 16 |
+| 15 | SF | MIA @ SF | Keep SF; 4 → 15 |
+| 14 | LAC | LV @ LAC | Flip LV → LAC; 7 → 14 |
+| 13 | BAL | NO @ BAL | Keep BAL; 12 → 13 |
+| 12 | DEN | JAX @ DEN | Flip JAX → DEN; 8 → 12 |
+| 11 | DAL | WAS @ DAL | Keep DAL; 6 → 11 |
+| 10 | TB | CLE @ TB | Keep TB; 14 → 10 |
+| 9 | CHI | MIN @ CHI | Flip MIN → CHI; 11 → 9 |
+| 8 | GB | GB @ NYJ | Flip NYJ → GB; 10 → 8 |
+| 7 | NE | PIT @ NE | Flip PIT → NE; 15 → 7 |
+| 6 | HOU | CIN @ HOU | Flip CIN → HOU; 16 → 6 |
+| 5 | CAR | CAR @ ATL | Keep CAR; 13 → 5 |
+| 4 | SEA | SEA @ ARI | Keep SEA; 5 → 4 |
+| 3 | PHI | PHI @ TEN | Keep PHI; 9 → 3 |
+| 2 | DET | DET @ BUF | Protected — no change |
+| 1 | KC | IND @ KC | Keep KC; 3 → 1 |
+
+Set 2 supersedes Set 1 for decision support because it incorporates Tony's explicit Detroit constraint and the corrected 94-entry pool size. Both sets remain recorded for post-week analysis.
