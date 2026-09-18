@@ -1,7 +1,7 @@
 {
   "product": "CBS Pick'em IQ Bridge",
   "version": "0.4.0-screenshot",
-  "exportedAt": "2026-09-17T23:25:00Z",
+  "exportedAt": "2026-09-17T23:59:00Z",
   "privacy": "Reconstructed from user-provided CBS Picks screenshots. No credentials, cookies, or authorization data.",
   "source": "CBS mobile Picks and Weekly Standings screenshots supplied by Tony Eickhoff",
   "tiebreaker": 41,
@@ -162,5 +162,6 @@
     "visiblePick": "DET",
     "visibleConfidence": 2,
     "opponentPicksHidden": true
-  }
+  },
+  "refreshReason": "Force Build 1.4.9 to clear the pre-lock recommendation and reapply Detroit at confidence 2."
 }
