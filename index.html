@@ -3,13 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <meta name="theme-color" content="#07111f">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Sunday Funday IQ">
 <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
 <link rel="icon" type="image/png" href="./favicon.png">
-<link rel="manifest" href="./manifest.webmanifest">
+<link rel="manifest" href="./manifest.webmanifest?v=1.4.1">
 <title>Sunday Funday IQ · Command Center</title>
 <style>
 :root{--bg:#07111f;--panel:#0f1d31;--panel2:#132641;--line:#243954;--text:#edf5ff;--muted:#91a7c2;--green:#32d296;--yellow:#f3c969;--orange:#ff9f43;--red:#ff6b7a;--accent:#8ee3cf;--blue:#5ab0ff;--purple:#a78bfa}
@@ -37,6 +40,7 @@ const LEAGUE_ID='1383615005433274368';
 const SLEEPER='https://api.sleeper.app/v1';
 const TREND_KEY='sfiqHubTrendV1';
 const SELECT_KEY='sfiqHubSelectedV1';
+const BUILD='1.4.1';
 const summaries={};
 const health={yahoo:{state:'pending'}};
 let selected=localStorage.getItem(SELECT_KEY)||'espn';
@@ -119,7 +123,7 @@ function selectModule(module){
 function renderDetail(){
   const s=summaries[selected]||summaries.espn;
   if(!s){$('detailPanel').innerHTML='<div class="loading">Loading selected module…</div>';return}
-  $('detailPanel').innerHTML=`<div class="detailhead"><span class="detailmodule">${esc(s.label)}</span>${s.href?`<a class="open" href="${s.href}">Open module →</a>`:''}</div><div class="headline">${esc(s.headline)}</div><div class="why">${esc(s.why)}</div><div class="metrics">${s.metrics.map(x=>`<div class="metric"><b>${esc(x[0])}</b><span>${esc(x[1])}</span></div>`).join('')}</div>${s.insights?.length?`<div class="insights">${s.insights.map(x=>`<div class="insight"><span>${esc(x[0])}</span><b class="${x[2]||''}">${esc(x[1])}</b></div>`).join('')}</div>`:''}<div class="trendline"><span class="trendicon ${s.trend.cls}">${s.trend.arrow}</span><div><div class="trendlabel">${s.trend.label}</div><div class="trenddetail">${s.trend.detail}</div></div></div><div class="detailfoot"><span>${esc(s.fresh||'')}</span><span>Hub Build 1.4</span></div>`;
+  $('detailPanel').innerHTML=`<div class="detailhead"><span class="detailmodule">${esc(s.label)}</span>${s.href?`<a class="open" href="${s.href}">Open module →</a>`:''}</div><div class="headline">${esc(s.headline)}</div><div class="why">${esc(s.why)}</div><div class="metrics">${s.metrics.map(x=>`<div class="metric"><b>${esc(x[0])}</b><span>${esc(x[1])}</span></div>`).join('')}</div>${s.insights?.length?`<div class="insights">${s.insights.map(x=>`<div class="insight"><span>${esc(x[0])}</span><b class="${x[2]||''}">${esc(x[1])}</b></div>`).join('')}</div>`:''}<div class="trendline"><span class="trendicon ${s.trend.cls}">${s.trend.arrow}</span><div><div class="trendlabel">${s.trend.label}</div><div class="trenddetail">${s.trend.detail}</div></div></div><div class="detailfoot"><span>${esc(s.fresh||'')}</span><span>Hub Build ${BUILD}</span></div>`;
 }
 
 async function json(url){
@@ -313,11 +317,27 @@ async function loadAll(manual=false){
   button.disabled=false;
 }
 
+async function checkAppVersion(){
+  try{
+    const response=await fetch(`./version.json?t=${Date.now()}`,{cache:'no-store'});
+    if(!response.ok)return;
+    const remote=await response.json();
+    if(remote.build&&remote.build!==BUILD){
+      const url=new URL(location.href);
+      url.searchParams.set('build',remote.build);
+      url.searchParams.set('refresh',Date.now());
+      location.replace(url.toString());
+    }
+  }catch{}
+}
+
 document.querySelectorAll('.tile').forEach(x=>x.addEventListener('click',()=>selectModule(x.dataset.module)));
 $('refresh').onclick=()=>loadAll(true);
 selectModule(selected);
 loadAll();
+checkAppVersion();
 setInterval(()=>{if(document.visibilityState==='visible')loadAll(false)},60000);
+setInterval(()=>{if(document.visibilityState==='visible')checkAppVersion()},300000);
 setInterval(()=>{if(lastCheckedAt&&!loadingPromise)$('updated').textContent=`Checked ${ago(lastCheckedAt)}`},30000);
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')loadAll(false)});
 </script>
