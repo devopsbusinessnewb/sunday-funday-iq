@@ -1,6 +1,6 @@
 # Yahoo Fantasy module
 
-Build 0.4 establishes the official Yahoo Fantasy API boundary for Sunday Funday IQ.
+Build 0.4.1 establishes the official Yahoo Fantasy API boundary for Sunday Funday IQ.
 
 ## Security boundary
 
@@ -12,11 +12,11 @@ Build 0.4 establishes the official Yahoo Fantasy API boundary for Sunday Funday 
 
 1. Confirm the Yahoo Developer application has **Fantasy Sports** API permission enabled.
 2. On the trusted machine, set `YAHOO_CLIENT_ID` and `YAHOO_CLIENT_SECRET` locally. Do not paste either value into GitHub or the public app.
-3. If the Yahoo app uses a callback other than out-of-band authorization, set `YAHOO_REDIRECT_URI` to that exact value.
+3. The registered callback is `https://devopsbusinessnewb.github.io/sunday-funday-iq/oauth/yahoo/`. Set `YAHOO_REDIRECT_URI` only if the Yahoo app registration is changed later.
 4. Run `python tools/yahoo-sync.py --authorize`.
-5. Approve access in the browser. Enter only the one-time authorization code when the local collector requests it.
+5. Approve access in the browser. Yahoo redirects to the Sunday Funday IQ callback page. Copy the **full redirected URL** back into the local collector; the collector verifies the OAuth `state` value before exchanging the one-time code.
 
-After that, the collector uses the saved refresh token to renew access tokens automatically. Yahoo may rotate refresh tokens; the collector always preserves the newest returned refresh token.
+The callback page never receives or stores the Client Secret, access token, or refresh token. After that, the collector uses the saved refresh token to renew access tokens automatically. Yahoo may rotate refresh tokens; the collector always preserves the newest returned refresh token.
 
 ## Sync
 
