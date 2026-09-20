@@ -29,7 +29,7 @@ table{width:100%;border-collapse:collapse;font-size:12px;min-width:830px}.tablew
 <body>
 <div class="app">
   <div class="header">
-    <div class="brand"><h1>🏈 Sunday Funday IQ</h1><p>CBS Pick'em · Pick'em Coach</p><p style="font-size:10px;color:#5f7898">Build 1.5.1 · clean standings migration</p></div>
+    <div class="brand"><h1>🏈 Sunday Funday IQ</h1><p>CBS Pick'em · Pick'em Coach</p><p style="font-size:10px;color:#5f7898">Build 1.6.0 · IQ probability engine</p></div>
     <div class="actions">
       <a class="btn" href="../../">⌂ Home</a>
       <input id="scanFile" type="file" accept=".json,application/json" hidden>
@@ -88,7 +88,7 @@ table{width:100%;border-collapse:collapse;font-size:12px;min-width:830px}.tablew
 
     <div class="card wide"><h2>Your Picks</h2><div class="games" id="games"></div></div>
 
-    <div class="card wide"><h2>Market vs Pool Analytics</h2><div class="tablewrap"><table><thead><tr><th>Game</th><th>Current pick</th><th>Confidence</th><th>CBS%</th><th>Market win%</th><th>Pool difference</th><th>IQ read</th></tr></thead><tbody id="rows"></tbody></table></div></div>
+    <div class="card wide"><h2>IQ Game Intelligence</h2><div class="tablewrap"><table><thead><tr><th>Game</th><th>Current pick</th><th>Confidence</th><th>CBS%</th><th>Market</th><th>IQ win%</th><th>IQ vs pool</th><th>IQ read</th></tr></thead><tbody id="rows"></tbody></table></div><div class="note" style="margin-top:8px">CBS% models what the field is likely to do. Market probability anchors the betting consensus. IQ win% independently adjusts the market using actual 2026 team performance; early-season adjustments are intentionally capped because the sample is small.</div></div>
   </div>
 
   <div class="footer">Freshness matters. CBS ownership and betting markets move during the week. Seed/fallback data is retained only so the app can continue to function, and is explicitly labeled when used.</div>
@@ -172,6 +172,67 @@ function sideOf(g,pick=g.pick){return pick===g.away?0:pick===g.home?1:null}
 function teamFor(g,s){return s===0?g.away:g.home}
 function ownProb(g,s){return (s===0?g.awayPct:g.homePct)/100}
 function marketProb(g,s){const m=market(g);return s===0?m.away:m.home}
+function iqTeamRating(team){
+  const x=state.iqModel?.ratings?.[normalizeTeam(team)];
+  return x&&Number.isFinite(Number(x.margin))?x:null;
+}
+function formProb(g,s){
+  const a=iqTeamRating(g.away),h=iqTeamRating(g.home);
+  if(!a||!h)return null;
+  // Recent point differential is capped when collected. Convert the matchup
+  // difference to a win probability with a modest home-field adjustment.
+  const homeEdge=(Number(h.margin)-Number(a.margin))+1.5;
+  const hp=1/(1+Math.exp(-homeEdge/6.5));
+  return s===0?1-hp:hp;
+}
+function iqProb(g,s){
+  const mp=marketProb(g,s),fp=formProb(g,s);
+  if(fp==null)return mp??ownProb(g,s);
+  const a=iqTeamRating(g.away),h=iqTeamRating(g.home);
+  const sample=Math.max(1,Math.min(Number(a?.games||1),Number(h?.games||1)));
+  // Early in the season the market remains the anchor, but actual football
+  // results get enough weight to create a genuinely independent IQ opinion.
+  const formWeight=Math.min(.42,.30+.06*Math.max(0,sample-1));
+  if(mp==null)return fp;
+  return mp*(1-formWeight)+fp*formWeight;
+}
+async function refreshIqModel(silent=true){
+  const season=Number(state.season||2026),week=Math.max(1,Number(state.week||1));
+  const priorWeeks=Array.from({length:Math.max(0,week-1)},(_,i)=>i+1);
+  if(!priorWeeks.length){state.iqModel={ratings:{},games:0,updatedAt:nowIso(),source:'No prior regular-season games'};return false}
+  try{
+    const rows=await Promise.all(priorWeeks.map(async w=>{
+      const r=await fetch(`https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=${season}&seasontype=2&week=${w}`,{cache:'no-store'});
+      if(!r.ok)throw new Error('ESPN '+r.status);
+      return {week:w,data:await r.json()};
+    }));
+    const agg={};let games=0;
+    const add=(team,margin,w)=>{
+      team=normalizeTeam(team);if(!team)return;
+      const x=agg[team]||(agg[team]={sum:0,weight:0,games:0});
+      x.sum+=margin*w;x.weight+=w;x.games++;
+    };
+    for(const row of rows){
+      const recency=.82+.18*(row.week/Math.max(1,week-1));
+      for(const ev of row.data.events||[]){
+        const comp=ev.competitions?.[0];if(!comp)continue;
+        const st=comp.status?.type||ev.status?.type||{};if(!st.completed)continue;
+        const cs=comp.competitors||[],ac=cs.find(x=>x.homeAway==='away'),hc=cs.find(x=>x.homeAway==='home');
+        const away=normalizeTeam(ac?.team?.abbreviation),home=normalizeTeam(hc?.team?.abbreviation);
+        const as=Number(ac?.score),hs=Number(hc?.score);if(!away||!home||!Number.isFinite(as)||!Number.isFinite(hs))continue;
+        const margin=Math.max(-14,Math.min(14,as-hs));
+        add(away,margin,recency);add(home,-margin,recency);games++;
+      }
+    }
+    const ratings={};for(const [team,x] of Object.entries(agg))ratings[team]={margin:x.weight?x.sum/x.weight:0,games:x.games};
+    state.iqModel={ratings,games,updatedAt:nowIso(),source:'ESPN 2026 completed games'};
+    save();if(!silent)show(`IQ football model refreshed from ${games} completed game${games===1?'':'s'}.`);return games>0;
+  }catch(e){
+    console.warn('IQ model refresh failed',e);
+    if(!silent)show('Could not refresh the IQ football model. Existing IQ ratings were preserved.','yellow');
+    return false;
+  }
+}
 
 function isLocked(g){return !!g.locked}
 function fixedWinner(g){return g.completed && (g.winner===0||g.winner===1)?g.winner:null}
@@ -219,7 +280,7 @@ function objective(x){return x.top2*10000+x.win*900+x.avg*.01}
 function binaryCounts(sorted,score){let lo=0,hi=sorted.length;while(lo<hi){const m=(lo+hi)>>1;if(sorted[m]<score)lo=m+1;else hi=m}const first=lo;lo=0;hi=sorted.length;while(lo<hi){const m=(lo+hi)>>1;if(sorted[m]<=score)lo=m+1;else hi=m}return{less:first,equal:lo-first,greater:sorted.length-lo}}
 function buildWorlds(games,poolSize,iters,seed=20260908,fieldModel=null){
   const rnd=mulberry32(seed),n=games.length,fieldN=Math.max(1,(poolSize||102)-1),worlds=new Array(iters);
-  const probs=games.map(g=>{const m=market(g);return[m.away??g.awayPct/100,m.home??g.homePct/100]});
+  const probs=games.map(g=>[iqProb(g,0),iqProb(g,1)]);
   const scheduleMap=new Map((fieldModel?.schedule||[]).map(x=>[x.away+'|'+x.home,x.defaultWeight]));
   const primary=(fieldModel?.locked||[]).find(x=>x.gameId===fieldModel?.primaryGameId)||fieldModel?.locked?.[0]||null;
   const primaryIdx=primary?games.findIndex(g=>g.id===primary.gameId):-1;
@@ -313,8 +374,12 @@ function searchCandidates(games,current,poolSize,opts={}){
       for(let i=0;i<games.length;i++){
         if(locked.has(i)||games[i].protectedPick||node.flipped.has(i))continue;
         const alt={choices:[...node.card.choices],weights:[...node.card.weights]};alt.choices[i]=1-alt.choices[i];
-        const p=marketProb(games[i],alt.choices[i])??ownProb(games[i],alt.choices[i]);
-        const field=ownProb(games[i],alt.choices[i]);if(p<.35 && !(p>=.30 && p-field>=.15))continue;
+        const p=iqProb(games[i],alt.choices[i]);
+        const field=ownProb(games[i],alt.choices[i]),leverage=p-field;
+        // Let the optimizer consider credible contrarian sides when IQ sees a
+        // real probability edge versus the CBS field. Do not require the
+        // betting market alone to validate the flip.
+        if(p<.32 && !(p>=.28 && leverage>=.10))continue;
         const tuned=optimizeConfidence(alt,worlds,1,locked);
         const flipped=new Set(node.flipped);flipped.add(i);
         expanded.push({card:tuned.card,eval:tuned.eval,flips:depth,flipped});
@@ -367,7 +432,7 @@ function cardActions(games,current,recommended,worlds){
 function recommendationClass(a){if(a.type==='FLIP')return['PICK CHANGE','green'];return['CONFIDENCE CHANGE','blue']}
 function explainAction(a,games){
   const dt=a.afterEval.top2-a.beforeEval.top2,dw=a.afterEval.win-a.beforeEval.win;
-  if(a.type==='FLIP'){const i=a.games[0],g=games[i],to=sideOf(g,a.to),cbs=ownProb(g,to),mp=marketProb(g,to);return`CBS has ${a.to} at ${pct(cbs,0)} while the market gives it ${pct(mp,0)}. The complete-card simulation ${dt>=0?'improves':'changes'} Top-2 probability after accounting for the rest of your card and the simulated field.`}
+  if(a.type==='FLIP'){const i=a.games[0],g=games[i],to=sideOf(g,a.to),cbs=ownProb(g,to),mp=marketProb(g,to),iq=iqProb(g,to);return`CBS has ${a.to} at ${pct(cbs,0)}, market ${pct(mp,0)}, and IQ ${pct(iq,0)}. The complete-card simulation ${dt>=0?'improves':'changes'} Top-2 probability after accounting for IQ's football view and the simulated field.`}
   return`This keeps all 16 confidence values valid while moving more confidence toward the card construction that performed better in the tournament simulation.`;
 }
 function interestingKeeps(games,current,recommended){
@@ -433,7 +498,7 @@ function cbsTeamAbbr(x){x=String(x||'').toUpperCase().trim();return CBS_TEAM_TO_
 function parsePicks(text){const record='\\d+-\\d+(?:-\\d+)?',rx=new RegExp(record+'\\s*\\n([A-Z0-9]+)\\s*\\n(\\d+)%[\\s\\S]{0,80}?'+record+'\\s*\\n([A-Z0-9]+)\\s*\\n(\\d+)%','g'),out=[];let m;while((m=rx.exec(text||''))!==null)out.push({away:cbsTeamAbbr(m[1]),awayPct:+m[2],home:cbsTeamAbbr(m[3]),homePct:+m[4]});return out}
 function parseOdds(text,matchups){const out=[];for(const [a,h] of matchups){const re=new RegExp('(?:^|\\n)'+a+'(?:\\s|\\n)[\\s\\S]{0,1000}?([+-]\\d{3,4})[\\s\\S]{0,1000}?(?:^|\\n)'+h+'(?:\\s|\\n)[\\s\\S]{0,1000}?([+-]\\d{3,4})','m'),m=(text||'').match(re);if(m)out.push({away:a,home:h,awayML:+m[1],homeML:+m[2]})}return out}
 function newest(arr){return [...arr].sort((a,b)=>String(b.ts||'').localeCompare(String(a.ts||'')))[0]}
-function normalizeTeam(x){x=String(x??'').toUpperCase().trim();return x==='JAC'?'JAX':x}
+function normalizeTeam(x){x=String(x??'').toUpperCase().trim();if(x==='JAC')return'JAX';if(x==='LA')return'LAR';if(x==='WSH')return'WAS';return x}
 function deepObjects(root,maxDepth=14){
   const out=[],seen=new Set();
   function walk(x,d=0){if(x==null||d>maxDepth||typeof x!=='object'||seen.has(x))return;seen.add(x);out.push(x);if(Array.isArray(x)){for(const v of x)walk(v,d+1)}else for(const v of Object.values(x))walk(v,d+1)}
@@ -949,7 +1014,7 @@ function renderDecision(){
     const i=a.games[0],g=state.games[i],[label,cls]=recommendationClass(a);
     if(a.type==='FLIP'){
       const to=sideOf(g,a.toPick);
-      html+=`<div class="rec"><div class="rec-head"><div><div class="rec-title">${idx+1}. FLIP PICK</div><div class="change-line">${a.fromPick} → ${a.toPick}</div><div class="change-sub">Confidence: ${a.fromConf} → ${a.toConf}</div></div><span class="pill ${cls}">${label}</span></div><div class="reason">CBS ${a.toPick}: ${pct(ownProb(g,to),0)} · Market ${a.toPick}: ${pct(marketProb(g,to),1)}. Final IQ card: pick ${a.toPick} at confidence ${a.toConf}. Make this together with the other listed changes.</div></div>`;
+      html+=`<div class="rec"><div class="rec-head"><div><div class="rec-title">${idx+1}. FLIP PICK</div><div class="change-line">${a.fromPick} → ${a.toPick}</div><div class="change-sub">Confidence: ${a.fromConf} → ${a.toConf}</div></div><span class="pill ${cls}">${label}</span></div><div class="reason">CBS ${a.toPick}: ${pct(ownProb(g,to),0)} · Market: ${pct(marketProb(g,to),1)} · IQ: ${pct(iqProb(g,to),1)}. Final IQ card: pick ${a.toPick} at confidence ${a.toConf}. Make this together with the other listed changes.</div></div>`;
     }else{
       const delta=a.toConf-a.fromConf;
       html+=`<div class="rec"><div class="rec-head"><div><div class="rec-title">${idx+1}. CHANGE CONFIDENCE</div><div class="change-line">${a.fromPick}: ${a.fromConf} → ${a.toConf} <span class="${delta>0?'good':delta<0?'bad':''}">(${delta>0?'+':''}${delta})</span></div><div class="change-sub">Keep pick: ${a.fromPick}</div></div><span class="pill ${cls}">${label}</span></div><div class="reason">Set ${a.fromPick} directly to ${a.toConf}. Do not interpret this as a swap with another team. Make every listed confidence change together; the finished card will still use 1–16 exactly once.</div></div>`;
@@ -978,11 +1043,11 @@ function render(){
     <div class="intel"><div class="mini"><b>${moneylineText(g.awayML)}</b><span>${g.away} ML</span></div><div class="mini"><b class="${r.c==='green'?'good':r.c==='yellow'?'warn':''}">${r.t}</b><span>Market vs pool</span></div><div class="mini"><b>${moneylineText(g.homeML)}</b><span>${g.home} ML</span></div><div class="mini"><b>${g.weight||'—'}</b><span>confidence</span></div></div><div class="inputs"><label>${g.away} moneyline<input data-field="awayML" data-id="${g.id}" type="number" value="${g.awayML??''}"></label><label>${g.home} moneyline<input data-field="homeML" data-id="${g.id}" type="number" value="${g.homeML??''}"></label><label>Confidence<input data-field="weight" data-id="${g.id}" type="number" min="1" max="${state.games.length}" value="${g.weight??''}" ${g.locked?'disabled':''}></label></div></div>`}).join('');
   document.querySelectorAll('[data-pick]').forEach(b=>b.onclick=()=>{const g=state.games.find(x=>x.id===b.dataset.id);g.pick=b.dataset.pick;state.optimization=null;state.recommendedCard=null;save();render()});
   document.querySelectorAll('input[data-field]').forEach(inp=>inp.onchange=()=>{const g=state.games.find(x=>x.id===inp.dataset.id);g[inp.dataset.field]=inp.value===''?null:+inp.value;if(inp.dataset.field!=='weight'){state.marketSource='manual';state.marketUpdatedAt=nowIso()}state.optimization=null;state.recommendedCard=null;save();render()});
-  $('rows').innerHTML=state.games.map(g=>{const s=sideOf(g),p=s==null?null:marketProb(g,s),o=s==null?null:ownProb(g,s),e=p==null||o==null?null:p-o,read=e==null?'NO MARKET':e>=.08?'UNDER-OWNED':e<=-.08?'OVER-OWNED':'FAIR';return `<tr><td>${g.away} @ ${g.home}</td><td><b>${s==null?'—':teamFor(g,s)}</b></td><td>${g.weight||'—'}</td><td>${o==null?'—':pct(o,0)}</td><td>${p==null?'—':pct(p,1)}</td><td>${e==null?'—':pp(e,0)}</td><td><span class="pill ${e>=.08?'green':e<=-.08?'yellow':'blue'}">${read}</span></td></tr>`}).join('');
+  $('rows').innerHTML=state.games.map(g=>{const s=sideOf(g),mp=s==null?null:marketProb(g,s),o=s==null?null:ownProb(g,s),iq=s==null?null:iqProb(g,s),edge=iq==null||o==null?null:iq-o;let read='NO IQ';if(edge!=null){read=edge>=.10?'STRONG LEVERAGE':edge>=.05?'VALUE':edge<=-.10?'CROWD RISK':edge<=-.05?'OVER-OWNED':'FAIR'}return `<tr><td>${g.away} @ ${g.home}</td><td><b>${s==null?'—':teamFor(g,s)}</b></td><td>${g.weight||'—'}</td><td>${o==null?'—':pct(o,0)}</td><td>${mp==null?'—':pct(mp,1)}</td><td>${iq==null?'—':pct(iq,1)}</td><td>${edge==null?'—':pp(edge,0)}</td><td><span class="pill ${edge>=.05?'green':edge<=-.05?'yellow':'blue'}">${read}</span></td></tr>`}).join('');
   renderDecision();
 }
 async function runSimulation(){
-  await refreshResults(true);
+  await Promise.all([refreshResults(true),refreshIqModel(true)]);
   let repaired=false;
   if(repairKnownWeek1LockedSeattle())repaired=true;
   if(repairLockedConfidenceCollision())repaired=true;
@@ -1018,7 +1083,7 @@ async function boot(){
   render();
   await loadPublishedCbs({silent:true,onlyIfNewer:true});
 }
-globalThis.SFIQ_TEST={validConfidence,ensureValidCard,dataFreshness,buildWorlds,evaluateCard,optimizeConfidence,runOptimizer,cardActions,marketProb,ownProb,clone,refreshResults,isLocked,fixedWinner,parsePicks,extractStructuredCard,extractFieldModel,SEED,normalizeTeam};
+globalThis.SFIQ_TEST={validConfidence,ensureValidCard,dataFreshness,buildWorlds,evaluateCard,optimizeConfidence,runOptimizer,cardActions,marketProb,iqProb,formProb,ownProb,clone,refreshResults,refreshIqModel,isLocked,fixedWinner,parsePicks,extractStructuredCard,extractFieldModel,SEED,normalizeTeam};
 if(!TESTING)boot();
 </script>
 </body></html>
