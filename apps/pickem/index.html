@@ -29,7 +29,7 @@ table{width:100%;border-collapse:collapse;font-size:12px;min-width:830px}.tablew
 <body>
 <div class="app">
   <div class="header">
-    <div class="brand"><h1>🏈 Sunday Funday IQ</h1><p>CBS Pick'em · Pick'em Coach</p><p style="font-size:10px;color:#5f7898">Build 1.5.0 · partial-pool truth + live standings</p></div>
+    <div class="brand"><h1>🏈 Sunday Funday IQ</h1><p>CBS Pick'em · Pick'em Coach</p><p style="font-size:10px;color:#5f7898">Build 1.5.1 · clean standings migration</p></div>
     <div class="actions">
       <a class="btn" href="../../">⌂ Home</a>
       <input id="scanFile" type="file" accept=".json,application/json" hidden>
@@ -96,7 +96,7 @@ table{width:100%;border-collapse:collapse;font-size:12px;min-width:830px}.tablew
 
 <script>
 const TESTING=!!globalThis.__SFIQ_TESTING__;
-const STORAGE_KEY='sfiqPickemV03';
+const STORAGE_KEY='sfiqPickemV04';
 const SEED_TS='2026-08-28T18:00:00Z';
 const CBS_FRESH_HOURS=24;
 const MARKET_FRESH_HOURS=12;
