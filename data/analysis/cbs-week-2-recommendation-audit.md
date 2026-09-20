@@ -188,3 +188,83 @@ Result already locked: DET 31, BUF 41. Tony's DET pick at confidence 2 lost and 
 ### Interpretation note
 
 This set uses live ESPN market odds plus the first real pool evidence: the DET @ BUF selections and confidence values revealed after kickoff. It is more informed than the pre-kickoff CBS-wide proxy sets, but it is still provisional because CBS continues to hide opponent picks for the remaining 15 games. Build 1.5.1 explicitly labels this state as a partial pool reveal.
+
+
+## Recommendation Set 5 — Risk-calibrated model and final submitted card
+
+Captured: 2026-09-20 15:15 UTC
+
+Build: 1.6.1
+
+Pool size: 94 entries.
+
+Observed field: 88 entries revealed for the completed DET @ BUF game; the other 15 pool picks remained hidden.
+Result already locked: DET 31, BUF 41. Tony's DET pick at confidence 2 lost and remained frozen.
+
+Build 1.6.1 reduced the one-game performance weight from 30% to 12%, stress-tested market, IQ, and blended outcome probabilities, and separated contrarian-pick leverage from confidence-point safety. This run supersedes Set 4 for decision support.
+
+| Metric | Submitted before changes | Build 1.6.1 recommendation |
+|---|---:|---:|
+| Top 2 | 2.6% | 4.9% |
+| Win | 1.7% | 3.0% |
+| Modeled improvement | — | +2.3 pp Top 2; +1.3 pp Win |
+
+### Build 1.6.1 recommended card
+
+| Confidence | Pick | Matchup | Recommendation |
+|---:|---|---|---|
+| 16 | SF | MIA @ SF | Keep SF; 4 → 16 |
+| 15 | LAR | NYG @ LAR | Flip NYG → LAR; 1 → 15 |
+| 14 | BAL | NO @ BAL | Keep BAL; 12 → 14 |
+| 13 | PHI | PHI @ TEN | Keep PHI; 9 → 13 |
+| 12 | KC | IND @ KC | Keep KC; 3 → 12 |
+| 11 | DAL | WAS @ DAL | Keep DAL; 6 → 11 |
+| 10 | DEN | JAX @ DEN | Flip JAX → DEN; 8 → 10 |
+| 9 | LAC | LV @ LAC | Flip LV → LAC; 7 → 9 |
+| 8 | TB | CLE @ TB | Keep TB; 14 → 8 |
+| 7 | CIN | CIN @ HOU | Keep CIN; 16 → 7 |
+| 6 | ATL | CAR @ ATL | Flip CAR → ATL; 13 → 6 |
+| 5 | NYJ | GB @ NYJ | Keep NYJ; 10 → 5 |
+| 4 | ARI | SEA @ ARI | Flip SEA → ARI; 5 → 4 |
+| 3 | PIT | PIT @ NE | Keep PIT; 15 → 3 |
+| 2 | DET | DET @ BUF | Locked loss — no change |
+| 1 | MIN | MIN @ CHI | Keep MIN; 11 → 1 |
+
+### Recorded probability inputs for recommended flips
+
+| Pick | CBS-wide share | Market win probability | IQ win probability | Confidence ceiling |
+|---|---:|---:|---:|---:|
+| ATL | 23% | 41.7% | 46.1% | 6 |
+| DEN | 53% | 57.2% | 50.5% | 10 |
+| LAC | 82% | 72.6% | 64.1% | 16 |
+| ARI | 12% | 35.5% | 41.3% | 4 |
+| LAR | 80% | 72.2% | 64.0% | 16 |
+
+### Official final CBS card submitted by Tony
+
+Tony entered the complete recommendation with one deliberate risk adjustment: PIT received 4 and ARI received 3 instead of the model's PIT 3 / ARI 4. This is the official card to score against the model recommendation and the original submitted card after Week 2 concludes.
+
+| Confidence | Pick | Matchup | Final status |
+|---:|---|---|---|
+| 16 | SF | MIA @ SF | Submitted |
+| 15 | LAR | NYG @ LAR | Submitted |
+| 14 | BAL | NO @ BAL | Submitted |
+| 13 | PHI | PHI @ TEN | Submitted |
+| 12 | KC | IND @ KC | Submitted |
+| 11 | DAL | WAS @ DAL | Submitted |
+| 10 | DEN | JAX @ DEN | Submitted |
+| 9 | LAC | LV @ LAC | Submitted |
+| 8 | TB | CLE @ TB | Submitted |
+| 7 | CIN | CIN @ HOU | Submitted |
+| 6 | ATL | CAR @ ATL | Submitted |
+| 5 | NYJ | GB @ NYJ | Submitted |
+| 4 | PIT | PIT @ NE | Submitted — manual override from model's 3 |
+| 3 | ARI | SEA @ ARI | Submitted — manual override from model's 4 |
+| 2 | DET | DET @ BUF | Locked loss |
+| 1 | MIN | MIN @ CHI | Submitted |
+
+Tiebreaker: 41.
+
+### Post-week evaluation plan
+
+Score three cards after all games become final: (1) the original CBS card, (2) the exact Build 1.6.1 recommended card, and (3) Tony's official submitted card. Compare correct picks, confidence points, pool finish, Top-2 outcome, pick-flip attribution, confidence-reallocation attribution, and the effect of the PIT/ARI manual override. Use the result to calibrate early-season form weight, probability disagreement limits, confidence ceilings, and contrarian-pick selection without retroactively changing this record.
