@@ -2,9 +2,9 @@
     "meta":  {
                  "source":  "ESPN browser bridge",
                  "status":  "connected",
-                 "updatedAt":  "2026-09-12T14:35:38.074Z",
+                 "updatedAt":  "2026-09-20T13:51:21.229Z",
                  "season":  2026,
-                 "week":  1,
+                 "week":  2,
                  "leagueId":  "896942321",
                  "teamId":  "3"
              },
@@ -16,16 +16,16 @@
                },
     "team":  {
                  "name":  "Sunday Funday",
-                 "record":  "0-0",
-                 "standing":  11,
+                 "record":  "0-1",
+                 "standing":  7,
                  "faabRemaining":  100,
-                 "score":  28.5,
-                 "projection":  125.90839114
+                 "score":  22.5,
+                 "projection":  120.58107411
              },
     "opponent":  {
-                     "name":  "Kurt Warner Brothers",
-                     "score":  0,
-                     "projection":  116.19050641
+                     "name":  "Hold My Gatorade",
+                     "score":  40.82,
+                     "projection":  147.6358945
                  },
     "lineup":  [
                    {
@@ -34,7 +34,7 @@
                        "pos":  "WR",
                        "team":  "6",
                        "status":  "ACTIVE",
-                       "projection":  17.26,
+                       "projection":  18,
                        "points":  0,
                        "starter":  true,
                        "played":  false
@@ -45,7 +45,7 @@
                        "pos":  "RB",
                        "team":  "13",
                        "status":  "ACTIVE",
-                       "projection":  18.3,
+                       "projection":  18.33,
                        "points":  0,
                        "starter":  true,
                        "played":  false
@@ -56,7 +56,7 @@
                        "pos":  "WR",
                        "team":  "21",
                        "status":  "ACTIVE",
-                       "projection":  14.8,
+                       "projection":  13.96,
                        "points":  0,
                        "starter":  true,
                        "played":  false
@@ -67,10 +67,10 @@
                        "pos":  "WR",
                        "team":  "8",
                        "status":  "ACTIVE",
-                       "projection":  12.12,
-                       "points":  0,
+                       "projection":  12.33,
+                       "points":  5.3,
                        "starter":  true,
-                       "played":  false
+                       "played":  true
                    },
                    {
                        "slot":  "RB",
@@ -78,10 +78,10 @@
                        "pos":  "RB",
                        "team":  "17",
                        "status":  "ACTIVE",
-                       "projection":  13.97,
-                       "points":  14.5,
+                       "projection":  12.91,
+                       "points":  0,
                        "starter":  true,
-                       "played":  true
+                       "played":  false
                    },
                    {
                        "slot":  "TE",
@@ -89,10 +89,10 @@
                        "pos":  "TE",
                        "team":  "8",
                        "status":  "ACTIVE",
-                       "projection":  10.95,
-                       "points":  0,
+                       "projection":  11.25,
+                       "points":  17.2,
                        "starter":  true,
-                       "played":  false
+                       "played":  true
                    },
                    {
                        "slot":  "QB",
@@ -100,7 +100,7 @@
                        "pos":  "QB",
                        "team":  "12",
                        "status":  "ACTIVE",
-                       "projection":  15.48,
+                       "projection":  18.22,
                        "points":  0,
                        "starter":  true,
                        "played":  false
@@ -111,10 +111,10 @@
                        "pos":  "D/ST",
                        "team":  "26",
                        "status":  "Active",
-                       "projection":  7.22,
-                       "points":  14,
+                       "projection":  7.61,
+                       "points":  0,
                        "starter":  true,
-                       "played":  true
+                       "played":  false
                    },
                    {
                        "slot":  "K",
@@ -122,7 +122,7 @@
                        "pos":  "K",
                        "team":  "33",
                        "status":  "ACTIVE",
-                       "projection":  8.49,
+                       "projection":  9.06,
                        "points":  0,
                        "starter":  true,
                        "played":  false
@@ -135,7 +135,7 @@
                       "pos":  "RB",
                       "team":  "5",
                       "status":  "ACTIVE",
-                      "projection":  13.15,
+                      "projection":  11.97,
                       "points":  0,
                       "starter":  false,
                       "played":  false
@@ -146,7 +146,7 @@
                       "pos":  "WR",
                       "team":  "9",
                       "status":  "ACTIVE",
-                      "projection":  10.91,
+                      "projection":  12.49,
                       "points":  0,
                       "starter":  false,
                       "played":  false
@@ -156,8 +156,8 @@
                       "name":  "RJ Harvey",
                       "pos":  "RB",
                       "team":  "7",
-                      "status":  "ACTIVE",
-                      "projection":  8.47,
+                      "status":  "QUESTIONABLE",
+                      "projection":  10.04,
                       "points":  0,
                       "starter":  false,
                       "played":  false
@@ -168,7 +168,7 @@
                       "pos":  "WR",
                       "team":  "5",
                       "status":  "ACTIVE",
-                      "projection":  9.08,
+                      "projection":  9.49,
                       "points":  0,
                       "starter":  false,
                       "played":  false
@@ -179,7 +179,7 @@
                       "pos":  "QB",
                       "team":  "27",
                       "status":  "ACTIVE",
-                      "projection":  16.28,
+                      "projection":  16.8,
                       "points":  0,
                       "starter":  false,
                       "played":  false
@@ -190,7 +190,7 @@
                       "pos":  "TE",
                       "team":  "16",
                       "status":  "ACTIVE",
-                      "projection":  9.2,
+                      "projection":  9.56,
                       "points":  0,
                       "starter":  false,
                       "played":  false
