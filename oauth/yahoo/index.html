@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#07111f">
+<title>Sunday Funday IQ · Authorization</title>
+<style>
+:root{--bg:#07111f;--panel:#0f1d31;--line:#243954;--text:#edf5ff;--muted:#91a7c2;--green:#32d296;--red:#ff6b7a;--accent:#a78bfa}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;display:grid;place-items:center;padding:18px}.card{width:min(100%,620px);background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:20px}.eyebrow{font-size:10px;letter-spacing:.12em;color:var(--accent);font-weight:900}.status{font-size:24px;font-weight:900;margin:8px 0}.copy{width:100%;border:0;border-radius:12px;background:var(--accent);color:#130829;padding:12px;font-weight:900;margin-top:14px}.muted{color:var(--muted);font-size:12px;line-height:1.5}.bad{color:var(--red)}
+</style>
+</head>
+<body>
+<main class="card">
+<div class="eyebrow">SUNDAY FUNDAY IQ</div>
+<div class="status" id="status">Checking authorization…</div>
+<p class="muted" id="message">This page only receives Yahoo's one-time authorization response. Your Client Secret and long-lived tokens stay on the private collector.</p>
+<button class="copy" id="copy" style="display:none">Copy redirected URL</button>
+</main>
+<script>
+const q=new URLSearchParams(location.search),code=q.get('code'),err=q.get('error');
+const status=document.getElementById('status'),message=document.getElementById('message'),copy=document.getElementById('copy');
+if(err){status.textContent='Authorization was not completed';status.className='status bad';message.textContent='Yahoo returned: '+err+'. Return to the private collector and try again.'}
+else if(code){status.textContent='Authorization received';message.textContent='Return to the private collector and paste this full redirected URL. The collector will verify the OAuth state before exchanging the one-time authorization code.';copy.style.display='block';copy.onclick=async()=>{try{await navigator.clipboard.writeText(location.href);copy.textContent='Copied — return to the collector'}catch{copy.textContent='Copy the address from the browser bar'}}}
+else{status.textContent='No authorization code found';status.className='status bad';message.textContent='This page was opened without a Yahoo authorization response. Start authorization from the private collector.'}
+</script>
+</body>
+</html>
