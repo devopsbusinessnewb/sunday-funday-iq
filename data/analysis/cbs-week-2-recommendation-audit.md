@@ -148,3 +148,43 @@ Set 3 supersedes Set 2 for current decision support. Sets 1 and 2 remain preserv
 ## Data correction — 2026-09-17
 
 The 9% Detroit figure is the pick distribution across CBS, not Tony's 94-entry pool. Pool selections remain hidden until the game starts. Recommendation Set 3 is therefore a sensitivity result under a CBS-wide proxy, not a pool-specific conclusion. Its DET-at-16 recommendation should not be treated as reliable without knowing how closely this pool resembles the CBS-wide population.
+
+
+## Recommendation Set 4 — Post-Detroit partial pool reveal
+
+Captured: 2026-09-20 13:51 UTC  
+Build: 1.5.1  
+Pool size: 94 entries.  
+Observed field: 88 entries revealed for the completed DET @ BUF game; the other 15 pool picks remain hidden.  
+Result already locked: DET 31, BUF 41. Tony's DET pick at confidence 2 lost and remains frozen.
+
+| Metric | Submitted | Recommended |
+|---|---:|---:|
+| Top 2 | 2.0% | 7.6% |
+| Win | 1.3% | 4.4% |
+| Average confidence points | 71.4 | — |
+
+### Provisional final card
+
+| Confidence | Pick | Matchup | Change from submitted |
+|---:|---|---|---|
+| 16 | ATL | CAR @ ATL | Flip CAR → ATL; 13 → 16 |
+| 15 | MIN | MIN @ CHI | Keep MIN; 11 → 15 |
+| 14 | SF | MIA @ SF | Keep SF; 4 → 14 |
+| 13 | BAL | NO @ BAL | Keep BAL; 12 → 13 |
+| 12 | KC | IND @ KC | Keep KC; 3 → 12 |
+| 11 | LAR | NYG @ LAR | Flip NYG → LAR; 1 → 11 |
+| 10 | TB | CLE @ TB | Keep TB; 14 → 10 |
+| 9 | PHI | PHI @ TEN | No change |
+| 8 | LAC | LV @ LAC | Flip LV → LAC; 7 → 8 |
+| 7 | DAL | WAS @ DAL | Keep DAL; 6 → 7 |
+| 6 | SEA | SEA @ ARI | Keep SEA; 5 → 6 |
+| 5 | NE | PIT @ NE | Flip PIT → NE; 15 → 5 |
+| 4 | GB | GB @ NYJ | Flip NYJ → GB; 10 → 4 |
+| 3 | DEN | JAX @ DEN | Flip JAX → DEN; 8 → 3 |
+| 2 | DET | DET @ BUF | Locked loss — no change |
+| 1 | CIN | CIN @ HOU | Keep CIN; 16 → 1 |
+
+### Interpretation note
+
+This set uses live ESPN market odds plus the first real pool evidence: the DET @ BUF selections and confidence values revealed after kickoff. It is more informed than the pre-kickoff CBS-wide proxy sets, but it is still provisional because CBS continues to hide opponent picks for the remaining 15 games. Build 1.5.1 explicitly labels this state as a partial pool reveal.
