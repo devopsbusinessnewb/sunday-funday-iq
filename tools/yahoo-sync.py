@@ -8,7 +8,7 @@ football snapshot at data/live/yahoo.json.
 Environment variables:
   YAHOO_CLIENT_ID          required for authorization/sync
   YAHOO_CLIENT_SECRET      required for authorization/sync
-  YAHOO_REDIRECT_URI       optional; defaults to oob
+  YAHOO_REDIRECT_URI       optional; defaults to the registered Sunday Funday IQ callback
   YAHOO_TEAM_KEY           optional; auto-discovered when possible
   YAHOO_LEAGUE_KEY         optional; derived from team key when possible
   YAHOO_SEASON             optional; defaults to 2026
@@ -33,7 +33,7 @@ import xml.etree.ElementTree as ET
 from datetime import datetime, timezone
 from pathlib import Path
 from urllib.error import HTTPError
-from urllib.parse import urlencode
+from urllib.parse import parse_qs, urlencode, urlparse
 from urllib.request import Request, urlopen
 
 AUTH_URL = "https://api.login.yahoo.com/oauth2/request_auth"
@@ -42,6 +42,7 @@ API_BASE = "https://fantasysports.yahooapis.com/fantasy/v2"
 TOKEN_PATH = Path(os.environ.get("YAHOO_TOKEN_PATH", Path.home() / ".sunday-funday-iq" / "yahoo-oauth.json"))
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_OUTPUT = REPO_ROOT / "data" / "live" / "yahoo.json"
+DEFAULT_REDIRECT_URI = "https://devopsbusinessnewb.github.io/sunday-funday-iq/oauth/yahoo/"
 
 
 def env(name: str, default: str = "") -> str:
@@ -66,7 +67,7 @@ def post_token(fields: dict[str, str]) -> dict:
     req = Request(TOKEN_URL, data=body, headers={
         "Authorization": basic_auth(client_id, client_secret),
         "Content-Type": "application/x-www-form-urlencoded",
-        "User-Agent": "Sunday-Funday-IQ-Yahoo/0.4",
+        "User-Agent": "Sunday-Funday-IQ-Yahoo/0.4.1",
     })
     try:
         with urlopen(req, timeout=30) as response:
@@ -100,7 +101,7 @@ def load_tokens(optional: bool = False) -> dict | None:
 
 def authorize() -> None:
     client_id, _ = require_credentials()
-    redirect_uri = env("YAHOO_REDIRECT_URI", "oob")
+    redirect_uri = env("YAHOO_REDIRECT_URI", DEFAULT_REDIRECT_URI)
     state = base64.urlsafe_b64encode(os.urandom(18)).decode().rstrip("=")
     auth_url = AUTH_URL + "?" + urlencode({
         "client_id": client_id,
@@ -113,11 +114,21 @@ def authorize() -> None:
     print("If the browser does not open, paste this URL into the browser on this trusted machine:\n")
     print(auth_url)
     webbrowser.open(auth_url)
-    if redirect_uri != "oob":
-        print("\nYahoo will redirect to the configured callback. This collector currently expects the authorization code to be supplied once on the trusted machine.")
-    code = input("\nAfter Yahoo says access is approved, paste ONLY the one-time authorization code here: ").strip()
+    print("\nAfter approval, Yahoo will redirect to the Sunday Funday IQ callback page.")
+    redirected = input("Paste the FULL redirected URL from the browser here: ").strip()
+    if not redirected:
+        raise SystemExit("No redirected URL supplied.")
+    parsed = urlparse(redirected)
+    params = parse_qs(parsed.query)
+    code = (params.get("code") or [""])[0]
+    returned_state = (params.get("state") or [""])[0]
+    error = (params.get("error") or [""])[0]
+    if error:
+        raise SystemExit(f"Yahoo authorization returned an error: {error}")
     if not code:
-        raise SystemExit("No authorization code supplied.")
+        raise SystemExit("The redirected URL did not contain an authorization code.")
+    if returned_state != state:
+        raise SystemExit("OAuth state mismatch. Refusing to exchange the authorization code.")
     tokens = post_token({"grant_type": "authorization_code", "redirect_uri": redirect_uri, "code": code})
     save_tokens(tokens)
     print(f"Yahoo authorization saved privately to {TOKEN_PATH}. This file is not part of the repository.")
@@ -130,7 +141,7 @@ def access_token() -> str:
     refresh = tokens.get("refresh_token")
     if not refresh:
         raise SystemExit("Yahoo refresh token is missing. Run --authorize again.")
-    redirect_uri = env("YAHOO_REDIRECT_URI", "oob")
+    redirect_uri = env("YAHOO_REDIRECT_URI", DEFAULT_REDIRECT_URI)
     new_tokens = post_token({"grant_type": "refresh_token", "redirect_uri": redirect_uri, "refresh_token": refresh})
     save_tokens(new_tokens)
     return new_tokens["access_token"]
@@ -141,7 +152,7 @@ def api_xml(path: str) -> ET.Element:
     req = Request(f"{API_BASE}/{path}", headers={
         "Authorization": f"Bearer {token}",
         "Accept": "application/xml",
-        "User-Agent": "Sunday-Funday-IQ-Yahoo/0.4",
+        "User-Agent": "Sunday-Funday-IQ-Yahoo/0.4.1",
     })
     try:
         with urlopen(req, timeout=30) as response:
