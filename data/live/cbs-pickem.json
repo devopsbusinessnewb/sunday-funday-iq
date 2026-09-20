@@ -1,167 +1,55 @@
 {
   "product": "CBS Pick'em IQ Bridge",
-  "version": "0.4.0-screenshot",
-  "exportedAt": "2026-09-17T23:59:00Z",
-  "privacy": "Reconstructed from user-provided CBS Picks screenshots. No credentials, cookies, or authorization data.",
-  "source": "CBS mobile Picks and Weekly Standings screenshots supplied by Tony Eickhoff",
-  "tiebreaker": 41,
-  "graphqlSummary": [],
+  "version": "0.3.0",
+  "exportedAt": "2026-09-20T13:44:49.809Z",
+  "privacy": "No passwords, cookies, request headers, Authorization headers, or CSRF headers are intentionally captured.",
+  "graphqlSummary": [
+    {
+      "operationName": "CurrentPoolCBSMessage",
+      "variables": "{\"poolId\":\"kbxw63b2ge3dkobxguyds===\"}",
+      "status": 200,
+      "ts": "2026-09-20T13:44:34.824Z",
+      "bodyBytes": 116
+    }
+  ],
   "captures": [
     {
-      "operationName": "UserScreenshotCard",
+      "body": "{\"data\":{\"commonPool\":{\"id\":\"kbxw63b2ge3dkobxguyds===\",\"cbsMessage\":null,\"__typename\":\"FootballPickemManagerPool\"}}}",
+      "contentType": "application/json; charset=utf-8",
+      "durationMs": 355,
+      "method": "GET",
+      "operationName": "CurrentPoolCBSMessage",
       "status": 200,
-      "ts": "2026-09-17T22:57:00Z",
-      "contentType": "application/json",
-      "body": "{\"myEntry\":{\"isMine\":true,\"tiebreaker\":41,\"picks\":[{\"away\":\"CIN\",\"home\":\"HOU\",\"pick\":\"CIN\",\"confidence\":16},{\"away\":\"PIT\",\"home\":\"NE\",\"pick\":\"PIT\",\"confidence\":15},{\"away\":\"CLE\",\"home\":\"TB\",\"pick\":\"TB\",\"confidence\":14},{\"away\":\"CAR\",\"home\":\"ATL\",\"pick\":\"CAR\",\"confidence\":13},{\"away\":\"NO\",\"home\":\"BAL\",\"pick\":\"BAL\",\"confidence\":12},{\"away\":\"MIN\",\"home\":\"CHI\",\"pick\":\"MIN\",\"confidence\":11},{\"away\":\"GB\",\"home\":\"NYJ\",\"pick\":\"NYJ\",\"confidence\":10},{\"away\":\"PHI\",\"home\":\"TEN\",\"pick\":\"PHI\",\"confidence\":9},{\"away\":\"JAX\",\"home\":\"DEN\",\"pick\":\"JAX\",\"confidence\":8},{\"away\":\"LV\",\"home\":\"LAC\",\"pick\":\"LV\",\"confidence\":7},{\"away\":\"WAS\",\"home\":\"DAL\",\"pick\":\"DAL\",\"confidence\":6},{\"away\":\"SEA\",\"home\":\"ARI\",\"pick\":\"SEA\",\"confidence\":5},{\"away\":\"MIA\",\"home\":\"SF\",\"pick\":\"SF\",\"confidence\":4},{\"away\":\"IND\",\"home\":\"KC\",\"pick\":\"KC\",\"confidence\":3},{\"away\":\"DET\",\"home\":\"BUF\",\"pick\":\"DET\",\"confidence\":2},{\"away\":\"NYG\",\"home\":\"LAR\",\"pick\":\"NYG\",\"confidence\":1}]}}"
+      "transport": "fetch",
+      "ts": "2026-09-20T13:44:34.824Z",
+      "url": "https://picks.cbssports.com/graphql?operationName=CurrentPoolCBSMessage&variables=%7B%22poolId%22%3A%22kbxw63b2ge3dkobxguyds%3D%3D%3D%22%7D&extensions=%7B%22clientLibrary%22%3A%7B%22name%22%3A%22%40apollo%2Fclient%22%2C%22version%22%3A%224.2.12%22%7D%2C%22persistedQuery%22%3A%7B%22version%22%3A1%2C%22sha256Hash%22%3A%22b97345949d6306cd27b139b961bcc7f27ba98c09d26b75321bc13d192a30b3ce%22%7D%7D",
+      "variables": "{\"poolId\":\"kbxw63b2ge3dkobxguyds===\"}"
     }
   ],
   "snapshots": [
     {
+      "text": "News\n\nOdds\n\nAdvice\n\nPower Rankings\n\nNFL Football Tourney 2026\n\nTony Eickhoff\nTony Eickhoff\nNFL Football Tourney 2026\nLobby\nMy Pools\nPicks\nStandings\nFinances\nInvite Friends\nPlayers\nMessage Board\nSettings\nHelp\nRules\nAutofill\nClear Picks\nWeek 2\n\nAWAY\n\n16/16 Picks\n0 Correct Picks\n\nHOME\n\nSun @ 5:00 PM\nMatchup Analysis\n\nCINCINNATI\n\n1-0\nBENGALS\n38%\n16 Pts\n0-1\nTEXANS\n62%\nSun @ 5:00 PM\nMatchup Analysis\n\nPITTSBURGH\n\n1-0\nSTEELERS\n24%\n15 Pts\n0-1\nPATRIOTS\n76%\nSun @ 5:00 PM\nMatchup Analysis\n0-1\nBROWNS\n3%\n14 Pts\n\nTAMPA BAY\n\n0-1\nBUCCANEERS\n97%\nSun @ 5:00 PM\n•\nFOX\nMatchup Analysis\n\nCAROLINA\n\n0-1\nPANTHERS\n77%\n13 Pts\n0-1\nFALCONS\n23%\nSun @ 5:00 PM\nMatchup Analysis\n0-1\nSAINTS\n3%\n12 Pts\n\nBALTIMORE\n\n1-0\nRAVENS\n97%\nSun @ 5:00 PM\n•\nFOX\nMatchup Analysis\n\nMINNESOTA\n\n1-0\nVIKINGS\n11%\n11 Pts\n1-0\nBEARS\n89%\nSun @ 5:00 PM\n•\nFOX\nMatchup Analysis\n0-1\nPACKERS\n84%\n10 Pts\n\nNEW YORK\n\n1-0\nJETS\n16%\nSun @ 5:00 PM\n•\nFOX\nMatchup Analysis\n\nPHILADELPHIA\n\n1-0\nEAGLES\n99%\n9 Pts\n0-1\nTITANS\n1%\nSun @ 8:05 PM\nMatchup Analysis\n\nJACKSONVILLE\n\n1-0\nJAGUARS\n47%\n8 Pts\n0-1\nBRONCOS\n53%\nSun @ 8:05 PM\nMatchup Analysis\n\nLAS VEGAS\n\n1-0\nRAIDERS\n18%\n7 Pts\n0-1\nCHARGERS\n82%\nSun @ 8:25 PM\n•\nFOX\nMatchup Analysis\n0-1\nCOMMANDERS\n19%\n6 Pts\n\nDALLAS\n\n0-1\nCOWBOYS\n81%\nSun @ 8:25 PM\n•\nFOX\nMatchup Analysis\n\nSEATTLE\n\n1-0\nSEAHAWKS\n88%\n5 Pts\n1-0\nCARDINALS\n12%\nSun @ 8:25 PM\n•\nFOX\nMatchup Analysis\n0-1\nDOLPHINS\n2%\n4 Pts\n\nSAN FRANCISCO\n\n1-0\n49ERS\n98%\nMon @ 12:20 AM\n•\nNBC\nMatchup Analysis\n0-1\nCOLTS\n3%\n3 Pts\n\nKANSAS CITY\n\n1-0\nCHIEFS\n97%\n31\nFinal\n41\n\nDETROIT\n\n1-1\nLIONS\n10%\n2 Pts\n2-0\nBILLS\n90%\nTue @ 12:15 AM\n•\nABC\nMatchup Analysis\n\nNEW YORK\n\n1-0\nGIANTS\n20%\n1 Pt\n0-1\nRAMS\n80%\nTue 12:15 AM\nNYG\nLAR\n\nTiebreaker\n\nHow many total points will be scored?\n​\nSave\nSportsLine Picks\nMore\nPick'em Games\nFantasy Sports\nFree Sports TV\nBest Betting Apps\nBest Prediction Apps\nMarch Madness\nMobile Apps\nCompany\nAbout Us\nCareers\nAbout Paramount\nParamount+\nCBS TV\nRegulation\nTerms Of Use\nPrivacy Policy\nMinors' Privacy Policy\nYour Privacy Choices\nClosed Captioning\nCalifornia Notice\nContact Us\nHelp\nCustomer Care\nSocial Media\nYouTube\nTikTok\nInstagram\nFacebook\nX\nThreads\nFlipboard\nAccount\nManage My Account\nNewsletters\nMy Teams\nForgot Password\n\n© 2026 CBS Interactive Inc. All rights reserved.\n\nThe content on this site is for entertainment purposes only and CBS Sports makes no representation or warranty as to the accuracy of the information given or the outcome of any game or event. Odds and lines subject to change. There is no gambling offered on this site. This site contains commercial content and CBS Sports may be compensated for the links provided on this site.\n\nImages by Getty Images and Imagn",
       "title": "NFL Football Tourney 2026 | Picks",
-      "url": "screenshot://cbs/week-2/picks",
-      "ts": "2026-09-17T22:57:00Z",
-      "text": "NFL Football Tourney 2026\nTony Eickhoff\nPicks\nWeek 2\n16/16 Picks\nTiebreaker Saved\n1-0\nCIN\n37%\n16 Pts\n0-1\nHOU\n63%\n1-0\nPIT\n25%\n15 Pts\n0-1\nNE\n75%\n0-1\nCLE\n3%\n14 Pts\n0-1\nTB\n97%\n0-1\nCAR\n77%\n13 Pts\n0-1\nATL\n23%\n0-1\nNO\n3%\n12 Pts\n1-0\nBAL\n97%\n1-0\nMIN\n11%\n11 Pts\n1-0\nCHI\n89%\n0-1\nGB\n85%\n10 Pts\n1-0\nNYJ\n15%\n1-0\nPHI\n99%\n9 Pts\n0-1\nTEN\n1%\n1-0\nJAX\n46%\n8 Pts\n0-1\nDEN\n54%\n1-0\nLV\n19%\n7 Pts\n0-1\nLAC\n81%\n0-1\nWAS\n19%\n6 Pts\n0-1\nDAL\n81%\n1-0\nSEA\n89%\n5 Pts\n1-0\nARI\n11%\n0-1\nMIA\n2%\n4 Pts\n1-0\nSF\n98%\n0-1\nIND\n3%\n3 Pts\n1-0\nKC\n97%\n1-0\nDET\n9%\n2 Pts\n1-0\nBUF\n91%\n1-0\nNYG\n20%\n1 Pt\n0-1\nLAR\n80%\nTiebreaker\nHow many total points will be scored?\n41"
+      "ts": "2026-09-20T13:44:23.547Z",
+      "url": "https://picks.cbssports.com/football/pickem/pools/kbxw63b2ge3dkobxguyds==="
+    },
+    {
+      "text": "News\n\nOdds\n\nAdvice\n\nPower Rankings\n\nNFL Football Tourney 2026\n\nTony Eickhoff\nTony Eickhoff\nNFL Football Tourney 2026\nLobby\nMy Pools\nPicks\nStandings\nFinances\nInvite Friends\nPlayers\nMessage Board\nSettings\nHelp\nRules\nAutofill\nClear Picks\nWeek 2\n\nAWAY\n\n16/16 Picks\n0 Correct Picks\n\nHOME\n\nSun @ 12:00 PM\nMatchup Analysis\n\nCINCINNATI\n\n1-0\nBENGALS\n38%\n16 Pts\n0-1\nTEXANS\n62%\nSun @ 12:00 PM\nMatchup Analysis\n\nPITTSBURGH\n\n1-0\nSTEELERS\n24%\n15 Pts\n0-1\nPATRIOTS\n76%\nSun @ 12:00 PM\nMatchup Analysis\n0-1\nBROWNS\n3%\n14 Pts\n\nTAMPA BAY\n\n0-1\nBUCCANEERS\n97%\nSun @ 12:00 PM\n•\nFOX\nMatchup Analysis\n\nCAROLINA\n\n0-1\nPANTHERS\n77%\n13 Pts\n0-1\nFALCONS\n23%\nSun @ 12:00 PM\nMatchup Analysis\n0-1\nSAINTS\n3%\n12 Pts\n\nBALTIMORE\n\n1-0\nRAVENS\n97%\nSun @ 12:00 PM\n•\nFOX\nMatchup Analysis\n\nMINNESOTA\n\n1-0\nVIKINGS\n11%\n11 Pts\n1-0\nBEARS\n89%\nSun @ 12:00 PM\n•\nFOX\nMatchup Analysis\n0-1\nPACKERS\n84%\n10 Pts\n\nNEW YORK\n\n1-0\nJETS\n16%\nSun @ 12:00 PM\n•\nFOX\nMatchup Analysis\n\nPHILADELPHIA\n\n1-0\nEAGLES\n99%\n9 Pts\n0-1\nTITANS\n1%\nSun @ 3:05 PM\nMatchup Analysis\n\nJACKSONVILLE\n\n1-0\nJAGUARS\n47%\n8 Pts\n0-1\nBRONCOS\n53%\nSun @ 3:05 PM\nMatchup Analysis\n\nLAS VEGAS\n\n1-0\nRAIDERS\n18%\n7 Pts\n0-1\nCHARGERS\n82%\nSun @ 3:25 PM\n•\nFOX\nMatchup Analysis\n0-1\nCOMMANDERS\n19%\n6 Pts\n\nDALLAS\n\n0-1\nCOWBOYS\n81%\nSun @ 3:25 PM\n•\nFOX\nMatchup Analysis\n\nSEATTLE\n\n1-0\nSEAHAWKS\n88%\n5 Pts\n1-0\nCARDINALS\n12%\nSun @ 3:25 PM\n•\nFOX\nMatchup Analysis\n0-1\nDOLPHINS\n2%\n4 Pts\n\nSAN FRANCISCO\n\n1-0\n49ERS\n98%\nSun @ 7:20 PM\n•\nNBC\nMatchup Analysis\n0-1\nCOLTS\n3%\n3 Pts\n\nKANSAS CITY\n\n1-0\nCHIEFS\n97%\n31\nFinal\n41\n\nDETROIT\n\n1-1\nLIONS\n10%\n2 Pts\n2-0\nBILLS\n90%\nMon @ 7:15 PM\n•\nABC\nMatchup Analysis\n\nNEW YORK\n\n1-0\nGIANTS\n20%\n1 Pt\n0-1\nRAMS\n80%\nMon 7:15 PM\nNYG\nLAR\n\nTiebreaker\n\nHow many total points will be scored?\n​\nSave\nMore\nPick'em Games\nFantasy Sports\nFree Sports TV\nBest Betting Apps\nBest Prediction Apps\nMarch Madness\nMobile Apps\nCompany\nAbout Us\nCareers\nAbout Paramount\nParamount+\nCBS TV\nRegulation\nTerms Of Use\nPrivacy Policy\nMinors' Privacy Policy\nYour Privacy Choices\nClosed Captioning\nCalifornia Notice\nContact Us\nHelp\nCustomer Care\nSocial Media\nYouTube\nTikTok\nInstagram\nFacebook\nX\nThreads\nFlipboard\nAccount\nManage My Account\nNewsletters\nMy Teams\nForgot Password\n\n© 2026 CBS Interactive Inc. All rights reserved.\n\nThe content on this site is for entertainment purposes only and CBS Sports makes no representation or warranty as to the accuracy of the information given or the outcome of any game or event. Odds and lines subject to change. There is no gambling offered on this site. This site contains commercial content and CBS Sports may be compensated for the links provided on this site.\n\nImages by Getty Images and Imagn",
+      "title": "NFL Football Tourney 2026 | Picks",
+      "ts": "2026-09-20T13:44:32.663Z",
+      "url": "https://picks.cbssports.com/football/pickem/pools/kbxw63b2ge3dkobxguyds==="
+    },
+    {
+      "text": "News\n\nOdds\n\nAdvice\n\nPower Rankings\n\nNFL Football Tourney 2026\n\nTony Eickhoff\nTony Eickhoff\nNFL Football Tourney 2026\nLobby\nMy Pools\nPicks\nStandings\nFinances\nInvite Friends\nPlayers\nMessage Board\nSettings\nHelp\nRules\nWeekly\nOverall\nWeek 2\n\nPLAYERS\n\n\t\n\nPTS\n\n\t\n\nYTD\n\n\t\nFINAL\nDET\nBUF\n31\n41\n\t\nSUN 12:00 PM\nCIN\nHOU\n\t\nSUN 12:00 PM\nPIT\nNE\n\t\nSUN 12:00 PM\nCLE\nTB\n\t\nSUN 12:00 PM\nCAR\nATL\n\t\nSUN 12:00 PM\nNO\nBAL\n\t\nSUN 12:00 PM\nMIN\nCHI\n\t\nSUN 12:00 PM\nGB\nNYJ\n\t\nSUN 12:00 PM\nPHI\nTEN\n\t\nSUN 3:05 PM\nJAC\nDEN\n\t\nSUN 3:05 PM\nLV\nLAC\n\t\nSUN 3:25 PM\nWAS\nDAL\n\t\nSUN 3:25 PM\nSEA\nARI\n\t\nSUN 3:25 PM\nMIA\nSF\n\t\nSUN 7:20 PM\nIND\nKC\n\t\nMON 7:15 PM\nNYG\nLAR\n\t\nTIE\nNYG-LAR\n-\n\n\n1st\nPablo Fitting\n\t16\t129\t\nBUF\n(16)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n1st\nHeath Kastner\n\t16\t125\t\nBUF\n(16)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n1st\nZeke Aviles\n\t16\t123\t\nBUF\n(16)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n-\n\n\n1st\nKen Barr\n\t16\t119\t\nBUF\n(16)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n1st\nJonathan Alley\n\t16\t115\t\nBUF\n(16)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n1st\nAndrew Rose\n\t16\t112\t\nBUF\n(16)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n1st\nScott Sandy\n\t16\t106\t\nBUF\n(16)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n1st\nIan Stonerock\n\t16\t103\t\nBUF\n(16)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n1st\nYvette Carmona\n\t16\t97\t\nBUF\n(16)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n1st\nJason Surya\n\t16\t96\t\nBUF\n(16)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n1st\nMike Cardello\n\t16\t94\t\nBUF\n(16)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n1st\nOzzy Aviles\n\t16\t88\t\nBUF\n(16)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n-\n\n\n13th\nAdam Jolly\n\t15\t129\t\nBUF\n(15)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n13th\nDave Wakeman\n\t15\t119\t\nBUF\n(15)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n15th\nMario Mejia\n\t14\t139\t\nBUF\n(14)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n15th\nGeraldo Padilla\n\t14\t116\t\nBUF\n(14)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n15th\nG Pomes\n\t14\t111\t\nBUF\n(14)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n18th\nDave Burns\n\t13\t120\t\nBUF\n(13)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n18th\nDerek DeBoer\n\t13\t115\t\nBUF\n(13)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n18th\nStewart Schrader\n\t13\t111\t\nBUF\n(13)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n18th\nDave Borghi\n\t13\t105\t\nBUF\n(13)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n18th\nJon Walmsley\n\t13\t103\t\nBUF\n(13)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n18th\nDakota Endres SaYJUj\n\t13\t99\t\nBUF\n(13)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n24th\nSujay Koneru\n\t12\t121\t\nBUF\n(12)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n24th\nChris Rico\n\t12\t102\t\nBUF\n(12)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n24th\nPaul Craddock\n\t12\t101\t\nBUF\n(12)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n-\n\n\n24th\nDavid Yakaitis\n\t12\t96\t\nBUF\n(12)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n28th\nwayne graveline\n\t11\t120\t\nBUF\n(11)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n28th\nJack Patel\n\t11\t116\t\nBUF\n(11)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n28th\nJoshua Ayoub\n\t11\t111\t\nBUF\n(11)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n28th\nCandace Bandel\n\t11\t109\t\nBUF\n(11)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n28th\nDave Patel\n\t11\t102\t\nBUF\n(11)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n28th\nMatt Winter\n\t11\t101\t\nBUF\n(11)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n28th\nTodd Winter\n\t11\t99\t\nBUF\n(11)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n35th\nDustin Ferreiro\n\t10\t121\t\nBUF\n(10)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n35th\nAmber Turley\n\t10\t116\t\nBUF\n(10)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n35th\nSteve Hidalgo\n\t10\t115\t\nBUF\n(10)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n35th\nroberto santos\n\t10\t111\t\nBUF\n(10)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n35th\nChristopher Cady\n\t10\t110\t\nBUF\n(10)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n35th\nNathaniel Bandel\n\t10\t109\t\nBUF\n(10)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n35th\nAdam Deskins\n\t10\t102\t\nBUF\n(10)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n35th\nCraig Liguori\n\t10\t101\t\nBUF\n(10)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n35th\nAndrew Thompson\n\t10\t93\t\nBUF\n(10)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n35th\nSteve O'Brien\n\t10\t91\t\nBUF\n(10)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n45th\nJeff Stoltey\n\t9\t118\t\nBUF\n(9)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n45th\nJonah Snyder\n\t9\t116\t\nBUF\n(9)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n45th\nMarty young\n\t9\t112\t\nBUF\n(9)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n45th\nAlbert Garcia\n\t9\t110\t\nBUF\n(9)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n45th\nDrew Carroll\n\t9\t110\t\nBUF\n(9)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n45th\nMelissa Bandel\n\t9\t110\t\nBUF\n(9)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n45th\nMarek Turley\n\t9\t107\t\nBUF\n(9)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n45th\nMatthew Little\n\t9\t101\t\nBUF\n(9)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n-\n\n\n45th\nGregory VanDyke\n\t9\t100\t\nBUF\n(9)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n54th\nTim Ayoub\n\t8\t105\t\nBUF\n(8)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n54th\nTyler Stone\n\t8\t104\t\nBUF\n(8)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n54th\nGarret Ring\n\t8\t102\t\nBUF\n(8)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n54th\nzach walden\n\t8\t81\t\nBUF\n(8)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n-\n\n\n58th\nAaron Plaza\n\t7\t118\t\nBUF\n(7)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n58th\nJon Briones\n\t7\t105\t\nBUF\n(7)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n58th\nBen McCrummen\n\t7\t94\t\nBUF\n(7)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n-\n\n\n61st\nDavid Poster\n\t6\t111\t\nBUF\n(6)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n61st\nJeffrey Glynn\n\t6\t104\t\nBUF\n(6)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n61st\nJosh Berkowitz\n\t6\t103\t\nBUF\n(6)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n61st\nMichael Raidt\n\t6\t97\t\nBUF\n(6)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n61st\nMichael Walmsley\n\t6\t96\t\nBUF\n(6)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n61st\nBilly OBrien\n\t6\t91\t\nBUF\n(6)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n-\n\n\n67th\nJames Hook\n\t5\t115\t\nBUF\n(5)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n67th\nMike Turley\n\t5\t114\t\nBUF\n(5)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n67th\nWill Barr\n\t5\t106\t\nBUF\n(5)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n67th\nCyle Curtis\n\t5\t58\t\nBUF\n(5)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n71st\nTim Bandel\n\t4\t109\t\nBUF\n(4)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n72nd\nTravis Poulos\n\t3\t106\t\nBUF\n(3)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n72nd\nDerek Zivin YFGYNI\n\t3\t101\t\nBUF\n(3)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n72nd\nJustin Maycher\n\t3\t93\t\nBUF\n(3)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n72nd\nDan Westuba\n\t3\t88\t\nBUF\n(3)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n72nd\nAdam Cormier\n\t3\t87\t\nBUF\n(3)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n72nd\nAlexa Bennett\n\t3\t79\t\nBUF\n(3)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n78th\nMark Bourbeau\n\t2\t72\t\nBUF\n(2)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n79th\nbryan thorne\n\t1\t98\t\nBUF\n(1)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n79th\nJ. Glynn\n\t1\t89\t\nBUF\n(1)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n79th\nGoodman\n\t1\t88\t\nBUF\n(1)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n79th\nSteven Mortimer\n\t1\t85\t\nBUF\n(1)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n83rd\nTony Eickhoff\n\t0\t108\t\nDET\n(2)\n\t\nCIN\n(16)\n\t\nPIT\n(15)\n\t\nTB\n(14)\n\t\nCAR\n(13)\n\t\nBAL\n(12)\n\t\nMIN\n(11)\n\t\nNYJ\n(10)\n\t\nPHI\n(9)\n\t\nJAC\n(8)\n\t\nLV\n(7)\n\t\nDAL\n(6)\n\t\nSEA\n(5)\n\t\nSF\n(4)\n\t\nKC\n(3)\n\t\nNYG\n(1)\n\t\n41\n\n\n83rd\nZac Jervis\n\t0\t104\t\n-\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n-\n\n\n83rd\nBen Rose\n\t0\t103\t\n-\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n83rd\nmike gandy\n\t0\t102\t\n-\n(16)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n83rd\nGabriel Garcia\n\t0\t101\t\n-\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n83rd\nScot Fiskars\n\t0\t97\t\nDET\n(1)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n83rd\nPatrick Clark\n\t0\t91\t\n-\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n83rd\nDerek Zivin\n\t0\t89\t\nDET\n(11)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n83rd\nMitchell Fleming\n\t0\t88\t\n-\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n-\n\n\n83rd\nRick Paauwe\n\t0\t88\t\nDET\n(1)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n83rd\nCynthia Greenwood\n\t0\t86\t\nDET\n(3)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n83rd\nSean Ferreiro\n\t0\t76\t\nDET\n(4)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\nMore\nPick'em Games\nFantasy Sports\nFree Sports TV\nBest Betting Apps\nBest Prediction Apps\nMarch Madness\nMobile Apps\nCompany\nAbout Us\nCareers\nAbout Paramount\nParamount+\nCBS TV\nRegulation\nTerms Of Use\nPrivacy Policy\nMinors' Privacy Policy\nYour Privacy Choices\nClosed Captioning\nCalifornia Notice\nContact Us\nHelp\nCustomer Care\nSocial Media\nYouTube\nTikTok\nInstagram\nFacebook\nX\nThreads\nFlipboard\nAccount\nManage My Account\nNewsletters\nMy Teams\nForgot Password\n\n© 2026 CBS Interactive Inc. All rights reserved.\n\nThe content on this site is for entertainment purposes only and CBS Sports makes no representation or warranty as to the accuracy of the information given or the outcome of any game or event. Odds and lines subject to change. There is no gambling offered on this site. This site contains commercial content and CBS Sports may be compensated for the links provided on this site.\n\nImages by Getty Images and Imagn",
+      "title": "NFL Football Tourney 2026 | Weekly Standings",
+      "ts": "2026-09-20T13:44:36.020Z",
+      "url": "https://picks.cbssports.com/football/pickem/pools/kbxw63b2ge3dkobxguyds===/standings/weekly"
+    },
+    {
+      "text": "News\n\nOdds\n\nAdvice\n\nPower Rankings\n\nNFL Football Tourney 2026\n\nTony Eickhoff\nTony Eickhoff\nNFL Football Tourney 2026\nLobby\nMy Pools\nPicks\nStandings\nFinances\nInvite Friends\nPlayers\nMessage Board\nSettings\nHelp\nRules\nWeekly\nOverall\nWeek 2\n\nPLAYERS\n\n\t\n\nPTS\n\n\t\n\nYTD\n\n\t\nFINAL\nDET\nBUF\n31\n41\n\t\nSUN 12:00 PM\nCIN\nHOU\n\t\nSUN 12:00 PM\nPIT\nNE\n\t\nSUN 12:00 PM\nCLE\nTB\n\t\nSUN 12:00 PM\nCAR\nATL\n\t\nSUN 12:00 PM\nNO\nBAL\n\t\nSUN 12:00 PM\nMIN\nCHI\n\t\nSUN 12:00 PM\nGB\nNYJ\n\t\nSUN 12:00 PM\nPHI\nTEN\n\t\nSUN 3:05 PM\nJAC\nDEN\n\t\nSUN 3:05 PM\nLV\nLAC\n\t\nSUN 3:25 PM\nWAS\nDAL\n\t\nSUN 3:25 PM\nSEA\nARI\n\t\nSUN 3:25 PM\nMIA\nSF\n\t\nSUN 7:20 PM\nIND\nKC\n\t\nMON 7:15 PM\nNYG\nLAR\n\t\nTIE\nNYG-LAR\n-\n\n\n1st\nPablo Fitting\n\t16\t129\t\nBUF\n(16)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n1st\nHeath Kastner\n\t16\t125\t\nBUF\n(16)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n1st\nZeke Aviles\n\t16\t123\t\nBUF\n(16)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n-\n\n\n1st\nKen Barr\n\t16\t119\t\nBUF\n(16)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n1st\nJonathan Alley\n\t16\t115\t\nBUF\n(16)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n1st\nAndrew Rose\n\t16\t112\t\nBUF\n(16)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n1st\nScott Sandy\n\t16\t106\t\nBUF\n(16)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n1st\nIan Stonerock\n\t16\t103\t\nBUF\n(16)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n1st\nYvette Carmona\n\t16\t97\t\nBUF\n(16)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n1st\nJason Surya\n\t16\t96\t\nBUF\n(16)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n1st\nMike Cardello\n\t16\t94\t\nBUF\n(16)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n1st\nOzzy Aviles\n\t16\t88\t\nBUF\n(16)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n-\n\n\n13th\nAdam Jolly\n\t15\t129\t\nBUF\n(15)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n13th\nDave Wakeman\n\t15\t119\t\nBUF\n(15)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n15th\nMario Mejia\n\t14\t139\t\nBUF\n(14)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n15th\nGeraldo Padilla\n\t14\t116\t\nBUF\n(14)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n15th\nG Pomes\n\t14\t111\t\nBUF\n(14)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n18th\nDave Burns\n\t13\t120\t\nBUF\n(13)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n18th\nDerek DeBoer\n\t13\t115\t\nBUF\n(13)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n18th\nStewart Schrader\n\t13\t111\t\nBUF\n(13)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n18th\nDave Borghi\n\t13\t105\t\nBUF\n(13)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n18th\nJon Walmsley\n\t13\t103\t\nBUF\n(13)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n18th\nDakota Endres SaYJUj\n\t13\t99\t\nBUF\n(13)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n24th\nSujay Koneru\n\t12\t121\t\nBUF\n(12)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n24th\nChris Rico\n\t12\t102\t\nBUF\n(12)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n24th\nPaul Craddock\n\t12\t101\t\nBUF\n(12)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n-\n\n\n24th\nDavid Yakaitis\n\t12\t96\t\nBUF\n(12)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n28th\nwayne graveline\n\t11\t120\t\nBUF\n(11)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n28th\nJack Patel\n\t11\t116\t\nBUF\n(11)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n28th\nJoshua Ayoub\n\t11\t111\t\nBUF\n(11)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n28th\nCandace Bandel\n\t11\t109\t\nBUF\n(11)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n28th\nDave Patel\n\t11\t102\t\nBUF\n(11)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n28th\nMatt Winter\n\t11\t101\t\nBUF\n(11)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n28th\nTodd Winter\n\t11\t99\t\nBUF\n(11)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n35th\nDustin Ferreiro\n\t10\t121\t\nBUF\n(10)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n35th\nAmber Turley\n\t10\t116\t\nBUF\n(10)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n35th\nSteve Hidalgo\n\t10\t115\t\nBUF\n(10)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n35th\nroberto santos\n\t10\t111\t\nBUF\n(10)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n35th\nChristopher Cady\n\t10\t110\t\nBUF\n(10)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n35th\nNathaniel Bandel\n\t10\t109\t\nBUF\n(10)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n35th\nAdam Deskins\n\t10\t102\t\nBUF\n(10)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n35th\nCraig Liguori\n\t10\t101\t\nBUF\n(10)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n35th\nAndrew Thompson\n\t10\t93\t\nBUF\n(10)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n35th\nSteve O'Brien\n\t10\t91\t\nBUF\n(10)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n45th\nJeff Stoltey\n\t9\t118\t\nBUF\n(9)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n45th\nJonah Snyder\n\t9\t116\t\nBUF\n(9)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n45th\nMarty young\n\t9\t112\t\nBUF\n(9)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n45th\nAlbert Garcia\n\t9\t110\t\nBUF\n(9)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n45th\nDrew Carroll\n\t9\t110\t\nBUF\n(9)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n45th\nMelissa Bandel\n\t9\t110\t\nBUF\n(9)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n45th\nMarek Turley\n\t9\t107\t\nBUF\n(9)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n45th\nMatthew Little\n\t9\t101\t\nBUF\n(9)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n-\n\n\n45th\nGregory VanDyke\n\t9\t100\t\nBUF\n(9)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n54th\nTim Ayoub\n\t8\t105\t\nBUF\n(8)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n54th\nTyler Stone\n\t8\t104\t\nBUF\n(8)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n54th\nGarret Ring\n\t8\t102\t\nBUF\n(8)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n54th\nzach walden\n\t8\t81\t\nBUF\n(8)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n-\n\n\n58th\nAaron Plaza\n\t7\t118\t\nBUF\n(7)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n58th\nJon Briones\n\t7\t105\t\nBUF\n(7)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n58th\nBen McCrummen\n\t7\t94\t\nBUF\n(7)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n-\n\n\n61st\nDavid Poster\n\t6\t111\t\nBUF\n(6)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n61st\nJeffrey Glynn\n\t6\t104\t\nBUF\n(6)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n61st\nJosh Berkowitz\n\t6\t103\t\nBUF\n(6)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n61st\nMichael Raidt\n\t6\t97\t\nBUF\n(6)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n61st\nMichael Walmsley\n\t6\t96\t\nBUF\n(6)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n61st\nBilly OBrien\n\t6\t91\t\nBUF\n(6)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n-\n\n\n67th\nJames Hook\n\t5\t115\t\nBUF\n(5)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n67th\nMike Turley\n\t5\t114\t\nBUF\n(5)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n67th\nWill Barr\n\t5\t106\t\nBUF\n(5)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n67th\nCyle Curtis\n\t5\t58\t\nBUF\n(5)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n71st\nTim Bandel\n\t4\t109\t\nBUF\n(4)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n72nd\nTravis Poulos\n\t3\t106\t\nBUF\n(3)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n72nd\nDerek Zivin YFGYNI\n\t3\t101\t\nBUF\n(3)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n72nd\nJustin Maycher\n\t3\t93\t\nBUF\n(3)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n72nd\nDan Westuba\n\t3\t88\t\nBUF\n(3)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n72nd\nAdam Cormier\n\t3\t87\t\nBUF\n(3)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n72nd\nAlexa Bennett\n\t3\t79\t\nBUF\n(3)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n78th\nMark Bourbeau\n\t2\t72\t\nBUF\n(2)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n79th\nbryan thorne\n\t1\t98\t\nBUF\n(1)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n79th\nJ. Glynn\n\t1\t89\t\nBUF\n(1)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n79th\nGoodman\n\t1\t88\t\nBUF\n(1)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n79th\nSteven Mortimer\n\t1\t85\t\nBUF\n(1)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n83rd\nTony Eickhoff\n\t0\t108\t\nDET\n(2)\n\t\nCIN\n(16)\n\t\nPIT\n(15)\n\t\nTB\n(14)\n\t\nCAR\n(13)\n\t\nBAL\n(12)\n\t\nMIN\n(11)\n\t\nNYJ\n(10)\n\t\nPHI\n(9)\n\t\nJAC\n(8)\n\t\nLV\n(7)\n\t\nDAL\n(6)\n\t\nSEA\n(5)\n\t\nSF\n(4)\n\t\nKC\n(3)\n\t\nNYG\n(1)\n\t\n41\n\n\n83rd\nZac Jervis\n\t0\t104\t\n-\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n-\n\n\n83rd\nBen Rose\n\t0\t103\t\n-\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n83rd\nmike gandy\n\t0\t102\t\n-\n(16)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n83rd\nGabriel Garcia\n\t0\t101\t\n-\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n83rd\nScot Fiskars\n\t0\t97\t\nDET\n(1)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n83rd\nPatrick Clark\n\t0\t91\t\n-\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n83rd\nDerek Zivin\n\t0\t89\t\nDET\n(11)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n83rd\nMitchell Fleming\n\t0\t88\t\n-\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n-\n\n\n83rd\nRick Paauwe\n\t0\t88\t\nDET\n(1)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n83rd\nCynthia Greenwood\n\t0\t86\t\nDET\n(3)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\n\n83rd\nSean Ferreiro\n\t0\t76\t\nDET\n(4)\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\nMore\nPick'em Games\nFantasy Sports\nFree Sports TV\nBest Betting Apps\nBest Prediction Apps\nMarch Madness\nMobile Apps\nCompany\nAbout Us\nCareers\nAbout Paramount\nParamount+\nCBS TV\nRegulation\nTerms Of Use\nPrivacy Policy\nMinors' Privacy Policy\nYour Privacy Choices\nClosed Captioning\nCalifornia Notice\nContact Us\nHelp\nCustomer Care\nSocial Media\nYouTube\nTikTok\nInstagram\nFacebook\nX\nThreads\nFlipboard\nAccount\nManage My Account\nNewsletters\nMy Teams\nForgot Password\n\n© 2026 CBS Interactive Inc. All rights reserved.\n\nThe content on this site is for entertainment purposes only and CBS Sports makes no representation or warranty as to the accuracy of the information given or the outcome of any game or event. Odds and lines subject to change. There is no gambling offered on this site. This site contains commercial content and CBS Sports may be compensated for the links provided on this site.\n\nImages by Getty Images and Imagn",
+      "title": "NFL Football Tourney 2026 | Weekly Standings",
+      "ts": "2026-09-20T13:44:38.853Z",
+      "url": "https://picks.cbssports.com/football/pickem/pools/kbxw63b2ge3dkobxguyds===/standings/weekly"
     }
-  ],
-  "marketSource": "Week 2 consensus moneylines (FOX Sports / VegasInsider lookup)",
-  "marketCapturedAt": "2026-09-17T22:57:00Z",
-  "market": [
-    {
-      "away": "CIN",
-      "home": "HOU",
-      "awayML": 120,
-      "homeML": -142,
-      "total": 46.5
-    },
-    {
-      "away": "PIT",
-      "home": "NE",
-      "awayML": 180,
-      "homeML": -218,
-      "total": 41.5
-    },
-    {
-      "away": "CLE",
-      "home": "TB",
-      "awayML": 350,
-      "homeML": -455,
-      "total": 41.5
-    },
-    {
-      "away": "CAR",
-      "home": "ATL",
-      "awayML": -155,
-      "homeML": 130,
-      "total": 43.5
-    },
-    {
-      "away": "NO",
-      "home": "BAL",
-      "awayML": 300,
-      "homeML": -380,
-      "total": 46.5
-    },
-    {
-      "away": "MIN",
-      "home": "CHI",
-      "awayML": 164,
-      "homeML": -198,
-      "total": 47.5
-    },
-    {
-      "away": "GB",
-      "home": "NYJ",
-      "awayML": -192,
-      "homeML": 160,
-      "total": 44.5
-    },
-    {
-      "away": "PHI",
-      "home": "TEN",
-      "awayML": -310,
-      "homeML": 250,
-      "total": 39.5
-    },
-    {
-      "away": "JAX",
-      "home": "DEN",
-      "awayML": 124,
-      "homeML": -148,
-      "total": 45.5
-    },
-    {
-      "away": "LV",
-      "home": "LAC",
-      "awayML": 245,
-      "homeML": -305,
-      "total": 43.5
-    },
-    {
-      "away": "WAS",
-      "home": "DAL",
-      "awayML": 180,
-      "homeML": -218,
-      "total": 50.5
-    },
-    {
-      "away": "SEA",
-      "home": "ARI",
-      "awayML": -218,
-      "homeML": 180,
-      "total": 41.5
-    },
-    {
-      "away": "MIA",
-      "home": "SF",
-      "awayML": 600,
-      "homeML": -900,
-      "total": 44.5
-    },
-    {
-      "away": "IND",
-      "home": "KC",
-      "awayML": 235,
-      "homeML": -290,
-      "total": 46.5
-    },
-    {
-      "away": "DET",
-      "home": "BUF",
-      "awayML": 190,
-      "homeML": -230,
-      "total": 54.5
-    },
-    {
-      "away": "NYG",
-      "home": "LAR",
-      "awayML": 285,
-      "homeML": -360,
-      "total": 48.5
-    }
-  ],
-  "poolSize": 94,
-  "constraints": {
-    "fixedPicks": [
-      "DET"
-    ],
-    "fixedConfidence": [
-      {
-        "team": "DET",
-        "confidence": 2
-      }
-    ],
-    "note": "Detroit remains selected at confidence 2 while pool-specific ownership is hidden. CBS-wide ownership is only a provisional proxy."
-  },
-  "standingsSummary": {
-    "capturedAt": "2026-09-17T23:09:00Z",
-    "week": 2,
-    "entries": 94,
-    "user": "Tony Eickhoff",
-    "ytdPoints": 108,
-    "weekPoints": 0,
-    "visiblePick": "DET",
-    "visibleConfidence": 2,
-    "opponentPicksHidden": true
-  },
-  "refreshReason": "Force Build 1.4.9 to clear the pre-lock recommendation and reapply Detroit at confidence 2."
+  ]
 }
