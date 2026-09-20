@@ -29,7 +29,7 @@ table{width:100%;border-collapse:collapse;font-size:12px;min-width:830px}.tablew
 <body>
 <div class="app">
   <div class="header">
-    <div class="brand"><h1>🏈 Sunday Funday IQ</h1><p>CBS Pick'em · Pick'em Coach</p><p style="font-size:10px;color:#5f7898">Build 1.4.9 · iPhone safe area + fresh lock</p></div>
+    <div class="brand"><h1>🏈 Sunday Funday IQ</h1><p>CBS Pick'em · Pick'em Coach</p><p style="font-size:10px;color:#5f7898">Build 1.5.0 · partial-pool truth + live standings</p></div>
     <div class="actions">
       <a class="btn" href="../../">⌂ Home</a>
       <input id="scanFile" type="file" accept=".json,application/json" hidden>
@@ -214,6 +214,7 @@ function applyCardToGames(games,card){games.forEach((g,i)=>{g.pick=teamFor(g,car
 function completeCard(games){return games.length>0&&games.every(g=>sideOf(g)!=null)&&validConfidence(games.map(g=>Number(g.weight)),games.length)}
 function freshness(source,ts,threshold){const age=hoursOld(ts);if(source==='seed'||source==='fallback')return{label:'FALLBACK',cls:'red',age,current:false};if(source==='CBS Sports odds snapshot'&&age<=30)return{label:'SNAPSHOT',cls:'green',age,current:true};if(age<=threshold)return{label:'CURRENT',cls:'green',age,current:true};return{label:'STALE',cls:'yellow',age,current:false}}
 function dataFreshness(s){return{cbs:freshness(s.cbsSource||'seed',s.cbsUpdatedAt||SEED_TS,CBS_FRESH_HOURS),market:freshness(s.marketSource||'seed',s.marketUpdatedAt||SEED_TS,MARKET_FRESH_HOURS)}}
+function fieldModelComplete(s=state){return !!s.fieldModel?.observedEntries&&s.games.length>0&&s.games.every(g=>isLocked(g))}
 function objective(x){return x.top2*10000+x.win*900+x.avg*.01}
 function binaryCounts(sorted,score){let lo=0,hi=sorted.length;while(lo<hi){const m=(lo+hi)>>1;if(sorted[m]<score)lo=m+1;else hi=m}const first=lo;lo=0;hi=sorted.length;while(lo<hi){const m=(lo+hi)>>1;if(sorted[m]<=score)lo=m+1;else hi=m}return{less:first,equal:lo-first,greater:sorted.length-lo}}
 function buildWorlds(games,poolSize,iters,seed=20260908,fieldModel=null){
@@ -797,7 +798,7 @@ async function importScan(obj){
   });
   restoreLockedGames(lockedBeforeImport);
   repairLockedConfidenceCollision();
-  const stand=newest(snaps.filter(s=>/Weekly Standings/i.test(s.title||'')));if(stand){const names=[...stand.text.matchAll(/\n\n\n([^\n\t]{2,60})\n\t0\t0\t/g)].map(x=>x[1]);if(names.length>20)state.poolSize=new Set(names).size}
+  const stand=newest(snaps.filter(s=>/Weekly Standings/i.test(s.title||'')));if(stand){const names=[...stand.text.matchAll(/\n\n\n(?:\d+(?:st|nd|rd|th))\n([^\n\t]{2,60})\n\t-?\d+\t-?\d+\t/g)].map(x=>x[1]);if(names.length>20)state.poolSize=new Set(names).size}
   if(Number.isInteger(Number(obj.poolSize))&&Number(obj.poolSize)>1)state.poolSize=Number(obj.poolSize);
   state.importedAt=obj.exportedAt||pickSnap?.ts||nowIso();state.cbsUpdatedAt=pickSnap?.ts||obj.exportedAt||nowIso();state.cbsSource='scan';
   if(odds.length){state.marketUpdatedAt=obj.marketCapturedAt||oddsSnap?.ts||obj.exportedAt||nowIso();state.marketSource=obj.marketSource||'CBS scan odds'}
@@ -920,20 +921,21 @@ function renderFreshness(){
   $('marketFreshPill').textContent=f.market.label;$('marketFreshPill').className='pill '+f.market.cls;$('marketFreshText').textContent=`${state.marketSource||'seed'} · ${fmt(state.marketUpdatedAt||SEED_TS)} · ${isFinite(f.market.age)?f.market.age.toFixed(1)+'h old':'unknown age'}`;
   const warnings=[];if(!f.cbs.current)warnings.push('CBS pool data is not current.');if(!f.market.current)warnings.push('Market data is not current.');else if(f.market.label==='SNAPSHOT')warnings.push('Market uses a verified CBS Sports snapshot captured tonight; it is not live auto-refresh.');if((state.marketSource||'seed')==='seed')warnings.push('The app is using the Aug. 28 seed/fallback odds.');
   const locked=state.games.filter(g=>g.locked).length,finals=state.games.filter(g=>g.completed).length;const gameState=locked?` Game state: ${locked} locked, ${finals} final.`:'';
+  const revealedGames=state.fieldModel?.locked?.length||0,remainingGames=state.games.filter(g=>!isLocked(g)).length;
   const fieldState=state.fieldModel?.observedEntries
-    ?` Field model: ${state.fieldModel.observedEntries} revealed CBS entries; ${Math.round((state.fieldModel.defaultShare||0)*100)}% default-confidence on the locked game.`
+    ?` Pool reveal: ${state.fieldModel.observedEntries} entries observed for ${revealedGames} locked game${revealedGames===1?'':'s'}; picks for ${remainingGames} remaining game${remainingGames===1?'':'s'} are still hidden. ${Math.round((state.fieldModel.defaultShare||0)*100)}% used CBS default confidence on the revealed game.`
     :' Field model: CBS-wide pick percentages are being used as a proxy because this pool hides opponent picks until kickoff.';
-  $('freshnessWarning').textContent=(warnings.length?'⚠ '+warnings.join(' ')+(f.cbs.current&&f.market.current?'':' Simulation results and recommendations are PROVISIONAL until these inputs are refreshed.'):'✓ CBS ownership and market inputs are current.')+gameState+fieldState;
-  const fieldCurrent=!!state.fieldModel?.observedEntries,allCurrent=f.cbs.current&&f.market.current&&fieldCurrent;
-  $('modePill').textContent=allCurrent?'CURRENT MARKET + FIELD':'PROVISIONAL · CBS-WIDE PROXY';$('modePill').className='pill '+(allCurrent?'green':'yellow');
+  $('freshnessWarning').textContent=(warnings.length?'⚠ '+warnings.join(' ')+(f.cbs.current&&f.market.current?'':' Simulation results and recommendations are PROVISIONAL until these inputs are refreshed.'):'✓ CBS and market inputs are current.')+gameState+fieldState;
+  const fieldObserved=!!state.fieldModel?.observedEntries,allCurrent=f.cbs.current&&f.market.current&&fieldModelComplete(state);
+  $('modePill').textContent=allCurrent?'COMPLETE POOL REVEAL':fieldObserved?'PROVISIONAL · PARTIAL POOL REVEAL':'PROVISIONAL · CBS-WIDE PROXY';$('modePill').className='pill '+(allCurrent?'green':'yellow');
 }
 function renderDecision(){
-  const o=state.optimization,f=dataFreshness(state),provisional=!(f.cbs.current&&f.market.current&&state.fieldModel?.observedEntries);$('decisionCard').classList.toggle('stale',provisional);
+  const o=state.optimization,f=dataFreshness(state),provisional=!(f.cbs.current&&f.market.current&&fieldModelComplete(state)),partialField=!!state.fieldModel?.observedEntries&&!fieldModelComplete(state),provisionalNote=(!f.cbs.current||!f.market.current)?' Inputs are stale, so treat this as provisional until refreshed.':partialField?' Remaining pool picks are still hidden, so treat this as provisional.':' CBS-wide ownership is a proxy, so treat this as provisional.';$('decisionCard').classList.toggle('stale',provisional);
   if(!o){$('decisionHeadline').textContent='WHAT SHOULD I DO?';$('decisionSub').textContent='Refresh the data, then Run Simulation. IQ will compare your submitted card with better complete-card alternatives.';$('decisionPill').textContent=provisional?'REFRESH DATA':'READY';$('decisionPill').className='pill '+(provisional?'yellow':'blue');$('currentTop2').textContent='— Top 2';$('currentWin').textContent='Win —';$('recommendedTop2').textContent='— Top 2';$('recommendedWin').textContent='Win —';$('recommendations').innerHTML='<div class="note" style="margin-top:10px">No recommendation yet.</div>';$('applyBtn').disabled=true;$('revertBtn').disabled=!state.originalCard;return}
   const cur=o.currentEval,rec=o.recommendedEval,dt=rec.top2-cur.top2,dw=rec.win-cur.win,actions=o.actions||[];
   $('currentTop2').textContent=pct(cur.top2,1)+' Top 2';$('currentWin').textContent='Win '+pct(cur.win,1);$('recommendedTop2').textContent=pct(rec.top2,1)+' Top 2';$('recommendedWin').textContent='Win '+pct(rec.win,1);
-  if(actions.length&&dt>0){$('decisionHeadline').textContent=`IQ RECOMMENDS ${actions.length} CHANGE${actions.length===1?'':'S'}`;$('decisionSub').textContent=`Recommended complete card improves Top-2 probability by ${pp(dt,1)} and Win probability by ${pp(dw,1)} in the final simulation.${provisional?' Inputs are stale, so treat this as provisional until refreshed.':''}`;$('decisionPill').textContent=provisional?'PROVISIONAL':'BETTER CARD';$('decisionPill').className='pill '+(provisional?'yellow':'green')}
-  else{$('decisionHeadline').textContent='KEEP YOUR CURRENT CARD';$('decisionSub').textContent=`IQ did not find a complete card that beat your current card enough to justify a change in the final simulation.${provisional?' Refresh stale inputs before treating that as final.':''}`;$('decisionPill').textContent=provisional?'PROVISIONAL':'KEEP';$('decisionPill').className='pill '+(provisional?'yellow':'green')}
+  if(actions.length&&dt>0){$('decisionHeadline').textContent=`IQ RECOMMENDS ${actions.length} CHANGE${actions.length===1?'':'S'}`;$('decisionSub').textContent=`Recommended complete card improves Top-2 probability by ${pp(dt,1)} and Win probability by ${pp(dw,1)} in the final simulation.${provisional?provisionalNote:''}`;$('decisionPill').textContent=provisional?'PROVISIONAL':'BETTER CARD';$('decisionPill').className='pill '+(provisional?'yellow':'green')}
+  else{$('decisionHeadline').textContent='KEEP YOUR CURRENT CARD';$('decisionSub').textContent=`IQ did not find a complete card that beat your current card enough to justify a change in the final simulation.${provisional?provisionalNote:''}`;$('decisionPill').textContent=provisional?'PROVISIONAL':'KEEP';$('decisionPill').className='pill '+(provisional?'yellow':'green')}
   const locked=state.games.map((g,i)=>({g,i})).filter(x=>x.g.locked);
   let html='';
   if(locked.length){
@@ -995,7 +997,7 @@ async function runSimulation(){
   try{
     const result=runOptimizer(state.games,state.poolSize,{currentCard:current,searchIters:SEARCH_ITERS,finalIters:FINAL_ITERS,seed:20260908,fieldModel:state.fieldModel||null});
     const actions=cardActions(state.games,result.current,result.recommended,result.finalWorlds);
-    state.recommendedCard=result.recommended;state.optimization={current:result.current,currentEval:result.currentEval,recommended:result.recommended,recommendedEval:result.recommendedEval,actions,ranAt:nowIso(),provisional:!(f.cbs.current&&f.market.current&&state.fieldModel?.observedEntries)};state.sim=result.currentEval;state.applied=false;save();render();
+    state.recommendedCard=result.recommended;state.optimization={current:result.current,currentEval:result.currentEval,recommended:result.recommended,recommendedEval:result.recommendedEval,actions,ranAt:nowIso(),provisional:!(f.cbs.current&&f.market.current&&fieldModelComplete(state))};state.sim=result.currentEval;state.applied=false;save();render();
     show(`Simulation complete. ${state.games.filter(g=>g.locked).length} locked game(s) frozen; remaining card optimized.`);
   }catch(e){console.error(e);show('Optimizer error: '+e.message,'red')}
   finally{$('optBtn').disabled=false;$('progress').classList.remove('show')}
