@@ -47,3 +47,11 @@ low=public.lower()
 for forbidden in ['refresh_token','access_token','client_secret','yahoo_client_secret','authorization: bearer']:
     assert forbidden not in low, f'credential marker leaked into public assets: {forbidden}'
 print('Yahoo regression checks passed.')
+
+collector=(ROOT/'tools/yahoo-sync.py').read_text(encoding='utf-8')
+assert 'DEFAULT_REDIRECT_URI = "https://devopsbusinessnewb.github.io/sunday-funday-iq/oauth/yahoo/"' in collector
+assert 'returned_state != state' in collector
+assert 'Paste the FULL redirected URL' in collector
+callback=(ROOT/'oauth/yahoo/index.html').read_text(encoding='utf-8')
+assert 'authorization code' in callback.lower()
+assert 'client_secret' not in callback.lower() and 'refresh_token' not in callback.lower() and 'access_token' not in callback.lower()
