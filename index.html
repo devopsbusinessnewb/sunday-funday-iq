@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-title" content="Sunday Funday IQ">
 <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
 <link rel="icon" type="image/png" href="./favicon.png">
-<link rel="manifest" href="./manifest.webmanifest?v=1.4.1">
+<link rel="manifest" href="./manifest.webmanifest?v=1.4.2">
 <title>Sunday Funday IQ · Command Center</title>
 <style>
 :root{--bg:#07111f;--panel:#0f1d31;--panel2:#132641;--line:#243954;--text:#edf5ff;--muted:#91a7c2;--green:#32d296;--yellow:#f3c969;--orange:#ff9f43;--red:#ff6b7a;--accent:#8ee3cf;--blue:#5ab0ff;--purple:#a78bfa}
@@ -40,7 +40,9 @@ const LEAGUE_ID='1383615005433274368';
 const SLEEPER='https://api.sleeper.app/v1';
 const TREND_KEY='sfiqHubTrendV1';
 const SELECT_KEY='sfiqHubSelectedV1';
-const BUILD='1.4.1';
+const BUILD='1.4.2';
+const CURRENT_SNAPSHOT_MINUTES=120;
+const STALE_SNAPSHOT_MINUTES=240;
 const summaries={};
 const health={yahoo:{state:'pending'}};
 let selected=localStorage.getItem(SELECT_KEY)||'espn';
@@ -65,8 +67,8 @@ function ageInfo(iso){
   const t=typeof iso==='number'?iso:Date.parse(iso||'');
   if(!Number.isFinite(t))return{state:'error',label:'UNKNOWN',kind:'error',age:'unknown',time:null};
   const minutes=Math.max(0,(Date.now()-t)/60000);
-  if(minutes<=15)return{state:'current',label:'CURRENT',kind:'',age:ago(t),time:t};
-  if(minutes<=60)return{state:'delayed',label:'DELAYED',kind:'delayed',age:ago(t),time:t};
+  if(minutes<=CURRENT_SNAPSHOT_MINUTES)return{state:'current',label:'CURRENT',kind:'',age:ago(t),time:t};
+  if(minutes<=STALE_SNAPSHOT_MINUTES)return{state:'delayed',label:'DELAYED',kind:'delayed',age:ago(t),time:t};
   return{state:'stale',label:'STALE',kind:'stale',age:ago(t),time:t};
 }
 
