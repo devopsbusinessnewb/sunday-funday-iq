@@ -41,7 +41,7 @@ function Invoke-Token([hashtable]$body){
 function Authorize-Yahoo{
  Add-Type -AssemblyName System.Web
  $c=Get-Credentials
- $bytes=New-Object byte[] 18;[Security.Cryptography.RandomNumberGenerator]::Fill($bytes)
+ $bytes=New-Object byte[] 18;$rng=New-Object Security.Cryptography.RNGCryptoServiceProvider;try{$rng.GetBytes($bytes)}finally{$rng.Dispose()}
  $state=[Convert]::ToBase64String($bytes).TrimEnd('=').Replace('+','-').Replace('/','_')
  $qs=[Web.HttpUtility]::ParseQueryString('');$qs['client_id']=$c.ClientId;$qs['redirect_uri']=$RedirectUri;$qs['response_type']='code';$qs['state']=$state;$qs['language']='en-us'
  $url=$AuthUrl+'?'+$qs.ToString()
