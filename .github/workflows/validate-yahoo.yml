@@ -5,6 +5,8 @@ on:
     paths:
       - 'apps/yahoo/**'
       - 'tools/yahoo-sync.py'
+      - 'tools/yahoo-sync.ps1'
+      - 'Start Yahoo IQ Sync.cmd'
       - 'data/live/yahoo.json'
       - 'data/examples/yahoo-snapshot.example.json'
       - 'tests/yahoo-regression.py'
@@ -34,6 +36,7 @@ jobs:
         run: |
           python -m py_compile tools/yahoo-sync.py
           python tests/yahoo-regression.py
+          pwsh -NoProfile -Command "[scriptblock]::Create((Get-Content -Raw 'tools/yahoo-sync.ps1')) | Out-Null"
       - name: Reject Yahoo secrets in public assets
         shell: bash
         run: |
@@ -45,6 +48,10 @@ jobs:
           leaked=[x for x in forbidden if x in text]
           assert not leaked, f'Forbidden Yahoo credential markers in public assets: {leaked}'
           collector=Path('tools/yahoo-sync.py').read_text()
+          ps=Path('tools/yahoo-sync.ps1').read_text().lower()
+          assert 'convertfrom-securestring' in ps
+          assert "'.sunday-funday-iq'" in ps
+          assert 'forbidden public field' in ps
           assert 'TOKEN_PATH' in collector and '.sunday-funday-iq' in collector
           assert 'assert_sanitized' in collector
           assert 'git("push", "origin", "main")' in collector
