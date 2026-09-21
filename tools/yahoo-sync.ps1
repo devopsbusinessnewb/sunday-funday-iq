@@ -1,4 +1,4 @@
-param([switch]$Publish,[int]$Season=2026,[int]$Week=0)
+param([switch]$Publish,[switch]$ResetAuth,[int]$Season=2026,[int]$Week=0)
 $ErrorActionPreference='Stop'
 $RepoRoot=Split-Path -Parent $PSScriptRoot
 $PrivateDir=Join-Path $env:USERPROFILE '.sunday-funday-iq'
@@ -13,6 +13,11 @@ $ApiBase='https://fantasysports.yahooapis.com/fantasy/v2'
 function SecureToPlain([Security.SecureString]$s){$p=[Runtime.InteropServices.Marshal]::SecureStringToBSTR($s);try{[Runtime.InteropServices.Marshal]::PtrToStringBSTR($p)}finally{[Runtime.InteropServices.Marshal]::ZeroFreeBSTR($p)}}
 function ProtectText([string]$t){ConvertTo-SecureString $t -AsPlainText -Force|ConvertFrom-SecureString}
 function UnprotectText([string]$c){SecureToPlain (ConvertTo-SecureString $c)}
+function Reset-Auth{
+ if(Test-Path $CredPath){Remove-Item $CredPath -Force}
+ if(Test-Path $TokenPath){Remove-Item $TokenPath -Force}
+ Write-Host 'Yahoo local credentials and tokens cleared. The next run will prompt for the new app credentials.' -ForegroundColor Yellow
+}
 function Save-Credentials{
  New-Item -ItemType Directory -Force -Path $PrivateDir|Out-Null
  Write-Host 'Yahoo first-time setup' -ForegroundColor Cyan
@@ -22,7 +27,8 @@ function Save-Credentials{
  @{clientId=$id.Trim();clientSecret=ProtectText $sec;redirectUri=$RedirectUri}|ConvertTo-Json|Set-Content -Encoding UTF8 $CredPath
 }
 function Get-Credentials{
- if(-not(Test-Path $CredPath)){Save-Credentials}
+ if($ResetAuth){Reset-Auth; return}
+if(-not(Test-Path $CredPath)){Save-Credentials}
  $c=Get-Content $CredPath -Raw|ConvertFrom-Json
  @{ClientId=[string]$c.clientId;ClientSecret=UnprotectText([string]$c.clientSecret)}
 }
