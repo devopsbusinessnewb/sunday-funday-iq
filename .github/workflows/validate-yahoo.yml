@@ -7,6 +7,7 @@ on:
       - 'tools/yahoo-sync.py'
       - 'tools/yahoo-sync.ps1'
       - 'Start Yahoo IQ Sync.cmd'
+      - 'Reset Yahoo IQ Auth.cmd'
       - 'data/live/yahoo.json'
       - 'data/examples/yahoo-snapshot.example.json'
       - 'tests/yahoo-regression.py'
@@ -52,6 +53,9 @@ jobs:
           assert 'convertfrom-securestring' in ps
           assert "'.sunday-funday-iq'" in ps
           assert 'forbidden public field' in ps
+          assert 'reset-auth' in ps
+          reset=Path('Reset Yahoo IQ Auth.cmd').read_text().lower()
+          assert '-resetauth' in reset
           assert 'TOKEN_PATH' in collector and '.sunday-funday-iq' in collector
           assert 'assert_sanitized' in collector
           assert 'git("push", "origin", "main")' in collector
