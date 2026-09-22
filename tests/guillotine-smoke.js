@@ -1,0 +1,13 @@
+const fs=require('fs');
+const assert=require('assert');
+const html=fs.readFileSync('apps/guillotine/index.html','utf8');
+assert(html.includes('Build 2.13 · survival engine'));
+assert(html.includes('<script src="./core.js"></script>'));
+assert(html.includes('CORE.survivalSimulation'));
+assert(html.includes('CORE.isAvailable'));
+assert(html.includes('nextProjectionPoints'));
+assert(html.includes('sfiqGuillotineHistoryV1'));
+const scripts=[...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g)].map(m=>m[1]).filter(Boolean);
+assert(scripts.length>=1,'expected inline application script');
+for(const js of scripts)new Function(js);
+console.log('Guillotine production smoke test passed');
