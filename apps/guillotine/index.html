@@ -641,27 +641,24 @@ function positionNeedScore(r,pos){
   if(pos==="QB")return c.QB===0?3:c.QB===1?1:0;
   return 0;
 }
+function managerWaiverIntent(r,pos){
+  return CORE.preWaiverIntent({transactions:state.transactions||[],rosterId:r.roster_id,targetPosition:pos,playerLookup:id=>playerMeta(id),now:Date.now()});
+}
 function likelyBiddersFor(playerId,mine,excludedRosterId=null){
-  const p=playerMeta(playerId),pos=(p.position||"").toUpperCase();
-  const myFaab=faabRemaining(mine);
-  return state.rosters.filter(r=>
-    activeRoster(r) &&
-    r.roster_id!==mine.roster_id && r.roster_id!==excludedRosterId &&
-    positionNeedScore(r,pos)>=1
-  ).map(r=>({
-    r,
-    faab:faabRemaining(r),
-    need:positionNeedScore(r,pos),
-    canOutbid:faabRemaining(r)>myFaab
-  })).sort((a,b)=>(b.need-a.need)||(b.faab-a.faab));
+  const p=playerMeta(playerId),pos=(p.position||"").toUpperCase(),myFaab=faabRemaining(mine);
+  return state.rosters.filter(r=>activeRoster(r)&&r.roster_id!==mine.roster_id&&r.roster_id!==excludedRosterId).map(r=>{
+    const need=positionNeedScore(r,pos),intent=managerWaiverIntent(r,pos);
+    return {r,faab:faabRemaining(r),need,intent,canOutbid:faabRemaining(r)>myFaab};
+  }).filter(x=>x.need>=1||x.intent.active)
+    .sort((a,b)=>(b.intent.score-a.intent.score)||(b.need-a.need)||(b.faab-a.faab));
 }
 function marketPressureFor(playerId,mine,excludedRosterId=null){
   const bidders=likelyBiddersFor(playerId,mine,excludedRosterId);
-  const strong=bidders.filter(x=>x.need>=3).length;
-  const rich=bidders.filter(x=>x.faab>=faabRemaining(mine)).length;
-  const score=strong*2+Math.min(4,rich)+Math.min(4,bidders.length/3);
-  if(score>=8)return["HIGH","red"];
-  if(score>=4)return["MEDIUM","yellow"];
+  const strong=bidders.filter(x=>x.need>=3).length,rich=bidders.filter(x=>x.faab>=faabRemaining(mine)).length;
+  const intent=bidders.reduce((s,x)=>s+Math.min(2.5,Number(x.intent?.score||0)),0);
+  const score=strong*2+Math.min(4,rich)+Math.min(4,bidders.length/3)+Math.min(5,intent);
+  if(score>=10)return["HIGH","red"];
+  if(score>=5)return["MEDIUM","yellow"];
   return["LOW","green"];
 }
 function starterPlayersFor(r,projectionMap=state.nextProjections){
@@ -738,7 +735,7 @@ function renderChoppedMarket(){
     ${ranked.map(x=>{
       const bye=BYE[x.p.team];
       const rich=x.bidders.filter(b=>b.canOutbid).length;
-      const topBidders=x.bidders.slice(0,3).map(b=>teamName(rosterUser(b.r))).join(", ");
+      const topBidders=x.bidders.slice(0,3).map(b=>`${teamName(rosterUser(b.r))}${b.intent?.active?" ⚡":""}`).join(", ");
       return `<div class="analyzer-card">
         <div class="analyzer-head">
           <div>
@@ -751,11 +748,12 @@ function renderChoppedMarket(){
           <div class="analyzer-stat"><b>${x.band.upgrade>=0?"+":""}${x.band.upgrade.toFixed(1)}</b><span>Next-wk starter gain</span></div>
           <div class="analyzer-stat"><b class="${x.pressureCls}">${x.pressure}</b><span>Market pressure</span></div>
           <div class="analyzer-stat"><b>${x.bidders.length}</b><span>Likely bidders</span></div>
+          <div class="analyzer-stat"><b>${x.bidders.filter(b=>b.intent?.active).length}</b><span>Pre-waiver signals</span></div>
           <div class="analyzer-stat"><b>${rich}</b><span>Can outbid us</span></div>
         </div>
         <div class="bidband">
           <b>FAAB model:</b> ${money(x.band.low)}–${money(x.band.high)} target · ${money(x.band.max)} hard ceiling
-          <div class="meta" style="margin-top:4px">${x.band.replaces?`Would compete with ${x.band.replaces.name} (${Number(x.band.replaces.projection||0).toFixed(1)} next-wk proj). `:""}${topBidders?`Likely competition: ${topBidders}`:"No obvious positional bidders."}</div>
+          <div class="meta" style="margin-top:4px">${x.band.replaces?`Would compete with ${x.band.replaces.name} (${Number(x.band.replaces.projection||0).toFixed(1)} next-wk proj). `:""}${topBidders?`Likely competition: ${topBidders}. ⚡ = cleared a roster spot before waivers.`:"No obvious positional bidders."}</div>
         </div>
       </div>`;
     }).join("") || '<div class="empty">No fantasy-position players found on chopped roster.</div>'}`;
