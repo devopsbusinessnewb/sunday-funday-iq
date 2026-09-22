@@ -113,4 +113,19 @@ function approx(a,b,t=.02){assert(Math.abs(a-b)<=t,`expected ${a} ≈ ${b}`)}
   assert(opts[0].survivalProbability>opts[1].survivalProbability);
 }
 
+// Pre-waiver drops should increase likely-bidder intent, especially when the dropped player matches the target position.
+{
+  const now=1_000_000_000;
+  const tx=[
+    {roster_ids:[2],created:now-2*3600000,adds:null,drops:{wr1:2}},
+    {roster_ids:[3],created:now-2*3600000,adds:null,drops:{qb1:3}},
+    {roster_ids:[4],created:now-2*3600000,adds:{x:4},drops:{wr2:4}}
+  ];
+  const lookup=id=>({wr1:{position:'WR'},qb1:{position:'QB'},wr2:{position:'WR'}}[id]);
+  const same=core.preWaiverIntent({transactions:tx,rosterId:2,targetPosition:'WR',playerLookup:lookup,now});
+  const other=core.preWaiverIntent({transactions:tx,rosterId:3,targetPosition:'WR',playerLookup:lookup,now});
+  const swap=core.preWaiverIntent({transactions:tx,rosterId:4,targetPosition:'WR',playerLookup:lookup,now});
+  assert(same.active);assert(same.score>other.score);assert.equal(swap.score,0);
+}
+
 console.log('Guillotine regression suite passed');
