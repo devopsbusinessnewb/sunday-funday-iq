@@ -95,7 +95,7 @@ select,input{width:100%;margin-top:4px;background:#0a1728;border:1px solid var(-
 <body>
 <div class="app" id="app">
   <div class="header">
-    <div class="brand"><h1>🏈 Sunday Funday IQ</h1><p id="leagueTitle">Loading league…</p><p style="margin:3px 0 0;color:#5f7898;font-size:10px">Chop Suey module · Build 2.11 · compact live chop board</p></div>
+    <div class="brand"><h1>🏈 Sunday Funday IQ</h1><p id="leagueTitle">Loading league…</p><p style="margin:3px 0 0;color:#5f7898;font-size:10px">Chop Suey module · Build 2.13 · survival engine</p><p id="dataFreshness" style="margin:3px 0 0;color:#5f7898;font-size:10px">Validating league context…</p></div>
     <div class="actions">
       <a class="btn" href="../../">⌂ Home</a>
       <button class="btn" id="sundayBtn">Live Mode</button>
@@ -129,7 +129,7 @@ select,input{width:100%;margin-top:4px;background:#0a1728;border:1px solid var(-
     <div class="card metric normal-only"><div class="label">Projected Total</div><div class="value" id="projTotalVal">—</div><div class="sub">IQ projected weekly finish</div></div>
     <div class="card metric sunday-only"><div class="label">Current Score Rank</div><div class="value" id="liveRank">—</div><div class="sub">actual Sleeper points right now</div></div>
     <div class="card metric sunday-only"><div class="label">Projected Survival Rank</div><div class="value" id="liveProjRank">—</div><div class="sub">current score + remaining projections</div></div>
-    <div class="card metric"><div class="label">Projected Safety Cushion</div><div class="value" id="liveCushion">—</div><div class="sub">projected points above chop</div></div>
+    <div class="card metric"><div class="label">Projected Safety Cushion</div><div class="value" id="liveCushion">—</div><div class="sub" id="riskSub">projected points above chop</div></div>
     <div class="card metric normal-only"><div class="label">FAAB</div><div class="value" id="faabVal">$1,000</div><div class="sub" id="faabSub">100% remaining</div></div>
     <div class="card metric normal-only"><div class="label">Teams Alive</div><div class="value" id="teamsVal">18</div><div class="sub" id="weekVal">Week 1</div></div>
 
@@ -194,7 +194,9 @@ select,input{width:100%;margin-top:4px;background:#0a1728;border:1px solid var(-
   </div>
 </div>
 
+<script src="./core.js"></script>
 <script>
+const CORE=globalThis.SFIQGuillotineCore;
 const LEAGUE_ID="1383615005433274368";
 const API="https://api.sleeper.app/v1";
 const BYE={
@@ -208,7 +210,7 @@ const BYE={
   BAL:13,IND:13,LV:13,NYJ:13,
   ARI:14,DAL:14
 };
-let state={league:null,users:[],rosters:[],matchups:[],previousMatchups:[],players:{},transactions:[],historicalTransactions:[],drafts:[],draftPicks:[],projections:{},week:1,nflState:null};
+let state={league:null,users:[],rosters:[],matchups:[],previousMatchups:[],players:{},transactions:[],historicalTransactions:[],drafts:[],draftPicks:[],projections:{},nextProjections:{},projectionsUpdatedAt:null,gameStates:{},gameStatesUpdatedAt:null,week:1,nflState:null};
 let prefs=JSON.parse(localStorage.getItem("gwPrefs")||'{"rosterId":null,"safePct":61,"startFaab":1000}');
 
 const $=id=>document.getElementById(id);
@@ -230,50 +232,59 @@ async function getJson(url,timeout=10000){
   finally{clearTimeout(t)}
 }
 
-async function loadWeeklyProjections(){
+async function loadProjectionWeek(week){
   const season=state.league?.season||state.nflState?.season||2026;
   const seasonType=String(state.nflState?.season_type||'regular').toLowerCase();
   const urls=[
-    `https://api.sleeper.app/projections/nfl/${season}/${state.week}?season_type=${encodeURIComponent(seasonType)}`,
-    `https://api.sleeper.com/projections/nfl/${season}/${state.week}?season_type=${encodeURIComponent(seasonType)}`
+    `https://api.sleeper.app/projections/nfl/${season}/${week}?season_type=${encodeURIComponent(seasonType)}`,
+    `https://api.sleeper.com/projections/nfl/${season}/${week}?season_type=${encodeURIComponent(seasonType)}`
   ];
   for(const url of urls){
     try{
       const rows=await getJson(url,12000);
       if(Array.isArray(rows)&&rows.length){
-        const map={};
-        rows.forEach(x=>{const id=String(x.player_id??x.player?.player_id??x.player?.id??'');if(id)map[id]=x});
-        if(Object.keys(map).length){state.projections=map;return true}
+        const map={};rows.forEach(x=>{const id=String(x.player_id??x.player?.player_id??x.player?.id??'');if(id)map[id]=x});
+        if(Object.keys(map).length)return map;
       }
     }catch(e){console.warn('Sleeper projections unavailable',url,e)}
   }
-  state.projections={};return false;
+  return {};
 }
-function projectionPoints(id){
-  const x=state.projections?.[String(id)];if(!x)return 0;
-  const s=x.stats||x;
-  for(const k of ['pts_ppr','pts_half_ppr','pts_std','fantasy_points']){
-    const v=Number(s?.[k]);if(Number.isFinite(v)&&v!==0)return v;
-  }
+async function loadWeeklyProjections(){
+  const [current,next]=await Promise.all([loadProjectionWeek(state.week),loadProjectionWeek(state.week+1)]);
+  state.projections=current;state.nextProjections=next;state.projectionsUpdatedAt=new Date().toISOString();
+  return Object.keys(current).length>0;
+}
+function pointsFromProjectionMap(map,id){
+  const x=map?.[String(id)];if(!x)return 0;const s=x.stats||x;
+  for(const k of ['pts_ppr','pts_half_ppr','pts_std','fantasy_points']){const v=Number(s?.[k]);if(Number.isFinite(v)&&v!==0)return v}
   return 0;
 }
-function teamLiveProjection(r){
-  const m=matchupFor(r.roster_id)||{};
-  const starters=(m.starters||r.starters||[]).map(String);
-  const ptsMap=m.players_points||{};
-  let projected=Number(m.points||0);
-  for(const id of starters){
-    const hasLive=Object.prototype.hasOwnProperty.call(ptsMap,id);
-    const live=Number(ptsMap[id]||0);
-    // Sleeper exposes a weekly player projection; use it only for players who have not
-    // yet produced a live scoring entry. This mirrors the chop screen's current+remaining view.
-    if(!hasLive || live===0)projected+=projectionPoints(id);
-  }
-  return projected;
+function projectionPoints(id){return pointsFromProjectionMap(state.projections,id)}
+function nextProjectionPoints(id){return pointsFromProjectionMap(state.nextProjections,id)}
+function normalizeEspnTeam(x){x=String(x||'').toUpperCase();return x==='JAC'?'JAX':x==='WSH'?'WAS':x==='LA'?'LAR':x}
+async function loadGameStates(){
+  const season=state.league?.season||state.nflState?.season||2026;
+  try{
+    const data=await getJson(`https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=${season}&seasontype=2&week=${state.week}`,12000);
+    const map={};
+    for(const ev of data.events||[]){
+      const comp=ev.competitions?.[0];if(!comp)continue;const st=comp.status?.type||ev.status?.type||{};const stateName=String(st.state||'pre').toLowerCase();
+      for(const team of comp.competitors||[]){const ab=normalizeEspnTeam(team?.team?.abbreviation);if(!ab)continue;map[ab]={state:stateName,started:stateName!=='pre',completed:!!st.completed,period:Number(comp.status?.period||ev.status?.period||0),clock:comp.status?.displayClock||ev.status?.displayClock||'',detail:st.shortDetail||st.detail||''}}
+    }
+    state.gameStates=map;state.gameStatesUpdatedAt=new Date().toISOString();return true;
+  }catch(e){console.warn('Game-state refresh unavailable',e);state.gameStates={};return false}
 }
-function liveProjectedTeams(){
-  return state.rosters.filter(activeRoster).map(r=>({r,m:matchupFor(r.roster_id),pts:Number(matchupFor(r.roster_id)?.points||0),proj:teamLiveProjection(r)})).sort((a,b)=>b.proj-a.proj||b.pts-a.pts);
+function playerGame(id){const team=playerMeta(id).team;return state.gameStates?.[team]||null}
+function teamDistribution(r){
+  const m=matchupFor(r.roster_id)||{},starters=(m.starters||r.starters||[]).map(String),ptsMap=m.players_points||{};
+  const players=starters.map(id=>({id,position:(playerMeta(id).position||'').toUpperCase(),live:Number(ptsMap[id]||0),projection:projectionPoints(id),game:playerGame(id),hasLive:Object.prototype.hasOwnProperty.call(ptsMap,id)}));
+  return CORE.teamDistribution({current:Number(m.points||0),players});
 }
+function teamLiveProjection(r){return teamDistribution(r).mean}
+function liveProjectedTeams(){return state.rosters.filter(activeRoster).map(r=>{const d=teamDistribution(r);return{r,m:matchupFor(r.roster_id),pts:Number(matchupFor(r.roster_id)?.points||0),proj:d.mean,sigma:d.sigma}}).sort((a,b)=>b.proj-a.proj||b.pts-a.pts)}
+function survivalSnapshot(){const teams=state.rosters.filter(activeRoster).map(r=>{const d=teamDistribution(r);return{id:String(r.roster_id),mean:d.mean,sigma:d.sigma}});return CORE.survivalSimulation(teams,12000,20260921+Number(state.week||1))}
+function gameRemaining(id){return CORE.gameFractionRemaining(playerGame(id))>0}
 
 async function load(){
   hideError();$("recommendation").textContent="Refreshing Sleeper…";
@@ -286,6 +297,9 @@ async function load(){
     const st=String(nfl.season_type||"").toLowerCase();
     state.week=(st==="regular"||st==="post")?Number(nfl.week||1):1;
     $("leagueTitle").textContent=`${league.name||"Sleeper League"} · ${league.season||""}`;
+    const ctx=CORE.leagueContext(league,rosters,prefs.startFaab||1000);
+    $("dataFreshness").textContent=`${ctx.teamsAlive}/${ctx.teamsConfigured} alive · ${ctx.rosterSlots.starters} starters · ${ctx.rosterSlots.bench} bench · FAAB ${money(ctx.startingFaab)}`;
+    if(ctx.teamsConfigured!==18)showError(`League configuration warning: expected 18 teams, Sleeper reports ${ctx.teamsConfigured}.`);
 
     const jobs=[
       getJson(`${API}/league/${LEAGUE_ID}/matchups/${state.week}`).catch(()=>[]),
@@ -309,9 +323,10 @@ async function load(){
     state.drafts=await getJson(`${API}/league/${LEAGUE_ID}/drafts`).catch(()=>[]);
     const draftId=state.league?.draft_id || state.drafts?.[0]?.draft_id;
     state.draftPicks=draftId?await getJson(`${API}/draft/${draftId}/picks`).catch(()=>[]):[];
-    await loadWeeklyProjections();
+    await Promise.all([loadWeeklyProjections(),loadGameStates()]);
 
     buildTeamSelect();
+    reconcilePriorWeek();
     if(!prefs.rosterId){$("setup").style.display="block";$("recommendation").textContent="Choose your team once";$("recommendationWhy").textContent="Your selection will persist on this device."}
     else {
       try{
@@ -340,37 +355,30 @@ function scoredTeams(){
   return state.rosters.filter(activeRoster).map(r=>({r,m:matchupFor(r.roster_id),pts:Number(matchupFor(r.roster_id)?.points||0)})).sort((a,b)=>b.pts-a.pts);
 }
 function recommendation(scored,mine){
-  const current=scoredTeams();
-  const currentIdx=current.findIndex(x=>x.r.roster_id===mine.roster_id);
-  const currentRank=currentIdx>=0?currentIdx+1:null;
-  const currentPts=currentIdx>=0?current[currentIdx].pts:0;
+  const current=scoredTeams(),currentIdx=current.findIndex(x=>x.r.roster_id===mine.roster_id);
+  const currentRank=currentIdx>=0?currentIdx+1:null,currentPts=currentIdx>=0?current[currentIdx].pts:0;
   const projected=[...scored].sort((a,b)=>(b.proj??0)-(a.proj??0)||(b.pts??0)-(a.pts??0));
-  const pIdx=projected.findIndex(x=>x.r.roster_id===mine.roster_id);
-  const mineProj=pIdx>=0?Number(projected[pIdx].proj??currentPts):currentPts;
-  const chopProj=projected.length?Number(projected[projected.length-1].proj??0):0;
-  const gap=mineProj-chopProj;
-  const myfaab=faabRemaining(mine);
-  const started=current.some(x=>x.pts!==0);
-  let title,why,pill,cls;
-  if(!started){
-    title="Weekly posture: preserve FAAB";
-    why=`Pregame projection ${pIdx>=0?pIdx+1:"—"}/${projected.length}, ${gap>=0?"+":""}${gap.toFixed(1)} vs projected chop. Spend only for a clear starter upgrade.`;
-    pill="HOLD";cls="green";
-  }else if(gap<5){
-    title="Weekly posture: survival risk";
-    why=`Score rank ${currentRank||"—"}/${current.length} · projected ${pIdx>=0?pIdx+1:"—"}/${projected.length} · ${gap.toFixed(1)} pts above chop. Protect survival first.`;
-    pill="RISK";cls="red";
-  }else if(gap<12){
-    title="Weekly posture: selective upgrades";
-    why=`Score rank ${currentRank||"—"}/${current.length} · projected ${pIdx>=0?pIdx+1:"—"}/${projected.length} · +${gap.toFixed(1)} vs chop. Preserve ${money(myfaab)} unless an upgrade materially improves your lineup.`;
-    pill="WATCH";cls="yellow";
+  const pIdx=projected.findIndex(x=>x.r.roster_id===mine.roster_id),mineProj=pIdx>=0?Number(projected[pIdx].proj??currentPts):currentPts;
+  const chopProj=projected.length?Number(projected[projected.length-1].proj??0):0,gap=mineProj-chopProj;
+  const risk=survivalSnapshot()[String(mine.roster_id)]||{chopProbability:0,dangerProbability:0,survivalProbability:1};
+  const mode=CORE.posture({chopProbability:risk.chopProbability,dangerProbability:risk.dangerProbability,cushion:gap});
+  const myfaab=faabRemaining(mine),started=current.some(x=>x.pts!==0);let title,why,pill,cls;
+  if(mode==='SURVIVE'){
+    title='Weekly posture: protect survival';
+    why=`Score rank ${currentRank||'—'}/${current.length} · projected ${pIdx>=0?pIdx+1:'—'}/${projected.length} · ${gap>=0?'+':''}${gap.toFixed(1)} vs chop · ${Math.round(risk.chopProbability*100)}% simulated chop risk. Favor moves that materially reduce downside.`;
+    pill='SURVIVE';cls='red';
+  }else if(mode==='CAUTION'){
+    title='Weekly posture: selective';
+    why=`Projected ${pIdx>=0?pIdx+1:'—'}/${projected.length} · ${gap>=0?'+':''}${gap.toFixed(1)} vs chop · ${Math.round(risk.chopProbability*100)}% chop / ${Math.round(risk.dangerProbability*100)}% bottom-3 risk. Spend only where the survival improvement is meaningful.`;
+    pill='WATCH';cls='yellow';
   }else{
-    title="Weekly posture: preserve FAAB";
-    why=`Score rank ${currentRank||"—"}/${current.length} · projected ${pIdx>=0?pIdx+1:"—"}/${projected.length} · +${gap.toFixed(1)} vs chop. No need to spend for marginal upgrades.`;
-    pill="HOLD";cls="green";
+    title='Weekly posture: preserve FAAB';
+    const livePart=started?`Score rank ${currentRank||'—'}/${current.length} · `:'';
+    why=`${livePart}projected ${pIdx>=0?pIdx+1:'—'}/${projected.length} · ${gap>=0?'+':''}${gap.toFixed(1)} vs chop · ${Math.round(risk.chopProbability*100)}% simulated chop risk. Preserve ${money(myfaab)} unless a move creates a clear starter or future-bye upgrade.`;
+    pill='HOLD';cls='green';
   }
-  $("recommendation").textContent=title;$("recommendationWhy").textContent=why;
-  $("recommendationPill").textContent=pill;$("recommendationPill").className=`pill ${cls}`;
+  $('recommendation').textContent=title;$('recommendationWhy').textContent=why;$('recommendationPill').textContent=pill;$('recommendationPill').className=`pill ${cls}`;
+  return {risk,mode,gap,projectedRank:pIdx>=0?pIdx+1:null,projectedTotal:mineProj};
 }
 function render(){
   const mine=myRoster();if(!mine){$("setup").style.display="block";return}
@@ -397,8 +405,23 @@ function render(){
   $("faabVal").textContent=money(faab);$("faabSub").textContent=`${Math.round(100*faab/Number(prefs.startFaab||1000))}% remaining`;
   $("teamsVal").textContent=scored.length;$("weekVal").textContent=`Week ${state.week}`;
 
-  recommendation(projected,mine);renderRoster(mine);renderChop(projected,mine,started);
+  const weekly=recommendation(projected,mine);
+  $("riskSub").textContent=`${Math.round(weekly.risk.chopProbability*100)}% chop risk · ${Math.round(weekly.risk.dangerProbability*100)}% bottom-3 risk`;
+  persistWeeklySnapshot(mine,weekly);
+  renderRoster(mine);renderChop(projected,mine,started);
   renderFaabIntelligence(mine);renderByeRadar(mine);renderTransactions();renderChoppedMarket();renderSunday(projected,mine,started);
+}
+const HISTORY_KEY="sfiqGuillotineHistoryV1";
+function readHistory(){try{return JSON.parse(localStorage.getItem(HISTORY_KEY)||"[]")}catch{return[]}}
+function writeHistory(rows){try{localStorage.setItem(HISTORY_KEY,JSON.stringify(rows.slice(-80)))}catch{}}
+function persistWeeklySnapshot(mine,weekly){
+  const rows=readHistory(),m=matchupFor(mine.roster_id)||{},starters=(m.starters||mine.starters||[]).map(String);
+  const snap={type:"analysis",ts:new Date().toISOString(),leagueId:LEAGUE_ID,week:state.week,rosterId:String(mine.roster_id),starters,faab:faabRemaining(mine),teamsAlive:state.rosters.filter(activeRoster).length,projectedTotal:Number(weekly.projectedTotal||0),projectedRank:weekly.projectedRank,cushion:Number(weekly.gap||0),chopProbability:Number(weekly.risk?.chopProbability||0),dangerProbability:Number(weekly.risk?.dangerProbability||0),posture:weekly.mode,projectionFreshAt:state.projectionsUpdatedAt,gameStateFreshAt:state.gameStatesUpdatedAt};
+  const key=[snap.week,snap.rosterId,snap.starters.join(","),snap.faab,Math.round(snap.projectedTotal*10),snap.posture].join("|");if(rows.length&&rows[rows.length-1]._key===key)return;snap._key=key;rows.push(snap);writeHistory(rows);
+}
+function reconcilePriorWeek(){
+  if(state.week<=1||!state.previousMatchups.length)return;const mine=myRoster();if(!mine)return;const rows=readHistory(),week=state.week-1,actual=matchupFor(mine.roster_id,state.previousMatchups),cutoff=Math.min(...state.previousMatchups.map(x=>Number(x.points||0)));let changed=false;
+  for(const x of rows){if(x.type==="analysis"&&x.week===week&&x.rosterId===String(mine.roster_id)&&!x.result){x.result={actualScore:Number(actual?.points||0),chopScore:cutoff,survived:Number(actual?.points||0)>cutoff,margin:Number(actual?.points||0)-cutoff};changed=true}}if(changed)writeHistory(rows);
 }
 function renderRoster(mine){
   const starters=new Set((matchupFor(mine.roster_id)?.starters||mine.starters||[]).map(String));
@@ -641,38 +664,29 @@ function marketPressureFor(playerId,mine){
   if(score>=4)return["MEDIUM","yellow"];
   return["LOW","green"];
 }
+function starterPlayersFor(r,projectionMap=state.nextProjections){
+  const m=matchupFor(r.roster_id)||{},ids=(m.starters||r.starters||[]).map(String),slots=(state.league?.roster_positions||[]).filter(x=>x!=='BN');
+  return ids.map((id,i)=>({id,name:playerName(id),position:(playerMeta(id).position||'').toUpperCase(),slot:slots[i]||playerMeta(id).position,projection:pointsFromProjectionMap(projectionMap,id)}));
+}
+function marginalUpgradeFor(playerId,mine){const p=playerMeta(playerId),target={id:playerId,position:(p.position||'').toUpperCase(),projection:nextProjectionPoints(playerId)};return CORE.marginalStarterUpgrade({target,starterPlayers:starterPlayersFor(mine),league:state.league})}
+function replacementDepthFor(playerId){
+  const pos=(playerMeta(playerId).position||'').toUpperCase(),used=CORE.rosteredSet(state.rosters.filter(activeRoster));
+  const vals=Object.keys(state.players||{}).filter(id=>!used.has(String(id))&&(playerMeta(id).position||'').toUpperCase()===pos).map(id=>nextProjectionPoints(id)).filter(x=>x>0).sort((a,b)=>b-a);
+  const target=nextProjectionPoints(playerId);if(!target||!vals.length)return .5;return Math.min(1,vals.filter(x=>x>=target*.75).length/8);
+}
+function observedEliteClear(){const wins=(state.historicalTransactions||[]).filter(t=>String(t.status||'complete').toLowerCase()==='complete'&&Number.isFinite(Number(t.settings?.waiver_bid)));const elite=wins.filter(t=>Object.keys(t.adds||{}).some(id=>(originalAuctionPrice(id)||0)>=40)).map(t=>Number(t.settings.waiver_bid));if(!elite.length)return null;return elite.sort((a,b)=>a-b)[Math.floor(elite.length/2)]}
 function recommendedBidBand(playerId,mine){
-  const p=playerMeta(playerId),pos=(p.position||"").toUpperCase();
-  const need=positionNeedScore(mine,pos);
-  const [pressure]=marketPressureFor(playerId,mine);
-  const start=Number(prefs.startFaab||1000);
-  const auction=originalAuctionPrice(playerId);
-
-  // League-specific heuristic, not a player projection:
-  // need + observed market pressure + original auction cost determine a conservative bid band.
-  let base=need===3?.10:need===1?.06:.025;
-  if(pressure==="HIGH")base+=.05;
-  else if(pressure==="MEDIUM")base+=.025;
-
-  // Original auction value is an anchor only; inflated auction cost should not mechanically dictate FAAB.
-  if(auction!=null){
-    if(auction>=60)base+=.08;
-    else if(auction>=40)base+=.05;
-    else if(auction>=20)base+=.025;
-  }
-  const low=Math.round(start*Math.max(.01,base*.75));
-  const high=Math.round(start*Math.min(.35,base*1.25));
-  const max=Math.round(start*Math.min(.45,base*1.55));
-  return {low,high,max};
+  const risk=survivalSnapshot()[String(mine.roster_id)]||{chopProbability:0},up=marginalUpgradeFor(playerId,mine),auction=originalAuctionPrice(playerId),depth=replacementDepthFor(playerId),pos=(playerMeta(playerId).position||'').toUpperCase();
+  const scarce=pos==='TE'?.7:pos==='QB'?.45:Math.max(.25,1-depth);
+  const g=CORE.bidGuidance({faabRemaining:faabRemaining(mine),startFaab:Number(prefs.startFaab||1000),teamsAlive:state.rosters.filter(activeRoster).length,startingTeams:Number(state.league?.total_rosters||18),chopProbability:risk.chopProbability,marginalUpgrade:Math.max(0,up.upgrade),elite:Number(auction||0)>=40,scarcity:scarce,replacementDepth:depth,observedEliteClear:observedEliteClear()});
+  return {low:g.low,high:g.high,max:g.hardCeiling,upgrade:up.upgrade,replaces:up.replaces,depth};
 }
 function analyzerLabel(playerId,mine){
-  const pos=(playerMeta(playerId).position||"").toUpperCase();
-  const need=positionNeedScore(mine,pos);
-  if(need>=3)return["ROSTER NEED","red"];
-  if(need>=1)return["USEFUL","yellow"];
-  return["LUXURY","green"];
+  const x=marginalUpgradeFor(playerId,mine);
+  if(x.upgrade>=5)return['STARTER UPGRADE','green'];
+  if(x.upgrade>=2)return['COMPETES','yellow'];
+  return['DEPTH / BYE','purple'];
 }
-
 function renderChoppedMarket(){
   const mine=myRoster();
   if(state.week<=1||!state.previousMatchups.length){
@@ -684,9 +698,10 @@ function renderChoppedMarket(){
   const chopped=prev[0];
   const r=state.rosters.find(x=>x.roster_id===chopped.roster_id);
   const name=teamName(rosterUser(r));
+  const aliveRosters=state.rosters.filter(activeRoster);
   const ids=(chopped.players||r?.players||[]).filter(id=>{
     const pos=(playerMeta(id).position||"").toUpperCase();
-    return ["QB","RB","WR","TE"].includes(pos);
+    return ["QB","RB","WR","TE"].includes(pos)&&CORE.isAvailable(id,aliveRosters);
   });
 
   const ranked=ids.map(id=>{
@@ -699,14 +714,14 @@ function renderChoppedMarket(){
     const band=recommendedBidBand(id,mine);
     const [label,labelCls]=analyzerLabel(id,mine);
     // Sort by our need, then auction-price signal, then competition.
-    const priority=need*100+(auction||0)+Math.min(30,bidders.length*2);
+    const priority=Math.max(0,band.upgrade)*40+(auction||0)+Math.min(30,bidders.length*2);
     return {id,p,pos,need,auction,bidders,pressure,pressureCls,band,label,labelCls,priority};
   }).sort((a,b)=>b.priority-a.priority);
 
   $("choppedMarket").innerHTML=`
     <div class="player" style="margin-bottom:10px">
       <div class="top"><span class="name">🪓 ${name}</span><span class="pill red">${Number(chopped.points||0).toFixed(2)} pts</span></div>
-      <div class="meta">Previous week’s lowest scorer · ${ranked.length} fantasy players entering the market</div>
+      <div class="meta">Previous week’s lowest scorer · ${ranked.length} fantasy players confirmed available now</div>
     </div>
     ${ranked.map(x=>{
       const bye=BYE[x.p.team];
@@ -721,14 +736,14 @@ function renderChoppedMarket(){
           <span class="pill ${x.labelCls}">${x.label}</span>
         </div>
         <div class="analyzer-grid">
-          <div class="analyzer-stat"><b>${x.need===3?"High":x.need===1?"Medium":"Low"}</b><span>Our need</span></div>
+          <div class="analyzer-stat"><b>${x.band.upgrade>=0?"+":""}${x.band.upgrade.toFixed(1)}</b><span>Next-wk starter gain</span></div>
           <div class="analyzer-stat"><b class="${x.pressureCls}">${x.pressure}</b><span>Market pressure</span></div>
           <div class="analyzer-stat"><b>${x.bidders.length}</b><span>Likely bidders</span></div>
           <div class="analyzer-stat"><b>${rich}</b><span>Can outbid us</span></div>
         </div>
         <div class="bidband">
           <b>FAAB model:</b> ${money(x.band.low)}–${money(x.band.high)} target · ${money(x.band.max)} hard ceiling
-          <div class="meta" style="margin-top:4px">${topBidders?`Likely competition: ${topBidders}`:"No obvious positional bidders."}</div>
+          <div class="meta" style="margin-top:4px">${x.band.replaces?`Would compete with ${x.band.replaces.name} (${Number(x.band.replaces.projection||0).toFixed(1)} next-wk proj). `:""}${topBidders?`Likely competition: ${topBidders}`:"No obvious positional bidders."}</div>
         </div>
       </div>`;
     }).join("") || '<div class="empty">No fantasy-position players found on chopped roster.</div>'}`;
@@ -745,7 +760,7 @@ function renderSunday(projected,mine,started){
   const cushion=myProj-chopProj;
   const myStarters=(myMatch.starters||mine.starters||[]).map(String);
   const ptsMap=myMatch.players_points||{};
-  const myRemaining=myStarters.filter(id=>!Object.prototype.hasOwnProperty.call(ptsMap,id)||Number(ptsMap[id]||0)===0).length;
+  const myRemaining=myStarters.filter(id=>gameRemaining(id)).length;
 
   const projectedRank=rankedProj.findIndex(x=>x.r.roster_id===mine.roster_id)+1;
 
@@ -755,14 +770,14 @@ function renderSunday(projected,mine,started){
     const m=x.m||{};
     const starters=(m.starters||x.r.starters||[]).map(String);
     const pmap=m.players_points||{};
-    const remaining=starters.filter(id=>!Object.prototype.hasOwnProperty.call(pmap,id)||Number(pmap[id]||0)===0).length;
+    const remaining=starters.filter(id=>gameRemaining(id)).length;
     return {...x,rank:i+1,remaining};
   });
   const projectedRows=rankedProj.map((x,i)=>{
     const m=x.m||{};
     const starters=(m.starters||x.r.starters||[]).map(String);
     const pmap=m.players_points||{};
-    const remaining=starters.filter(id=>!Object.prototype.hasOwnProperty.call(pmap,id)||Number(pmap[id]||0)===0).length;
+    const remaining=starters.filter(id=>gameRemaining(id)).length;
     return {...x,rank:i+1,remaining};
   });
   const projectedDanger=projectedRows.slice(-6).reverse();
