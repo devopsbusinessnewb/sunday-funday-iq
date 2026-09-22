@@ -81,4 +81,36 @@ function approx(a,b,t=.02){assert(Math.abs(a-b)<=t,`expected ${a} ≈ ${b}`)}
   assert(danger.hardCeiling<=980);
 }
 
+// Lineup survival comparison must reward lower downside when the roster is already above the danger cluster.
+{
+  const teams=[
+    {id:'me',mean:96,sigma:8},
+    {id:'a',mean:90,sigma:9},
+    {id:'b',mean:84,sigma:9},
+    {id:'c',mean:78,sigma:8}
+  ];
+  const opts=core.compareLineupOptions({teams,mineId:'me',iters:25000,seed:44,options:[
+    {id:'steady',mean:96,sigma:6},
+    {id:'volatile',mean:96,sigma:15}
+  ]});
+  assert.equal(opts[0].id,'steady');
+  assert(opts[0].chopProbability<opts[1].chopProbability);
+}
+
+// When endangered, a materially higher mean can justify added volatility.
+{
+  const teams=[
+    {id:'me',mean:76,sigma:6},
+    {id:'a',mean:95,sigma:8},
+    {id:'b',mean:88,sigma:8},
+    {id:'c',mean:80,sigma:7}
+  ];
+  const opts=core.compareLineupOptions({teams,mineId:'me',iters:25000,seed:91,options:[
+    {id:'safe-low',mean:76,sigma:5},
+    {id:'upside',mean:84,sigma:12}
+  ]});
+  assert.equal(opts[0].id,'upside');
+  assert(opts[0].survivalProbability>opts[1].survivalProbability);
+}
+
 console.log('Guillotine regression suite passed');
