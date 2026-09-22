@@ -641,12 +641,12 @@ function positionNeedScore(r,pos){
   if(pos==="QB")return c.QB===0?3:c.QB===1?1:0;
   return 0;
 }
-function likelyBiddersFor(playerId,mine){
+function likelyBiddersFor(playerId,mine,excludedRosterId=null){
   const p=playerMeta(playerId),pos=(p.position||"").toUpperCase();
   const myFaab=faabRemaining(mine);
   return state.rosters.filter(r=>
     activeRoster(r) &&
-    r.roster_id!==mine.roster_id &&
+    r.roster_id!==mine.roster_id && r.roster_id!==excludedRosterId &&
     positionNeedScore(r,pos)>=1
   ).map(r=>({
     r,
@@ -655,8 +655,8 @@ function likelyBiddersFor(playerId,mine){
     canOutbid:faabRemaining(r)>myFaab
   })).sort((a,b)=>(b.need-a.need)||(b.faab-a.faab));
 }
-function marketPressureFor(playerId,mine){
-  const bidders=likelyBiddersFor(playerId,mine);
+function marketPressureFor(playerId,mine,excludedRosterId=null){
+  const bidders=likelyBiddersFor(playerId,mine,excludedRosterId);
   const strong=bidders.filter(x=>x.need>=3).length;
   const rich=bidders.filter(x=>x.faab>=faabRemaining(mine)).length;
   const score=strong*2+Math.min(4,rich)+Math.min(4,bidders.length/3);
@@ -687,30 +687,42 @@ function analyzerLabel(playerId,mine){
   if(x.upgrade>=2)return['COMPETES','yellow'];
   return['DEPTH / BYE','purple'];
 }
+function chopMarketSource(){
+  const current=scoredTeams();
+  if(current.length){
+    const last=current[current.length-1],r=last.r,m=last.m||matchupFor(r.roster_id)||{};
+    const starters=(m.starters||r.starters||[]).map(String);
+    const allDone=starters.length>0&&starters.every(id=>CORE.gameFractionRemaining(playerGame(id))===0);
+    const risk=survivalSnapshot()[String(r.roster_id)]||{};
+    if(allDone||Number(risk.chopProbability||0)>=.995){
+      return {matchup:m,roster:r,name:teamName(rosterUser(r)),points:Number(m.points||0),released:false,week:state.week,label:allDone?'CURRENT CHOP LOCKED':'PROJECTED CHOP >99%'};
+    }
+  }
+  if(state.week>1&&state.previousMatchups.length){
+    const prev=[...state.previousMatchups].sort((a,b)=>Number(a.points||0)-Number(b.points||0)),m=prev[0],r=state.rosters.find(x=>x.roster_id===m.roster_id);
+    return {matchup:m,roster:r,name:teamName(rosterUser(r)),points:Number(m.points||0),released:true,week:state.week-1,label:'RELEASED'};
+  }
+  return null;
+}
 function renderChoppedMarket(){
-  const mine=myRoster();
-  if(state.week<=1||!state.previousMatchups.length){
-    $("choppedMarket").innerHTML='<div class="empty">After Week 1, the prior week’s lowest-scoring roster will be analyzed here automatically: player value anchor, our roster need, likely bidders, market pressure, and a recommended FAAB band.</div>';
+  const mine=myRoster(),source=chopMarketSource();
+  if(!source){
+    $("choppedMarket").innerHTML='<div class="empty">No current chop is locked yet. IQ will begin pre-waiver analysis as soon as the last-place roster is effectively decided.</div>';
     return;
   }
 
-  const prev=[...state.previousMatchups].sort((a,b)=>Number(a.points||0)-Number(b.points||0));
-  const chopped=prev[0];
-  const r=state.rosters.find(x=>x.roster_id===chopped.roster_id);
-  const name=teamName(rosterUser(r));
+  const chopped=source.matchup,r=source.roster,name=source.name;
   const aliveRosters=state.rosters.filter(activeRoster);
-  const ids=(chopped.players||r?.players||[]).filter(id=>{
-    const pos=(playerMeta(id).position||"").toUpperCase();
-    return ["QB","RB","WR","TE"].includes(pos)&&CORE.isAvailable(id,aliveRosters);
-  });
+  const rawIds=(chopped.players||r?.players||[]).filter(id=>["QB","RB","WR","TE"].includes((playerMeta(id).position||"").toUpperCase()));
+  const ids=source.released?rawIds.filter(id=>CORE.isAvailable(id,aliveRosters)):rawIds;
 
   const ranked=ids.map(id=>{
     const p=playerMeta(id);
     const pos=(p.position||"").toUpperCase();
     const need=positionNeedScore(mine,pos);
     const auction=originalAuctionPrice(id);
-    const bidders=likelyBiddersFor(id,mine);
-    const [pressure,pressureCls]=marketPressureFor(id,mine);
+    const bidders=likelyBiddersFor(id,mine,r?.roster_id);
+    const [pressure,pressureCls]=marketPressureFor(id,mine,r?.roster_id);
     const band=recommendedBidBand(id,mine);
     const [label,labelCls]=analyzerLabel(id,mine);
     // Sort by our need, then auction-price signal, then competition.
@@ -720,8 +732,8 @@ function renderChoppedMarket(){
 
   $("choppedMarket").innerHTML=`
     <div class="player" style="margin-bottom:10px">
-      <div class="top"><span class="name">🪓 ${name}</span><span class="pill red">${Number(chopped.points||0).toFixed(2)} pts</span></div>
-      <div class="meta">Previous week’s lowest scorer · ${ranked.length} fantasy players confirmed available now</div>
+      <div class="top"><span class="name">🪓 ${name}</span><span class="pill ${source.released?"red":"yellow"}">${source.label}</span></div>
+      <div class="meta">Week ${source.week} · ${Number(source.points||0).toFixed(2)} pts · ${ranked.length} fantasy players ${source.released?"confirmed available now":"to evaluate before release"}</div>
     </div>
     ${ranked.map(x=>{
       const bye=BYE[x.p.team];
@@ -731,7 +743,7 @@ function renderChoppedMarket(){
         <div class="analyzer-head">
           <div>
             <div class="analyzer-name">${playerName(x.id)}</div>
-            <div class="analyzer-meta">${x.pos} · ${x.p.team||"FA"}${bye?` · Bye ${bye}`:""}${x.auction!=null?` · Drafted $${x.auction}`:""}</div>
+            <div class="analyzer-meta">${x.pos} · ${x.p.team||"FA"}${bye?` · Bye ${bye}`:""}${x.auction!=null?` · Drafted ${x.auction}`:""} · ${source.released?"AVAILABLE":"PENDING RELEASE"}</div>
           </div>
           <span class="pill ${x.labelCls}">${x.label}</span>
         </div>
