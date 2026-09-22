@@ -119,6 +119,23 @@
     const repl=eligible[0],upgrade=Number(target.projection||0)-Number(repl.projection||0);
     return {upgrade,replaces:repl,eligible:eligible.length};
   }
+  function preWaiverIntent({transactions=[],rosterId,targetPosition='',playerLookup=()=>null,now=Date.now()}){
+    let score=0,drops=0,samePositionDrops=0,latest=0;
+    for(const t of transactions||[]){
+      const rid=(t.roster_ids||[])[0];if(String(rid)!==String(rosterId))continue;
+      const adds=Object.keys(t.adds||{}),dropIds=Object.keys(t.drops||{});
+      if(!dropIds.length||adds.length)continue; // pure slot-clearing moves are the strongest pre-waiver tell
+      const ts=Number(t.status_updated||t.created||0);latest=Math.max(latest,ts);
+      const ageH=ts?Math.max(0,(Number(now)-ts)/3600000):24;
+      const recency=ageH<=12?1:ageH<=36?.7:.4;
+      drops+=dropIds.length;score+=1.25*recency;
+      for(const id of dropIds){
+        const p=playerLookup(String(id))||{};
+        if(String(p.position||'').toUpperCase()===String(targetPosition||'').toUpperCase()){samePositionDrops++;score+=.75*recency}
+      }
+    }
+    return {score,drops,samePositionDrops,latest,active:score>=.75};
+  }
   function compareLineupOptions({teams,mineId,options,iters=10000,seed=20260921}){
     const out=[];
     for(let j=0;j<(options||[]).length;j++){
@@ -163,5 +180,5 @@
   }
   return {clamp,rosterSlots,leagueContext,rosteredSet,isAvailable,availableIds,gameFractionRemaining,
     playerFinalMean,playerSigma,teamDistribution,survivalSimulation,posture,eligibleForSlot,
-    marginalStarterUpgrade,compareLineupOptions,bidGuidance,recommendationAudit};
+    marginalStarterUpgrade,preWaiverIntent,compareLineupOptions,bidGuidance,recommendationAudit};
 });
