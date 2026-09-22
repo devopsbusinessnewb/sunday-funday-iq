@@ -119,6 +119,15 @@
     const repl=eligible[0],upgrade=Number(target.projection||0)-Number(repl.projection||0);
     return {upgrade,replaces:repl,eligible:eligible.length};
   }
+  function compareLineupOptions({teams,mineId,options,iters=10000,seed=20260921}){
+    const out=[];
+    for(let j=0;j<(options||[]).length;j++){
+      const option=options[j],variant=(teams||[]).map(t=>String(t.id)===String(mineId)?{...t,mean:Number(option.mean),sigma:Number(option.sigma)}:{...t});
+      const risk=survivalSimulation(variant,iters,seed+j*997)[String(mineId)]||{};
+      out.push({...option,...risk});
+    }
+    return out.sort((a,b)=>(a.chopProbability??1)-(b.chopProbability??1)||(b.survivalProbability??0)-(a.survivalProbability??0));
+  }
   function bidGuidance({faabRemaining=1000,startFaab=1000,teamsAlive=18,startingTeams=18,
                         chopProbability=0,marginalUpgrade=0,elite=false,scarcity=.5,replacementDepth=.5,
                         observedEliteClear=null}){
@@ -154,5 +163,5 @@
   }
   return {clamp,rosterSlots,leagueContext,rosteredSet,isAvailable,availableIds,gameFractionRemaining,
     playerFinalMean,playerSigma,teamDistribution,survivalSimulation,posture,eligibleForSlot,
-    marginalStarterUpgrade,bidGuidance,recommendationAudit};
+    marginalStarterUpgrade,compareLineupOptions,bidGuidance,recommendationAudit};
 });
