@@ -119,6 +119,25 @@
     const repl=eligible[0],upgrade=Number(target.projection||0)-Number(repl.projection||0);
     return {upgrade,replaces:repl,eligible:eligible.length};
   }
+  function lineupFeasibility({players=[],league,week=null}){
+    const slots=rosterSlots(league).slots.filter(s=>s!=='BN');
+    const active=(players||[]).filter(p=>week==null||Number(p.bye||0)!==Number(week));
+    const adj=active.map(p=>slots.map((s,idx)=>eligibleForSlot(p.position,s)?idx:-1).filter(x=>x>=0));
+    const matchedSlot=Array(slots.length).fill(-1);
+    function dfs(pi,seen){
+      for(const si of adj[pi]){if(seen.has(si))continue;seen.add(si);if(matchedSlot[si]===-1||dfs(matchedSlot[si],seen)){matchedSlot[si]=pi;return true}}
+      return false;
+    }
+    let filled=0;for(let pi=0;pi<active.length;pi++)if(dfs(pi,new Set()))filled++;
+    return {feasible:filled===slots.length,filled,required:slots.length,emptySlots:Math.max(0,slots.length-filled),activePlayers:active.length};
+  }
+  function futureByeRisk({players=[],league,currentWeek=1,endWeek=14}){
+    const weeks=[];
+    for(let w=Math.max(1,Number(currentWeek||1));w<=Number(endWeek||14);w++){
+      const x=lineupFeasibility({players,league,week:w});if(!x.feasible)weeks.push({week:w,...x});
+    }
+    return {hasHole:weeks.length>0,weeks,firstHole:weeks[0]||null};
+  }
   function preWaiverIntent({transactions=[],rosterId,targetPosition='',playerLookup=()=>null,now=Date.now()}){
     let score=0,drops=0,samePositionDrops=0,latest=0;
     for(const t of transactions||[]){
@@ -180,5 +199,5 @@
   }
   return {clamp,rosterSlots,leagueContext,rosteredSet,isAvailable,availableIds,gameFractionRemaining,
     playerFinalMean,playerSigma,teamDistribution,survivalSimulation,posture,eligibleForSlot,
-    marginalStarterUpgrade,preWaiverIntent,compareLineupOptions,bidGuidance,recommendationAudit};
+    marginalStarterUpgrade,lineupFeasibility,futureByeRisk,preWaiverIntent,compareLineupOptions,bidGuidance,recommendationAudit};
 });
