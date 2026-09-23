@@ -268,3 +268,13 @@ Tiebreaker: 41.
 ### Post-week evaluation plan
 
 Score three cards after all games become final: (1) the original CBS card, (2) the exact Build 1.6.1 recommended card, and (3) Tony's official submitted card. Compare correct picks, confidence points, pool finish, Top-2 outcome, pick-flip attribution, confidence-reallocation attribution, and the effect of the PIT/ARI manual override. Use the result to calibrate early-season form weight, probability disagreement limits, confidence ceilings, and contrarian-pick selection without retroactively changing this record.
+
+### Baseline clarification — 2026-09-22
+
+The card labeled “original” above was created in approximately two minutes so CBS contained a complete card and Sunday Funday IQ could run its simulation. It was not intended to represent Tony's considered strategy. It remains preserved for lineage and component attribution, but any point improvement versus that card is **not** evidence that the model added value.
+
+Model-performance evaluation must use disciplined independent baselines such as market-favorite picks with probability-sorted confidence, CBS-consensus picks with a consistent confidence rule, and zero-flip versus model-flip strategies. Until those baselines are reconstructed, Week 2's +11 points versus the placeholder card is diagnostic only.
+
+### Independent benchmark result — 2026-09-23
+
+A pre-declared CBS-consensus baseline selected the CBS-wide majority for every game and ranked confidence by majority pick share (ties by matchup key). It scored **91 points with 11 correct picks**. Build 1.6.1 scored **85 points with 8 correct picks**, six points and three correct picks worse than that benchmark. This one-week result does not establish calibration, but it is valid evidence that the Week 2 leverage choices failed to add value; the +11 versus the rapid placeholder is not.
