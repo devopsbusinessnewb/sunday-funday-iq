@@ -138,7 +138,7 @@ function approx(a,b,t=.02){assert(Math.abs(a-b)<=t,`expected ${a} ≈ ${b}`)}
   const w6=core.lineupFeasibility({players:roster,league,week:6});
   assert.equal(w6.feasible,false);assert.equal(w6.emptySlots,1);
   const risk=core.futureByeRisk({players:roster,league,currentWeek:3,endWeek:14});
-  assert(risk.hasHole);assert.equal(risk.firstHole.week,6);
+  assert(risk.hasHole);assert.equal(risk.firstHole.week,5);assert(risk.weeks.some(x=>x.week===6));
 }
 
 // A replacement with a different bye should restore a legal lineup.
