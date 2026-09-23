@@ -684,14 +684,21 @@ function defaultDropForClaim(playerId,mine){
   if(!bench.length)return null;
   return [...bench].sort((a,b)=>nextProjectionPoints(a)-nextProjectionPoints(b))[0];
 }
+function currentRosterByeRisk(mine){
+  const players=(mine.players||[]).map(String).map(id=>{const p=playerMeta(id);return{id,position:(p.position||'').toUpperCase(),bye:BYE[p.team]||null,name:playerName(id)}});
+  return CORE.futureByeRisk({players,league:state.league,currentWeek:state.week+1,endWeek:14});
+}
 function byeRiskForClaim(playerId,mine,dropId=null){
-  return CORE.futureByeRisk({players:rosterPlayersAfterClaim(playerId,mine,dropId),league:state.league,currentWeek:state.week+1,endWeek:14});
+  const baseline=currentRosterByeRisk(mine),after=CORE.futureByeRisk({players:rosterPlayersAfterClaim(playerId,mine,dropId),league:state.league,currentWeek:state.week+1,endWeek:14});
+  const beforeWeeks=new Set((baseline.weeks||[]).map(x=>Number(x.week)));
+  const newWeeks=(after.weeks||[]).filter(x=>!beforeWeeks.has(Number(x.week)));
+  return {...after,baseline,newWeeks,createsNewHole:newWeeks.length>0,firstNewHole:newWeeks[0]||null};
 }
 function recommendedBidBand(playerId,mine){
   const risk=survivalSnapshot()[String(mine.roster_id)]||{chopProbability:0},up=marginalUpgradeFor(playerId,mine),auction=originalAuctionPrice(playerId),depth=replacementDepthFor(playerId),pos=(playerMeta(playerId).position||'').toUpperCase();
   const scarce=pos==='TE'?.7:pos==='QB'?.45:Math.max(.25,1-depth),dropId=defaultDropForClaim(playerId,mine),byeRisk=byeRiskForClaim(playerId,mine,dropId);
   const g=CORE.bidGuidance({faabRemaining:faabRemaining(mine),startFaab:Number(prefs.startFaab||1000),teamsAlive:state.rosters.filter(activeRoster).length,startingTeams:Number(state.league?.total_rosters||18),chopProbability:risk.chopProbability,marginalUpgrade:Math.max(0,up.upgrade),elite:Number(auction||0)>=40,scarcity:scarce,replacementDepth:depth,observedEliteClear:observedEliteClear()});
-  const penalty=byeRisk.hasHole?.55:1;
+  const penalty=byeRisk.createsNewHole?.55:1;
   return {low:Math.round(g.low*penalty),high:Math.round(g.high*penalty),max:Math.round(g.hardCeiling*penalty),upgrade:up.upgrade,replaces:up.replaces,depth,dropId,byeRisk};
 }
 function analyzerLabel(playerId,mine){
@@ -756,7 +763,7 @@ function renderChoppedMarket(){
         <div class="analyzer-head">
           <div>
             <div class="analyzer-name">${playerName(x.id)}</div>
-            <div class="analyzer-meta">${x.pos} · ${x.p.team||"FA"}${bye?` · Bye ${bye}`:""}${x.auction!=null?` · Drafted ${x.auction}`:""} · ${source.released?"AVAILABLE":"PENDING RELEASE"}${x.band.byeRisk?.hasHole?` · ⚠️ BYE HOLE W${x.band.byeRisk.firstHole.week}`:""}</div>
+            <div class="analyzer-meta">${x.pos} · ${x.p.team||"FA"}${bye?` · Bye ${bye}`:""}${x.auction!=null?` · Drafted ${x.auction}`:""} · ${source.released?"AVAILABLE":"PENDING RELEASE"}${x.band.byeRisk?.createsNewHole?` · ⚠️ CREATES BYE HOLE W${x.band.byeRisk.firstNewHole.week}`:""}</div>
           </div>
           <span class="pill ${x.labelCls}">${x.label}</span>
         </div>
@@ -768,7 +775,7 @@ function renderChoppedMarket(){
           <div class="analyzer-stat"><b>${rich}</b><span>Can outbid us</span></div>
         </div>
         <div class="bidband">
-          <b>FAAB model:</b> ${money(x.band.low)}–${money(x.band.high)} target · ${money(x.band.max)} hard ceiling${x.band.byeRisk?.hasHole?` · reduced for guaranteed Week ${x.band.byeRisk.firstHole.week} lineup hole`:""}
+          <b>FAAB model:</b> ${money(x.band.low)}–${money(x.band.high)} target · ${money(x.band.max)} hard ceiling${x.band.byeRisk?.createsNewHole?` · reduced for new guaranteed Week ${x.band.byeRisk.firstNewHole.week} lineup hole`:""}
           <div class="meta" style="margin-top:4px">${x.band.replaces?`Would compete with ${x.band.replaces.name} (${Number(x.band.replaces.projection||0).toFixed(1)} next-wk proj). `:""}${topBidders?`Likely competition: ${topBidders}. ⚡ = cleared a roster spot before waivers.`:"No obvious positional bidders."}</div>
         </div>
       </div>`;
