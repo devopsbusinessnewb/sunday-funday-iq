@@ -128,4 +128,27 @@ function approx(a,b,t=.02){assert(Math.abs(a-b)<=t,`expected ${a} ≈ ${b}`)}
   assert(same.active);assert(same.score>other.score);assert.equal(swap.score,0);
 }
 
+// Future bye feasibility must catch a guaranteed empty starter slot.
+{
+  const league={roster_positions:['QB','RB','RB','WR','WR','TE','FLEX','FLEX','BN']};
+  const roster=[
+    {position:'QB',bye:5},{position:'RB',bye:13},{position:'RB',bye:13},{position:'RB',bye:11},
+    {position:'WR',bye:6},{position:'WR',bye:9},{position:'WR',bye:7},{position:'TE',bye:9},{position:'WR',bye:6}
+  ];
+  const w6=core.lineupFeasibility({players:roster,league,week:6});
+  assert.equal(w6.feasible,false);assert.equal(w6.emptySlots,1);
+  const risk=core.futureByeRisk({players:roster,league,currentWeek:3,endWeek:14});
+  assert(risk.hasHole);assert.equal(risk.firstHole.week,6);
+}
+
+// A replacement with a different bye should restore a legal lineup.
+{
+  const league={roster_positions:['QB','RB','RB','WR','WR','TE','FLEX','FLEX','BN']};
+  const roster=[
+    {position:'QB',bye:5},{position:'RB',bye:13},{position:'RB',bye:13},{position:'RB',bye:11},
+    {position:'WR',bye:6},{position:'WR',bye:9},{position:'WR',bye:7},{position:'TE',bye:9},{position:'WR',bye:8}
+  ];
+  assert.equal(core.lineupFeasibility({players:roster,league,week:6}).feasible,true);
+}
+
 console.log('Guillotine regression suite passed');
