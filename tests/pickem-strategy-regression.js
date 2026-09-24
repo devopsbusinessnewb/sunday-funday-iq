@@ -41,6 +41,21 @@ for(const c of search.candidates){
 const worlds=t.buildWorlds(games,102,90,771,null),same=t.compareCards(favoriteCard,favoriteCard,worlds);
 if(Math.abs(same.top2Delta)>1e-12||Math.abs(same.pointsDelta)>1e-12||Math.abs(same.worstScenarioTop2Delta)>1e-12)throw new Error('Identical cards produced a simulated improvement');
 
+// A held-out entry produced by the same proxy-field process must reproduce the
+// mathematical tournament baseline and sensible rank-distribution anchors.
+const calibrationWorlds=t.buildWorlds(games,102,2200,1871,null),cal=t.evaluateProxyField(calibrationWorlds),neutral=t.neutralTop2(102);
+if(Math.abs(cal.top2-neutral)>.015)throw new Error(`Proxy field is not Top-2 calibrated: ${cal.top2} vs ${neutral}`);
+if(Math.abs(cal.top10-.10)>.04)throw new Error(`Proxy field Top-10 distribution is distorted: ${cal.top10}`);
+if(Math.abs(cal.bottomHalf-.50)>.05)throw new Error(`Proxy field median distribution is distorted: ${cal.bottomHalf}`);
+
+// The frontier must expose explicit risk choices, preserve valid confidence,
+// and ensure the card labeled Safest actually leads on expected points.
+const frontier=t.buildStrategyFrontier(games,favoriteCard,calibrationWorlds,search.candidates.map(x=>x.card),102);
+for(const key of ['safest','balanced','aggressive','maxUpside']){
+  const p=frontier[key];if(!p||!t.validConfidence(p.card.weights,16))throw new Error(`Invalid or missing ${key} frontier card`);
+  if(frontier.safest.eval.avg+1e-9<p.eval.avg)throw new Error(`${key} has more expected points than Safest`);
+}
+
 // Import failures must identify exact games and confidence defects.
 const broken=JSON.parse(JSON.stringify(games));broken[0].pick=null;broken[1].weight=null;broken[2].weight=broken[3].weight;
 const issues=t.cardImportIssues(broken).join(' | ');
