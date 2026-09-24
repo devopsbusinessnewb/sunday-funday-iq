@@ -66,6 +66,14 @@ const liveCard=t.extractStructuredCard(live,liveGames);
 if(liveCard.pickCount!==16||liveCard.weightCount!==16)throw new Error(`published live CBS: ${liveCard.pickCount}/${liveCard.weightCount}`);
 if(new Set(liveCard.weights).size!==16||liveCard.weights.some(x=>x<1||x>16))throw new Error('published live CBS: confidence values must be unique 1–16');
 if(liveCard.picks.some((pick,i)=>pick!==liveGames[i].away&&pick!==liveGames[i].home))throw new Error('published live CBS: invalid matchup pick');
+if(live.season===2026&&live.week===3){
+  const expectedLive={
+    picks:['GB','BUF','CAR','DET','HOU','JAX','KC','NYG','CIN','SEA','SF','MIN','BAL','NO','LAR','PHI'],
+    weights:[16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1]
+  };
+  assertCard('published Week 3 screenshot card',liveCard,expectedLive);
+  if(!/exact confidence values displayed by CBS/i.test(live.confidenceNote||''))throw new Error('published Week 3 CBS: confidence provenance must preserve displayed values');
+}
 const stableOpts={currentCard:{choices:expectedPost.picks.map((p,i)=>p===postGames[i].away?0:1),weights:expectedPost.weights},searchIters:120,finalIters:300,seed:20260908,fieldModel:fm};
 const first=t.runOptimizer(postGames,93,stableOpts),second=t.runOptimizer(postGames,93,{...stableOpts,currentCard:first.recommended});
 for(const key of ['safest','balanced','aggressive','maxUpside'])if(!first.strategies?.[key])throw new Error(`strategy frontier missing ${key}`);
