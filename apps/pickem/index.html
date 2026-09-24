@@ -29,10 +29,9 @@ table{width:100%;border-collapse:collapse;font-size:12px;min-width:830px}.tablew
 <body>
 <div class="app">
   <div class="header">
-    <div class="brand"><h1>🏈 Sunday Funday IQ</h1><p>CBS Pick'em · Pick'em Coach</p><p style="font-size:10px;color:#5f7898">Build 1.7.0 · separated probability, leverage, and confidence</p></div>
+    <div class="brand"><h1>🏈 Sunday Funday IQ</h1><p>CBS Pick'em · Pick'em Coach</p><p style="font-size:10px;color:#5f7898">Build 1.7.1 · direct CBS data refresh</p></div>
     <div class="actions">
       <a class="btn" href="../../">⌂ Home</a>
-      <input id="scanFile" type="file" accept=".json,application/json" hidden>
       <button class="btn primary" id="refreshBtn">Refresh CBS Data</button>
       <button class="btn" id="marketBtn">Refresh Market</button>
       <button class="btn" id="optBtn">Run Simulation</button>
@@ -1185,10 +1184,10 @@ async function loadPublishedCbs({silent=true,onlyIfNewer=true}={}){
     const obj=await r.json();const incoming=Date.parse(obj?.exportedAt||''),stored=Date.parse(state.importedAt||state.cbsUpdatedAt||'');
     if(onlyIfNewer&&Number.isFinite(stored)&&Number.isFinite(incoming)&&incoming<=stored)return false;
     await importScan(obj);if(!silent)show('CBS refreshed from the published live data file.');return true;
-  }catch(err){console.error('Published CBS data load failed',err);if(!silent)show('No newer published CBS data was available. Choose a bridge JSON file instead.','yellow');return false}
+  }catch(err){console.error('Published CBS data load failed',err);if(!silent)show('Could not load the published CBS data from GitHub. Try again in a moment.','red');return false}
 }
 async function boot(){
-  $('refreshBtn').onclick=async()=>{const got=await loadPublishedCbs({silent:false,onlyIfNewer:true});if(!got)$('scanFile').click()};$('scanFile').onchange=async e=>{try{const f=e.target.files?.[0];if(f)await importScan(JSON.parse(await f.text()))}catch(err){show('Could not refresh CBS data: '+err.message,'red')}e.target.value=''};
+  $('refreshBtn').onclick=async()=>{const btn=$('refreshBtn');btn.disabled=true;try{await loadPublishedCbs({silent:false,onlyIfNewer:false})}finally{btn.disabled=false}};
   $('marketBtn').onclick=()=>refreshMarket(false);$('optBtn').onclick=runSimulation;$('saveBtn').onclick=()=>{recordDecision('saved_card',{current:snapshotCard(),recommended:state.recommendedCard,note:'User saved the current IQ card locally.'});save();show('Saved locally in this browser and added to this week’s decision history.')};$('applyBtn').onclick=applyRecommended;$('revertBtn').onclick=revertOriginal;
   render();
   await loadPublishedCbs({silent:true,onlyIfNewer:true});
