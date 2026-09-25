@@ -3,7 +3,7 @@ const vm=require('vm');
 const path=require('path');
 const root=path.resolve(__dirname,'..');
 const html=fs.readFileSync(path.join(root,'apps/pickem/index.html'),'utf8');
-if(!html.includes('Build 1.9.0')) throw new Error('Expected Pickem Build 1.9.0');
+if(!html.includes('Build 1.9.1')) throw new Error('Expected Pickem Build 1.9.1');
 if(!html.includes("POOL_HISTORY_URL='../../data/analysis/cbs-pool-history-report.json'"))throw new Error('Completed-pool history is not wired into the module');
 if(!html.includes('PROVISIONAL · PARTIAL POOL REVEAL')) throw new Error('Partial pool reveal label missing');
 if(!html.includes('NO DEMONSTRATED FIELD EDGE')||!html.includes('Safety → upside strategy frontier'))throw new Error('Risk-return frontier or no-edge guardrail missing');
@@ -24,6 +24,7 @@ if(typeof t.iqProb!=='function'||typeof t.formProb!=='function'||typeof t.refres
 if(typeof t.probabilityProfile!=='function'||typeof t.strategicPickEvidence!=='function'||typeof t.allocateConfidence!=='function'||typeof t.compareCards!=='function')throw new Error('Separated decision-layer exports missing');
 if(typeof t.buildStrategyFrontier!=='function'||typeof t.evaluateProxyField!=='function'||typeof t.neutralTop2!=='function')throw new Error('Calibrated strategy-frontier exports missing');
 if(typeof t.normalizePoolHistory!=='function'||typeof t.drawFieldPicks!=='function')throw new Error('Historical pool prior helpers missing');
+if(typeof t.applyStructuredCard!=='function')throw new Error('Authoritative CBS card merge helper missing');
 if(Math.abs(t.neutralTop2(102)-2/102)>1e-12||Math.abs(t.neutralWin(102)-1/102)>1e-12)throw new Error('Neutral pool benchmarks are incorrect');
 if(Math.abs(t.iqFormWeight(1)-.12)>1e-12)throw new Error('Week 2 form weight must remain conservatively shrunk');
 if(t.iqFormWeight(6)>.37)throw new Error('Early-season form weight cap is too aggressive');
@@ -71,10 +72,14 @@ if(liveCard.picks.some((pick,i)=>pick!==liveGames[i].away&&pick!==liveGames[i].h
 if(live.season===2026&&live.week===3){
   const expectedLive={
     picks:['GB','BUF','CAR','DET','HOU','JAX','KC','NYG','CIN','SEA','SF','MIN','BAL','NO','LAR','PHI'],
-    weights:[16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1]
+    weights:[11,16,15,14,13,12,10,9,8,7,6,5,4,3,2,1]
   };
   assertCard('published Week 3 screenshot card',liveCard,expectedLive);
-  if(!/exact confidence values displayed by CBS/i.test(live.confidenceNote||''))throw new Error('published Week 3 CBS: confidence provenance must preserve displayed values');
+  if(live.confidenceStatus!=='submitted'||!/Green Bay at 11/i.test(live.confidenceNote||''))throw new Error('published Week 3 CBS: final submitted confidence provenance missing');
+  const staleLocked=clone(liveGames);
+  const gb=staleLocked.find(g=>g.away==='ATL'&&g.home==='GB');Object.assign(gb,{pick:'GB',weight:16,locked:true,completed:true});
+  t.applyStructuredCard(staleLocked,liveCard);
+  if(gb.weight!==11)throw new Error('authoritative CBS refresh preserved stale locked GB confidence');
 }
 const stableOpts={currentCard:{choices:expectedPost.picks.map((p,i)=>p===postGames[i].away?0:1),weights:expectedPost.weights},searchIters:120,finalIters:300,seed:20260908,fieldModel:fm};
 const first=t.runOptimizer(postGames,93,stableOpts),second=t.runOptimizer(postGames,93,{...stableOpts,currentCard:first.recommended});
