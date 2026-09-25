@@ -10,13 +10,14 @@ function summarizeWeek(archive){
   if(!valid.valid)throw new Error(`Week ${archive.week} archive is incomplete:\n- ${valid.errors.join('\n- ')}`);
   const standings=[...archive.entries].sort((a,b)=>a.rank-b.rank),n=archive.games.length;
   const entryProfiles=archive.entries.map(entry=>{
-    let consensus=0,contrarian=0,highConfidenceContrarian=0,ownershipSum=0;
+    let consensus=0,contrarian=0,highConfidenceContrarian=0,ownershipSum=0,submittedGames=0;
     for(const game of archive.games){
-      const pick=entry.card[game.key],metric=archive.analytics.gameMetrics[game.key],share=metric.teams[pick.team].pickShare;
+      const pick=entry.card[game.key];if(!pick)continue;
+      const metric=archive.analytics.gameMetrics[game.key],share=metric.teams[pick.team].pickShare;submittedGames++;
       ownershipSum+=share;
       if(share>=.5)consensus++;else{contrarian++;if(pick.confidence>n*.75)highConfidenceContrarian++}
     }
-    return{entryId:entry.entryId,isMine:entry.isMine,rank:entry.rank,weeklyPoints:entry.weeklyPoints,seasonPoints:entry.seasonPoints,consensusRate:consensus/n,contrarianPicks:contrarian,highConfidenceContrarian,averageSelectedOwnership:ownershipSum/n};
+    return{entryId:entry.entryId,isMine:entry.isMine,rank:entry.rank,weeklyPoints:entry.weeklyPoints,seasonPoints:entry.seasonPoints,submittedGames,consensusRate:submittedGames?consensus/submittedGames:null,contrarianPicks:contrarian,highConfidenceContrarian,averageSelectedOwnership:submittedGames?ownershipSum/submittedGames:null};
   });
   const mostDivisive=archive.games.map(game=>{
     const metric=archive.analytics.gameMetrics[game.key],away=metric.teams[game.away].pickShare;
@@ -58,7 +59,8 @@ function summarizeHistory(archives){
 }
 
 if(require.main===module){
-  const files=process.argv.slice(2).filter(x=>!x.startsWith('--')),outIndex=process.argv.indexOf('--out'),out=outIndex>=0?process.argv[outIndex+1]:null;
+  const args=process.argv.slice(2),outIndex=args.indexOf('--out'),out=outIndex>=0?args[outIndex+1]:null;
+  const files=args.filter((x,i)=>!x.startsWith('--')&&i!==outIndex+1);
   if(!files.length){console.error('Usage: node tools/cbs-pool-report.js <archive-week-1.json> [archive-week-2.json ...] [--out report.json]');process.exit(2)}
   try{
     const report=summarizeHistory(files.map(file=>JSON.parse(fs.readFileSync(path.resolve(file),'utf8'))));

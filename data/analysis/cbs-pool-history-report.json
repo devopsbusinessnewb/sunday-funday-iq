@@ -1,0 +1,1490 @@
+{
+  "schemaVersion": 1,
+  "weeks": [
+    {
+      "week": 1,
+      "poolSize": 94,
+      "winnerScore": 125,
+      "top2Cutoff": 114,
+      "mine": {
+        "entryId": "ME",
+        "isMine": true,
+        "rank": 12,
+        "weeklyPoints": 108,
+        "seasonPoints": 193,
+        "submittedGames": 16,
+        "consensusRate": 0.6875,
+        "contrarianPicks": 5,
+        "highConfidenceContrarian": 0,
+        "averageSelectedOwnership": 0.7120650992708862
+      },
+      "top2": [
+        {
+          "entryId": "entry-c1c885b2da69",
+          "isMine": false,
+          "rank": 1,
+          "weeklyPoints": 125,
+          "seasonPoints": 220,
+          "submittedGames": 16,
+          "consensusRate": 0.8125,
+          "contrarianPicks": 3,
+          "highConfidenceContrarian": 1,
+          "averageSelectedOwnership": 0.7687454927735172
+        },
+        {
+          "entryId": "entry-630149df7a20",
+          "isMine": false,
+          "rank": 2,
+          "weeklyPoints": 114,
+          "seasonPoints": 219,
+          "submittedGames": 16,
+          "consensusRate": 0.75,
+          "contrarianPicks": 4,
+          "highConfidenceContrarian": 0,
+          "averageSelectedOwnership": 0.7461481242477594
+        }
+      ],
+      "mostDivisive": [
+        {
+          "game": "DEN@KC",
+          "winner": "KC",
+          "awayShare": 0.5425531914893617,
+          "homeShare": 0.4574468085106383,
+          "division": 0.9148936170212767
+        },
+        {
+          "game": "GB@MIN",
+          "winner": "MIN",
+          "awayShare": 0.6236559139784946,
+          "homeShare": 0.3763440860215054,
+          "division": 0.7526881720430108
+        },
+        {
+          "game": "BUF@HOU",
+          "winner": "BUF",
+          "awayShare": 0.6914893617021277,
+          "homeShare": 0.30851063829787234,
+          "division": 0.6170212765957446
+        },
+        {
+          "game": "NYJ@TEN",
+          "winner": "NYJ",
+          "awayShare": 0.26595744680851063,
+          "homeShare": 0.7340425531914894,
+          "division": 0.5319148936170213
+        },
+        {
+          "game": "NE@SEA",
+          "winner": "SEA",
+          "awayShare": 0.2,
+          "homeShare": 0.8,
+          "division": 0.4
+        },
+        {
+          "game": "SF@LAR",
+          "winner": "SF",
+          "awayShare": 0.18478260869565216,
+          "homeShare": 0.8152173913043478,
+          "division": 0.3695652173913043
+        },
+        {
+          "game": "TB@CIN",
+          "winner": "CIN",
+          "awayShare": 0.1595744680851064,
+          "homeShare": 0.8404255319148937,
+          "division": 0.3191489361702128
+        },
+        {
+          "game": "CHI@CAR",
+          "winner": "CHI",
+          "awayShare": 0.8723404255319149,
+          "homeShare": 0.1276595744680851,
+          "division": 0.25531914893617014
+        },
+        {
+          "game": "DAL@NYG",
+          "winner": "NYG",
+          "awayShare": 0.8723404255319149,
+          "homeShare": 0.1276595744680851,
+          "division": 0.25531914893617014
+        },
+        {
+          "game": "BAL@IND",
+          "winner": "BAL",
+          "awayShare": 0.8829787234042553,
+          "homeShare": 0.11702127659574468,
+          "division": 0.23404255319148937
+        },
+        {
+          "game": "MIA@LV",
+          "winner": "LV",
+          "awayShare": 0.0851063829787234,
+          "homeShare": 0.9148936170212766,
+          "division": 0.17021276595744683
+        },
+        {
+          "game": "ATL@PIT",
+          "winner": "PIT",
+          "awayShare": 0.06382978723404255,
+          "homeShare": 0.9361702127659575,
+          "division": 0.12765957446808507
+        },
+        {
+          "game": "WAS@PHI",
+          "winner": "PHI",
+          "awayShare": 0.02127659574468085,
+          "homeShare": 0.9787234042553191,
+          "division": 0.04255319148936165
+        },
+        {
+          "game": "CLE@JAX",
+          "winner": "JAX",
+          "awayShare": 0.010638297872340425,
+          "homeShare": 0.9893617021276596,
+          "division": 0.021276595744680882
+        },
+        {
+          "game": "ARI@LAC",
+          "winner": "ARI",
+          "awayShare": 0.010638297872340425,
+          "homeShare": 0.9893617021276596,
+          "division": 0.021276595744680882
+        },
+        {
+          "game": "NO@DET",
+          "winner": "DET",
+          "awayShare": 0,
+          "homeShare": 1,
+          "division": 0
+        }
+      ]
+    },
+    {
+      "week": 2,
+      "poolSize": 94,
+      "winnerScore": 104,
+      "top2Cutoff": 101,
+      "mine": {
+        "entryId": "ME",
+        "isMine": true,
+        "rank": 51,
+        "weeklyPoints": 85,
+        "seasonPoints": 193,
+        "submittedGames": 16,
+        "consensusRate": 0.5625,
+        "contrarianPicks": 7,
+        "highConfidenceContrarian": 0,
+        "averageSelectedOwnership": 0.5734502431585106
+      },
+      "top2": [
+        {
+          "entryId": "entry-630149df7a20",
+          "isMine": false,
+          "rank": 1,
+          "weeklyPoints": 104,
+          "seasonPoints": 219,
+          "submittedGames": 16,
+          "consensusRate": 0.8125,
+          "contrarianPicks": 3,
+          "highConfidenceContrarian": 0,
+          "averageSelectedOwnership": 0.8049755598116584
+        },
+        {
+          "entryId": "entry-fa3d1eac516f",
+          "isMine": false,
+          "rank": 2,
+          "weeklyPoints": 101,
+          "seasonPoints": 199,
+          "submittedGames": 16,
+          "consensusRate": 0.9375,
+          "contrarianPicks": 1,
+          "highConfidenceContrarian": 0,
+          "averageSelectedOwnership": 0.8345933221384565
+        }
+      ],
+      "mostDivisive": [
+        {
+          "game": "JAX@DEN",
+          "winner": "DEN",
+          "awayShare": 0.4787234042553192,
+          "homeShare": 0.5212765957446809,
+          "division": 0.9574468085106383
+        },
+        {
+          "game": "CIN@HOU",
+          "winner": "CIN",
+          "awayShare": 0.32608695652173914,
+          "homeShare": 0.6739130434782609,
+          "division": 0.6521739130434783
+        },
+        {
+          "game": "PIT@NE",
+          "winner": "NE",
+          "awayShare": 0.1935483870967742,
+          "homeShare": 0.8064516129032258,
+          "division": 0.3870967741935484
+        },
+        {
+          "game": "CAR@ATL",
+          "winner": "CAR",
+          "awayShare": 0.8172043010752689,
+          "homeShare": 0.1827956989247312,
+          "division": 0.36559139784946226
+        },
+        {
+          "game": "LV@LAC",
+          "winner": "LV",
+          "awayShare": 0.11702127659574468,
+          "homeShare": 0.8829787234042553,
+          "division": 0.23404255319148937
+        },
+        {
+          "game": "GB@NYJ",
+          "winner": "GB",
+          "awayShare": 0.8924731182795699,
+          "homeShare": 0.10752688172043011,
+          "division": 0.21505376344086025
+        },
+        {
+          "game": "WAS@DAL",
+          "winner": "DAL",
+          "awayShare": 0.0851063829787234,
+          "homeShare": 0.9148936170212766,
+          "division": 0.17021276595744683
+        },
+        {
+          "game": "MIN@CHI",
+          "winner": "MIN",
+          "awayShare": 0.07526881720430108,
+          "homeShare": 0.9247311827956989,
+          "division": 0.15053763440860213
+        },
+        {
+          "game": "NYG@LAR",
+          "winner": "LAR",
+          "awayShare": 0.07526881720430108,
+          "homeShare": 0.9247311827956989,
+          "division": 0.15053763440860213
+        },
+        {
+          "game": "SEA@ARI",
+          "winner": "SEA",
+          "awayShare": 0.925531914893617,
+          "homeShare": 0.07446808510638298,
+          "division": 0.14893617021276606
+        },
+        {
+          "game": "DET@BUF",
+          "winner": "BUF",
+          "awayShare": 0.06818181818181818,
+          "homeShare": 0.9318181818181818,
+          "division": 0.13636363636363635
+        },
+        {
+          "game": "IND@KC",
+          "winner": "KC",
+          "awayShare": 0.05319148936170213,
+          "homeShare": 0.9468085106382979,
+          "division": 0.1063829787234043
+        },
+        {
+          "game": "NO@BAL",
+          "winner": "NO",
+          "awayShare": 0.03260869565217391,
+          "homeShare": 0.967391304347826,
+          "division": 0.06521739130434778
+        },
+        {
+          "game": "CLE@TB",
+          "winner": "CLE",
+          "awayShare": 0.010752688172043012,
+          "homeShare": 0.989247311827957,
+          "division": 0.021505376344086002
+        },
+        {
+          "game": "PHI@TEN",
+          "winner": "PHI",
+          "awayShare": 1,
+          "homeShare": 0,
+          "division": 0
+        },
+        {
+          "game": "MIA@SF",
+          "winner": "SF",
+          "awayShare": 0,
+          "homeShare": 1,
+          "division": 0
+        }
+      ]
+    }
+  ],
+  "fieldPrior": {
+    "participantWeeks": 188,
+    "averageConsensusRate": 0.8628482776089161,
+    "averageContrarianPicks": 2.1808510638297873,
+    "top2AverageConsensusRate": 0.828125,
+    "top2AverageContrarianPicks": 2.75,
+    "confidenceByPoolOwnershipBucket": [
+      {
+        "label": "0–20%",
+        "observations": 185,
+        "mean": 4.940540540540541,
+        "median": 4
+      },
+      {
+        "label": "20–40%",
+        "observations": 137,
+        "mean": 4.875912408759124,
+        "median": 4
+      },
+      {
+        "label": "40–60%",
+        "observations": 188,
+        "mean": 3.776595744680851,
+        "median": 3
+      },
+      {
+        "label": "60–80%",
+        "observations": 254,
+        "mean": 6.653543307086614,
+        "median": 6
+      },
+      {
+        "label": "80–100%",
+        "observations": 2220,
+        "mean": 9.653153153153154,
+        "median": 10
+      }
+    ]
+  },
+  "participantProfiles": [
+    {
+      "entryId": "entry-630149df7a20",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 3,
+      "top2Finishes": 2,
+      "consensusTotal": 1.5625,
+      "contrarianPicks": 7,
+      "highConfidenceContrarian": 0,
+      "averageRank": 1.5,
+      "averageConsensusRate": 0.78125
+    },
+    {
+      "entryId": "entry-c1c885b2da69",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 16,
+      "top2Finishes": 1,
+      "consensusTotal": 1.8125,
+      "contrarianPicks": 3,
+      "highConfidenceContrarian": 1,
+      "averageRank": 8,
+      "averageConsensusRate": 0.90625
+    },
+    {
+      "entryId": "entry-3e69c770ec04",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 17,
+      "top2Finishes": 0,
+      "consensusTotal": 1.7410714285714286,
+      "contrarianPicks": 4,
+      "highConfidenceContrarian": 0,
+      "averageRank": 8.5,
+      "averageConsensusRate": 0.8705357142857143
+    },
+    {
+      "entryId": "entry-3a945ecfb6ec",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 18,
+      "top2Finishes": 0,
+      "consensusTotal": 1.6875,
+      "contrarianPicks": 5,
+      "highConfidenceContrarian": 0,
+      "averageRank": 9,
+      "averageConsensusRate": 0.84375
+    },
+    {
+      "entryId": "entry-b531b1b797c7",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 21,
+      "top2Finishes": 0,
+      "consensusTotal": 1.625,
+      "contrarianPicks": 6,
+      "highConfidenceContrarian": 1,
+      "averageRank": 10.5,
+      "averageConsensusRate": 0.8125
+    },
+    {
+      "entryId": "entry-9faa1188f46f",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 30,
+      "top2Finishes": 0,
+      "consensusTotal": 1.625,
+      "contrarianPicks": 6,
+      "highConfidenceContrarian": 0,
+      "averageRank": 15,
+      "averageConsensusRate": 0.8125
+    },
+    {
+      "entryId": "entry-cd787a07a05d",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 31,
+      "top2Finishes": 0,
+      "consensusTotal": 1.875,
+      "contrarianPicks": 2,
+      "highConfidenceContrarian": 0,
+      "averageRank": 15.5,
+      "averageConsensusRate": 0.9375
+    },
+    {
+      "entryId": "entry-8f651fb035ea",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 31,
+      "top2Finishes": 0,
+      "consensusTotal": 1.9375,
+      "contrarianPicks": 1,
+      "highConfidenceContrarian": 0,
+      "averageRank": 15.5,
+      "averageConsensusRate": 0.96875
+    },
+    {
+      "entryId": "entry-c3d01cfda55f",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 34,
+      "top2Finishes": 0,
+      "consensusTotal": 1.75,
+      "contrarianPicks": 4,
+      "highConfidenceContrarian": 0,
+      "averageRank": 17,
+      "averageConsensusRate": 0.875
+    },
+    {
+      "entryId": "entry-bd092ed64daf",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 37,
+      "top2Finishes": 0,
+      "consensusTotal": 1.5,
+      "contrarianPicks": 8,
+      "highConfidenceContrarian": 0,
+      "averageRank": 18.5,
+      "averageConsensusRate": 0.75
+    },
+    {
+      "entryId": "entry-614e618fca31",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 39,
+      "top2Finishes": 0,
+      "consensusTotal": 1.75,
+      "contrarianPicks": 4,
+      "highConfidenceContrarian": 0,
+      "averageRank": 19.5,
+      "averageConsensusRate": 0.875
+    },
+    {
+      "entryId": "entry-22e5c274e59f",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 46,
+      "top2Finishes": 0,
+      "consensusTotal": 1.625,
+      "contrarianPicks": 6,
+      "highConfidenceContrarian": 0,
+      "averageRank": 23,
+      "averageConsensusRate": 0.8125
+    },
+    {
+      "entryId": "entry-fa3d1eac516f",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 46,
+      "top2Finishes": 1,
+      "consensusTotal": 1.8125,
+      "contrarianPicks": 3,
+      "highConfidenceContrarian": 0,
+      "averageRank": 23,
+      "averageConsensusRate": 0.90625
+    },
+    {
+      "entryId": "entry-0dbd0a3cdfca",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 49,
+      "top2Finishes": 0,
+      "consensusTotal": 1.875,
+      "contrarianPicks": 2,
+      "highConfidenceContrarian": 0,
+      "averageRank": 24.5,
+      "averageConsensusRate": 0.9375
+    },
+    {
+      "entryId": "entry-4ece024b5c77",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 58,
+      "top2Finishes": 0,
+      "consensusTotal": 1.875,
+      "contrarianPicks": 2,
+      "highConfidenceContrarian": 0,
+      "averageRank": 29,
+      "averageConsensusRate": 0.9375
+    },
+    {
+      "entryId": "entry-8ca70d4a1d00",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 59,
+      "top2Finishes": 0,
+      "consensusTotal": 1.9375,
+      "contrarianPicks": 1,
+      "highConfidenceContrarian": 0,
+      "averageRank": 29.5,
+      "averageConsensusRate": 0.96875
+    },
+    {
+      "entryId": "entry-71cc117080c1",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 59,
+      "top2Finishes": 0,
+      "consensusTotal": 1.75,
+      "contrarianPicks": 4,
+      "highConfidenceContrarian": 0,
+      "averageRank": 29.5,
+      "averageConsensusRate": 0.875
+    },
+    {
+      "entryId": "entry-01b45efdf426",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 60,
+      "top2Finishes": 0,
+      "consensusTotal": 1.8125,
+      "contrarianPicks": 3,
+      "highConfidenceContrarian": 0,
+      "averageRank": 30,
+      "averageConsensusRate": 0.90625
+    },
+    {
+      "entryId": "entry-0509cdcf8346",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 62,
+      "top2Finishes": 0,
+      "consensusTotal": 1.625,
+      "contrarianPicks": 6,
+      "highConfidenceContrarian": 2,
+      "averageRank": 31,
+      "averageConsensusRate": 0.8125
+    },
+    {
+      "entryId": "entry-dfd1d4fbc077",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 62,
+      "top2Finishes": 0,
+      "consensusTotal": 1.6875,
+      "contrarianPicks": 5,
+      "highConfidenceContrarian": 0,
+      "averageRank": 31,
+      "averageConsensusRate": 0.84375
+    },
+    {
+      "entryId": "ME",
+      "isMine": true,
+      "weeks": 2,
+      "rankTotal": 63,
+      "top2Finishes": 0,
+      "consensusTotal": 1.25,
+      "contrarianPicks": 12,
+      "highConfidenceContrarian": 0,
+      "averageRank": 31.5,
+      "averageConsensusRate": 0.625
+    },
+    {
+      "entryId": "entry-113e850a70d7",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 64,
+      "top2Finishes": 0,
+      "consensusTotal": 1.4375,
+      "contrarianPicks": 9,
+      "highConfidenceContrarian": 0,
+      "averageRank": 32,
+      "averageConsensusRate": 0.71875
+    },
+    {
+      "entryId": "entry-eedeff590012",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 66,
+      "top2Finishes": 0,
+      "consensusTotal": 1.75,
+      "contrarianPicks": 4,
+      "highConfidenceContrarian": 0,
+      "averageRank": 33,
+      "averageConsensusRate": 0.875
+    },
+    {
+      "entryId": "entry-95767cd833ff",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 67,
+      "top2Finishes": 0,
+      "consensusTotal": 1.8125,
+      "contrarianPicks": 3,
+      "highConfidenceContrarian": 0,
+      "averageRank": 33.5,
+      "averageConsensusRate": 0.90625
+    },
+    {
+      "entryId": "entry-919966d9b7c9",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 68,
+      "top2Finishes": 0,
+      "consensusTotal": 1.9375,
+      "contrarianPicks": 1,
+      "highConfidenceContrarian": 0,
+      "averageRank": 34,
+      "averageConsensusRate": 0.96875
+    },
+    {
+      "entryId": "entry-bfd0bd62ed89",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 69,
+      "top2Finishes": 0,
+      "consensusTotal": 1.875,
+      "contrarianPicks": 2,
+      "highConfidenceContrarian": 0,
+      "averageRank": 34.5,
+      "averageConsensusRate": 0.9375
+    },
+    {
+      "entryId": "entry-ea6209444b65",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 71,
+      "top2Finishes": 0,
+      "consensusTotal": 1.8125,
+      "contrarianPicks": 3,
+      "highConfidenceContrarian": 0,
+      "averageRank": 35.5,
+      "averageConsensusRate": 0.90625
+    },
+    {
+      "entryId": "entry-417f00375d76",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 71,
+      "top2Finishes": 0,
+      "consensusTotal": 1.6875,
+      "contrarianPicks": 5,
+      "highConfidenceContrarian": 1,
+      "averageRank": 35.5,
+      "averageConsensusRate": 0.84375
+    },
+    {
+      "entryId": "entry-6e3e07106658",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 71,
+      "top2Finishes": 0,
+      "consensusTotal": 1.8125,
+      "contrarianPicks": 3,
+      "highConfidenceContrarian": 0,
+      "averageRank": 35.5,
+      "averageConsensusRate": 0.90625
+    },
+    {
+      "entryId": "entry-0a0b42c2c64d",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 73,
+      "top2Finishes": 0,
+      "consensusTotal": 1.6875,
+      "contrarianPicks": 5,
+      "highConfidenceContrarian": 1,
+      "averageRank": 36.5,
+      "averageConsensusRate": 0.84375
+    },
+    {
+      "entryId": "entry-5d750b3b9a55",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 74,
+      "top2Finishes": 0,
+      "consensusTotal": 1.8125,
+      "contrarianPicks": 3,
+      "highConfidenceContrarian": 0,
+      "averageRank": 37,
+      "averageConsensusRate": 0.90625
+    },
+    {
+      "entryId": "entry-1a0e91ef0693",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 75,
+      "top2Finishes": 0,
+      "consensusTotal": 1.9375,
+      "contrarianPicks": 1,
+      "highConfidenceContrarian": 0,
+      "averageRank": 37.5,
+      "averageConsensusRate": 0.96875
+    },
+    {
+      "entryId": "entry-009685906a16",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 76,
+      "top2Finishes": 0,
+      "consensusTotal": 1.5625,
+      "contrarianPicks": 7,
+      "highConfidenceContrarian": 0,
+      "averageRank": 38,
+      "averageConsensusRate": 0.78125
+    },
+    {
+      "entryId": "entry-3eadb26968e0",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 78,
+      "top2Finishes": 0,
+      "consensusTotal": 1.75,
+      "contrarianPicks": 4,
+      "highConfidenceContrarian": 0,
+      "averageRank": 39,
+      "averageConsensusRate": 0.875
+    },
+    {
+      "entryId": "entry-bcb26dc4a8fb",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 78,
+      "top2Finishes": 0,
+      "consensusTotal": 1.75,
+      "contrarianPicks": 4,
+      "highConfidenceContrarian": 1,
+      "averageRank": 39,
+      "averageConsensusRate": 0.875
+    },
+    {
+      "entryId": "entry-cb43fa52b22a",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 79,
+      "top2Finishes": 0,
+      "consensusTotal": 1.875,
+      "contrarianPicks": 2,
+      "highConfidenceContrarian": 0,
+      "averageRank": 39.5,
+      "averageConsensusRate": 0.9375
+    },
+    {
+      "entryId": "entry-01c9a6440108",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 79,
+      "top2Finishes": 0,
+      "consensusTotal": 1.75,
+      "contrarianPicks": 4,
+      "highConfidenceContrarian": 0,
+      "averageRank": 39.5,
+      "averageConsensusRate": 0.875
+    },
+    {
+      "entryId": "entry-a09e1286925f",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 83,
+      "top2Finishes": 0,
+      "consensusTotal": 1.625,
+      "contrarianPicks": 6,
+      "highConfidenceContrarian": 0,
+      "averageRank": 41.5,
+      "averageConsensusRate": 0.8125
+    },
+    {
+      "entryId": "entry-95846d8c66a7",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 83,
+      "top2Finishes": 0,
+      "consensusTotal": 1.875,
+      "contrarianPicks": 2,
+      "highConfidenceContrarian": 0,
+      "averageRank": 41.5,
+      "averageConsensusRate": 0.9375
+    },
+    {
+      "entryId": "entry-97f6c8c07a7b",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 83,
+      "top2Finishes": 0,
+      "consensusTotal": 1.625,
+      "contrarianPicks": 6,
+      "highConfidenceContrarian": 0,
+      "averageRank": 41.5,
+      "averageConsensusRate": 0.8125
+    },
+    {
+      "entryId": "entry-fe2f8782d656",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 84,
+      "top2Finishes": 0,
+      "consensusTotal": 1.9375,
+      "contrarianPicks": 1,
+      "highConfidenceContrarian": 0,
+      "averageRank": 42,
+      "averageConsensusRate": 0.96875
+    },
+    {
+      "entryId": "entry-28efeed3d9f9",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 89,
+      "top2Finishes": 0,
+      "consensusTotal": 1.6875,
+      "contrarianPicks": 5,
+      "highConfidenceContrarian": 0,
+      "averageRank": 44.5,
+      "averageConsensusRate": 0.84375
+    },
+    {
+      "entryId": "entry-548bc31536fd",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 90,
+      "top2Finishes": 0,
+      "consensusTotal": 1.8,
+      "contrarianPicks": 3,
+      "highConfidenceContrarian": 0,
+      "averageRank": 45,
+      "averageConsensusRate": 0.9
+    },
+    {
+      "entryId": "entry-eb71595d1df9",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 91,
+      "top2Finishes": 0,
+      "consensusTotal": 1.7458333333333333,
+      "contrarianPicks": 4,
+      "highConfidenceContrarian": 0,
+      "averageRank": 45.5,
+      "averageConsensusRate": 0.8729166666666667
+    },
+    {
+      "entryId": "entry-5604e19d499d",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 91,
+      "top2Finishes": 0,
+      "consensusTotal": 1.75,
+      "contrarianPicks": 4,
+      "highConfidenceContrarian": 0,
+      "averageRank": 45.5,
+      "averageConsensusRate": 0.875
+    },
+    {
+      "entryId": "entry-37667b074539",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 93,
+      "top2Finishes": 0,
+      "consensusTotal": 1.875,
+      "contrarianPicks": 2,
+      "highConfidenceContrarian": 0,
+      "averageRank": 46.5,
+      "averageConsensusRate": 0.9375
+    },
+    {
+      "entryId": "entry-ebed47e87f8e",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 94,
+      "top2Finishes": 0,
+      "consensusTotal": 1.625,
+      "contrarianPicks": 6,
+      "highConfidenceContrarian": 0,
+      "averageRank": 47,
+      "averageConsensusRate": 0.8125
+    },
+    {
+      "entryId": "entry-0a2da3c9df9b",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 95,
+      "top2Finishes": 0,
+      "consensusTotal": 1.875,
+      "contrarianPicks": 2,
+      "highConfidenceContrarian": 0,
+      "averageRank": 47.5,
+      "averageConsensusRate": 0.9375
+    },
+    {
+      "entryId": "entry-845d4978f1b0",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 95,
+      "top2Finishes": 0,
+      "consensusTotal": 1.6875,
+      "contrarianPicks": 5,
+      "highConfidenceContrarian": 0,
+      "averageRank": 47.5,
+      "averageConsensusRate": 0.84375
+    },
+    {
+      "entryId": "entry-040ab44e2007",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 97,
+      "top2Finishes": 0,
+      "consensusTotal": 1.75,
+      "contrarianPicks": 4,
+      "highConfidenceContrarian": 0,
+      "averageRank": 48.5,
+      "averageConsensusRate": 0.875
+    },
+    {
+      "entryId": "entry-fbe149b62413",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 98,
+      "top2Finishes": 0,
+      "consensusTotal": 1.6160714285714286,
+      "contrarianPicks": 6,
+      "highConfidenceContrarian": 2,
+      "averageRank": 49,
+      "averageConsensusRate": 0.8080357142857143
+    },
+    {
+      "entryId": "entry-f3bcc6332a81",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 102,
+      "top2Finishes": 0,
+      "consensusTotal": 1.8125,
+      "contrarianPicks": 3,
+      "highConfidenceContrarian": 0,
+      "averageRank": 51,
+      "averageConsensusRate": 0.90625
+    },
+    {
+      "entryId": "entry-a7833e398625",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 105,
+      "top2Finishes": 0,
+      "consensusTotal": 1.875,
+      "contrarianPicks": 2,
+      "highConfidenceContrarian": 0,
+      "averageRank": 52.5,
+      "averageConsensusRate": 0.9375
+    },
+    {
+      "entryId": "entry-d621f6de2053",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 106,
+      "top2Finishes": 0,
+      "consensusTotal": 1.875,
+      "contrarianPicks": 2,
+      "highConfidenceContrarian": 0,
+      "averageRank": 53,
+      "averageConsensusRate": 0.9375
+    },
+    {
+      "entryId": "entry-d98c241a7582",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 106,
+      "top2Finishes": 0,
+      "consensusTotal": 1.9375,
+      "contrarianPicks": 1,
+      "highConfidenceContrarian": 0,
+      "averageRank": 53,
+      "averageConsensusRate": 0.96875
+    },
+    {
+      "entryId": "entry-3a60ded278bf",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 108,
+      "top2Finishes": 0,
+      "consensusTotal": 1.8041666666666667,
+      "contrarianPicks": 3,
+      "highConfidenceContrarian": 0,
+      "averageRank": 54,
+      "averageConsensusRate": 0.9020833333333333
+    },
+    {
+      "entryId": "entry-a0d64b4239e8",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 108,
+      "top2Finishes": 0,
+      "consensusTotal": 1.6875,
+      "contrarianPicks": 5,
+      "highConfidenceContrarian": 0,
+      "averageRank": 54,
+      "averageConsensusRate": 0.84375
+    },
+    {
+      "entryId": "entry-2f7f18811066",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 109,
+      "top2Finishes": 0,
+      "consensusTotal": 1.625,
+      "contrarianPicks": 6,
+      "highConfidenceContrarian": 0,
+      "averageRank": 54.5,
+      "averageConsensusRate": 0.8125
+    },
+    {
+      "entryId": "entry-91754fbf0f31",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 109,
+      "top2Finishes": 0,
+      "consensusTotal": 1.9333333333333333,
+      "contrarianPicks": 1,
+      "highConfidenceContrarian": 0,
+      "averageRank": 54.5,
+      "averageConsensusRate": 0.9666666666666667
+    },
+    {
+      "entryId": "entry-ab68c0cd09d8",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 110,
+      "top2Finishes": 0,
+      "consensusTotal": 1.6875,
+      "contrarianPicks": 5,
+      "highConfidenceContrarian": 0,
+      "averageRank": 55,
+      "averageConsensusRate": 0.84375
+    },
+    {
+      "entryId": "entry-77d91b81fcef",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 111,
+      "top2Finishes": 0,
+      "consensusTotal": 1.9333333333333333,
+      "contrarianPicks": 1,
+      "highConfidenceContrarian": 0,
+      "averageRank": 55.5,
+      "averageConsensusRate": 0.9666666666666667
+    },
+    {
+      "entryId": "entry-d5238444f8a4",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 111,
+      "top2Finishes": 0,
+      "consensusTotal": 1.75,
+      "contrarianPicks": 4,
+      "highConfidenceContrarian": 0,
+      "averageRank": 55.5,
+      "averageConsensusRate": 0.875
+    },
+    {
+      "entryId": "entry-97d314cd1fe6",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 112,
+      "top2Finishes": 0,
+      "consensusTotal": 1.6875,
+      "contrarianPicks": 5,
+      "highConfidenceContrarian": 2,
+      "averageRank": 56,
+      "averageConsensusRate": 0.84375
+    },
+    {
+      "entryId": "entry-5974eb913210",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 113,
+      "top2Finishes": 0,
+      "consensusTotal": 1.8041666666666667,
+      "contrarianPicks": 3,
+      "highConfidenceContrarian": 1,
+      "averageRank": 56.5,
+      "averageConsensusRate": 0.9020833333333333
+    },
+    {
+      "entryId": "entry-ab3f78eedbc9",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 114,
+      "top2Finishes": 0,
+      "consensusTotal": 1.5625,
+      "contrarianPicks": 7,
+      "highConfidenceContrarian": 0,
+      "averageRank": 57,
+      "averageConsensusRate": 0.78125
+    },
+    {
+      "entryId": "entry-d68b2e4b449d",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 115,
+      "top2Finishes": 0,
+      "consensusTotal": 1.625,
+      "contrarianPicks": 6,
+      "highConfidenceContrarian": 0,
+      "averageRank": 57.5,
+      "averageConsensusRate": 0.8125
+    },
+    {
+      "entryId": "entry-8aaff102d13b",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 115,
+      "top2Finishes": 0,
+      "consensusTotal": 1.625,
+      "contrarianPicks": 6,
+      "highConfidenceContrarian": 0,
+      "averageRank": 57.5,
+      "averageConsensusRate": 0.8125
+    },
+    {
+      "entryId": "entry-9a7759a32d89",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 116,
+      "top2Finishes": 0,
+      "consensusTotal": 1.8125,
+      "contrarianPicks": 3,
+      "highConfidenceContrarian": 0,
+      "averageRank": 58,
+      "averageConsensusRate": 0.90625
+    },
+    {
+      "entryId": "entry-aa8dce23f0d7",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 116,
+      "top2Finishes": 0,
+      "consensusTotal": 1.625,
+      "contrarianPicks": 6,
+      "highConfidenceContrarian": 0,
+      "averageRank": 58,
+      "averageConsensusRate": 0.8125
+    },
+    {
+      "entryId": "entry-9cc4f0b4fb61",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 117,
+      "top2Finishes": 0,
+      "consensusTotal": 1.6875,
+      "contrarianPicks": 5,
+      "highConfidenceContrarian": 0,
+      "averageRank": 58.5,
+      "averageConsensusRate": 0.84375
+    },
+    {
+      "entryId": "entry-bafc80c3148e",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 122,
+      "top2Finishes": 0,
+      "consensusTotal": 1.875,
+      "contrarianPicks": 2,
+      "highConfidenceContrarian": 0,
+      "averageRank": 61,
+      "averageConsensusRate": 0.9375
+    },
+    {
+      "entryId": "entry-567fabcccb3b",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 125,
+      "top2Finishes": 0,
+      "consensusTotal": 2,
+      "contrarianPicks": 0,
+      "highConfidenceContrarian": 0,
+      "averageRank": 62.5,
+      "averageConsensusRate": 1
+    },
+    {
+      "entryId": "entry-702e505df34b",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 125,
+      "top2Finishes": 0,
+      "consensusTotal": 1.3125,
+      "contrarianPicks": 11,
+      "highConfidenceContrarian": 0,
+      "averageRank": 62.5,
+      "averageConsensusRate": 0.65625
+    },
+    {
+      "entryId": "entry-dece965b47a0",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 127,
+      "top2Finishes": 0,
+      "consensusTotal": 1.875,
+      "contrarianPicks": 2,
+      "highConfidenceContrarian": 0,
+      "averageRank": 63.5,
+      "averageConsensusRate": 0.9375
+    },
+    {
+      "entryId": "entry-8a9a73454c4d",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 127,
+      "top2Finishes": 0,
+      "consensusTotal": 1.8125,
+      "contrarianPicks": 3,
+      "highConfidenceContrarian": 0,
+      "averageRank": 63.5,
+      "averageConsensusRate": 0.90625
+    },
+    {
+      "entryId": "entry-3b0ed4391540",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 127,
+      "top2Finishes": 0,
+      "consensusTotal": 1.875,
+      "contrarianPicks": 2,
+      "highConfidenceContrarian": 0,
+      "averageRank": 63.5,
+      "averageConsensusRate": 0.9375
+    },
+    {
+      "entryId": "entry-4ee10aaa1e3b",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 128,
+      "top2Finishes": 0,
+      "consensusTotal": 1.625,
+      "contrarianPicks": 6,
+      "highConfidenceContrarian": 0,
+      "averageRank": 64,
+      "averageConsensusRate": 0.8125
+    },
+    {
+      "entryId": "entry-f5709b1ad299",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 133,
+      "top2Finishes": 0,
+      "consensusTotal": 1.75,
+      "contrarianPicks": 4,
+      "highConfidenceContrarian": 1,
+      "averageRank": 66.5,
+      "averageConsensusRate": 0.875
+    },
+    {
+      "entryId": "entry-7c4d9641466d",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 143,
+      "top2Finishes": 0,
+      "consensusTotal": 1.625,
+      "contrarianPicks": 6,
+      "highConfidenceContrarian": 0,
+      "averageRank": 71.5,
+      "averageConsensusRate": 0.8125
+    },
+    {
+      "entryId": "entry-96059ac6a841",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 143,
+      "top2Finishes": 0,
+      "consensusTotal": 1.3125,
+      "contrarianPicks": 11,
+      "highConfidenceContrarian": 0,
+      "averageRank": 71.5,
+      "averageConsensusRate": 0.65625
+    },
+    {
+      "entryId": "entry-273a1dac8028",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 145,
+      "top2Finishes": 0,
+      "consensusTotal": 1.4375,
+      "contrarianPicks": 9,
+      "highConfidenceContrarian": 0,
+      "averageRank": 72.5,
+      "averageConsensusRate": 0.71875
+    },
+    {
+      "entryId": "entry-e75755e0f07d",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 146,
+      "top2Finishes": 0,
+      "consensusTotal": 1.9375,
+      "contrarianPicks": 1,
+      "highConfidenceContrarian": 0,
+      "averageRank": 73,
+      "averageConsensusRate": 0.96875
+    },
+    {
+      "entryId": "entry-4d94f328e523",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 149,
+      "top2Finishes": 0,
+      "consensusTotal": 1.5,
+      "contrarianPicks": 8,
+      "highConfidenceContrarian": 0,
+      "averageRank": 74.5,
+      "averageConsensusRate": 0.75
+    },
+    {
+      "entryId": "entry-8f788800cfc8",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 152,
+      "top2Finishes": 0,
+      "consensusTotal": 1.6166666666666667,
+      "contrarianPicks": 6,
+      "highConfidenceContrarian": 1,
+      "averageRank": 76,
+      "averageConsensusRate": 0.8083333333333333
+    },
+    {
+      "entryId": "entry-fc1c1bb3fc73",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 154,
+      "top2Finishes": 0,
+      "consensusTotal": 1.4375,
+      "contrarianPicks": 9,
+      "highConfidenceContrarian": 0,
+      "averageRank": 77,
+      "averageConsensusRate": 0.71875
+    },
+    {
+      "entryId": "entry-1de33d3605f6",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 154,
+      "top2Finishes": 0,
+      "consensusTotal": 1.6875,
+      "contrarianPicks": 5,
+      "highConfidenceContrarian": 0,
+      "averageRank": 77,
+      "averageConsensusRate": 0.84375
+    },
+    {
+      "entryId": "entry-eef439f67d77",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 157,
+      "top2Finishes": 0,
+      "consensusTotal": 1.5,
+      "contrarianPicks": 8,
+      "highConfidenceContrarian": 1,
+      "averageRank": 78.5,
+      "averageConsensusRate": 0.75
+    },
+    {
+      "entryId": "entry-0ae50bfe87e8",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 160,
+      "top2Finishes": 0,
+      "consensusTotal": 1.8125,
+      "contrarianPicks": 3,
+      "highConfidenceContrarian": 0,
+      "averageRank": 80,
+      "averageConsensusRate": 0.90625
+    },
+    {
+      "entryId": "entry-5d9cbf6e6c5f",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 160,
+      "top2Finishes": 0,
+      "consensusTotal": 1.625,
+      "contrarianPicks": 6,
+      "highConfidenceContrarian": 0,
+      "averageRank": 80,
+      "averageConsensusRate": 0.8125
+    },
+    {
+      "entryId": "entry-e91af4beecaf",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 162,
+      "top2Finishes": 0,
+      "consensusTotal": 1.7375,
+      "contrarianPicks": 4,
+      "highConfidenceContrarian": 1,
+      "averageRank": 81,
+      "averageConsensusRate": 0.86875
+    },
+    {
+      "entryId": "entry-3cbbb1aa51fc",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 168,
+      "top2Finishes": 0,
+      "consensusTotal": 1.4833333333333334,
+      "contrarianPicks": 8,
+      "highConfidenceContrarian": 0,
+      "averageRank": 84,
+      "averageConsensusRate": 0.7416666666666667
+    },
+    {
+      "entryId": "entry-b7814fd9e08c",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 169,
+      "top2Finishes": 0,
+      "consensusTotal": 1.625,
+      "contrarianPicks": 6,
+      "highConfidenceContrarian": 0,
+      "averageRank": 84.5,
+      "averageConsensusRate": 0.8125
+    },
+    {
+      "entryId": "entry-dfc4accd492c",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 174,
+      "top2Finishes": 0,
+      "consensusTotal": 1.8125,
+      "contrarianPicks": 3,
+      "highConfidenceContrarian": 1,
+      "averageRank": 87,
+      "averageConsensusRate": 0.90625
+    },
+    {
+      "entryId": "entry-2766aa772445",
+      "isMine": false,
+      "weeks": 2,
+      "rankTotal": 186,
+      "top2Finishes": 0,
+      "consensusTotal": 1.75,
+      "contrarianPicks": 3,
+      "highConfidenceContrarian": 2,
+      "averageRank": 93,
+      "averageConsensusRate": 0.875
+    }
+  ]
+}

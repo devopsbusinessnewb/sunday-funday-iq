@@ -57,20 +57,23 @@ function parseRows(lines,firstRank,games,pool,includeNames=false){
     const rank=Number((chunk[0].match(RANK)||[])[1]);
     const name=chunk[1]||'';
     if(!rank||!name)continue;
-    const firstPair=chunk.findIndex((value,i)=>TEAM.test(normalizeTeam(value))&&/^\(\d{1,2}\)$/.test(chunk[i+1]||''));
-    if(firstPair<0)continue;
-    const scoreValues=chunk.slice(2,firstPair).filter(x=>/^\d+$/.test(x)).map(Number);
-    const picks=[];
-    for(let i=firstPair;i<chunk.length-1;i++){
-      const team=normalizeTeam(chunk[i]),weightMatch=String(chunk[i+1]).match(/^\((\d{1,2})\)$/);
+    const firstSelection=chunk.findIndex((value,i)=>i>=2&&(value==='-'||(TEAM.test(normalizeTeam(value))&&/^\(\d{1,2}\)$/.test(chunk[i+1]||''))));
+    if(firstSelection<0)continue;
+    const scoreValues=chunk.slice(2,firstSelection).filter(x=>/^\d+$/.test(x)).map(Number);
+    const card={},missingPicks={};
+    let gameIndex=0;
+    for(let i=firstSelection;i<chunk.length&&gameIndex<games.length;i++){
+      const value=chunk[i],weightMatch=String(chunk[i+1]||'').match(/^\((\d{1,2})\)$/),game=games[gameIndex];
+      if(value==='-'){
+        missingPicks[game.key]={confidence:weightMatch?Number(weightMatch[1]):null};
+        gameIndex++;if(weightMatch)i++;
+        continue;
+      }
+      const team=normalizeTeam(value);
       if(!TEAM.test(team)||!weightMatch)continue;
-      picks.push({team,confidence:Number(weightMatch[1])});i++;
-    }
-    const card={};
-    for(let i=0;i<Math.min(picks.length,games.length);i++){
-      const game=games[i],pick=picks[i];
-      if(pick.team!==game.away&&pick.team!==game.home)continue;
-      card[game.key]=pick;
+      if(team!==game.away&&team!==game.home)continue;
+      card[game.key]={team,confidence:Number(weightMatch[1])};
+      gameIndex++;i++;
     }
     entries.push({
       entryId:stableEntryId(pool,name),
@@ -79,7 +82,8 @@ function parseRows(lines,firstRank,games,pool,includeNames=false){
       rank,
       weeklyPoints:scoreValues[0]??null,
       seasonPoints:scoreValues[1]??null,
-      card
+      card,
+      missingPicks
     });
   }
   if(!entries.length)throw new Error('No participant rows with picks were found in the standings capture.');
@@ -87,21 +91,23 @@ function parseRows(lines,firstRank,games,pool,includeNames=false){
 }
 
 function analyzeArchive(archive){
+  const accountedEntries=archive.entries.filter(e=>Object.keys(e.card).length+Object.keys(e.missingPicks||{}).length===archive.games.length);
   const completeEntries=archive.entries.filter(e=>Object.keys(e.card).length===archive.games.length);
   const gameMetrics={};
   for(const game of archive.games){
-    const observations=completeEntries.map(e=>e.card[game.key]).filter(Boolean),teams={};
+    const observations=accountedEntries.map(e=>e.card[game.key]).filter(Boolean),teams={};
     for(const team of [game.away,game.home]){
       const selected=observations.filter(x=>x.team===team),weights=selected.map(x=>x.confidence);
       teams[team]={count:selected.length,pickShare:observations.length?selected.length/observations.length:null,confidence:{mean:weights.length?weights.reduce((a,b)=>a+b,0)/weights.length:null,median:median(weights),min:weights.length?Math.min(...weights):null,max:weights.length?Math.max(...weights):null}};
     }
-    gameMetrics[game.key]={observedEntries:observations.length,winner:game.winner,teams};
+    gameMetrics[game.key]={observedEntries:observations.length,missingEntries:accountedEntries.length-observations.length,submissionRate:accountedEntries.length?observations.length/accountedEntries.length:null,winner:game.winner,teams};
   }
   const standings=[...archive.entries].filter(e=>Number.isFinite(e.weeklyPoints)).sort((a,b)=>b.weeklyPoints-a.weeklyPoints||a.rank-b.rank);
   return{
     observedEntries:archive.entries.length,
+    accountedEntries:accountedEntries.length,
     completeEntries:completeEntries.length,
-    completeness:archive.entries.length?completeEntries.length/archive.entries.length:0,
+    completeness:archive.entries.length?accountedEntries.length/archive.entries.length:0,
     winnerScore:standings[0]?.weeklyPoints??null,
     top2Cutoff:standings[1]?.weeklyPoints??null,
     gameMetrics
@@ -114,15 +120,17 @@ function validateArchive(archive,{requireComplete=false}={}){
   if(!archive.entries.length)errors.push('No entries');
   const keys=new Set(archive.games.map(g=>g.key));
   for(const entry of archive.entries){
-    const cardKeys=Object.keys(entry.card);
+    const cardKeys=Object.keys(entry.card),missingKeys=Object.keys(entry.missingPicks||{}),accountedKeys=[...cardKeys,...missingKeys];
     for(const key of cardKeys)if(!keys.has(key))errors.push(`${entry.entryId}: unknown game ${key}`);
-    const weights=cardKeys.map(k=>entry.card[k].confidence);
+    for(const key of missingKeys)if(!keys.has(key))errors.push(`${entry.entryId}: unknown missing-pick game ${key}`);
+    if(new Set(accountedKeys).size!==accountedKeys.length)errors.push(`${entry.entryId}: game is both picked and missing`);
+    const weights=[...cardKeys.map(k=>entry.card[k].confidence),...missingKeys.map(k=>entry.missingPicks[k].confidence).filter(Number.isInteger)];
     if(new Set(weights).size!==weights.length)errors.push(`${entry.entryId}: duplicate confidence value`);
     if(weights.some(w=>!Number.isInteger(w)||w<1||w>n))errors.push(`${entry.entryId}: invalid confidence value`);
-    if(requireComplete&&cardKeys.length!==n)errors.push(`${entry.entryId}: only ${cardKeys.length}/${n} games captured`);
-    if(cardKeys.length===n){
+    if(requireComplete&&accountedKeys.length!==n)errors.push(`${entry.entryId}: only ${accountedKeys.length}/${n} game slots captured`);
+    if(accountedKeys.length===n){
       const sorted=[...weights].sort((a,b)=>a-b);
-      if(sorted.some((w,i)=>w!==i+1))errors.push(`${entry.entryId}: confidence values are not exactly 1–${n}`);
+      if(weights.length===n&&sorted.some((w,i)=>w!==i+1))errors.push(`${entry.entryId}: confidence values are not exactly 1–${n}`);
       if(archive.games.every(g=>g.winner)&&Number.isFinite(entry.weeklyPoints)){
         const calculated=archive.games.reduce((sum,g)=>sum+(entry.card[g.key]?.team===g.winner?entry.card[g.key].confidence:0),0);
         if(calculated!==entry.weeklyPoints)errors.push(`${entry.entryId}: CBS score ${entry.weeklyPoints} does not match calculated ${calculated}`);
@@ -156,7 +164,7 @@ function buildArchive(scan,{week,includeNames=false,requireComplete=false}={}){
       for(const entry of entries){
         const prior=entryMap.get(entry.entryId);
         if(!prior)entryMap.set(entry.entryId,entry);
-        else entryMap.set(entry.entryId,{...prior,...entry,card:{...prior.card,...entry.card},weeklyPoints:entry.weeklyPoints??prior.weeklyPoints,seasonPoints:entry.seasonPoints??prior.seasonPoints});
+        else entryMap.set(entry.entryId,{...prior,...entry,card:{...prior.card,...entry.card},missingPicks:{...(prior.missingPicks||{}),...(entry.missingPicks||{})},weeklyPoints:entry.weeklyPoints??prior.weeklyPoints,seasonPoints:entry.seasonPoints??prior.seasonPoints});
       }
     }catch(error){viewErrors.push(error.message)}
   }

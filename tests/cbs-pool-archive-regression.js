@@ -78,6 +78,12 @@ if(archive.analytics.gameMetrics['CAR@CLE'].teams.CAR.pickShare!==2/3)throw new 
 if(archive.analytics.gameMetrics['ATL@GB'].teams.GB.confidence.mean!==4)throw new Error('Confidence distribution is incorrect');
 if(!validateArchive(archive,{requireComplete:true}).valid)throw new Error('Completed archive should validate');
 
+const missedText=text.replace('1st\nAdam Jolly\n10\n110','1st\nAdam Jolly\n6\n110').replace('GB\n(4)\nBUF\n(3)\nCAR\n(2)\nDET\n(1)','-\nBUF\n(3)\nCAR\n(2)\nDET\n(1)');
+const missed=buildArchive({...scan,snapshots:[{...scan.snapshots[0],text:missedText}]},{week:2,requireComplete:true});
+const missedEntry=missed.entries[0];
+if(!missedEntry.missingPicks['ATL@GB']||missedEntry.card['LAC@BUF']?.team!=='BUF'||Object.keys(missedEntry.card).length!==3)throw new Error('Explicit CBS no-pick slot shifted later games');
+if(missed.analytics.gameMetrics['ATL@GB'].missingEntries!==1||missed.analytics.completeEntries!==2||missed.analytics.accountedEntries!==3)throw new Error('No-pick analytics are incorrect');
+
 const named=buildArchive(scan,{week:2,requireComplete:true,includeNames:true});
 if(named.entries[0].name!=='Adam Jolly')throw new Error('Explicit name-preserving mode failed');
 

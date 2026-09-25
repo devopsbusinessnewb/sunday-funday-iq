@@ -1,0 +1,7554 @@
+{
+  "schemaVersion": 1,
+  "product": "Sunday Funday IQ CBS Pool Archive",
+  "season": 2026,
+  "week": 2,
+  "pool": "NFL Football Tourney 2026",
+  "poolSize": 94,
+  "capturedAt": "2026-09-25T10:52:12.648Z",
+  "source": "CBS Weekly Standings",
+  "privacy": "Participant names removed; stable anonymous IDs preserve cross-week behavior.",
+  "games": [
+    {
+      "key": "DET@BUF",
+      "away": "DET",
+      "home": "BUF",
+      "awayScore": 31,
+      "homeScore": 41,
+      "winner": "BUF"
+    },
+    {
+      "key": "CIN@HOU",
+      "away": "CIN",
+      "home": "HOU",
+      "awayScore": 20,
+      "homeScore": 6,
+      "winner": "CIN"
+    },
+    {
+      "key": "PIT@NE",
+      "away": "PIT",
+      "home": "NE",
+      "awayScore": 3,
+      "homeScore": 20,
+      "winner": "NE"
+    },
+    {
+      "key": "CLE@TB",
+      "away": "CLE",
+      "home": "TB",
+      "awayScore": 23,
+      "homeScore": 19,
+      "winner": "CLE"
+    },
+    {
+      "key": "CAR@ATL",
+      "away": "CAR",
+      "home": "ATL",
+      "awayScore": 34,
+      "homeScore": 3,
+      "winner": "CAR"
+    },
+    {
+      "key": "NO@BAL",
+      "away": "NO",
+      "home": "BAL",
+      "awayScore": 24,
+      "homeScore": 17,
+      "winner": "NO"
+    },
+    {
+      "key": "MIN@CHI",
+      "away": "MIN",
+      "home": "CHI",
+      "awayScore": 9,
+      "homeScore": 3,
+      "winner": "MIN"
+    },
+    {
+      "key": "GB@NYJ",
+      "away": "GB",
+      "home": "NYJ",
+      "awayScore": 20,
+      "homeScore": 17,
+      "winner": "GB"
+    },
+    {
+      "key": "PHI@TEN",
+      "away": "PHI",
+      "home": "TEN",
+      "awayScore": 24,
+      "homeScore": 20,
+      "winner": "PHI"
+    },
+    {
+      "key": "JAX@DEN",
+      "away": "JAX",
+      "home": "DEN",
+      "awayScore": 13,
+      "homeScore": 20,
+      "winner": "DEN"
+    },
+    {
+      "key": "LV@LAC",
+      "away": "LV",
+      "home": "LAC",
+      "awayScore": 26,
+      "homeScore": 14,
+      "winner": "LV"
+    },
+    {
+      "key": "WAS@DAL",
+      "away": "WAS",
+      "home": "DAL",
+      "awayScore": 20,
+      "homeScore": 37,
+      "winner": "DAL"
+    },
+    {
+      "key": "SEA@ARI",
+      "away": "SEA",
+      "home": "ARI",
+      "awayScore": 31,
+      "homeScore": 7,
+      "winner": "SEA"
+    },
+    {
+      "key": "MIA@SF",
+      "away": "MIA",
+      "home": "SF",
+      "awayScore": 13,
+      "homeScore": 35,
+      "winner": "SF"
+    },
+    {
+      "key": "IND@KC",
+      "away": "IND",
+      "home": "KC",
+      "awayScore": 30,
+      "homeScore": 33,
+      "winner": "KC"
+    },
+    {
+      "key": "NYG@LAR",
+      "away": "NYG",
+      "home": "LAR",
+      "awayScore": 6,
+      "homeScore": 28,
+      "winner": "LAR"
+    }
+  ],
+  "entries": [
+    {
+      "entryId": "entry-630149df7a20",
+      "isMine": false,
+      "rank": 1,
+      "weeklyPoints": 104,
+      "seasonPoints": 219,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 15
+        },
+        "CIN@HOU": {
+          "team": "CIN",
+          "confidence": 9
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 12
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 7
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 1
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 11
+        },
+        "MIN@CHI": {
+          "team": "MIN",
+          "confidence": 10
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 13
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 14
+        },
+        "JAX@DEN": {
+          "team": "JAX",
+          "confidence": 8
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 6
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 5
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 4
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 16
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 3
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 2
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-fa3d1eac516f",
+      "isMine": false,
+      "rank": 2,
+      "weeklyPoints": 101,
+      "seasonPoints": 199,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 9
+        },
+        "CIN@HOU": {
+          "team": "HOU",
+          "confidence": 3
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 6
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 13
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 4
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 12
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 7
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 8
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 16
+        },
+        "JAX@DEN": {
+          "team": "DEN",
+          "confidence": 2
+        },
+        "LV@LAC": {
+          "team": "LV",
+          "confidence": 1
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 5
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 10
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 15
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 14
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 11
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-009685906a16",
+      "isMine": false,
+      "rank": 3,
+      "weeklyPoints": 101,
+      "seasonPoints": 189,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 11
+        },
+        "CIN@HOU": {
+          "team": "CIN",
+          "confidence": 7
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 9
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 14
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 6
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 13
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 4
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 10
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 15
+        },
+        "JAX@DEN": {
+          "team": "DEN",
+          "confidence": 2
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 3
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 5
+        },
+        "SEA@ARI": {
+          "team": "ARI",
+          "confidence": 1
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 16
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 12
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 8
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-01c9a6440108",
+      "isMine": false,
+      "rank": 4,
+      "weeklyPoints": 99,
+      "seasonPoints": 186,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 1
+        },
+        "CIN@HOU": {
+          "team": "HOU",
+          "confidence": 14
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 2
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 11
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 10
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 9
+        },
+        "MIN@CHI": {
+          "team": "MIN",
+          "confidence": 8
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 15
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 7
+        },
+        "JAX@DEN": {
+          "team": "DEN",
+          "confidence": 6
+        },
+        "LV@LAC": {
+          "team": "LV",
+          "confidence": 5
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 4
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 12
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 16
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 13
+        },
+        "NYG@LAR": {
+          "team": "NYG",
+          "confidence": 3
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-3a945ecfb6ec",
+      "isMine": false,
+      "rank": 5,
+      "weeklyPoints": 99,
+      "seasonPoints": 206,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 13
+        },
+        "CIN@HOU": {
+          "team": "HOU",
+          "confidence": 2
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 5
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 10
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 4
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 12
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 7
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 11
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 15
+        },
+        "JAX@DEN": {
+          "team": "JAX",
+          "confidence": 6
+        },
+        "LV@LAC": {
+          "team": "LV",
+          "confidence": 1
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 3
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 8
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 16
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 14
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 9
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-9faa1188f46f",
+      "isMine": false,
+      "rank": 5,
+      "weeklyPoints": 99,
+      "seasonPoints": 202,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 9
+        },
+        "CIN@HOU": {
+          "team": "HOU",
+          "confidence": 4
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 6
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 13
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 3
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 11
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 7
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 5
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 15
+        },
+        "JAX@DEN": {
+          "team": "JAX",
+          "confidence": 2
+        },
+        "LV@LAC": {
+          "team": "LV",
+          "confidence": 1
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 8
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 14
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 16
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 10
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 12
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-0a0b42c2c64d",
+      "isMine": false,
+      "rank": 7,
+      "weeklyPoints": 98,
+      "seasonPoints": 188,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 3
+        },
+        "CIN@HOU": {
+          "team": "HOU",
+          "confidence": 4
+        },
+        "PIT@NE": {
+          "team": "PIT",
+          "confidence": 1
+        },
+        "CLE@TB": {
+          "team": "CLE",
+          "confidence": 14
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 5
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 9
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 12
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 11
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 16
+        },
+        "JAX@DEN": {
+          "team": "JAX",
+          "confidence": 2
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 10
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 7
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 8
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 15
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 13
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 6
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-bcb26dc4a8fb",
+      "isMine": false,
+      "rank": 8,
+      "weeklyPoints": 98,
+      "seasonPoints": 186,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 1
+        },
+        "CIN@HOU": {
+          "team": "HOU",
+          "confidence": 4
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 3
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 7
+        },
+        "CAR@ATL": {
+          "team": "ATL",
+          "confidence": 2
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 8
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 6
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 5
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 9
+        },
+        "JAX@DEN": {
+          "team": "DEN",
+          "confidence": 10
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 11
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 12
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 13
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 14
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 15
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 16
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-22e5c274e59f",
+      "isMine": false,
+      "rank": 9,
+      "weeklyPoints": 97,
+      "seasonPoints": 197,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 11
+        },
+        "CIN@HOU": {
+          "team": "CIN",
+          "confidence": 10
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 9
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 8
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 7
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 13
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 6
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 12
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 14
+        },
+        "JAX@DEN": {
+          "team": "JAX",
+          "confidence": 5
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 4
+        },
+        "WAS@DAL": {
+          "team": "WAS",
+          "confidence": 3
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 2
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 16
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 15
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 1
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-28efeed3d9f9",
+      "isMine": false,
+      "rank": 10,
+      "weeklyPoints": 97,
+      "seasonPoints": 182,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 6
+        },
+        "CIN@HOU": {
+          "team": "CIN",
+          "confidence": 2
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 5
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 14
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 7
+        },
+        "NO@BAL": {
+          "team": "NO",
+          "confidence": 1
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 12
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 11
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 15
+        },
+        "JAX@DEN": {
+          "team": "JAX",
+          "confidence": 4
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 9
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 8
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 13
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 16
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 3
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 10
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-bfd0bd62ed89",
+      "isMine": false,
+      "rank": 11,
+      "weeklyPoints": 96,
+      "seasonPoints": 188,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 10
+        },
+        "CIN@HOU": {
+          "team": "CIN",
+          "confidence": 1
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 11
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 14
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 9
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 13
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 3
+        },
+        "GB@NYJ": {
+          "team": "NYJ",
+          "confidence": 2
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 15
+        },
+        "JAX@DEN": {
+          "team": "DEN",
+          "confidence": 4
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 8
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 6
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 7
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 16
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 12
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 5
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-97f6c8c07a7b",
+      "isMine": false,
+      "rank": 12,
+      "weeklyPoints": 96,
+      "seasonPoints": 184,
+      "card": {
+        "DET@BUF": {
+          "team": "DET",
+          "confidence": 1
+        },
+        "CIN@HOU": {
+          "team": "CIN",
+          "confidence": 3
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 10
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 13
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 9
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 11
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 8
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 12
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 14
+        },
+        "JAX@DEN": {
+          "team": "JAX",
+          "confidence": 2
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 5
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 7
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 4
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 16
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 15
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 6
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-3e69c770ec04",
+      "isMine": false,
+      "rank": 13,
+      "weeklyPoints": 95,
+      "seasonPoints": 206,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 10
+        },
+        "CIN@HOU": {
+          "team": "CIN",
+          "confidence": 3
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 9
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 12
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 11
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 14
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 8
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 13
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 16
+        },
+        "JAX@DEN": {
+          "team": "JAX",
+          "confidence": 4
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 1
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 5
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 7
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 15
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 6
+        },
+        "NYG@LAR": {
+          "team": "NYG",
+          "confidence": 2
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-845d4978f1b0",
+      "isMine": false,
+      "rank": 14,
+      "weeklyPoints": 95,
+      "seasonPoints": 180,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 3
+        },
+        "CIN@HOU": {
+          "team": "HOU",
+          "confidence": 5
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 9
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 15
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 7
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 10
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 6
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 8
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 14
+        },
+        "JAX@DEN": {
+          "team": "JAX",
+          "confidence": 1
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 4
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 2
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 11
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 16
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 12
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 13
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-c1c885b2da69",
+      "isMine": false,
+      "rank": 15,
+      "weeklyPoints": 95,
+      "seasonPoints": 220,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 14
+        },
+        "CIN@HOU": {
+          "team": "HOU",
+          "confidence": 2
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 9
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 12
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 3
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 11
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 10
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 7
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 15
+        },
+        "JAX@DEN": {
+          "team": "DEN",
+          "confidence": 1
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 6
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 5
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 16
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 13
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 8
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 4
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-b531b1b797c7",
+      "isMine": false,
+      "rank": 15,
+      "weeklyPoints": 95,
+      "seasonPoints": 205,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 5
+        },
+        "CIN@HOU": {
+          "team": "CIN",
+          "confidence": 2
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 9
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 7
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 3
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 13
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 8
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 15
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 11
+        },
+        "JAX@DEN": {
+          "team": "JAX",
+          "confidence": 1
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 12
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 4
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 6
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 14
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 16
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 10
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-c3d01cfda55f",
+      "isMine": false,
+      "rank": 17,
+      "weeklyPoints": 94,
+      "seasonPoints": 199,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 4
+        },
+        "CIN@HOU": {
+          "team": "HOU",
+          "confidence": 8
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 13
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 9
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 6
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 11
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 12
+        },
+        "GB@NYJ": {
+          "team": "NYJ",
+          "confidence": 2
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 16
+        },
+        "JAX@DEN": {
+          "team": "DEN",
+          "confidence": 1
+        },
+        "LV@LAC": {
+          "team": "LV",
+          "confidence": 7
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 5
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 10
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 15
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 14
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 3
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-97d314cd1fe6",
+      "isMine": false,
+      "rank": 18,
+      "weeklyPoints": 94,
+      "seasonPoints": 147,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 5
+        },
+        "CIN@HOU": {
+          "team": "CIN",
+          "confidence": 3
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 4
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 12
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 10
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 9
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 8
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 7
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 15
+        },
+        "JAX@DEN": {
+          "team": "DEN",
+          "confidence": 6
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 13
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 2
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 11
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 14
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 16
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 1
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-614e618fca31",
+      "isMine": false,
+      "rank": 19,
+      "weeklyPoints": 94,
+      "seasonPoints": 199,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 6
+        },
+        "CIN@HOU": {
+          "team": "HOU",
+          "confidence": 10
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 9
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 14
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 5
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 12
+        },
+        "MIN@CHI": {
+          "team": "MIN",
+          "confidence": 4
+        },
+        "GB@NYJ": {
+          "team": "NYJ",
+          "confidence": 3
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 16
+        },
+        "JAX@DEN": {
+          "team": "JAX",
+          "confidence": 2
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 1
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 7
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 11
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 15
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 13
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 8
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-8f651fb035ea",
+      "isMine": false,
+      "rank": 20,
+      "weeklyPoints": 93,
+      "seasonPoints": 202,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 16
+        },
+        "CIN@HOU": {
+          "team": "HOU",
+          "confidence": 5
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 8
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 14
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 7
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 11
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 9
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 13
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 15
+        },
+        "JAX@DEN": {
+          "team": "JAX",
+          "confidence": 1
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 3
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 2
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 6
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 12
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 10
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 4
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-71cc117080c1",
+      "isMine": false,
+      "rank": 21,
+      "weeklyPoints": 93,
+      "seasonPoints": 192,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 10
+        },
+        "CIN@HOU": {
+          "team": "HOU",
+          "confidence": 7
+        },
+        "PIT@NE": {
+          "team": "PIT",
+          "confidence": 4
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 13
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 12
+        },
+        "NO@BAL": {
+          "team": "NO",
+          "confidence": 1
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 11
+        },
+        "GB@NYJ": {
+          "team": "NYJ",
+          "confidence": 2
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 16
+        },
+        "JAX@DEN": {
+          "team": "DEN",
+          "confidence": 3
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 6
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 9
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 8
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 15
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 14
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 5
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-f3bcc6332a81",
+      "isMine": false,
+      "rank": 22,
+      "weeklyPoints": 92,
+      "seasonPoints": 177,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 3
+        },
+        "CIN@HOU": {
+          "team": "HOU",
+          "confidence": 2
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 9
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 13
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 1
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 15
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 8
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 4
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 12
+        },
+        "JAX@DEN": {
+          "team": "DEN",
+          "confidence": 5
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 6
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 7
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 11
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 16
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 10
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 14
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-cd787a07a05d",
+      "isMine": false,
+      "rank": 23,
+      "weeklyPoints": 92,
+      "seasonPoints": 201,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 11
+        },
+        "CIN@HOU": {
+          "team": "HOU",
+          "confidence": 1
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 7
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 14
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 2
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 13
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 10
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 8
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 12
+        },
+        "JAX@DEN": {
+          "team": "DEN",
+          "confidence": 4
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 6
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 5
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 9
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 16
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 15
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 3
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-8ca70d4a1d00",
+      "isMine": false,
+      "rank": 23,
+      "weeklyPoints": 92,
+      "seasonPoints": 192,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 10
+        },
+        "CIN@HOU": {
+          "team": "HOU",
+          "confidence": 1
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 9
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 15
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 4
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 14
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 8
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 3
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 13
+        },
+        "JAX@DEN": {
+          "team": "DEN",
+          "confidence": 2
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 6
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 7
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 5
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 16
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 11
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 12
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-0dbd0a3cdfca",
+      "isMine": false,
+      "rank": 25,
+      "weeklyPoints": 92,
+      "seasonPoints": 195,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 16
+        },
+        "CIN@HOU": {
+          "team": "HOU",
+          "confidence": 3
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 8
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 13
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 5
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 12
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 6
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 11
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 15
+        },
+        "JAX@DEN": {
+          "team": "DEN",
+          "confidence": 1
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 10
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 7
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 2
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 9
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 14
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 4
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-3eadb26968e0",
+      "isMine": false,
+      "rank": 26,
+      "weeklyPoints": 91,
+      "seasonPoints": 187,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 8
+        },
+        "CIN@HOU": {
+          "team": "HOU",
+          "confidence": 6
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 2
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 14
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 12
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 13
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 7
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 11
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 16
+        },
+        "JAX@DEN": {
+          "team": "DEN",
+          "confidence": 4
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 5
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 3
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 10
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 15
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 1
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 9
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-dfd1d4fbc077",
+      "isMine": false,
+      "rank": 27,
+      "weeklyPoints": 91,
+      "seasonPoints": 192,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 9
+        },
+        "CIN@HOU": {
+          "team": "CIN",
+          "confidence": 8
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 7
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 13
+        },
+        "CAR@ATL": {
+          "team": "ATL",
+          "confidence": 6
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 5
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 14
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 12
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 15
+        },
+        "JAX@DEN": {
+          "team": "JAX",
+          "confidence": 4
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 3
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 2
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 1
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 16
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 11
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 10
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-aa8dce23f0d7",
+      "isMine": false,
+      "rank": 28,
+      "weeklyPoints": 91,
+      "seasonPoints": 169,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 16
+        },
+        "CIN@HOU": {
+          "team": "HOU",
+          "confidence": 8
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 6
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 15
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 10
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 12
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 9
+        },
+        "GB@NYJ": {
+          "team": "NYJ",
+          "confidence": 1
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 13
+        },
+        "JAX@DEN": {
+          "team": "DEN",
+          "confidence": 5
+        },
+        "LV@LAC": {
+          "team": "LV",
+          "confidence": 4
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 2
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 7
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 14
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 11
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 3
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-5604e19d499d",
+      "isMine": false,
+      "rank": 29,
+      "weeklyPoints": 90,
+      "seasonPoints": 180,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 16
+        },
+        "CIN@HOU": {
+          "team": "CIN",
+          "confidence": 8
+        },
+        "PIT@NE": {
+          "team": "PIT",
+          "confidence": 7
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 14
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 6
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 13
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 5
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 11
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 12
+        },
+        "JAX@DEN": {
+          "team": "JAX",
+          "confidence": 4
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 3
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 2
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 9
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 15
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 10
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 1
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-a0d64b4239e8",
+      "isMine": false,
+      "rank": 30,
+      "weeklyPoints": 90,
+      "seasonPoints": 176,
+      "card": {
+        "DET@BUF": {
+          "team": "DET",
+          "confidence": 3
+        },
+        "CIN@HOU": {
+          "team": "CIN",
+          "confidence": 4
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 10
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 14
+        },
+        "CAR@ATL": {
+          "team": "ATL",
+          "confidence": 2
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 12
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 6
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 5
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 11
+        },
+        "JAX@DEN": {
+          "team": "DEN",
+          "confidence": 1
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 9
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 7
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 8
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 15
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 13
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 16
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-37667b074539",
+      "isMine": false,
+      "rank": 31,
+      "weeklyPoints": 90,
+      "seasonPoints": 180,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 11
+        },
+        "CIN@HOU": {
+          "team": "HOU",
+          "confidence": 2
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 1
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 13
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 5
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 14
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 9
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 3
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 15
+        },
+        "JAX@DEN": {
+          "team": "DEN",
+          "confidence": 4
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 8
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 7
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 10
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 16
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 12
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 6
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-bd092ed64daf",
+      "isMine": false,
+      "rank": 32,
+      "weeklyPoints": 89,
+      "seasonPoints": 200,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 7
+        },
+        "CIN@HOU": {
+          "team": "HOU",
+          "confidence": 9
+        },
+        "PIT@NE": {
+          "team": "PIT",
+          "confidence": 8
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 15
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 11
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 12
+        },
+        "MIN@CHI": {
+          "team": "MIN",
+          "confidence": 5
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 10
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 16
+        },
+        "JAX@DEN": {
+          "team": "DEN",
+          "confidence": 4
+        },
+        "LV@LAC": {
+          "team": "LV",
+          "confidence": 2
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 1
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 14
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 13
+        },
+        "IND@KC": {
+          "team": "IND",
+          "confidence": 3
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 6
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-040ab44e2007",
+      "isMine": false,
+      "rank": 32,
+      "weeklyPoints": 89,
+      "seasonPoints": 179,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 6
+        },
+        "CIN@HOU": {
+          "team": "HOU",
+          "confidence": 2
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 10
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 15
+        },
+        "CAR@ATL": {
+          "team": "ATL",
+          "confidence": 8
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 16
+        },
+        "MIN@CHI": {
+          "team": "MIN",
+          "confidence": 9
+        },
+        "GB@NYJ": {
+          "team": "NYJ",
+          "confidence": 1
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 14
+        },
+        "JAX@DEN": {
+          "team": "DEN",
+          "confidence": 11
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 5
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 7
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 4
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 13
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 12
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 3
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-cb43fa52b22a",
+      "isMine": false,
+      "rank": 34,
+      "weeklyPoints": 88,
+      "seasonPoints": 186,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 3
+        },
+        "CIN@HOU": {
+          "team": "CIN",
+          "confidence": 1
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 14
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 15
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 5
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 13
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 11
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 12
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 16
+        },
+        "JAX@DEN": {
+          "team": "DEN",
+          "confidence": 4
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 9
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 8
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 6
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 10
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 7
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 2
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-1a0e91ef0693",
+      "isMine": false,
+      "rank": 35,
+      "weeklyPoints": 88,
+      "seasonPoints": 198,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 11
+        },
+        "CIN@HOU": {
+          "team": "HOU",
+          "confidence": 2
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 3
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 12
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 4
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 14
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 9
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 8
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 16
+        },
+        "JAX@DEN": {
+          "team": "DEN",
+          "confidence": 1
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 6
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 7
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 10
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 15
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 13
+        }
+      },
+      "missingPicks": {
+        "NYG@LAR": {
+          "confidence": 5
+        }
+      }
+    },
+    {
+      "entryId": "entry-0509cdcf8346",
+      "isMine": false,
+      "rank": 35,
+      "weeklyPoints": 88,
+      "seasonPoints": 190,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 14
+        },
+        "CIN@HOU": {
+          "team": "CIN",
+          "confidence": 13
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 12
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 11
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 9
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 7
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 8
+        },
+        "GB@NYJ": {
+          "team": "NYJ",
+          "confidence": 5
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 4
+        },
+        "JAX@DEN": {
+          "team": "DEN",
+          "confidence": 3
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 2
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 1
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 10
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 16
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 6
+        },
+        "NYG@LAR": {
+          "team": "NYG",
+          "confidence": 15
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-01b45efdf426",
+      "isMine": false,
+      "rank": 37,
+      "weeklyPoints": 88,
+      "seasonPoints": 191,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 3
+        },
+        "CIN@HOU": {
+          "team": "CIN",
+          "confidence": 1
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 5
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 16
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 12
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 14
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 7
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 10
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 13
+        },
+        "JAX@DEN": {
+          "team": "DEN",
+          "confidence": 4
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 11
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 2
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 9
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 15
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 8
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 6
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-3b0ed4391540",
+      "isMine": false,
+      "rank": 38,
+      "weeklyPoints": 88,
+      "seasonPoints": 164,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 3
+        },
+        "CIN@HOU": {
+          "team": "HOU",
+          "confidence": 4
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 6
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 9
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 1
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 16
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 11
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 5
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 15
+        },
+        "JAX@DEN": {
+          "team": "DEN",
+          "confidence": 2
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 8
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 7
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 14
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 13
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 12
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 10
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-8aaff102d13b",
+      "isMine": false,
+      "rank": 39,
+      "weeklyPoints": 88,
+      "seasonPoints": 175,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 7
+        },
+        "CIN@HOU": {
+          "team": "CIN",
+          "confidence": 3
+        },
+        "PIT@NE": {
+          "team": "PIT",
+          "confidence": 8
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 12
+        },
+        "CAR@ATL": {
+          "team": "ATL",
+          "confidence": 1
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 16
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 5
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 9
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 10
+        },
+        "JAX@DEN": {
+          "team": "JAX",
+          "confidence": 2
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 4
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 13
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 15
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 14
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 11
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 6
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-6e3e07106658",
+      "isMine": false,
+      "rank": 40,
+      "weeklyPoints": 87,
+      "seasonPoints": 188,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 9
+        },
+        "CIN@HOU": {
+          "team": "HOU",
+          "confidence": 1
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 5
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 15
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 6
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 12
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 10
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 3
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 11
+        },
+        "JAX@DEN": {
+          "team": "JAX",
+          "confidence": 4
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 7
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 13
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 2
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 16
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 14
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 8
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-417f00375d76",
+      "isMine": false,
+      "rank": 41,
+      "weeklyPoints": 87,
+      "seasonPoints": 188,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 5
+        },
+        "CIN@HOU": {
+          "team": "CIN",
+          "confidence": 13
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 12
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 11
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 10
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 16
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 9
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 8
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 15
+        },
+        "JAX@DEN": {
+          "team": "JAX",
+          "confidence": 7
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 6
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 4
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 3
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 14
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 2
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 1
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-4ece024b5c77",
+      "isMine": false,
+      "rank": 42,
+      "weeklyPoints": 87,
+      "seasonPoints": 193,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 10
+        },
+        "CIN@HOU": {
+          "team": "HOU",
+          "confidence": 2
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 6
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 14
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 1
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 15
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 7
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 4
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 12
+        },
+        "JAX@DEN": {
+          "team": "DEN",
+          "confidence": 3
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 11
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 8
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 5
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 16
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 9
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 13
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-95846d8c66a7",
+      "isMine": false,
+      "rank": 42,
+      "weeklyPoints": 87,
+      "seasonPoints": 185,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 6
+        },
+        "CIN@HOU": {
+          "team": "HOU",
+          "confidence": 5
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 3
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 11
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 1
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 13
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 8
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 7
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 16
+        },
+        "JAX@DEN": {
+          "team": "DEN",
+          "confidence": 2
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 12
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 4
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 9
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 15
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 10
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 14
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-0a2da3c9df9b",
+      "isMine": false,
+      "rank": 42,
+      "weeklyPoints": 87,
+      "seasonPoints": 181,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 8
+        },
+        "CIN@HOU": {
+          "team": "CIN",
+          "confidence": 4
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 5
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 13
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 3
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 14
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 10
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 7
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 15
+        },
+        "JAX@DEN": {
+          "team": "JAX",
+          "confidence": 1
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 11
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 2
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 9
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 16
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 12
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 6
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-d98c241a7582",
+      "isMine": false,
+      "rank": 45,
+      "weeklyPoints": 87,
+      "seasonPoints": 178,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 11
+        },
+        "CIN@HOU": {
+          "team": "HOU",
+          "confidence": 3
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 1
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 16
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 5
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 13
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 10
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 8
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 15
+        },
+        "JAX@DEN": {
+          "team": "DEN",
+          "confidence": 2
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 7
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 4
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 9
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 14
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 12
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 6
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-f5709b1ad299",
+      "isMine": false,
+      "rank": 46,
+      "weeklyPoints": 86,
+      "seasonPoints": 166,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 16
+        },
+        "CIN@HOU": {
+          "team": "HOU",
+          "confidence": 9
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 3
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 14
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 1
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 12
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 11
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 10
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 15
+        },
+        "JAX@DEN": {
+          "team": "DEN",
+          "confidence": 8
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 4
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 7
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 6
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 5
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 13
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 2
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-5d750b3b9a55",
+      "isMine": false,
+      "rank": 47,
+      "weeklyPoints": 86,
+      "seasonPoints": 188,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 13
+        },
+        "CIN@HOU": {
+          "team": "HOU",
+          "confidence": 12
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 11
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 14
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 5
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 9
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 6
+        },
+        "GB@NYJ": {
+          "team": "NYJ",
+          "confidence": 2
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 15
+        },
+        "JAX@DEN": {
+          "team": "DEN",
+          "confidence": 1
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 7
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 4
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 3
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 16
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 8
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 10
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-9a7759a32d89",
+      "isMine": false,
+      "rank": 47,
+      "weeklyPoints": 86,
+      "seasonPoints": 175,
+      "card": {
+        "DET@BUF": {
+          "team": "DET",
+          "confidence": 11
+        },
+        "CIN@HOU": {
+          "team": "HOU",
+          "confidence": 1
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 7
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 6
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 4
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 13
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 12
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 9
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 15
+        },
+        "JAX@DEN": {
+          "team": "JAX",
+          "confidence": 5
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 2
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 10
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 8
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 16
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 14
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 3
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-95767cd833ff",
+      "isMine": false,
+      "rank": 49,
+      "weeklyPoints": 86,
+      "seasonPoints": 191,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 10
+        },
+        "CIN@HOU": {
+          "team": "HOU",
+          "confidence": 13
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 4
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 12
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 11
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 7
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 15
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 9
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 5
+        },
+        "JAX@DEN": {
+          "team": "DEN",
+          "confidence": 3
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 2
+        },
+        "WAS@DAL": {
+          "team": "WAS",
+          "confidence": 1
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 8
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 16
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 14
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 6
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-a09e1286925f",
+      "isMine": false,
+      "rank": 49,
+      "weeklyPoints": 86,
+      "seasonPoints": 187,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 10
+        },
+        "CIN@HOU": {
+          "team": "HOU",
+          "confidence": 5
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 9
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 8
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 2
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 13
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 11
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 6
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 16
+        },
+        "JAX@DEN": {
+          "team": "JAX",
+          "confidence": 1
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 12
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 4
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 7
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 15
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 14
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 3
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "ME",
+      "isMine": true,
+      "rank": 51,
+      "weeklyPoints": 85,
+      "seasonPoints": 193,
+      "card": {
+        "DET@BUF": {
+          "team": "DET",
+          "confidence": 2
+        },
+        "CIN@HOU": {
+          "team": "CIN",
+          "confidence": 7
+        },
+        "PIT@NE": {
+          "team": "PIT",
+          "confidence": 4
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 8
+        },
+        "CAR@ATL": {
+          "team": "ATL",
+          "confidence": 6
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 14
+        },
+        "MIN@CHI": {
+          "team": "MIN",
+          "confidence": 1
+        },
+        "GB@NYJ": {
+          "team": "NYJ",
+          "confidence": 5
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 13
+        },
+        "JAX@DEN": {
+          "team": "DEN",
+          "confidence": 10
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 9
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 11
+        },
+        "SEA@ARI": {
+          "team": "ARI",
+          "confidence": 3
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 16
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 12
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 15
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-91754fbf0f31",
+      "isMine": false,
+      "rank": 52,
+      "weeklyPoints": 85,
+      "seasonPoints": 176,
+      "card": {
+        "CIN@HOU": {
+          "team": "HOU",
+          "confidence": 2
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 8
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 13
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 11
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 14
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 12
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 10
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 15
+        },
+        "JAX@DEN": {
+          "team": "DEN",
+          "confidence": 7
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 6
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 5
+        },
+        "SEA@ARI": {
+          "team": "ARI",
+          "confidence": 3
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 16
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 4
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 9
+        }
+      },
+      "missingPicks": {
+        "DET@BUF": {
+          "confidence": null
+        }
+      }
+    },
+    {
+      "entryId": "entry-919966d9b7c9",
+      "isMine": false,
+      "rank": 53,
+      "weeklyPoints": 85,
+      "seasonPoints": 192,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 9
+        },
+        "CIN@HOU": {
+          "team": "HOU",
+          "confidence": 6
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 5
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 13
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 3
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 14
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 8
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 7
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 16
+        },
+        "JAX@DEN": {
+          "team": "DEN",
+          "confidence": 1
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 10
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 2
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 11
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 15
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 12
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 4
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-273a1dac8028",
+      "isMine": false,
+      "rank": 54,
+      "weeklyPoints": 85,
+      "seasonPoints": 166,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 8
+        },
+        "CIN@HOU": {
+          "team": "CIN",
+          "confidence": 1
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 4
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 12
+        },
+        "CAR@ATL": {
+          "team": "ATL",
+          "confidence": 7
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 10
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 6
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 5
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 13
+        },
+        "JAX@DEN": {
+          "team": "JAX",
+          "confidence": 2
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 14
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 3
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 15
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 16
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 9
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 11
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-d5238444f8a4",
+      "isMine": false,
+      "rank": 55,
+      "weeklyPoints": 85,
+      "seasonPoints": 177,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 9
+        },
+        "CIN@HOU": {
+          "team": "HOU",
+          "confidence": 1
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 8
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 11
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 4
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 12
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 10
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 13
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 15
+        },
+        "JAX@DEN": {
+          "team": "JAX",
+          "confidence": 3
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 14
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 2
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 7
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 16
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 6
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 5
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-113e850a70d7",
+      "isMine": false,
+      "rank": 56,
+      "weeklyPoints": 84,
+      "seasonPoints": 193,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 9
+        },
+        "CIN@HOU": {
+          "team": "CIN",
+          "confidence": 7
+        },
+        "PIT@NE": {
+          "team": "PIT",
+          "confidence": 3
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 14
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 2
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 13
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 6
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 5
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 15
+        },
+        "JAX@DEN": {
+          "team": "JAX",
+          "confidence": 4
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 11
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 8
+        },
+        "SEA@ARI": {
+          "team": "ARI",
+          "confidence": 1
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 16
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 10
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 12
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-548bc31536fd",
+      "isMine": false,
+      "rank": 57,
+      "weeklyPoints": 84,
+      "seasonPoints": 185,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 9
+        },
+        "CIN@HOU": {
+          "team": "HOU",
+          "confidence": 2
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 6
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 14
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 3
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 15
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 8
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 7
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 12
+        },
+        "JAX@DEN": {
+          "team": "DEN",
+          "confidence": 1
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 13
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 5
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 4
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 16
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 11
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 10
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-a7833e398625",
+      "isMine": false,
+      "rank": 57,
+      "weeklyPoints": 84,
+      "seasonPoints": 181,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 14
+        },
+        "CIN@HOU": {
+          "team": "HOU",
+          "confidence": 4
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 16
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 15
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 10
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 13
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 11
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 8
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 12
+        },
+        "JAX@DEN": {
+          "team": "JAX",
+          "confidence": 7
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 2
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 5
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 3
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 6
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 9
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 1
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-eedeff590012",
+      "isMine": false,
+      "rank": 59,
+      "weeklyPoints": 83,
+      "seasonPoints": 192,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 12
+        },
+        "CIN@HOU": {
+          "team": "HOU",
+          "confidence": 7
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 3
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 15
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 4
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 14
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 1
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 6
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 10
+        },
+        "JAX@DEN": {
+          "team": "JAX",
+          "confidence": 5
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 11
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 9
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 8
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 16
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 2
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 13
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-eb71595d1df9",
+      "isMine": false,
+      "rank": 60,
+      "weeklyPoints": 83,
+      "seasonPoints": 184,
+      "card": {
+        "CIN@HOU": {
+          "team": "HOU",
+          "confidence": 2
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 6
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 15
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 7
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 12
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 10
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 4
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 11
+        },
+        "JAX@DEN": {
+          "team": "JAX",
+          "confidence": 5
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 8
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 13
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 3
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 16
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 14
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 9
+        }
+      },
+      "missingPicks": {
+        "DET@BUF": {
+          "confidence": null
+        }
+      }
+    },
+    {
+      "entryId": "entry-96059ac6a841",
+      "isMine": false,
+      "rank": 61,
+      "weeklyPoints": 83,
+      "seasonPoints": 167,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 12
+        },
+        "CIN@HOU": {
+          "team": "HOU",
+          "confidence": 6
+        },
+        "PIT@NE": {
+          "team": "PIT",
+          "confidence": 5
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 16
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 7
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 13
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 9
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 4
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 15
+        },
+        "JAX@DEN": {
+          "team": "JAX",
+          "confidence": 3
+        },
+        "LV@LAC": {
+          "team": "LV",
+          "confidence": 2
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 8
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 11
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 14
+        },
+        "IND@KC": {
+          "team": "IND",
+          "confidence": 1
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 10
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-e75755e0f07d",
+      "isMine": false,
+      "rank": 62,
+      "weeklyPoints": 83,
+      "seasonPoints": 166,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 10
+        },
+        "CIN@HOU": {
+          "team": "HOU",
+          "confidence": 12
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 13
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 15
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 7
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 11
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 1
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 4
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 6
+        },
+        "JAX@DEN": {
+          "team": "DEN",
+          "confidence": 2
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 14
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 3
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 5
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 16
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 8
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 9
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-2f7f18811066",
+      "isMine": false,
+      "rank": 63,
+      "weeklyPoints": 83,
+      "seasonPoints": 180,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 6
+        },
+        "CIN@HOU": {
+          "team": "HOU",
+          "confidence": 3
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 11
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 15
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 4
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 13
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 10
+        },
+        "GB@NYJ": {
+          "team": "NYJ",
+          "confidence": 1
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 14
+        },
+        "JAX@DEN": {
+          "team": "JAX",
+          "confidence": 2
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 9
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 7
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 12
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 16
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 5
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 8
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-d621f6de2053",
+      "isMine": false,
+      "rank": 64,
+      "weeklyPoints": 83,
+      "seasonPoints": 181,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 7
+        },
+        "CIN@HOU": {
+          "team": "HOU",
+          "confidence": 3
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 8
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 14
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 1
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 15
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 9
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 5
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 13
+        },
+        "JAX@DEN": {
+          "team": "DEN",
+          "confidence": 2
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 12
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 4
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 6
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 16
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 11
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 10
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-d68b2e4b449d",
+      "isMine": false,
+      "rank": 65,
+      "weeklyPoints": 83,
+      "seasonPoints": 180,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 1
+        },
+        "CIN@HOU": {
+          "team": "HOU",
+          "confidence": 2
+        },
+        "PIT@NE": {
+          "team": "PIT",
+          "confidence": 6
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 13
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 5
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 14
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 8
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 9
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 15
+        },
+        "JAX@DEN": {
+          "team": "DEN",
+          "confidence": 4
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 7
+        },
+        "WAS@DAL": {
+          "team": "WAS",
+          "confidence": 3
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 11
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 16
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 10
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 12
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-4ee10aaa1e3b",
+      "isMine": false,
+      "rank": 66,
+      "weeklyPoints": 82,
+      "seasonPoints": 172,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 13
+        },
+        "CIN@HOU": {
+          "team": "CIN",
+          "confidence": 3
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 8
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 15
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 6
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 11
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 14
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 10
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 7
+        },
+        "JAX@DEN": {
+          "team": "JAX",
+          "confidence": 5
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 9
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 2
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 4
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 16
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 12
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 1
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-5d9cbf6e6c5f",
+      "isMine": false,
+      "rank": 67,
+      "weeklyPoints": 82,
+      "seasonPoints": 152,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 2
+        },
+        "CIN@HOU": {
+          "team": "CIN",
+          "confidence": 1
+        },
+        "PIT@NE": {
+          "team": "PIT",
+          "confidence": 11
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 10
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 9
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 16
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 4
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 7
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 15
+        },
+        "JAX@DEN": {
+          "team": "JAX",
+          "confidence": 5
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 8
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 3
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 14
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 13
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 12
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 6
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-ea6209444b65",
+      "isMine": false,
+      "rank": 68,
+      "weeklyPoints": 81,
+      "seasonPoints": 194,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 16
+        },
+        "CIN@HOU": {
+          "team": "HOU",
+          "confidence": 15
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 14
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 13
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 12
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 11
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 10
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 9
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 8
+        },
+        "JAX@DEN": {
+          "team": "DEN",
+          "confidence": 7
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 6
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 5
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 4
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 3
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 2
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 1
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-8a9a73454c4d",
+      "isMine": false,
+      "rank": 68,
+      "weeklyPoints": 81,
+      "seasonPoints": 182,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 9
+        },
+        "CIN@HOU": {
+          "team": "HOU",
+          "confidence": 5
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 7
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 16
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 3
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 15
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 11
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 10
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 14
+        },
+        "JAX@DEN": {
+          "team": "JAX",
+          "confidence": 2
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 6
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 1
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 12
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 13
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 8
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 4
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-9cc4f0b4fb61",
+      "isMine": false,
+      "rank": 70,
+      "weeklyPoints": 81,
+      "seasonPoints": 178,
+      "card": {
+        "DET@BUF": {
+          "team": "DET",
+          "confidence": 1
+        },
+        "CIN@HOU": {
+          "team": "CIN",
+          "confidence": 2
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 14
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 13
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 12
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 16
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 15
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 8
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 11
+        },
+        "JAX@DEN": {
+          "team": "DEN",
+          "confidence": 7
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 10
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 9
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 6
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 5
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 4
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 3
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-702e505df34b",
+      "isMine": false,
+      "rank": 71,
+      "weeklyPoints": 80,
+      "seasonPoints": 172,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 13
+        },
+        "CIN@HOU": {
+          "team": "HOU",
+          "confidence": 10
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 12
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 16
+        },
+        "CAR@ATL": {
+          "team": "ATL",
+          "confidence": 4
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 2
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 14
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 8
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 3
+        },
+        "JAX@DEN": {
+          "team": "DEN",
+          "confidence": 6
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 9
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 5
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 7
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 15
+        },
+        "IND@KC": {
+          "team": "IND",
+          "confidence": 1
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 11
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-ebed47e87f8e",
+      "isMine": false,
+      "rank": 72,
+      "weeklyPoints": 80,
+      "seasonPoints": 184,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 15
+        },
+        "CIN@HOU": {
+          "team": "CIN",
+          "confidence": 1
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 14
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 16
+        },
+        "CAR@ATL": {
+          "team": "ATL",
+          "confidence": 2
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 13
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 12
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 11
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 10
+        },
+        "JAX@DEN": {
+          "team": "JAX",
+          "confidence": 4
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 9
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 8
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 6
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 5
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 7
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 3
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-eef439f67d77",
+      "isMine": false,
+      "rank": 72,
+      "weeklyPoints": 80,
+      "seasonPoints": 161,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 10
+        },
+        "CIN@HOU": {
+          "team": "CIN",
+          "confidence": 9
+        },
+        "PIT@NE": {
+          "team": "PIT",
+          "confidence": 12
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 13
+        },
+        "CAR@ATL": {
+          "team": "ATL",
+          "confidence": 6
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 15
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 5
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 8
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 11
+        },
+        "JAX@DEN": {
+          "team": "JAX",
+          "confidence": 4
+        },
+        "LV@LAC": {
+          "team": "LV",
+          "confidence": 3
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 2
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 7
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 14
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 16
+        },
+        "NYG@LAR": {
+          "team": "NYG",
+          "confidence": 1
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-567fabcccb3b",
+      "isMine": false,
+      "rank": 74,
+      "weeklyPoints": 80,
+      "seasonPoints": 176,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 16
+        },
+        "CIN@HOU": {
+          "team": "HOU",
+          "confidence": 12
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 11
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 15
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 14
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 13
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 10
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 9
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 8
+        },
+        "JAX@DEN": {
+          "team": "DEN",
+          "confidence": 7
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 6
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 5
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 4
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 3
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 2
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 1
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-ab3f78eedbc9",
+      "isMine": false,
+      "rank": 75,
+      "weeklyPoints": 80,
+      "seasonPoints": 179,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 16
+        },
+        "CIN@HOU": {
+          "team": "HOU",
+          "confidence": 7
+        },
+        "PIT@NE": {
+          "team": "PIT",
+          "confidence": 2
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 11
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 6
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 15
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 9
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 4
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 13
+        },
+        "JAX@DEN": {
+          "team": "JAX",
+          "confidence": 3
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 8
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 5
+        },
+        "SEA@ARI": {
+          "team": "ARI",
+          "confidence": 1
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 12
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 14
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 10
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-fe2f8782d656",
+      "isMine": false,
+      "rank": 76,
+      "weeklyPoints": 80,
+      "seasonPoints": 189,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 5
+        },
+        "CIN@HOU": {
+          "team": "HOU",
+          "confidence": 4
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 6
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 10
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 7
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 15
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 13
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 8
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 9
+        },
+        "JAX@DEN": {
+          "team": "DEN",
+          "confidence": 2
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 14
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 3
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 12
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 16
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 1
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 11
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-1de33d3605f6",
+      "isMine": false,
+      "rank": 77,
+      "weeklyPoints": 80,
+      "seasonPoints": 166,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 13
+        },
+        "CIN@HOU": {
+          "team": "HOU",
+          "confidence": 8
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 4
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 14
+        },
+        "CAR@ATL": {
+          "team": "ATL",
+          "confidence": 2
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 15
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 10
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 5
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 12
+        },
+        "JAX@DEN": {
+          "team": "DEN",
+          "confidence": 3
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 7
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 1
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 6
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 16
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 9
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 11
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-dece965b47a0",
+      "isMine": false,
+      "rank": 78,
+      "weeklyPoints": 79,
+      "seasonPoints": 176,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 8
+        },
+        "CIN@HOU": {
+          "team": "HOU",
+          "confidence": 9
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 6
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 14
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 5
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 11
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 12
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 4
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 13
+        },
+        "JAX@DEN": {
+          "team": "DEN",
+          "confidence": 3
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 1
+        },
+        "WAS@DAL": {
+          "team": "WAS",
+          "confidence": 10
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 7
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 16
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 15
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 2
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-b7814fd9e08c",
+      "isMine": false,
+      "rank": 79,
+      "weeklyPoints": 78,
+      "seasonPoints": 154,
+      "card": {
+        "DET@BUF": {
+          "team": "DET",
+          "confidence": 4
+        },
+        "CIN@HOU": {
+          "team": "CIN",
+          "confidence": 9
+        },
+        "PIT@NE": {
+          "team": "PIT",
+          "confidence": 7
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 14
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 8
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 12
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 11
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 10
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 16
+        },
+        "JAX@DEN": {
+          "team": "JAX",
+          "confidence": 6
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 3
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 5
+        },
+        "SEA@ARI": {
+          "team": "ARI",
+          "confidence": 1
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 15
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 13
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 2
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-bafc80c3148e",
+      "isMine": false,
+      "rank": 80,
+      "weeklyPoints": 77,
+      "seasonPoints": 175,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 13
+        },
+        "CIN@HOU": {
+          "team": "HOU",
+          "confidence": 12
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 10
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 15
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 11
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 16
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 9
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 14
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 8
+        },
+        "JAX@DEN": {
+          "team": "DEN",
+          "confidence": 5
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 6
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 4
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 7
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 3
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 2
+        },
+        "NYG@LAR": {
+          "team": "NYG",
+          "confidence": 1
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-4d94f328e523",
+      "isMine": false,
+      "rank": 81,
+      "weeklyPoints": 76,
+      "seasonPoints": 165,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 12
+        },
+        "CIN@HOU": {
+          "team": "HOU",
+          "confidence": 6
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 11
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 16
+        },
+        "CAR@ATL": {
+          "team": "ATL",
+          "confidence": 4
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 9
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 7
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 5
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 14
+        },
+        "JAX@DEN": {
+          "team": "JAX",
+          "confidence": 3
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 13
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 1
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 8
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 15
+        },
+        "IND@KC": {
+          "team": "IND",
+          "confidence": 2
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 10
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-3a60ded278bf",
+      "isMine": false,
+      "rank": 82,
+      "weeklyPoints": 76,
+      "seasonPoints": 179,
+      "card": {
+        "CIN@HOU": {
+          "team": "HOU",
+          "confidence": 12
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 11
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 13
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 10
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 14
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 7
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 9
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 15
+        },
+        "JAX@DEN": {
+          "team": "JAX",
+          "confidence": 2
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 8
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 6
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 4
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 5
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 16
+        },
+        "NYG@LAR": {
+          "team": "NYG",
+          "confidence": 3
+        }
+      },
+      "missingPicks": {
+        "DET@BUF": {
+          "confidence": null
+        }
+      }
+    },
+    {
+      "entryId": "entry-77d91b81fcef",
+      "isMine": false,
+      "rank": 82,
+      "weeklyPoints": 76,
+      "seasonPoints": 178,
+      "card": {
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 7
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 13
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 8
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 12
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 10
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 9
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 15
+        },
+        "JAX@DEN": {
+          "team": "DEN",
+          "confidence": 2
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 6
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 4
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 5
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 14
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 11
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 1
+        }
+      },
+      "missingPicks": {
+        "DET@BUF": {
+          "confidence": 16
+        },
+        "CIN@HOU": {
+          "confidence": 3
+        }
+      }
+    },
+    {
+      "entryId": "entry-fbe149b62413",
+      "isMine": false,
+      "rank": 84,
+      "weeklyPoints": 76,
+      "seasonPoints": 183,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 16
+        },
+        "CIN@HOU": {
+          "team": "CIN",
+          "confidence": 15
+        },
+        "PIT@NE": {
+          "team": "PIT",
+          "confidence": 14
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 13
+        },
+        "CAR@ATL": {
+          "team": "ATL",
+          "confidence": 12
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 11
+        },
+        "MIN@CHI": {
+          "team": "MIN",
+          "confidence": 10
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 9
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 8
+        },
+        "JAX@DEN": {
+          "team": "DEN",
+          "confidence": 7
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 6
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 5
+        },
+        "SEA@ARI": {
+          "team": "ARI",
+          "confidence": 4
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 3
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 2
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 1
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-3cbbb1aa51fc",
+      "isMine": false,
+      "rank": 85,
+      "weeklyPoints": 75,
+      "seasonPoints": 159,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 1
+        },
+        "CIN@HOU": {
+          "team": "CIN",
+          "confidence": 6
+        },
+        "PIT@NE": {
+          "team": "PIT",
+          "confidence": 4
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 16
+        },
+        "CAR@ATL": {
+          "team": "ATL",
+          "confidence": 2
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 14
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 12
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 11
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 13
+        },
+        "JAX@DEN": {
+          "team": "JAX",
+          "confidence": 8
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 5
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 3
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 9
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 15
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 10
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 7
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-0ae50bfe87e8",
+      "isMine": false,
+      "rank": 86,
+      "weeklyPoints": 75,
+      "seasonPoints": 162,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 16
+        },
+        "CIN@HOU": {
+          "team": "HOU",
+          "confidence": 15
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 14
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 13
+        },
+        "CAR@ATL": {
+          "team": "ATL",
+          "confidence": 12
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 11
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 10
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 9
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 8
+        },
+        "JAX@DEN": {
+          "team": "DEN",
+          "confidence": 7
+        },
+        "LV@LAC": {
+          "team": "LV",
+          "confidence": 6
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 5
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 4
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 3
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 2
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 1
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-fc1c1bb3fc73",
+      "isMine": false,
+      "rank": 87,
+      "weeklyPoints": 74,
+      "seasonPoints": 165,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 12
+        },
+        "CIN@HOU": {
+          "team": "HOU",
+          "confidence": 11
+        },
+        "PIT@NE": {
+          "team": "PIT",
+          "confidence": 10
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 15
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 13
+        },
+        "NO@BAL": {
+          "team": "NO",
+          "confidence": 8
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 14
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 7
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 9
+        },
+        "JAX@DEN": {
+          "team": "JAX",
+          "confidence": 6
+        },
+        "LV@LAC": {
+          "team": "LV",
+          "confidence": 5
+        },
+        "WAS@DAL": {
+          "team": "WAS",
+          "confidence": 4
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 3
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 16
+        },
+        "IND@KC": {
+          "team": "IND",
+          "confidence": 2
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 1
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-dfc4accd492c",
+      "isMine": false,
+      "rank": 88,
+      "weeklyPoints": 74,
+      "seasonPoints": 155,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 16
+        },
+        "CIN@HOU": {
+          "team": "HOU",
+          "confidence": 15
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 14
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 13
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 12
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 11
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 10
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 9
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 8
+        },
+        "JAX@DEN": {
+          "team": "JAX",
+          "confidence": 7
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 6
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 5
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 4
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 3
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 2
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 1
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-7c4d9641466d",
+      "isMine": false,
+      "rank": 89,
+      "weeklyPoints": 69,
+      "seasonPoints": 161,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 10
+        },
+        "CIN@HOU": {
+          "team": "CIN",
+          "confidence": 8
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 9
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 16
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 5
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 14
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 13
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 12
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 15
+        },
+        "JAX@DEN": {
+          "team": "JAX",
+          "confidence": 11
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 7
+        },
+        "WAS@DAL": {
+          "team": "WAS",
+          "confidence": 6
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 2
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 1
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 3
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 4
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-e91af4beecaf",
+      "isMine": false,
+      "rank": 90,
+      "weeklyPoints": 68,
+      "seasonPoints": 156,
+      "card": {
+        "CIN@HOU": {
+          "team": "HOU",
+          "confidence": 10
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 9
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 15
+        },
+        "CAR@ATL": {
+          "team": "ATL",
+          "confidence": 8
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 14
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 6
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 12
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 13
+        },
+        "JAX@DEN": {
+          "team": "JAX",
+          "confidence": 5
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 7
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 4
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 3
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 16
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 11
+        },
+        "NYG@LAR": {
+          "team": "NYG",
+          "confidence": 2
+        }
+      },
+      "missingPicks": {
+        "DET@BUF": {
+          "confidence": null
+        }
+      }
+    },
+    {
+      "entryId": "entry-ab68c0cd09d8",
+      "isMine": false,
+      "rank": 91,
+      "weeklyPoints": 64,
+      "seasonPoints": 169,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 11
+        },
+        "CIN@HOU": {
+          "team": "HOU",
+          "confidence": 15
+        },
+        "PIT@NE": {
+          "team": "PIT",
+          "confidence": 9
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 14
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 13
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 12
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 6
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 8
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 10
+        },
+        "JAX@DEN": {
+          "team": "JAX",
+          "confidence": 7
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 5
+        },
+        "WAS@DAL": {
+          "team": "WAS",
+          "confidence": 4
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 16
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 3
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 2
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 1
+        }
+      },
+      "missingPicks": {}
+    },
+    {
+      "entryId": "entry-5974eb913210",
+      "isMine": false,
+      "rank": 92,
+      "weeklyPoints": 61,
+      "seasonPoints": 165,
+      "card": {
+        "CIN@HOU": {
+          "team": "HOU",
+          "confidence": 16
+        },
+        "PIT@NE": {
+          "team": "PIT",
+          "confidence": 3
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 14
+        },
+        "CAR@ATL": {
+          "team": "ATL",
+          "confidence": 13
+        },
+        "NO@BAL": {
+          "team": "BAL",
+          "confidence": 11
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 10
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 8
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 15
+        },
+        "JAX@DEN": {
+          "team": "DEN",
+          "confidence": 4
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 7
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 6
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 5
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 12
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 9
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 2
+        }
+      },
+      "missingPicks": {
+        "DET@BUF": {
+          "confidence": null
+        }
+      }
+    },
+    {
+      "entryId": "entry-8f788800cfc8",
+      "isMine": false,
+      "rank": 93,
+      "weeklyPoints": 54,
+      "seasonPoints": 145,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 6
+        },
+        "CIN@HOU": {
+          "team": "HOU",
+          "confidence": 14
+        },
+        "PIT@NE": {
+          "team": "NE",
+          "confidence": 12
+        },
+        "CLE@TB": {
+          "team": "TB",
+          "confidence": 10
+        },
+        "CAR@ATL": {
+          "team": "CAR",
+          "confidence": 13
+        },
+        "MIN@CHI": {
+          "team": "CHI",
+          "confidence": 9
+        },
+        "GB@NYJ": {
+          "team": "GB",
+          "confidence": 8
+        },
+        "PHI@TEN": {
+          "team": "PHI",
+          "confidence": 4
+        },
+        "JAX@DEN": {
+          "team": "JAX",
+          "confidence": 15
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 7
+        },
+        "WAS@DAL": {
+          "team": "WAS",
+          "confidence": 11
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 3
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 1
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 2
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 5
+        }
+      },
+      "missingPicks": {
+        "NO@BAL": {
+          "confidence": 16
+        }
+      }
+    },
+    {
+      "entryId": "entry-2766aa772445",
+      "isMine": false,
+      "rank": 94,
+      "weeklyPoints": 31,
+      "seasonPoints": 103,
+      "card": {
+        "DET@BUF": {
+          "team": "BUF",
+          "confidence": 16
+        },
+        "JAX@DEN": {
+          "team": "JAX",
+          "confidence": 7
+        },
+        "LV@LAC": {
+          "team": "LAC",
+          "confidence": 6
+        },
+        "WAS@DAL": {
+          "team": "DAL",
+          "confidence": 5
+        },
+        "SEA@ARI": {
+          "team": "SEA",
+          "confidence": 4
+        },
+        "MIA@SF": {
+          "team": "SF",
+          "confidence": 3
+        },
+        "IND@KC": {
+          "team": "KC",
+          "confidence": 2
+        },
+        "NYG@LAR": {
+          "team": "LAR",
+          "confidence": 1
+        }
+      },
+      "missingPicks": {
+        "CIN@HOU": {
+          "confidence": 15
+        },
+        "PIT@NE": {
+          "confidence": 14
+        },
+        "CLE@TB": {
+          "confidence": 13
+        },
+        "CAR@ATL": {
+          "confidence": 12
+        },
+        "NO@BAL": {
+          "confidence": 11
+        },
+        "MIN@CHI": {
+          "confidence": 10
+        },
+        "GB@NYJ": {
+          "confidence": 9
+        },
+        "PHI@TEN": {
+          "confidence": 8
+        }
+      }
+    }
+  ],
+  "analytics": {
+    "observedEntries": 94,
+    "accountedEntries": 94,
+    "completeEntries": 85,
+    "completeness": 1,
+    "winnerScore": 104,
+    "top2Cutoff": 101,
+    "gameMetrics": {
+      "DET@BUF": {
+        "observedEntries": 88,
+        "missingEntries": 6,
+        "submissionRate": 0.9361702127659575,
+        "winner": "BUF",
+        "teams": {
+          "DET": {
+            "count": 6,
+            "pickShare": 0.06818181818181818,
+            "confidence": {
+              "mean": 3.6666666666666665,
+              "median": 2.5,
+              "min": 1,
+              "max": 11
+            }
+          },
+          "BUF": {
+            "count": 82,
+            "pickShare": 0.9318181818181818,
+            "confidence": {
+              "mean": 9.573170731707316,
+              "median": 10,
+              "min": 1,
+              "max": 16
+            }
+          }
+        }
+      },
+      "CIN@HOU": {
+        "observedEntries": 92,
+        "missingEntries": 2,
+        "submissionRate": 0.9787234042553191,
+        "winner": "CIN",
+        "teams": {
+          "CIN": {
+            "count": 30,
+            "pickShare": 0.32608695652173914,
+            "confidence": {
+              "mean": 5.466666666666667,
+              "median": 4,
+              "min": 1,
+              "max": 15
+            }
+          },
+          "HOU": {
+            "count": 62,
+            "pickShare": 0.6739130434782609,
+            "confidence": {
+              "mean": 6.532258064516129,
+              "median": 5,
+              "min": 1,
+              "max": 16
+            }
+          }
+        }
+      },
+      "PIT@NE": {
+        "observedEntries": 93,
+        "missingEntries": 1,
+        "submissionRate": 0.9893617021276596,
+        "winner": "NE",
+        "teams": {
+          "PIT": {
+            "count": 18,
+            "pickShare": 0.1935483870967742,
+            "confidence": {
+              "mean": 6.555555555555555,
+              "median": 6.5,
+              "min": 1,
+              "max": 14
+            }
+          },
+          "NE": {
+            "count": 75,
+            "pickShare": 0.8064516129032258,
+            "confidence": {
+              "mean": 8.053333333333333,
+              "median": 8,
+              "min": 1,
+              "max": 16
+            }
+          }
+        }
+      },
+      "CLE@TB": {
+        "observedEntries": 93,
+        "missingEntries": 1,
+        "submissionRate": 0.9893617021276596,
+        "winner": "CLE",
+        "teams": {
+          "CLE": {
+            "count": 1,
+            "pickShare": 0.010752688172043012,
+            "confidence": {
+              "mean": 14,
+              "median": 14,
+              "min": 14,
+              "max": 14
+            }
+          },
+          "TB": {
+            "count": 92,
+            "pickShare": 0.989247311827957,
+            "confidence": {
+              "mean": 13.021739130434783,
+              "median": 13.5,
+              "min": 6,
+              "max": 16
+            }
+          }
+        }
+      },
+      "CAR@ATL": {
+        "observedEntries": 93,
+        "missingEntries": 1,
+        "submissionRate": 0.9893617021276596,
+        "winner": "CAR",
+        "teams": {
+          "CAR": {
+            "count": 76,
+            "pickShare": 0.8172043010752689,
+            "confidence": {
+              "mean": 6.578947368421052,
+              "median": 6,
+              "min": 1,
+              "max": 14
+            }
+          },
+          "ATL": {
+            "count": 17,
+            "pickShare": 0.1827956989247312,
+            "confidence": {
+              "mean": 5.705882352941177,
+              "median": 6,
+              "min": 1,
+              "max": 13
+            }
+          }
+        }
+      },
+      "NO@BAL": {
+        "observedEntries": 92,
+        "missingEntries": 2,
+        "submissionRate": 0.9787234042553191,
+        "winner": "NO",
+        "teams": {
+          "NO": {
+            "count": 3,
+            "pickShare": 0.03260869565217391,
+            "confidence": {
+              "mean": 3.3333333333333335,
+              "median": 1,
+              "min": 1,
+              "max": 8
+            }
+          },
+          "BAL": {
+            "count": 89,
+            "pickShare": 0.967391304347826,
+            "confidence": {
+              "mean": 12.438202247191011,
+              "median": 13,
+              "min": 2,
+              "max": 16
+            }
+          }
+        }
+      },
+      "MIN@CHI": {
+        "observedEntries": 93,
+        "missingEntries": 1,
+        "submissionRate": 0.9893617021276596,
+        "winner": "MIN",
+        "teams": {
+          "MIN": {
+            "count": 7,
+            "pickShare": 0.07526881720430108,
+            "confidence": {
+              "mean": 6.714285714285714,
+              "median": 8,
+              "min": 1,
+              "max": 10
+            }
+          },
+          "CHI": {
+            "count": 86,
+            "pickShare": 0.9247311827956989,
+            "confidence": {
+              "mean": 8.930232558139535,
+              "median": 9,
+              "min": 1,
+              "max": 15
+            }
+          }
+        }
+      },
+      "GB@NYJ": {
+        "observedEntries": 93,
+        "missingEntries": 1,
+        "submissionRate": 0.9893617021276596,
+        "winner": "GB",
+        "teams": {
+          "GB": {
+            "count": 83,
+            "pickShare": 0.8924731182795699,
+            "confidence": {
+              "mean": 8.397590361445783,
+              "median": 8,
+              "min": 3,
+              "max": 15
+            }
+          },
+          "NYJ": {
+            "count": 10,
+            "pickShare": 0.10752688172043011,
+            "confidence": {
+              "mean": 2.4,
+              "median": 2,
+              "min": 1,
+              "max": 5
+            }
+          }
+        }
+      },
+      "PHI@TEN": {
+        "observedEntries": 93,
+        "missingEntries": 1,
+        "submissionRate": 0.9893617021276596,
+        "winner": "PHI",
+        "teams": {
+          "PHI": {
+            "count": 93,
+            "pickShare": 1,
+            "confidence": {
+              "mean": 12.763440860215054,
+              "median": 14,
+              "min": 3,
+              "max": 16
+            }
+          },
+          "TEN": {
+            "count": 0,
+            "pickShare": 0,
+            "confidence": {
+              "mean": null,
+              "median": null,
+              "min": null,
+              "max": null
+            }
+          }
+        }
+      },
+      "JAX@DEN": {
+        "observedEntries": 94,
+        "missingEntries": 0,
+        "submissionRate": 1,
+        "winner": "DEN",
+        "teams": {
+          "JAX": {
+            "count": 45,
+            "pickShare": 0.4787234042553192,
+            "confidence": {
+              "mean": 4.377777777777778,
+              "median": 4,
+              "min": 1,
+              "max": 15
+            }
+          },
+          "DEN": {
+            "count": 49,
+            "pickShare": 0.5212765957446809,
+            "confidence": {
+              "mean": 4,
+              "median": 4,
+              "min": 1,
+              "max": 11
+            }
+          }
+        }
+      },
+      "LV@LAC": {
+        "observedEntries": 94,
+        "missingEntries": 0,
+        "submissionRate": 1,
+        "winner": "LV",
+        "teams": {
+          "LV": {
+            "count": 11,
+            "pickShare": 0.11702127659574468,
+            "confidence": {
+              "mean": 3.3636363636363638,
+              "median": 3,
+              "min": 1,
+              "max": 7
+            }
+          },
+          "LAC": {
+            "count": 83,
+            "pickShare": 0.8829787234042553,
+            "confidence": {
+              "mean": 7.337349397590361,
+              "median": 7,
+              "min": 1,
+              "max": 14
+            }
+          }
+        }
+      },
+      "WAS@DAL": {
+        "observedEntries": 94,
+        "missingEntries": 0,
+        "submissionRate": 1,
+        "winner": "DAL",
+        "teams": {
+          "WAS": {
+            "count": 8,
+            "pickShare": 0.0851063829787234,
+            "confidence": {
+              "mean": 5.25,
+              "median": 4,
+              "min": 1,
+              "max": 11
+            }
+          },
+          "DAL": {
+            "count": 86,
+            "pickShare": 0.9148936170212766,
+            "confidence": {
+              "mean": 5.267441860465116,
+              "median": 5,
+              "min": 1,
+              "max": 13
+            }
+          }
+        }
+      },
+      "SEA@ARI": {
+        "observedEntries": 94,
+        "missingEntries": 0,
+        "submissionRate": 1,
+        "winner": "SEA",
+        "teams": {
+          "SEA": {
+            "count": 87,
+            "pickShare": 0.925531914893617,
+            "confidence": {
+              "mean": 7.655172413793103,
+              "median": 7,
+              "min": 1,
+              "max": 16
+            }
+          },
+          "ARI": {
+            "count": 7,
+            "pickShare": 0.07446808510638298,
+            "confidence": {
+              "mean": 2,
+              "median": 1,
+              "min": 1,
+              "max": 4
+            }
+          }
+        }
+      },
+      "MIA@SF": {
+        "observedEntries": 94,
+        "missingEntries": 0,
+        "submissionRate": 1,
+        "winner": "SF",
+        "teams": {
+          "MIA": {
+            "count": 0,
+            "pickShare": 0,
+            "confidence": {
+              "mean": null,
+              "median": null,
+              "min": null,
+              "max": null
+            }
+          },
+          "SF": {
+            "count": 94,
+            "pickShare": 1,
+            "confidence": {
+              "mean": 13.138297872340425,
+              "median": 15,
+              "min": 1,
+              "max": 16
+            }
+          }
+        }
+      },
+      "IND@KC": {
+        "observedEntries": 94,
+        "missingEntries": 0,
+        "submissionRate": 1,
+        "winner": "KC",
+        "teams": {
+          "IND": {
+            "count": 5,
+            "pickShare": 0.05319148936170213,
+            "confidence": {
+              "mean": 1.8,
+              "median": 2,
+              "min": 1,
+              "max": 3
+            }
+          },
+          "KC": {
+            "count": 89,
+            "pickShare": 0.9468085106382979,
+            "confidence": {
+              "mean": 9.651685393258427,
+              "median": 11,
+              "min": 1,
+              "max": 16
+            }
+          }
+        }
+      },
+      "NYG@LAR": {
+        "observedEntries": 93,
+        "missingEntries": 1,
+        "submissionRate": 0.9893617021276596,
+        "winner": "LAR",
+        "teams": {
+          "NYG": {
+            "count": 7,
+            "pickShare": 0.07526881720430108,
+            "confidence": {
+              "mean": 3.857142857142857,
+              "median": 2,
+              "min": 1,
+              "max": 15
+            }
+          },
+          "LAR": {
+            "count": 86,
+            "pickShare": 0.9247311827956989,
+            "confidence": {
+              "mean": 6.465116279069767,
+              "median": 6,
+              "min": 1,
+              "max": 16
+            }
+          }
+        }
+      }
+    }
+  },
+  "validation": {
+    "valid": true,
+    "errors": [],
+    "requireComplete": true
+  }
+}

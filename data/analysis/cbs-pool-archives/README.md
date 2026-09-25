@@ -12,7 +12,9 @@ The normalizer:
 
 - removes participant names by default;
 - preserves stable anonymous entry IDs for cross-week learning;
-- validates every completed card has every matchup and confidence value exactly once;
+- distinguishes explicit CBS no-pick blanks from capture gaps;
+- validates every participant row accounts for every matchup slot, while allowing legitimate skipped games;
+- validates submitted confidence values and verifies complete cards use every value exactly once;
 - verifies calculated scores against CBS weekly scores;
 - calculates actual pool pick shares and confidence distributions;
 - records the winning score and Top-2 cutoff.
