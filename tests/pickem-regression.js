@@ -3,7 +3,7 @@ const vm=require('vm');
 const path=require('path');
 const root=path.resolve(__dirname,'..');
 const html=fs.readFileSync(path.join(root,'apps/pickem/index.html'),'utf8');
-if(!html.includes('Build 1.9.1')) throw new Error('Expected Pickem Build 1.9.1');
+if(!html.includes('Build 1.10.0')) throw new Error('Expected Pickem Build 1.10.0');
 if(!html.includes("POOL_HISTORY_URL='../../data/analysis/cbs-pool-history-report.json'"))throw new Error('Completed-pool history is not wired into the module');
 if(!html.includes('PROVISIONAL · PARTIAL POOL REVEAL')) throw new Error('Partial pool reveal label missing');
 if(!html.includes('NO DEMONSTRATED FIELD EDGE')||!html.includes('Safety → upside strategy frontier'))throw new Error('Risk-return frontier or no-edge guardrail missing');
@@ -69,6 +69,14 @@ const liveCard=t.extractStructuredCard(live,liveGames);
 if(liveCard.pickCount!==16||liveCard.weightCount!==16)throw new Error(`published live CBS: ${liveCard.pickCount}/${liveCard.weightCount}`);
 if(new Set(liveCard.weights).size!==16||liveCard.weights.some(x=>x<1||x>16))throw new Error('published live CBS: confidence values must be unique 1–16');
 if(liveCard.picks.some((pick,i)=>pick!==liveGames[i].away&&pick!==liveGames[i].home))throw new Error('published live CBS: invalid matchup pick');
+// A version upgrade must retire old model odds without losing submitted cards
+// or the decision history used for postgame analysis.
+const saved={games:liveGames,optimization:{modelBuild:'1.9.1',recommended:{choices:[],weights:[]}},recommendedCard:{choices:[],weights:[]},sim:{top2:.053},originalCard:{choices:[0],weights:[11]},decisionHistory:[{type:'locked',at:'2026-09-24'}]};
+ctx.localStorage={getItem:()=>JSON.stringify(saved)};
+const migrated=vm.runInContext('loadState()',ctx);
+if(migrated.optimization||migrated.recommendedCard||migrated.sim)throw new Error('Old simulated recommendations survived model upgrade');
+if(migrated.originalCard.weights[0]!==11||migrated.decisionHistory[0].type!=='locked')throw new Error('Model upgrade lost saved user decisions');
+delete ctx.localStorage;
 if(live.season===2026&&live.week===3){
   const expectedLive={
     picks:['GB','BUF','CAR','DET','HOU','JAX','KC','NYG','CIN','SEA','SF','MIN','BAL','NO','LAR','PHI'],
