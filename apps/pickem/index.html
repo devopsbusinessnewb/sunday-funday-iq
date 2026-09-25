@@ -30,7 +30,7 @@ table{width:100%;border-collapse:collapse;font-size:12px;min-width:830px}.tablew
 <body>
 <div class="app">
   <div class="header">
-    <div class="brand"><h1>🏈 Sunday Funday IQ</h1><p>CBS Pick'em · Pick'em Coach</p><p style="font-size:10px;color:#5f7898">Build 1.9.1 · authoritative CBS baseline refresh</p></div>
+    <div class="brand"><h1>🏈 Sunday Funday IQ</h1><p>CBS Pick'em · Pick'em Coach</p><p style="font-size:10px;color:#5f7898">Build 1.10.0 · independently validated strategy search</p></div>
     <div class="actions">
       <a class="btn" href="../../">⌂ Home</a>
       <button class="btn primary" id="refreshBtn">Refresh CBS Data</button>
@@ -127,8 +127,10 @@ const VERIFIED_MARKET_SNAPSHOT={
 
 const LIVE_CBS_URL='../../data/live/cbs-pickem.json';
 const POOL_HISTORY_URL='../../data/analysis/cbs-pool-history-report.json';
-const SEARCH_ITERS=1100;
-const FINAL_ITERS=6500;
+const SEARCH_ITERS=700;
+const FINAL_ITERS=3000;
+const VALIDATION_SEEDS=3;
+const MODEL_BUILD='1.10.0';
 const CONFIDENCE_TIE_BAND=.025;
 const MIN_OPTIONAL_FLIP_PROB=.40;
 const MIN_OPTIONAL_MARKET_PROB=.38;
@@ -419,6 +421,12 @@ function buildWorlds(games,poolSize,iters,seed=20260908,fieldModel=null,poolPrio
   const primary=(fieldModel?.locked||[]).find(x=>x.gameId===fieldModel?.primaryGameId)||fieldModel?.locked?.[0]||null;
   const primaryIdx=primary?games.findIndex(g=>g.id===primary.gameId):-1;
   const empirical=primary?.observations||[];
+  const openIdx=[...Array(n).keys()].filter(i=>i!==primaryIdx),allWeights=[...Array(n).keys()].map(i=>i+1);
+  const defaultWeights=games.map(g=>scheduleMap.get(g.away+'|'+g.home));
+  const fieldStrength=games.map(g=>[0,1].map(s=>poolConfidenceSignal(poolPrior,ownProb(g,s),n)));
+  const fieldAwayProb=games.map(g=>g.awayPct/100),consensusSides=games.map(g=>g.awayPct>=g.homePct?0:1);
+  const rawMinorityRate=games.reduce((sum,g)=>sum+Math.min(g.awayPct,g.homePct)/100,0)/Math.max(1,n);
+  const profiles=poolPrior?.profiles||[];
 
   for(let z=0;z<iters;z++){
     const scenario=z%3;
@@ -448,21 +456,29 @@ function buildWorlds(games,poolSize,iters,seed=20260908,fieldModel=null,poolPrio
         defaultBehavior=o.weight===primary.defaultWeight;
       }
 
-      const modeledPicks=drawFieldPicks(games,rnd,poolPrior);
-      for(let i=0;i<n;i++)if(i!==primaryIdx)picks[i]=modeledPicks[i];
+      let minorityScale=1;
+      if(poolPrior){
+        const profile=profiles.length?profiles[Math.floor(rnd()*profiles.length)]:null;
+        const historicalRate=profile?1-profile.averageConsensusRate:poolPrior.averageContrarianPicks/Math.max(1,n);
+        const target=rawMinorityRate*(1-poolPrior.reliability)+historicalRate*poolPrior.reliability;
+        minorityScale=rawMinorityRate?target/rawMinorityRate:1;
+      }
+      for(let i=0;i<n;i++){
+        const r=rnd();if(i===primaryIdx)continue;
+        if(!poolPrior)picks[i]=r<fieldAwayProb[i]?0:1;
+        else{const minorityShare=Math.min(fieldAwayProb[i],1-fieldAwayProb[i]),adjusted=Math.max(.005,Math.min(.495,minorityShare*minorityScale));picks[i]=r<adjusted?1-consensusSides[i]:consensusSides[i]}
+      }
 
-      const openIdx=[...Array(n).keys()].filter(i=>i!==primaryIdx);
       if(defaultBehavior){
         for(const i of openIdx){
-          const key=games[i].away+'|'+games[i].home;
-          const want=scheduleMap.get(key);
+          const want=defaultWeights[i];
           if(want&&!used.has(want)){weights[i]=want;used.add(want)}
         }
-        const leftovers=[...Array(n).keys()].map(i=>i+1).filter(w=>!used.has(w)).sort((a,b)=>b-a);
+        const leftovers=allWeights.filter(w=>!used.has(w)).reverse();
         let p=0; for(const i of openIdx)if(!weights[i])weights[i]=leftovers[p++];
       }else{
-        const strength=openIdx.map(i=>({i,v:poolConfidenceSignal(poolPrior,ownProb(games[i],picks[i]),n)+(rnd()-.5)*.18})).sort((a,b)=>b.v-a.v);
-        const remaining=[...Array(n).keys()].map(i=>i+1).filter(w=>!used.has(w)).sort((a,b)=>b-a);
+        const strength=openIdx.map(i=>({i,v:fieldStrength[i][picks[i]]+(rnd()-.5)*.18})).sort((a,b)=>b.v-a.v);
+        const remaining=allWeights.filter(w=>!used.has(w)).reverse();
         strength.forEach((x,r)=>weights[x.i]=remaining[r]);
       }
 
@@ -470,14 +486,32 @@ function buildWorlds(games,poolSize,iters,seed=20260908,fieldModel=null,poolPrio
       for(let i=0;i<n;i++)if(picks[i]===winners[i])score+=weights[i];
       fs[f]=score;
     }
-    worlds[z]={scenario,winners,proxyScore:fs[0],field:Array.from(fs.slice(1)).sort((a,b)=>a-b)};
+    const fieldHistogram=new Uint16Array(sumConfidence(n)+1);
+    for(let f=1;f<fs.length;f++)fieldHistogram[fs[f]]++;
+    const fieldAbove=new Uint16Array(fieldHistogram.length+1);
+    for(let s=fieldHistogram.length-1;s>=0;s--)fieldAbove[s]=fieldAbove[s+1]+fieldHistogram[s];
+    worlds[z]={scenario,winners,proxyScore:fs[0],fieldHistogram,fieldAbove,fieldSize:fieldN};
+  }
+  return worlds;
+}
+function buildWorldEnsemble(games,poolSize,iters,seed=20260908,fieldModel=null,poolPrior=null,seeds=VALIDATION_SEEDS){
+  const count=Math.max(1,Number(seeds)||1),worlds=[];let remaining=Math.max(count,iters);
+  for(let k=0;k<count;k++){
+    const n=Math.ceil(remaining/(count-k)),batch=buildWorlds(games,poolSize,n,seed+k*7919,fieldModel,poolPrior);
+    for(const w of batch){w.validationSeed=k;worlds.push(w)}remaining-=n;
   }
   return worlds;
 }
 function scoreWorldOutcome(points,w){
-  const c=binaryCounts(w.field,points),better=c.greater,equal=c.equal;
+  let better=0,equal=0,fieldSize=0;
+  if(w.fieldHistogram){
+    fieldSize=w.fieldSize??w.fieldHistogram.reduce((a,b)=>a+b,0);equal=w.fieldHistogram[points]||0;
+    better=w.fieldAbove? w.fieldAbove[points+1]||0 : w.fieldHistogram.slice(points+1).reduce((a,b)=>a+b,0);
+  }else{
+    const c=binaryCounts(w.field,points);better=c.greater;equal=c.equal;fieldSize=w.field.length;
+  }
   let win=0,top2=0;if(better===0){win=1/(equal+1);top2=Math.min(2,equal+1)/(equal+1)}else if(better===1)top2=1/(equal+1);
-  const entrants=w.field.length+1,midRank=better+1+equal/2,top10=midRank<=Math.max(2,Math.ceil(entrants*.10))?1:0,bottomHalf=midRank>(entrants+1)/2?1:0;
+  const entrants=fieldSize+1,midRank=better+1+equal/2,top10=midRank<=Math.max(2,Math.ceil(entrants*.10))?1:0,bottomHalf=midRank>(entrants+1)/2?1:0;
   return{points,win,top2,top10,bottomHalf,midRank};
 }
 function cardWorldOutcome(card,w){
@@ -506,12 +540,42 @@ function compareCards(base,candidate,worlds){
 function optimizeConfidence(card,worlds,maxPass=2,locked=new Set(),games=null){
   const best=allocateConfidence(card,games,locked);return{card:best,eval:evaluateCard(best,worlds)};
 }
+function upsideScore(x){return x.win*.55+x.top2*.30+x.top10*.15}
+function optimizeTournamentConfidence(card,worlds,locked=new Set(),games=null,maxPass=2,maxInversions=2){
+  let best=allocateConfidence(card,games,locked),bestEval=evaluateCard(best,worlds),bestScore=upsideScore(bestEval),evaluatedCount=1;
+  const open=[...Array(best.choices.length).keys()].filter(i=>!locked.has(i));
+  for(let pass=0;pass<maxPass;pass++){
+    let nextCard=null,nextEval=null,nextScore=bestScore;
+    for(let a=0;a<open.length;a++)for(let b=a+1;b<open.length;b++){
+      const candidate=clone(best),i=open[a],j=open[b];[candidate.weights[i],candidate.weights[j]]=[candidate.weights[j],candidate.weights[i]];
+      // Search limited tournament-oriented reordering among reasonably close
+      // probability estimates. This permits deliberate variance without
+      // allowing ownership leverage to overwhelm game safety.
+      if(games&&Math.abs(confidenceSafetyProb(games[i],candidate.choices[i])-confidenceSafetyProb(games[j],candidate.choices[j]))>.10)continue;
+      if(games&&confidenceRiskPenalty(games,candidate)>maxInversions)continue;
+      const ev=evaluateCard(candidate,worlds),score=upsideScore(ev);evaluatedCount++;
+      if(score>nextScore+1e-12){nextCard=candidate;nextEval=ev;nextScore=score}
+    }
+    if(!nextCard)break;best=nextCard;bestEval=nextEval;bestScore=nextScore;
+  }
+  return{card:best,eval:bestEval,score:bestScore,evaluatedCount};
+}
+function seedStability(card,worlds){
+  const groups=new Map();for(const w of worlds){const k=w.validationSeed??0;if(!groups.has(k))groups.set(k,[]);groups.get(k).push(w)}
+  const evaluations=[...groups.values()].map(ws=>evaluateCard(card,ws)),top2=evaluations.map(x=>x.top2),win=evaluations.map(x=>x.win);
+  return{seeds:evaluations.length,evaluations,top2Min:Math.min(...top2),top2Max:Math.max(...top2),winMin:Math.min(...win),winMax:Math.max(...win)};
+}
+function stableUpsideScore(x){const s=x.trainingStability;return s.winMin*.35+x.training.win*.25+s.top2Min*.18+x.training.top2*.12+x.training.top10*.10}
 function cardKey(c){return c.choices.join('')+'|'+c.weights.join(',')}
 function searchCandidates(games,current,poolSize,opts={}){
-  const worlds=opts.worlds||buildWorlds(games,poolSize,opts.searchIters||SEARCH_ITERS,opts.seed||20260908,opts.fieldModel||null,opts.poolPrior||null);
-  const locked=lockedIndices(games),base=ensureValidCard(current,games.length),baseEval=evaluateCard(base,worlds);
-  const candidates=new Map([[cardKey(base),{card:base,eval:baseEval,flips:0}]]);
+  const worlds=opts.worlds||buildWorldEnsemble(games,poolSize,opts.searchIters||SEARCH_ITERS,opts.seed||20260908,opts.fieldModel||null,opts.poolPrior||null);
+  const locked=lockedIndices(games),submitted=ensureValidCard(current,games.length),base=safestExpectedCard(games,submitted),baseEval=evaluateCard(submitted,worlds);
+  // Candidate construction is anchored to the deterministic expected-winner
+  // card, never to the user's submitted choices. The submitted card remains a
+  // comparison candidate without steering which alternatives get searched.
+  const candidates=new Map([[cardKey(submitted),{card:submitted,eval:baseEval,flips:0}],[cardKey(base),{card:base,eval:evaluateCard(base,worlds),flips:0}]]);
   const conf=optimizeConfidence(base,worlds,3,locked,games);candidates.set(cardKey(conf.card),{card:conf.card,eval:conf.eval,flips:0});
+  const upside=optimizeTournamentConfidence(base,worlds,locked,games,2);let confidenceEvaluations=upside.evaluatedCount;candidates.set(cardKey(upside.card),{card:upside.card,eval:upside.eval,flips:0});
   const proxyField=!fieldModelComplete({fieldModel:opts.fieldModel,games});
   let beam=[{card:conf.card,eval:conf.eval,flips:0,contrarianFlips:0,flipped:new Set()}];
   for(let depth=1;depth<=3;depth++){
@@ -533,7 +597,11 @@ function searchCandidates(games,current,poolSize,opts={}){
     beam=expanded.slice(0,10);
     for(const x of beam)candidates.set(cardKey(x.card),x);
   }
-  return{worlds,baseEval,candidates:[...candidates.values()].sort((a,b)=>cardObjective(b.eval,games,b.card,base)-cardObjective(a.eval,games,a.card,base)).slice(0,12)};
+  const all=[...candidates.values()],selected=new Map(),take=(arr,n)=>arr.slice(0,n).forEach(x=>selected.set(cardKey(x.card),x));
+  take([...all].sort((a,b)=>cardObjective(b.eval,games,b.card,base)-cardObjective(a.eval,games,a.card,base)),12);
+  take([...all].sort((a,b)=>upsideScore(b.eval)-upsideScore(a.eval)),12);
+  take([...all].sort((a,b)=>b.eval.avg-a.eval.avg),6);
+  return{worlds,baseEval,candidateCount:all.length,testedCount:all.length+confidenceEvaluations,candidates:[...selected.values()]};
 }
 function safestExpectedCard(games,current){
   const locked=lockedIndices(games),card={choices:[...current.choices],weights:new Array(games.length)},used=new Set([...locked].map(i=>current.weights[i])),available=games.map((_,i)=>i+1).filter(w=>!used.has(w));let next=0;
@@ -546,9 +614,9 @@ function safestExpectedCard(games,current){
   return allocateConfidence(card,games,locked);
 }
 function addCardCandidate(map,card){if(card&&validConfidence(card.weights,card.choices.length))map.set(cardKey(card),clone(card))}
-function buildStrategyFrontier(games,current,worlds,extraCards=[],poolSize=102,poolPrior=null){
-  const locked=lockedIndices(games),cards=new Map(),safeSeed=safestExpectedCard(games,current);
-  addCardCandidate(cards,current);addCardCandidate(cards,safeSeed);for(const c of extraCards)addCardCandidate(cards,c);
+function buildStrategyFrontier(games,current,worlds,extraCards=[],poolSize=102,poolPrior=null,tuningWorlds=worlds){
+  const locked=lockedIndices(games),cards=new Map(),safeSeed=safestExpectedCard(games,current),safeUpside=optimizeTournamentConfidence(safeSeed,tuningWorlds,locked,games,2);let confidenceSearchEvaluations=safeUpside.evaluatedCount;
+  addCardCandidate(cards,current);addCardCandidate(cards,safeSeed);addCardCandidate(cards,safeUpside.card);for(const c of extraCards)addCardCandidate(cards,c);
 
   // Build a controlled portfolio of leverage alternatives from the safest
   // expected-winner card. Candidate flips must pass the same probability,
@@ -559,38 +627,39 @@ function buildStrategyFrontier(games,current,worlds,extraCards=[],poolSize=102,p
     const to=1-safeSeed.choices[i],e=strategicPickEvidence(games[i],safeSeed.choices[i],to,{proxyField:true});
     if(e.eligible&&e.contrarian)leverage.push({i,e,value:e.leverage*e.pickProbability});
   }
-  leverage.sort((a,b)=>b.value-a.value);const usable=leverage.slice(0,6);
+  leverage.sort((a,b)=>b.value-a.value);const usable=leverage.slice(0,5);
   function combinations(start,left,chosen){
-    if(chosen.length){const c=clone(safeSeed);for(const x of chosen)c.choices[x.i]=1-c.choices[x.i];addCardCandidate(cards,allocateConfidence(c,games,locked))}
+    if(chosen.length){const c=clone(safeSeed);for(const x of chosen)c.choices[x.i]=1-c.choices[x.i];const calibrated=allocateConfidence(c,games,locked),tuned=optimizeTournamentConfidence(calibrated,tuningWorlds,locked,games,1);confidenceSearchEvaluations+=tuned.evaluatedCount;addCardCandidate(cards,calibrated);addCardCandidate(cards,tuned.card)}
     if(left===0)return;
     for(let j=start;j<usable.length;j++)combinations(j+1,left-1,[...chosen,usable[j]]);
   }
   combinations(0,3,[]);
 
   const evaluated=[...cards.values()].map(card=>{
-    const evalResult=evaluateCard(card,worlds),comparison=compareCards(current,card,worlds);
-    return{card,eval:evalResult,comparison,safeComparison:compareCards(safeSeed,card,worlds),edge:evalResult.top2-neutralTop2(poolSize),flips:card.choices.reduce((n,x,i)=>n+(x!==safeSeed.choices[i]?1:0),0)};
+    const training=evaluateCard(card,tuningWorlds),trainingStability=seedStability(card,tuningWorlds),trainingSafeComparison=compareCards(safeSeed,card,tuningWorlds);
+    const evalResult=evaluateCard(card,worlds),comparison=compareCards(current,card,worlds),stability=seedStability(card,worlds);
+    return{card,training,trainingStability,trainingSafeComparison,eval:evalResult,comparison,stability,edge:evalResult.top2-neutralTop2(poolSize),flips:card.choices.reduce((n,x,i)=>n+(x!==safeSeed.choices[i]?1:0),0),changes:cardChangeCost(current,card)};
   });
   const maxBy=(arr,score)=>arr.reduce((best,x)=>!best||score(x)>score(best)?x:best,null);
-  const safest=maxBy(evaluated,x=>x.eval.avg-x.eval.bottomHalf*.0001);
-  const balancedPool=evaluated.filter(x=>x.flips<=1&&x.eval.avg>=safest.eval.avg-3&&x.eval.bottomHalf<=safest.eval.bottomHalf+.10&&(x.flips===0||x.safeComparison.top2Delta>=0&&x.safeComparison.worstScenarioTop2Delta>=-.001));
-  const balanced=maxBy(balancedPool.length?balancedPool:[safest],x=>x.eval.top2*.55+x.eval.win*.15+x.eval.top10*.12-x.eval.bottomHalf*.025+x.eval.avg*.00008);
-  const aggressivePool=evaluated.filter(x=>x.flips<=2&&x.eval.avg>=safest.eval.avg-6&&x.eval.bottomHalf<=safest.eval.bottomHalf+.22&&x.safeComparison.worstScenarioTop2Delta>=-.003);
-  const aggressive=maxBy(aggressivePool.length?aggressivePool:[balanced],x=>x.eval.top2*.52+x.eval.win*.28+x.eval.top10*.20-x.eval.bottomHalf*.008);
-  const maxUpsidePool=evaluated.filter(x=>x.flips<=3),maxUpside=maxBy(maxUpsidePool.length?maxUpsidePool:[aggressive],x=>x.eval.win*.55+x.eval.top2*.30+x.eval.top10*.15);
-  const profile=(key,label,x)=>({key,label,card:x.card,eval:x.eval,comparison:x.comparison,safeComparison:x.safeComparison,edge:x.edge,flips:x.flips});
+  const safest=maxBy(evaluated,x=>x.training.avg-x.training.bottomHalf*.0001);
+  const balancedPool=evaluated.filter(x=>x.flips<=1&&x.training.avg>=safest.training.avg-3&&x.training.bottomHalf<=safest.training.bottomHalf+.10&&(x.flips===0||x.trainingSafeComparison.top2Delta>=0&&x.trainingSafeComparison.worstScenarioTop2Delta>=-.001));
+  const balanced=maxBy(balancedPool.length?balancedPool:[safest],x=>x.training.top2*.55+x.training.win*.15+x.training.top10*.12-x.training.bottomHalf*.025+x.training.avg*.00008);
+  const aggressivePool=evaluated.filter(x=>x.flips<=2&&x.training.avg>=safest.training.avg-6&&x.training.bottomHalf<=safest.training.bottomHalf+.22&&x.trainingSafeComparison.worstScenarioTop2Delta>=-.003);
+  const aggressive=maxBy(aggressivePool.length?aggressivePool:[balanced],x=>x.training.top2*.52+x.training.win*.28+x.training.top10*.20-x.training.bottomHalf*.008);
+  const maxUpsidePool=evaluated.filter(x=>x.flips<=3),maxUpside=maxBy(maxUpsidePool.length?maxUpsidePool:[aggressive],stableUpsideScore);
+  const profile=(key,label,x)=>({key,label,card:x.card,eval:x.eval,comparison:x.comparison,stability:x.stability,edge:x.edge,flips:x.flips,changes:x.changes,sameAsCurrent:cardKey(x.card)===cardKey(current)});
   return{
     safest:profile('safest','Safest',safest),
     balanced:profile('balanced','Balanced',balanced),
     aggressive:profile('aggressive','Aggressive',aggressive),
     maxUpside:profile('maxUpside','Max upside',maxUpside),
-    candidateCount:evaluated.length,poolPrior:poolPrior?{weeks:poolPrior.weeks,participantWeeks:poolPrior.participantWeeks,reliability:poolPrior.reliability,averageContrarianPicks:poolPrior.averageContrarianPicks,top2AverageContrarianPicks:poolPrior.top2AverageContrarianPicks}:null
+    candidateCount:evaluated.length,confidenceSearchEvaluations,validationSeeds:Math.max(...evaluated.map(x=>x.stability.seeds)),poolPrior:poolPrior?{weeks:poolPrior.weeks,participantWeeks:poolPrior.participantWeeks,reliability:poolPrior.reliability,averageContrarianPicks:poolPrior.averageContrarianPicks,top2AverageContrarianPicks:poolPrior.top2AverageContrarianPicks}:null
   };
 }
 function runOptimizer(games,poolSize,opts={}){
   const current=ensureValidCard(opts.currentCard||cardFromGames(games),games.length);
-  const searchWorlds=buildWorlds(games,poolSize,opts.searchIters||SEARCH_ITERS,opts.seed||20260908,opts.fieldModel||null,opts.poolPrior||null);
-  const finalWorlds=buildWorlds(games,poolSize,opts.finalIters||FINAL_ITERS,(opts.seed||20260908)+991,opts.fieldModel||null,opts.poolPrior||null);
+  const searchWorlds=buildWorldEnsemble(games,poolSize,opts.searchIters||SEARCH_ITERS,opts.seed||20260908,opts.fieldModel||null,opts.poolPrior||null);
+  const finalWorlds=buildWorldEnsemble(games,poolSize,opts.finalIters||FINAL_ITERS,(opts.seed||20260908)+991,opts.fieldModel||null,opts.poolPrior||null);
   const currentEval=evaluateCard(current,finalWorlds);
   const search=searchCandidates(games,current,poolSize,{...opts,worlds:searchWorlds});
   let best={card:current,eval:currentEval,comparison:compareCards(current,current,finalWorlds)};
@@ -602,7 +671,8 @@ function runOptimizer(games,poolSize,opts={}){
     const material=tournamentGain||safetyGain;
     if(material&&cardObjective(e,games,safe,current)>cardObjective(best.eval,games,best.card,current)+1e-9)best={card:safe,eval:e,comparison};
   }
-  const frontier=buildStrategyFrontier(games,current,finalWorlds,search.candidates.map(x=>x.card),poolSize,opts.poolPrior||null);
+  const frontier=buildStrategyFrontier(games,current,finalWorlds,search.candidates.map(x=>x.card),poolSize,opts.poolPrior||null,searchWorlds);
+  frontier.searchEvaluationCount=(search.testedCount||0)+(frontier.confidenceSearchEvaluations||0);
   // Balanced is the default decision view. The user can explicitly choose a
   // safer or more aggressive point on the same tested frontier.
   const selected=frontier.balanced||{card:best.card,eval:best.eval,comparison:best.comparison};
@@ -646,6 +716,9 @@ function loadState(){
   s.marketUpdatedAt=s.marketUpdatedAt||s.importedAt||SEED_TS;
   s.originalCard=s.originalCard||null;s.recommendedCard=s.recommendedCard||null;s.optimization=s.optimization||null;s.applied=!!s.applied;
   s.confidenceStatus=s.confidenceStatus||'submitted';s.confidenceSource=s.confidenceSource||'CBS import';s.originalConfidenceStatus=s.originalConfidenceStatus||s.confidenceStatus;
+  // Existing browser decisions and cards survive a model upgrade. Old model
+  // estimates and recommendations must be recalculated before display.
+  if(s.optimization?.modelBuild!==MODEL_BUILD){s.optimization=null;s.recommendedCard=null;s.sim=null}
   return s;
 }
 let state=loadState();
@@ -1230,15 +1303,16 @@ function renderDecision(){
   $('currentCardLabel').textContent=placeholder?'Neutral field benchmark':'Current CBS card';$('recommendedCardLabel').textContent=`IQ ${(o.strategies?.[o.selectedStrategy]?.label||'balanced')} card`;
   $('currentTop2').textContent=pct(placeholder?neutral:cur.top2,1)+' Top 2';$('currentWin').textContent='Win '+pct(placeholder?(o.neutralWin??neutralWin(state.poolSize)):cur.win,1);$('recommendedTop2').textContent=pct(rec.top2,1)+' Top 2';$('recommendedWin').textContent='Win '+pct(rec.win,1);
   const strategyOrder=['safest','balanced','aggressive','maxUpside'],strategies=o.strategies||{};$('frontier').style.display='block';
-  $('strategyGrid').innerHTML=strategyOrder.filter(k=>strategies[k]).map(k=>{const p=strategies[k],e=p.eval.top2-neutral,selected=k===o.selectedStrategy;return`<div class="strategy ${selected?'selected':''}"><div class="strategy-name">${p.label}</div><div class="strategy-top2">${pct(p.eval.top2,1)}</div><div class="strategy-edge ${e>=0?'good':'bad'}">${e>=0?'+':''}${(e*100).toFixed(1)} pts vs neutral</div><div class="strategy-stats">Win ${pct(p.eval.win,1)} · Top 10% ${pct(p.eval.top10,0)}<br>Expected ${p.eval.avg.toFixed(1)} pts · Bust ${pct(p.eval.bottomHalf,0)}<br>${p.flips} leverage flip${p.flips===1?'':'s'}</div><button class="btn ${selected?'primary':''}" data-strategy="${k}" ${selected?'disabled':''}>${selected?'Selected':'Review this card'}</button></div>`}).join('');
+  $('strategyGrid').innerHTML=strategyOrder.filter(k=>strategies[k]).map(k=>{const p=strategies[k],e=p.eval.top2-neutral,selected=k===o.selectedStrategy,m=p.changes?.confidenceMoves||0,range=p.stability?`${pct(p.stability.top2Min,1)}–${pct(p.stability.top2Max,1)}`:'—';return`<div class="strategy ${selected?'selected':''}"><div class="strategy-name">${p.label}${p.sameAsCurrent?' · CURRENT CARD':''}</div><div class="strategy-top2">${pct(p.eval.top2,1)}</div><div class="strategy-edge ${e>=0?'good':'bad'}">${e>=0?'+':''}${(e*100).toFixed(1)} pts vs neutral</div><div class="strategy-stats">Win ${pct(p.eval.win,1)} · Top 10% ${pct(p.eval.top10,0)}<br>Expected ${p.eval.avg.toFixed(1)} pts · Bust ${pct(p.eval.bottomHalf,0)}<br>${p.flips} leverage flip${p.flips===1?'':'s'} · ${m} confidence move${m===1?'':'s'}<br>Seed Top-2 range ${range}</div><button class="btn ${selected?'primary':''}" data-strategy="${k}" ${selected?'disabled':''}>${selected?'Selected':'Review this card'}</button></div>`}).join('');
   const hp=o.poolPrior,historyText=hp?` Historical pool prior: ${hp.weeks} completed weeks / ${hp.participantWeeks} participant-weeks, weighted ${(hp.reliability*100).toFixed(0)}%; field averaged ${hp.averageContrarianPicks.toFixed(1)} minority picks and Top-2 cards ${hp.top2AverageContrarianPicks.toFixed(1)}.`:' Historical pool prior unavailable.';
-  $('calibrationNote').textContent=`Neutral benchmark: ${pct(neutral,2)} Top 2 for ${state.poolSize} entries. Held-out proxy-field check: ${pct(o.fieldCalibration?.top2,2)} (${calibrationOk?'within tolerance':'outside tolerance'}).${historyText} Portfolio limits: Balanced ≤1 leverage flip, Aggressive ≤2, Max upside ≤3. Bust = simulated bottom-half finish.`;
+  const coverage=o.strategies?` Search evaluated ${o.strategies.searchEvaluationCount||o.strategies.candidateCount||0} card variants, retained ${o.strategies.candidateCount||0} distinct finalists, and validated them across ${o.strategies.validationSeeds||1} independent simulation seeds.`:'';
+  $('calibrationNote').textContent=`Neutral benchmark: ${pct(neutral,2)} Top 2 for ${state.poolSize} entries. Held-out proxy-field check: ${pct(o.fieldCalibration?.top2,2)} (${calibrationOk?'within tolerance':'outside tolerance'}).${coverage}${historyText} Portfolio limits: Balanced ≤1 leverage flip, Aggressive ≤2, Max upside ≤3. Bust = simulated bottom-half finish.`;
   document.querySelectorAll('[data-strategy]').forEach(b=>b.onclick=()=>selectStrategy(b.dataset.strategy));
   const d=o.diagnostics||{},material=d.material??dt>=MIN_MATERIAL_TOP2_GAIN;
   if(!calibrationOk){$('decisionHeadline').textContent='MODEL CALIBRATION WARNING';$('decisionSub').textContent=`The held-out synthetic-field entry did not reproduce the neutral ${pct(neutral,2)} Top-2 baseline closely enough. Treat absolute odds and card comparisons as diagnostic only.${provisional?provisionalNote:''}`;$('decisionPill').textContent='DO NOT TRUST ODDS';$('decisionPill').className='pill red'}
   else if(edge<=0){$('decisionHeadline').textContent='NO DEMONSTRATED FIELD EDGE';$('decisionSub').textContent=`The selected ${o.strategies?.[o.selectedStrategy]?.label||'balanced'} card tested at ${pct(rec.top2,1)}, below the ${pct(neutral,2)} neutral benchmark. IQ has not shown that these changes improve your position versus the field. Compare the frontier, but do not treat a gain over placeholder confidence as model value.${provisional?provisionalNote:''}`;$('decisionPill').textContent='NO EDGE';$('decisionPill').className='pill red'}
   else if(actions.length&&material){$('decisionHeadline').textContent=`${(o.strategies?.[o.selectedStrategy]?.label||'Balanced').toUpperCase()} CARD: ${pp(edge,1)} VS NEUTRAL`;$('decisionSub').textContent=`This strategy tests at ${pct(rec.top2,1)} Top 2 versus the ${pct(neutral,2)} neutral benchmark, with ${pct(rec.bottomHalf,0)} bottom-half risk. Expected points: ${rec.avg.toFixed(1)}.${placeholder?' Your imported confidence values were placeholders, so IQ is not claiming improvement over that starter order.':` Versus your submitted card: ${pp(dt,1)} Top 2 and ${pp(dw,1)} Win.`}${provisional?provisionalNote:''}`;$('decisionPill').textContent=provisional?'PROVISIONAL EDGE':'TESTED EDGE';$('decisionPill').className='pill '+(provisional?'yellow':'green')}
-  else{$('decisionHeadline').textContent='KEEP YOUR CURRENT CARD';$('decisionSub').textContent=`IQ did not find a materially better complete card. The selected card remains ${pp(edge,1)} versus the neutral field benchmark.${provisional?provisionalNote:''}`;$('decisionPill').textContent=provisional?'PROVISIONAL':'KEEP';$('decisionPill').className='pill '+(provisional?'yellow':'green')}
+  else{$('decisionHeadline').textContent='NO MATERIAL IMPROVEMENT VALIDATED';$('decisionSub').textContent=`After evaluating ${o.strategies?.searchEvaluationCount||o.strategies?.candidateCount||0} card variants and validating ${o.strategies?.candidateCount||0} finalists across ${o.strategies?.validationSeeds||1} independent simulation seeds, this selected strategy did not materially improve on your current card. That is a bounded search result—not proof that the current card is globally optimal. The selected card tests at ${pp(edge,1)} versus the neutral field benchmark.${provisional?provisionalNote:''}`;$('decisionPill').textContent=provisional?'PROVISIONAL':'NO MATERIAL EDGE';$('decisionPill').className='pill '+(provisional?'yellow':'green')}
   const locked=state.games.map((g,i)=>({g,i})).filter(x=>x.g.locked);
   let html='';
   if(locked.length){
@@ -1300,7 +1374,7 @@ async function runSimulation(){
   try{
     const result=runOptimizer(state.games,state.poolSize,{currentCard:current,searchIters:SEARCH_ITERS,finalIters:FINAL_ITERS,seed:20260908,fieldModel:state.fieldModel||null,poolPrior:poolHistoryPrior});
     const actions=cardActions(state.games,result.current,result.recommended,result.finalWorlds);
-    state.recommendedCard=result.recommended;state.optimization={current:result.current,currentEval:result.currentEval,recommended:result.recommended,recommendedEval:result.recommendedEval,actions,diagnostics:result.diagnostics,strategies:result.strategies,selectedStrategy:result.selectedStrategy,neutralTop2:result.neutralTop2,neutralWin:result.neutralWin,fieldCalibration:result.fieldCalibration,fieldCalibrationError:result.fieldCalibrationError,poolPrior:result.poolPrior,ranAt:nowIso(),provisional:!(f.cbs.current&&f.market.current&&fieldModelComplete(state))};state.sim=result.currentEval;state.applied=false;recordDecision('simulation',{current:result.current,recommended:result.recommended,metrics:{current:result.currentEval,recommended:result.recommendedEval,diagnostics:result.diagnostics,strategies:result.strategies,fieldCalibration:result.fieldCalibration,poolPrior:result.poolPrior}});save();render();
+    state.recommendedCard=result.recommended;state.optimization={modelBuild:MODEL_BUILD,current:result.current,currentEval:result.currentEval,recommended:result.recommended,recommendedEval:result.recommendedEval,actions,diagnostics:result.diagnostics,strategies:result.strategies,selectedStrategy:result.selectedStrategy,neutralTop2:result.neutralTop2,neutralWin:result.neutralWin,fieldCalibration:result.fieldCalibration,fieldCalibrationError:result.fieldCalibrationError,poolPrior:result.poolPrior,ranAt:nowIso(),provisional:!(f.cbs.current&&f.market.current&&fieldModelComplete(state))};state.sim=result.currentEval;state.applied=false;recordDecision('simulation',{current:result.current,recommended:result.recommended,metrics:{current:result.currentEval,recommended:result.recommendedEval,diagnostics:result.diagnostics,strategies:result.strategies,fieldCalibration:result.fieldCalibration,poolPrior:result.poolPrior}});save();render();
     show(`Simulation complete. ${state.games.filter(g=>g.locked).length} locked game(s) frozen; remaining card optimized.`);
   }catch(e){console.error(e);show('Optimizer error: '+e.message,'red')}
   finally{$('optBtn').disabled=false;$('progress').classList.remove('show')}
@@ -1325,7 +1399,7 @@ async function boot(){
   render();
   await Promise.all([loadPublishedCbs({silent:true,onlyIfNewer:true}),loadPoolHistory()]);
 }
-globalThis.SFIQ_TEST={validConfidence,ensureValidCard,completeCard,cardImportIssues,dataFreshness,buildWorlds,evaluateCard,evaluateProxyField,compareCards,robustMetrics,optimizeConfidence,searchCandidates,runOptimizer,buildStrategyFrontier,safestExpectedCard,neutralTop2,neutralWin,cardActions,marketProb,iqProb,formProb,iqFormWeight,scenarioProbability,probabilityProfile,confidenceSafetyProb,confidenceCeilingFromProbability,confidenceCeiling,confidenceRiskPenalty,allocateConfidence,seedRiskCalibratedConfidence,expectedWinnerSide,strategicPickEvidence,cardChangeCost,ownProb,clone,refreshResults,refreshIqModel,isLocked,fixedWinner,parsePicks,extractStructuredCard,extractFieldModel,applyStructuredCard,normalizePoolHistory,poolConfidenceSignal,drawFieldPicks,SEED,normalizeTeam};
+globalThis.SFIQ_TEST={validConfidence,ensureValidCard,completeCard,cardImportIssues,dataFreshness,buildWorlds,buildWorldEnsemble,evaluateCard,evaluateProxyField,compareCards,robustMetrics,optimizeConfidence,optimizeTournamentConfidence,seedStability,searchCandidates,runOptimizer,buildStrategyFrontier,safestExpectedCard,neutralTop2,neutralWin,cardActions,marketProb,iqProb,formProb,iqFormWeight,scenarioProbability,probabilityProfile,confidenceSafetyProb,confidenceCeilingFromProbability,confidenceCeiling,confidenceRiskPenalty,allocateConfidence,seedRiskCalibratedConfidence,expectedWinnerSide,strategicPickEvidence,cardChangeCost,ownProb,clone,refreshResults,refreshIqModel,isLocked,fixedWinner,parsePicks,extractStructuredCard,extractFieldModel,applyStructuredCard,normalizePoolHistory,poolConfidenceSignal,drawFieldPicks,SEED,normalizeTeam};
 if(!TESTING)boot();
 </script>
 </body></html>
