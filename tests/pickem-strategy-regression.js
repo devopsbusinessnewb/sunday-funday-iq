@@ -55,6 +55,7 @@ for(const key of ['safest','balanced','aggressive','maxUpside']){
   const p=frontier[key];if(!p||!t.validConfidence(p.card.weights,16))throw new Error(`Invalid or missing ${key} frontier card`);
   if(frontier.safest.eval.avg+1e-9<p.eval.avg)throw new Error(`${key} has more expected points than Safest`);
 }
+if(frontier.balanced.flips>1||frontier.aggressive.flips>2||frontier.maxUpside.flips>3)throw new Error('Frontier labels do not enforce their portfolio risk limits');
 
 // Import failures must identify exact games and confidence defects.
 const broken=JSON.parse(JSON.stringify(games));broken[0].pick=null;broken[1].weight=null;broken[2].weight=broken[3].weight;

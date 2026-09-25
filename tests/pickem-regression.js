@@ -3,7 +3,8 @@ const vm=require('vm');
 const path=require('path');
 const root=path.resolve(__dirname,'..');
 const html=fs.readFileSync(path.join(root,'apps/pickem/index.html'),'utf8');
-if(!html.includes('Build 1.8.0')) throw new Error('Expected Pickem Build 1.8.0');
+if(!html.includes('Build 1.9.0')) throw new Error('Expected Pickem Build 1.9.0');
+if(!html.includes("POOL_HISTORY_URL='../../data/analysis/cbs-pool-history-report.json'"))throw new Error('Completed-pool history is not wired into the module');
 if(!html.includes('PROVISIONAL · PARTIAL POOL REVEAL')) throw new Error('Partial pool reveal label missing');
 if(!html.includes('NO DEMONSTRATED FIELD EDGE')||!html.includes('Safety → upside strategy frontier'))throw new Error('Risk-return frontier or no-edge guardrail missing');
 if(!html.includes("state.originalConfidenceStatus==='placeholder'"))throw new Error('Placeholder confidence must not be presented as a meaningful baseline');
@@ -22,6 +23,7 @@ const t=ctx.SFIQ_TEST,clone=x=>JSON.parse(JSON.stringify(x));
 if(typeof t.iqProb!=='function'||typeof t.formProb!=='function'||typeof t.refreshIqModel!=='function')throw new Error('IQ probability engine exports missing');
 if(typeof t.probabilityProfile!=='function'||typeof t.strategicPickEvidence!=='function'||typeof t.allocateConfidence!=='function'||typeof t.compareCards!=='function')throw new Error('Separated decision-layer exports missing');
 if(typeof t.buildStrategyFrontier!=='function'||typeof t.evaluateProxyField!=='function'||typeof t.neutralTop2!=='function')throw new Error('Calibrated strategy-frontier exports missing');
+if(typeof t.normalizePoolHistory!=='function'||typeof t.drawFieldPicks!=='function')throw new Error('Historical pool prior helpers missing');
 if(Math.abs(t.neutralTop2(102)-2/102)>1e-12||Math.abs(t.neutralWin(102)-1/102)>1e-12)throw new Error('Neutral pool benchmarks are incorrect');
 if(Math.abs(t.iqFormWeight(1)-.12)>1e-12)throw new Error('Week 2 form weight must remain conservatively shrunk');
 if(t.iqFormWeight(6)>.37)throw new Error('Early-season form weight cap is too aggressive');
@@ -85,4 +87,10 @@ if(t.cardActions(postGames,second.current,second.recommended,second.finalWorlds)
 const protectedGames=clone(postGames);protectedGames[2].protectedPick=true;protectedGames[2].protectedConfidence=true;
 const protectedRun=t.runOptimizer(protectedGames,93,{...stableOpts,searchIters:60,finalIters:120});
 if(protectedRun.recommended.choices[2]!==stableOpts.currentCard.choices[2]||protectedRun.recommended.weights[2]!==stableOpts.currentCard.weights[2])throw new Error('protected pick or confidence changed');
+
+const poolHistory=JSON.parse(fs.readFileSync(path.join(root,'data/analysis/cbs-pool-history-report.json'),'utf8')),poolPrior=t.normalizePoolHistory(poolHistory,16);
+if(!poolPrior||poolPrior.weeks!==2||Math.abs(poolPrior.reliability-.2)>1e-12)throw new Error('Two-week pool history must be conservatively weighted at 20%');
+const learnedRun=t.runOptimizer(postGames,93,{...stableOpts,searchIters:100,finalIters:240,poolPrior});
+if(!learnedRun.poolPrior||learnedRun.poolPrior.weeks!==2)throw new Error('Optimizer did not preserve historical-prior provenance');
+if(learnedRun.strategies.balanced.flips>1||learnedRun.strategies.aggressive.flips>2||learnedRun.strategies.maxUpside.flips>3)throw new Error('Strategy frontier exceeded portfolio flip limits');
 console.log('Pickem regression suite passed: imports valid, live card flexible, recommendations stable after application.');
