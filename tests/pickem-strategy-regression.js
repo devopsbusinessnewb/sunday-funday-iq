@@ -40,6 +40,22 @@ for(const c of search.candidates){
 // Paired comparison must report no manufactured improvement for identical cards.
 const worlds=t.buildWorlds(games,102,90,771,null),same=t.compareCards(favoriteCard,favoriteCard,worlds);
 if(Math.abs(same.top2Delta)>1e-12||Math.abs(same.pointsDelta)>1e-12||Math.abs(same.worstScenarioTop2Delta)>1e-12)throw new Error('Identical cards produced a simulated improvement');
+// Histogram scoring must preserve the former sorted-field tie and rank math.
+const oldField=[3,3,5,7,7,7,9].sort((a,b)=>a-b),histogram=Array.from({length:12},(_,score)=>oldField.filter(x=>x===score).length);
+const above=histogram.map((_,score)=>oldField.filter(x=>x>=score).length).concat(0);
+for(const points of [2,3,4,5,7,8,9,10]){
+  const old=t.evaluateCard({choices:[1],weights:[points]},[{scenario:0,winners:Uint8Array.from([1]),field:oldField}]);
+  const fast=t.evaluateCard({choices:[1],weights:[points]},[{scenario:0,winners:Uint8Array.from([1]),fieldHistogram:histogram,fieldAbove:above,fieldSize:oldField.length}]);
+  for(const key of ['top2','win','top10','bottomHalf'])if(Math.abs(old[key]-fast[key])>1e-12)throw new Error(`Histogram scoring changed ${key} for ${points} points`);
+}
+
+// Max-upside confidence must be searched against tournament outcomes rather
+// than merely returning the conservative probability ordering.
+const equalGames=[game(30,{awayP:.40,weight:1}),game(31,{awayP:.40,weight:2}),game(32,{awayP:.40,weight:3})];
+const equalCard={choices:[1,1,1],weights:[1,2,3]},upsideWorlds=Array.from({length:30},(_,i)=>({scenario:i%3,validationSeed:i%3,winners:Uint8Array.from([1,0,0]),proxyScore:2,field:[2,2,2,2]}));
+const upsideConfidence=t.optimizeTournamentConfidence(equalCard,upsideWorlds,new Set(),equalGames,2);
+if(upsideConfidence.card.weights[0]!==3)throw new Error('Tournament confidence search did not improve the upside allocation');
+if(t.seedStability(upsideConfidence.card,upsideWorlds).seeds!==3)throw new Error('Independent-seed stability diagnostic missing');
 
 // A held-out entry produced by the same proxy-field process must reproduce the
 // mathematical tournament baseline and sensible rank-distribution anchors.
@@ -56,6 +72,7 @@ for(const key of ['safest','balanced','aggressive','maxUpside']){
   if(frontier.safest.eval.avg+1e-9<p.eval.avg)throw new Error(`${key} has more expected points than Safest`);
 }
 if(frontier.balanced.flips>1||frontier.aggressive.flips>2||frontier.maxUpside.flips>3)throw new Error('Frontier labels do not enforce their portfolio risk limits');
+if(frontier.validationSeeds<1||!Number.isInteger(frontier.candidateCount)||frontier.candidateCount<2)throw new Error('Frontier search coverage is not reported');
 
 // Import failures must identify exact games and confidence defects.
 const broken=JSON.parse(JSON.stringify(games));broken[0].pick=null;broken[1].weight=null;broken[2].weight=broken[3].weight;
