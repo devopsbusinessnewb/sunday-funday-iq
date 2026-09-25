@@ -30,7 +30,7 @@ table{width:100%;border-collapse:collapse;font-size:12px;min-width:830px}.tablew
 <body>
 <div class="app">
   <div class="header">
-    <div class="brand"><h1>🏈 Sunday Funday IQ</h1><p>CBS Pick'em · Pick'em Coach</p><p style="font-size:10px;color:#5f7898">Build 1.9.0 · pool-informed strategy frontier</p></div>
+    <div class="brand"><h1>🏈 Sunday Funday IQ</h1><p>CBS Pick'em · Pick'em Coach</p><p style="font-size:10px;color:#5f7898">Build 1.9.1 · authoritative CBS baseline refresh</p></div>
     <div class="actions">
       <a class="btn" href="../../">⌂ Home</a>
       <button class="btn primary" id="refreshBtn">Refresh CBS Data</button>
@@ -681,18 +681,33 @@ function snapshotLockedGames(){
   }
   return out;
 }
-function restoreLockedGames(lockSnap){
+function restoreLockedGames(lockSnap,{restoreCard=true}={}){
   if(!lockSnap)return;
   for(const g of state.games||[]){
     const x=lockSnap[g.away+'|'+g.home];
     if(!x)continue;
-    g.pick=x.pick;
-    g.weight=x.weight;
+    // A complete CBS import is authoritative for picks and confidence, even if
+    // the game has since locked. Preserve the old card only when no newer card
+    // was imported (for example, a postgame capture that omits finished games).
+    if(restoreCard||!g.pick)g.pick=x.pick;
+    if(restoreCard||!Number.isInteger(Number(g.weight)))g.weight=x.weight;
     g.locked=x.locked;
     g.completed=x.completed;
     g.winner=x.winner;
     g.statusText=x.statusText;
   }
+}
+
+function applyStructuredCard(games,structured){
+  if(!structured)return 0;
+  let applied=0;
+  games.forEach((g,i)=>{
+    const pick=normalizeTeam(structured.picks?.[i]);
+    if(pick&&(pick===g.away||pick===g.home)){g.pick=pick;applied++}
+    const weight=Number(structured.weights?.[i]);
+    if(Number.isInteger(weight)&&weight>=1&&weight<=games.length)g.weight=weight;
+  });
+  return applied;
 }
 
 const CBS_TEAM_TO_ABBR={
@@ -1030,11 +1045,15 @@ async function pasteCbsPhoneSync(){
 }
 
 async function importScan(obj){
-  const lockedBeforeImport=snapshotLockedGames();
+  let lockedBeforeImport=snapshotLockedGames();
+  const priorWeek=Number(state.week||0);
   const snaps=obj.snapshots||[],pickSnap=newest(snaps.filter(s=>/\|\s*Picks/i.test(s.title||'')||/Picks$/i.test(s.title||'')))||newest(snaps.filter(s=>/pickem/i.test(s.url||'')));
   let picks=pickSnap?parsePicks(pickSnap.text):[];
   const detectedWeek=Number((String(pickSnap?.text||'').match(/\bWeek\s+(\d+)\b/i)||[])[1]);
-  if(Number.isInteger(detectedWeek)&&detectedWeek>0)state.week=detectedWeek;
+  if(Number.isInteger(detectedWeek)&&detectedWeek>0){
+    state.week=detectedWeek;
+    if(priorWeek&&detectedWeek!==priorWeek)lockedBeforeImport={};
+  }
   if(!picks.length){
     // Preserve the known Week 1 matchup structure if the newer bridge provides structured data but no visible text snapshot.
     picks=state.games.map(g=>({away:g.away,home:g.home,awayPct:g.awayPct,homePct:g.homePct}));
@@ -1057,18 +1076,14 @@ async function importScan(obj){
     }
   }
   const structured=extractStructuredCard(obj,state.games);
-  if(structured){state.games.forEach((g,i)=>{
-    if(isLocked(g))return;
-    if(structured.picks[i])g.pick=structured.picks[i];
-    if(structured.weights[i]!=null)g.weight=structured.weights[i];
-  })}
+  applyStructuredCard(state.games,structured);
   const fixedPicks=new Set((obj?.constraints?.fixedPicks||[]).map(normalizeTeam));
   const fixedConfidence=obj?.constraints?.fixedConfidence||[];
   state.games.forEach(g=>{
     g.protectedPick=fixedPicks.has(g.pick);
     g.protectedConfidence=fixedConfidence.some(x=>normalizeTeam(x.team)===g.pick&&Number(x.confidence)===Number(g.weight));
   });
-  restoreLockedGames(lockedBeforeImport);
+  restoreLockedGames(lockedBeforeImport,{restoreCard:false});
   repairLockedConfidenceCollision();
   const stand=newest(snaps.filter(s=>/Weekly Standings/i.test(s.title||'')));if(stand){const names=[...stand.text.matchAll(/\n\n\n(?:\d+(?:st|nd|rd|th))\n([^\n\t]{2,60})\n\t-?\d+\t-?\d+\t/g)].map(x=>x[1]);if(names.length>20)state.poolSize=new Set(names).size}
   if(Number.isInteger(Number(obj.poolSize))&&Number(obj.poolSize)>1)state.poolSize=Number(obj.poolSize);
@@ -1077,7 +1092,7 @@ async function importScan(obj){
   if(odds.length){state.marketUpdatedAt=obj.marketCapturedAt||oddsSnap?.ts||obj.exportedAt||nowIso();state.marketSource=obj.marketSource||'CBS scan odds'}
   state.originalCard=completeCard(state.games)?snapshotCard():state.originalCard;state.recommendedCard=null;state.optimization=null;state.applied=false;state.sim=null;save();
   try{await refreshResults(true)}catch{}
-  restoreLockedGames(lockedBeforeImport);
+  restoreLockedGames(lockedBeforeImport,{restoreCard:false});
   repairLockedConfidenceCollision();
   state.fieldModel=extractFieldModel(obj,state.games);save();
   render();
@@ -1310,7 +1325,7 @@ async function boot(){
   render();
   await Promise.all([loadPublishedCbs({silent:true,onlyIfNewer:true}),loadPoolHistory()]);
 }
-globalThis.SFIQ_TEST={validConfidence,ensureValidCard,completeCard,cardImportIssues,dataFreshness,buildWorlds,evaluateCard,evaluateProxyField,compareCards,robustMetrics,optimizeConfidence,searchCandidates,runOptimizer,buildStrategyFrontier,safestExpectedCard,neutralTop2,neutralWin,cardActions,marketProb,iqProb,formProb,iqFormWeight,scenarioProbability,probabilityProfile,confidenceSafetyProb,confidenceCeilingFromProbability,confidenceCeiling,confidenceRiskPenalty,allocateConfidence,seedRiskCalibratedConfidence,expectedWinnerSide,strategicPickEvidence,cardChangeCost,ownProb,clone,refreshResults,refreshIqModel,isLocked,fixedWinner,parsePicks,extractStructuredCard,extractFieldModel,normalizePoolHistory,poolConfidenceSignal,drawFieldPicks,SEED,normalizeTeam};
+globalThis.SFIQ_TEST={validConfidence,ensureValidCard,completeCard,cardImportIssues,dataFreshness,buildWorlds,evaluateCard,evaluateProxyField,compareCards,robustMetrics,optimizeConfidence,searchCandidates,runOptimizer,buildStrategyFrontier,safestExpectedCard,neutralTop2,neutralWin,cardActions,marketProb,iqProb,formProb,iqFormWeight,scenarioProbability,probabilityProfile,confidenceSafetyProb,confidenceCeilingFromProbability,confidenceCeiling,confidenceRiskPenalty,allocateConfidence,seedRiskCalibratedConfidence,expectedWinnerSide,strategicPickEvidence,cardChangeCost,ownProb,clone,refreshResults,refreshIqModel,isLocked,fixedWinner,parsePicks,extractStructuredCard,extractFieldModel,applyStructuredCard,normalizePoolHistory,poolConfidenceSignal,drawFieldPicks,SEED,normalizeTeam};
 if(!TESTING)boot();
 </script>
 </body></html>
