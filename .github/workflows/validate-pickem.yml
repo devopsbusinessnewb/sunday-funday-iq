@@ -5,12 +5,18 @@ on:
     paths:
       - 'apps/pickem/**'
       - 'data/live/cbs-pickem.json'
+      - 'data/analysis/cbs-**'
+      - 'extensions/cbs-pickem-bridge/**'
+      - 'tools/cbs-**'
       - 'tests/**'
       - '.github/workflows/validate-pickem.yml'
   pull_request:
     paths:
       - 'apps/pickem/**'
       - 'data/live/cbs-pickem.json'
+      - 'data/analysis/cbs-**'
+      - 'extensions/cbs-pickem-bridge/**'
+      - 'tools/cbs-**'
       - 'tests/**'
       - '.github/workflows/validate-pickem.yml'
   workflow_dispatch:
@@ -40,6 +46,16 @@ jobs:
           Path('/tmp/pickem.js').write_text(s.split('<script>',1)[1].rsplit('</script>',1)[0])
           PY2
           node --check /tmp/pickem.js
+          node --check tools/cbs-pool-archive.js
+          node --check tools/cbs-pool-report.js
+          node --check extensions/cbs-pickem-bridge/background.js
+          node --check extensions/cbs-pickem-bridge/bridge.js
+          node --check extensions/cbs-pickem-bridge/popup.js
       - name: Run CBS regression suite
         shell: bash
-        run: cd repo && node tests/pickem-regression.js
+        run: |
+          cd repo
+          node tests/pickem-regression.js
+          node tests/pickem-strategy-regression.js
+          node tests/cbs-history-regression.js
+          node tests/cbs-pool-archive-regression.js
