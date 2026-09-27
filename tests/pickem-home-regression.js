@@ -8,7 +8,7 @@ const context={console,globalThis:null,localStorage:{getItem:()=>null}};context.
 vm.createContext(context);vm.runInContext(js.includes('if(!TESTING)bootHome()')?js:js.slice(0,js.lastIndexOf("\ndocument.querySelectorAll('.tile').forEach")),context);
 const home=context.SFIQ_HOME_TEST;
 if(!home?.strategySnapshot)throw new Error('Home does not expose saved CBS strategies');
-const pickemHtml=fs.readFileSync(path.join(root,'apps/pickem/index.html'),'utf8');
+const pickemHtml=fs.readFileSync(path.join(__dirname,'../apps/pickem/index.html'),'utf8');
 const pickemBuild=(pickemHtml.match(/const MODEL_BUILD='([^']+)'/)||[])[1];
 if(!pickemBuild||pickemBuild!==home.MODEL_BUILD)throw new Error(`CBS home/model build mismatch: home ${home.MODEL_BUILD}, pickem ${pickemBuild||'missing'}`);
 if(/Build\s+1\.\d+\.\d+/.test(pickemHtml))throw new Error('Pickem header contains a hard-coded build number instead of MODEL_BUILD');
