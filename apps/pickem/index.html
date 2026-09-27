@@ -31,7 +31,7 @@ table{width:100%;border-collapse:collapse;font-size:12px;min-width:830px}.tablew
 <body>
 <div class="app">
   <div class="header">
-    <div class="brand"><h1>🏈 Sunday Funday IQ</h1><p>CBS Pick'em · Pick'em Coach</p><p style="font-size:10px;color:#5f7898">Build 1.11.0 · independent strategy engines</p></div>
+    <div class="brand"><h1>🏈 Sunday Funday IQ</h1><p>CBS Pick'em · Pick'em Coach</p><p style="font-size:10px;color:#5f7898">Build 1.11.1 · independent strategy engines</p></div>
     <div class="actions">
       <a class="btn" href="../../">⌂ Home</a>
       <button class="btn primary" id="refreshBtn">Refresh CBS Data</button>
@@ -132,7 +132,7 @@ const POOL_HISTORY_URL='../../data/analysis/cbs-pool-history-report.json';
 const SEARCH_ITERS=700;
 const FINAL_ITERS=3000;
 const VALIDATION_SEEDS=3;
-const MODEL_BUILD='1.11.0';
+const MODEL_BUILD='1.11.1';
 const CONFIDENCE_TIE_BAND=.025;
 const MIN_OPTIONAL_FLIP_PROB=.40;
 const MIN_OPTIONAL_MARKET_PROB=.38;
@@ -289,6 +289,12 @@ function strategicPickEvidence(g,fromSide,toSide,{proxyField=true}={}){
   const eligible=!contrarian||(profile.pick>=MIN_OPTIONAL_FLIP_PROB&&marketSupported&&leverage>=MIN_OPTIONAL_LEVERAGE&&ownership<=.32&&stable);
   const classification=!contrarian&&profile.pick>=.55&&stable?'STRONG FLIP':'OPTIONAL FLIP';
   return{eligible,classification,contrarian,expectedWinner:teamFor(g,expected),pickProbability:profile.pick,confidenceProbability:profile.confidence,marketProbability:profile.market,iqProbability:profile.iq,ownership,leverage,disagreement:profile.disagreement,proxyField};
+}
+function upsidePickEvidence(g,toSide){
+  const profile=probabilityProfile(g,toSide),ownership=ownProb(g,toSide),expected=expectedWinnerSide(g),contrarian=toSide!==expected,leverage=profile.pick-ownership;
+  const marketSupported=profile.market==null||profile.market>=.30;
+  const eligible=contrarian&&profile.pick>=.32&&marketSupported&&ownership<=.20&&leverage>=.12&&profile.disagreement<=.10;
+  return{eligible,classification:'MAX UPSIDE',contrarian,pickProbability:profile.pick,confidenceProbability:profile.confidence,marketProbability:profile.market,iqProbability:profile.iq,ownership,leverage,disagreement:profile.disagreement};
 }
 async function refreshIqModel(silent=true){
   const season=Number(state.season||2026),week=Math.max(1,Number(state.week||1));
@@ -653,8 +659,8 @@ function buildStrategyFrontier(games,current,worlds,extraCards=[],poolSize=102,p
   const leverage=[];
   for(let i=0;i<games.length;i++){
     if(locked.has(i)||games[i].protectedPick)continue;
-    const to=1-safeSeed.choices[i],e=strategicPickEvidence(games[i],safeSeed.choices[i],to,{proxyField:true});
-    if(e.eligible&&e.contrarian)leverage.push({i,e,value:e.leverage*e.pickProbability});
+    const to=1-safeSeed.choices[i],standard=strategicPickEvidence(games[i],safeSeed.choices[i],to,{proxyField:true}),upside=upsidePickEvidence(games[i],to),e=standard.eligible?standard:upside;
+    if(e.eligible&&e.contrarian)leverage.push({i,e,upsideOnly:!standard.eligible,value:e.leverage*e.pickProbability});
   }
   leverage.sort((a,b)=>b.value-a.value);const usable=leverage.slice(0,8);
   function combinations(start,left,chosen){
@@ -678,13 +684,14 @@ function buildStrategyFrontier(games,current,worlds,extraCards=[],poolSize=102,p
   const evaluated=[...cards.values()].map(card=>{
     const training=evaluateCard(card,tuningWorlds),trainingStability=seedStability(card,tuningWorlds),trainingSafeComparison=compareCards(safeSeed,card,tuningWorlds);
     const evalResult=evaluateCard(card,worlds),comparison=compareCards(current,card,worlds),stability=seedStability(card,worlds);
-    return{card,training,trainingStability,trainingSafeComparison,eval:evalResult,comparison,stability,edge:evalResult.top2-neutralTop2(poolSize),flips:card.choices.reduce((n,x,i)=>n+(x!==safeSeed.choices[i]?1:0),0),changes:cardChangeCost(current,card)};
+    const flipped=card.choices.map((x,i)=>x!==safeSeed.choices[i]?i:-1).filter(i=>i>=0),upsideOnlyFlips=flipped.filter(i=>!strategicPickEvidence(games[i],safeSeed.choices[i],card.choices[i],{proxyField:true}).eligible).length;
+    return{card,training,trainingStability,trainingSafeComparison,eval:evalResult,comparison,stability,edge:evalResult.top2-neutralTop2(poolSize),flips:flipped.length,upsideOnlyFlips,changes:cardChangeCost(current,card)};
   });
   const maxBy=(arr,score)=>arr.reduce((best,x)=>!best||score(x)>score(best)?x:best,null);
   const safest=maxBy(evaluated,x=>x.training.avg-x.training.bottomHalf*.0001);
-  const balancedPool=evaluated.filter(x=>x.training.avg>=safest.training.avg-4&&x.training.bottomHalf<=safest.training.bottomHalf+.15);
+  const balancedPool=evaluated.filter(x=>x.flips<=1&&x.upsideOnlyFlips===0&&x.training.avg>=safest.training.avg-4&&x.training.bottomHalf<=safest.training.bottomHalf+.15);
   const balanced=maxBy(balancedPool.length?balancedPool:[safest],x=>strategyObjective('balanced',x.training));
-  const aggressivePool=evaluated.filter(x=>x.training.avg>=safest.training.avg-10);
+  const aggressivePool=evaluated.filter(x=>x.flips<=3&&x.upsideOnlyFlips<=1&&x.training.avg>=safest.training.avg-10);
   const aggressive=maxBy(aggressivePool.length?aggressivePool:[balanced],x=>strategyObjective('aggressive',x.training));
   const maxUpside=maxBy(evaluated,x=>strategyObjective('maxUpside',x.training));
   const profile=(key,label,objective,x)=>({key,label,objective,card:x.card,eval:x.eval,comparison:x.comparison,stability:x.stability,edge:x.edge,flips:x.flips,changes:x.changes,sameAsCurrent:cardKey(x.card)===cardKey(current),equivalentTo:null});
@@ -1489,7 +1496,7 @@ async function boot(){
     await runSimulation();
   }
 }
-globalThis.SFIQ_TEST={strategyCardRows,validConfidence,ensureValidCard,completeCard,cardImportIssues,dataFreshness,buildWorlds,buildWorldEnsemble,evaluateCard,evaluateProxyField,compareCards,lockedFieldImpact,robustMetrics,optimizeConfidence,optimizeTournamentConfidence,seedStability,searchCandidates,runOptimizer,buildStrategyFrontier,strategyObjective,strategyEquivalent,safestExpectedCard,neutralTop2,neutralWin,cardActions,marketProb,iqProb,formProb,iqFormWeight,scenarioProbability,probabilityProfile,confidenceSafetyProb,confidenceCeilingFromProbability,confidenceCeiling,confidenceRiskPenalty,allocateConfidence,seedRiskCalibratedConfidence,expectedWinnerSide,strategicPickEvidence,cardChangeCost,ownProb,clone,refreshResults,refreshIqModel,isLocked,fixedWinner,parsePicks,extractStructuredCard,extractFieldModel,applyStructuredCard,normalizePoolHistory,poolConfidenceSignal,drawFieldPicks,SEED,normalizeTeam};
+globalThis.SFIQ_TEST={strategyCardRows,validConfidence,ensureValidCard,completeCard,cardImportIssues,dataFreshness,buildWorlds,buildWorldEnsemble,evaluateCard,evaluateProxyField,compareCards,lockedFieldImpact,robustMetrics,optimizeConfidence,optimizeTournamentConfidence,seedStability,searchCandidates,runOptimizer,buildStrategyFrontier,strategyObjective,strategyEquivalent,safestExpectedCard,neutralTop2,neutralWin,cardActions,marketProb,iqProb,formProb,iqFormWeight,scenarioProbability,probabilityProfile,confidenceSafetyProb,confidenceCeilingFromProbability,confidenceCeiling,confidenceRiskPenalty,allocateConfidence,seedRiskCalibratedConfidence,expectedWinnerSide,strategicPickEvidence,upsidePickEvidence,cardChangeCost,ownProb,clone,refreshResults,refreshIqModel,isLocked,fixedWinner,parsePicks,extractStructuredCard,extractFieldModel,applyStructuredCard,normalizePoolHistory,poolConfidenceSignal,drawFieldPicks,SEED,normalizeTeam};
 if(!TESTING)boot();
 </script>
 </body></html>
