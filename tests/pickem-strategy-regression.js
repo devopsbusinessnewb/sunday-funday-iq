@@ -40,6 +40,24 @@ for(const c of search.candidates){
 // Paired comparison must report no manufactured improvement for identical cards.
 const worlds=t.buildWorlds(games,102,90,771,null),same=t.compareCards(favoriteCard,favoriteCard,worlds);
 if(Math.abs(same.top2Delta)>1e-12||Math.abs(same.pointsDelta)>1e-12||Math.abs(same.worstScenarioTop2Delta)>1e-12)throw new Error('Identical cards produced a simulated improvement');
+
+// A locked result must be framed relative to the revealed field, not as if
+// the user's loss happened in isolation. A loss shared by 90% of the field is
+// a small relative setback; the 10% minority winner receives the advantage.
+const lockedGames=JSON.parse(JSON.stringify(games));
+Object.assign(lockedGames[0],{locked:true,completed:true,winner:0,pick:lockedGames[0].home,weight:11});
+const lockedCurrent={choices:lockedGames.map(g=>g.pick===g.away?0:1),weights:[11,1,2,3,4,5,6,7,8,9,10,12,13,14,15,16]};
+const lockedField={primaryGameId:lockedGames[0].id,observedEntries:100,locked:[{gameId:lockedGames[0].id,defaultWeight:16,totalObserved:100,observations:[
+  ...Array.from({length:90},()=>({pick:lockedGames[0].home,weight:11})),
+  ...Array.from({length:10},()=>({pick:lockedGames[0].away,weight:8}))
+]}]};
+const sharedLoss=t.lockedFieldImpact(lockedGames,lockedField,lockedCurrent);
+if(sharedLoss.classification!=='WIDELY_SHARED_LOSS'||Math.abs(sharedLoss.samePickShare-.9)>1e-12||Math.abs(sharedLoss.advantagedShare-.1)>1e-12)throw new Error('Widely shared locked loss was not classified relative to the field');
+const minorityWinner={...lockedCurrent,choices:[0,...lockedCurrent.choices.slice(1)]};
+const minorityImpact=t.lockedFieldImpact(lockedGames,lockedField,minorityWinner);
+if(minorityImpact.classification!=='MINORITY_WIN'||Math.abs(minorityImpact.advantagedShare-.9)>1e-12)throw new Error('Minority locked winner did not retain its field advantage');
+const conditional=t.runOptimizer(lockedGames,102,{currentCard:lockedCurrent,searchIters:30,finalIters:60,fieldModel:lockedField});
+if(conditional.currentControl?.fieldImpact?.classification!=='WIDELY_SHARED_LOSS'||!Number.isFinite(conditional.currentControl?.eval?.top2))throw new Error('Optimizer did not preserve the current card as the conditional control');
 // Histogram scoring must preserve the former sorted-field tie and rank math.
 const oldField=[3,3,5,7,7,7,9].sort((a,b)=>a-b),histogram=Array.from({length:12},(_,score)=>oldField.filter(x=>x===score).length);
 const above=histogram.map((_,score)=>oldField.filter(x=>x>=score).length).concat(0);
@@ -64,6 +82,15 @@ if(Math.abs(cal.top2-neutral)>.015)throw new Error(`Proxy field is not Top-2 cal
 if(Math.abs(cal.top10-.10)>.04)throw new Error(`Proxy field Top-10 distribution is distorted: ${cal.top10}`);
 if(Math.abs(cal.bottomHalf-.50)>.05)throw new Error(`Proxy field median distribution is distorted: ${cal.bottomHalf}`);
 
+// Strategy objectives must represent genuinely different jobs. Safest should
+// prefer the stronger expected-points floor, while Max Upside may rationally
+// accept a much worse floor for a materially higher win ceiling.
+const floorCard={avg:90,bottomHalf:.32,top2:.012,win:.004,top10:.12};
+const ceilingCard={avg:80,bottomHalf:.66,top2:.055,win:.035,top10:.19};
+if(t.strategyObjective('safest',floorCard)<=t.strategyObjective('safest',ceilingCard))throw new Error('Safest objective did not prioritize the scoring floor');
+if(t.strategyObjective('maxUpside',ceilingCard)<=t.strategyObjective('maxUpside',floorCard))throw new Error('Max-upside objective remained anchored to the safe card');
+if(!t.strategyEquivalent(favoriteCard,JSON.parse(JSON.stringify(favoriteCard))))throw new Error('Equivalent strategy cards were not detected');
+
 // The frontier must expose explicit risk choices, preserve valid confidence,
 // and ensure the card labeled Safest actually leads on expected points.
 const frontier=t.buildStrategyFrontier(games,favoriteCard,calibrationWorlds,search.candidates.map(x=>x.card),102);
@@ -71,7 +98,7 @@ for(const key of ['safest','balanced','aggressive','maxUpside']){
   const p=frontier[key];if(!p||!t.validConfidence(p.card.weights,16))throw new Error(`Invalid or missing ${key} frontier card`);
   if(frontier.safest.eval.avg+1e-9<p.eval.avg)throw new Error(`${key} has more expected points than Safest`);
 }
-if(frontier.balanced.flips>1||frontier.aggressive.flips>2||frontier.maxUpside.flips>3)throw new Error('Frontier labels do not enforce their portfolio risk limits');
+if(frontier.maxUpside.objective!=='win-first'||frontier.aggressive.objective!=='top2-first'||frontier.safest.objective!=='floor-first')throw new Error('Frontier strategies do not expose independent objectives');
 if(frontier.validationSeeds<1||!Number.isInteger(frontier.candidateCount)||frontier.candidateCount<2)throw new Error('Frontier search coverage is not reported');
 
 // Import failures must identify exact games and confidence defects.
