@@ -22,7 +22,7 @@ with tempfile.NamedTemporaryFile('w', suffix='.js', delete=False, encoding='utf-
     f.write(r'''
 const assert=(ok,msg)=>{if(!ok)throw new Error(msg)};
 data={
- meta:{status:'connected',updatedAt:new Date(Date.now()-13*3600000).toISOString()},
+ meta:{status:'connected',updatedAt:new Date(Date.now()-13*3600000).toISOString(),capabilities:{lockState:true,playerStatus:true}},
  team:{projection:100},opponent:{projection:110},watch:[],
  lineup:[{slot:'FLEX',name:'Locked Starter',pos:'WR',projection:5,status:'Active',locked:true,gameState:'live',eligiblePositions:['RB','WR','TE']}],
  bench:[{slot:'BN',name:'Bench Star',pos:'WR',projection:20,status:'Active',locked:false,gameState:'upcoming'}]
