@@ -29,16 +29,16 @@
 <script>
 const TESTING=!!globalThis.__SFIQ_TESTING__;
 const STRATEGIES=[['safest','Safest'],['balanced','Balanced'],['aggressive','Aggressive'],['maxUpside','Max Upside']];
-const MODEL_BUILD='1.10.0';
+const MODEL_BUILD='1.11.0';
 function strategySnapshot(state,live,now=Date.now()){
   const opt=state?.optimization,week=Number(live?.week||state?.week||0),season=Number(live?.season||state?.season||2026);
   if(!opt||opt.modelBuild!==MODEL_BUILD||Number(state?.week)!==week||Number(state?.season||2026)!==season||!STRATEGIES.every(([key])=>opt.strategies?.[key]?.card&&opt.strategies[key]?.eval))return{status:'missing',week,cards:[]};
   const ran=Date.parse(opt.ranAt||''),cbs=Date.parse(state.cbsUpdatedAt||''),market=Date.parse(state.marketUpdatedAt||'');
   const published=Date.parse(live?.exportedAt||''),stale=!Number.isFinite(ran)||now-ran>12*3600e3||now<ran||cbs>ran||market>ran||published>ran||live?.unavailable;
-  return{status:stale?'stale':'ready',week,ranAt:opt.ranAt,provisional:!!opt.provisional,cards:STRATEGIES.map(([key,label])=>({key,label,href:'./apps/pickem/?strategy='+key,eval:opt.strategies[key].eval,stability:opt.strategies[key].stability,changes:opt.strategies[key].changes}))};
+  return{status:stale?'stale':'ready',week,ranAt:opt.ranAt,provisional:!!opt.provisional,currentEval:opt.currentControl?.eval||opt.currentEval,fieldImpact:opt.currentControl?.fieldImpact||null,cards:STRATEGIES.map(([key,label])=>({key,label,href:'./apps/pickem/?strategy='+key,eval:opt.strategies[key].eval,stability:opt.strategies[key].stability,changes:opt.strategies[key].changes,objective:opt.strategies[key].objective,equivalentTo:opt.strategies[key].equivalentTo}))};
 }
 function esc(s){return String(s??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]))}
-function pct(n,d=1){return Number.isFinite(n)?(n*100).toFixed(d)+'%':'—'}
+function pct(n,d=1){if(!Number.isFinite(n))return'—';if(n>0&&n<.001)return'<0.1%';return(n*100).toFixed(d)+'%'}
 async function bootHome(){
   let state=null;try{state=JSON.parse(localStorage.getItem('sfiqPickemV04')||'null')}catch{}
   let live=null;try{const r=await fetch('./data/live/cbs-pickem.json?t='+Date.now(),{cache:'no-store'});if(!r.ok)throw Error('CBS data unavailable');live=await r.json()}catch{live={week:state?.week,season:state?.season,unavailable:true}}
@@ -50,8 +50,9 @@ async function bootHome(){
     return;
   }
   const time=new Date(snapshot.ranAt).toLocaleString();
-  $('status').textContent=(snapshot.status==='stale'?'Previous run · refresh before using these cards. ':'Last run: ')+time+(snapshot.provisional?' · Pool picks are estimated from CBS-wide data.':'');
-  $('strategies').innerHTML=snapshot.cards.map(c=>`<a class="strategy ${snapshot.status==='stale'?'stale':''}" href="${c.href}"><strong>${c.label}</strong>${snapshot.status==='stale'?'<span class="tag">OLD SIMULATION</span>':''}<div class="odds">${pct(c.eval.top2)} <span style="font-size:12px;font-weight:600;color:var(--muted)">Top 2</span></div><div class="secondary">Win ${pct(c.eval.win)} · Expected ${Number(c.eval.avg).toFixed(1)} pts<br>Bottom-half risk ${pct(c.eval.bottomHalf,0)}${c.stability?` · Seed range ${pct(c.stability.top2Min)}–${pct(c.stability.top2Max)}`:''}</div><span class="foot">View complete card →</span></a>`).join('');
+  const impact=snapshot.fieldImpact,impactText=impact?.classification==='WIDELY_SHARED_LOSS'?` · ${pct(impact.samePickShare,0)} of observed entries shared the locked loss`:'';
+  $('status').textContent=(snapshot.status==='stale'?'Previous run · rerun before using these cards. ':'Last run: ')+time+(snapshot.provisional?' · Future pool picks are estimated.':'')+impactText;
+  $('strategies').innerHTML=snapshot.cards.map(c=>{const d=snapshot.currentEval?c.eval.top2-snapshot.currentEval.top2:null,equivalent=c.equivalentTo?`Same card as ${STRATEGIES.find(x=>x[0]===c.equivalentTo)?.[1]||c.equivalentTo}`:null;return`<a class="strategy ${snapshot.status==='stale'?'stale':''}" href="${c.href}"><strong>${c.label}</strong>${snapshot.status==='stale'?'<span class="tag">OLD SIMULATION</span>':''}<div class="odds">${pct(c.eval.top2)} <span style="font-size:12px;font-weight:600;color:var(--muted)">Top 2</span></div><div class="secondary">Win ${pct(c.eval.win)} · Expected ${Number(c.eval.avg).toFixed(1)} pts<br>Bottom-half risk ${pct(c.eval.bottomHalf,0)}${d!==null?` · ${d>=0?'+':''}${(d*100).toFixed(1)} pts vs current`:''}${equivalent?`<br>${equivalent}`:''}</div><span class="foot">View complete card →</span></a>`}).join('');
 }
 globalThis.SFIQ_HOME_TEST={strategySnapshot};
 if(!TESTING)bootHome();
