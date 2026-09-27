@@ -31,6 +31,14 @@ ctx.testGames=clone(t.SEED);ctx.testCard={choices:ctx.testGames.map(g=>g.pick===
 vm.runInContext("state.games=testGames;state.week=3;state.optimization={modelBuild:MODEL_BUILD,ranAt:new Date().toISOString(),current:testCard,strategies:{balanced:{label:'Balanced',card:testCard,eval:{top2:.04,win:.01,bottomHalf:.3,avg:85}}}};renderFullCard()",ctx);
 if(cardView.hidden||!cardView.innerHTML.includes('16 picks')||(cardView.innerHTML.match(/<details class="row">/g)||[]).length!==16)throw new Error('Strategy navigation did not render a complete 16-game card');
 if(cardView.innerHTML.indexOf('class="points">16')>cardView.innerHTML.indexOf('class="points">1'))throw new Error('Full card displays points in the wrong order');
+if(/PICK CHANGE|CONFIDENCE MOVE|Submitted confidence|Keep the winner|difference(?:s)? from the card/.test(cardView.innerHTML))throw new Error('Strategy card still reads like a change list');
+if(!/Pick [A-Z]+ for 16 points/.test(cardView.innerHTML)||!cardView.innerHTML.includes('Data &amp; model details')||!cardView.innerHTML.includes('strategy=balanced&amp;details=1'))throw new Error('Card lacks direct pick instructions or focused details navigation');
+ctx.location={search:'?strategy=balanced&details=1'};
+vm.runInContext('renderFullCard()',ctx);
+if(!cardView.innerHTML.includes('How this card was modeled')||cardView.innerHTML.includes('Week 3 tournament card')||!cardView.innerHTML.includes('Back to Balanced card'))throw new Error('Details do not stay within the strategy experience');
+ctx.location={search:'?details=1'};
+vm.runInContext('renderFullCard()',ctx);
+if(!cardView.innerHTML.includes('Data &amp; model details')||!cardView.innerHTML.includes('CBS picks')||cardView.innerHTML.includes('Run Simulation</button>'))throw new Error('Home details do not open a focused data view');
 delete ctx.document;delete ctx.location;
 if(typeof t.iqProb!=='function'||typeof t.formProb!=='function'||typeof t.refreshIqModel!=='function')throw new Error('IQ probability engine exports missing');
 if(typeof t.probabilityProfile!=='function'||typeof t.strategicPickEvidence!=='function'||typeof t.allocateConfidence!=='function'||typeof t.compareCards!=='function')throw new Error('Separated decision-layer exports missing');

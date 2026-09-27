@@ -23,6 +23,6 @@ context.fetch=async()=>({ok:true,json:async()=>({season:2026,week:3})});
 context.document={getElementById:id=>nodes[id]};
 vm.runInContext('bootHome()',context).then(()=>{
   if(nodes.week.textContent!=='Week 3'||(nodes.strategies.innerHTML.match(/View complete card/g)||[]).length!==4)throw new Error('Home does not present four usable complete-card links');
-  if(!html.includes('href="./apps/pickem/?action=refresh-simulate"')||!html.includes('href="./legacy-home.html"'))throw new Error('Home lost simulation action or paused fantasy access');
+  if(!html.includes('href="./apps/pickem/?action=refresh-simulate"')||!html.includes('href="./legacy-home.html"')||!html.includes('href="./apps/pickem/?details=1"'))throw new Error('Home lost simulation action, focused data details, or paused fantasy access');
   console.log('CBS home regression passed: four strategies, deep links, week and input freshness.');
 }).catch(e=>{console.error(e);process.exitCode=1});
