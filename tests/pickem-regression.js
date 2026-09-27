@@ -24,8 +24,8 @@ if(typeof t.strategyCardRows!=='function')throw new Error('Complete strategy car
 const displayGames=[{id:'a',away:'BUF',home:'KC',awayPct:70,homePct:30,awayML:-180,homeML:160,pick:'BUF',weight:1},{id:'b',away:'DET',home:'GB',awayPct:55,homePct:45,awayML:-120,homeML:110,pick:'DET',weight:2}];
 const display=t.strategyCardRows(displayGames,{choices:[0,1],weights:[2,1]},{choices:[0,0],weights:[1,2]});
 if(display.length!==2||display[0].team!=='BUF'||display[0].confidence!==2||display[1].team!=='GB'||!display[1].pickChanged)throw new Error('Full card does not show CBS-ready picks in descending confidence order');
-const cardView={hidden:true,innerHTML:''};
-ctx.document={body:{classList:{add(){},remove(){}}},getElementById:id=>id==='fullCardView'?cardView:null};
+const cardView={hidden:true,innerHTML:''},bodyClasses=new Set();
+ctx.document={body:{classList:{add(...names){names.forEach(name=>bodyClasses.add(name))},remove(...names){names.forEach(name=>bodyClasses.delete(name))},contains(name){return bodyClasses.has(name)}}},getElementById:id=>id==='fullCardView'?cardView:null};
 ctx.location={search:'?strategy=balanced'};ctx.URLSearchParams=URLSearchParams;
 ctx.testGames=clone(t.SEED);ctx.testCard={choices:ctx.testGames.map(g=>g.pick===g.away?0:1),weights:ctx.testGames.map((_,i)=>i+1)};
 vm.runInContext("state.games=testGames;state.week=3;state.optimization={modelBuild:MODEL_BUILD,ranAt:new Date().toISOString(),current:testCard,strategies:{balanced:{label:'Balanced',card:testCard,eval:{top2:.04,win:.01,bottomHalf:.3,avg:85}}}};renderFullCard()",ctx);
@@ -40,6 +40,11 @@ if(!cardView.innerHTML.includes('How this card was modeled')||cardView.innerHTML
 ctx.location={search:'?details=1'};
 vm.runInContext('renderFullCard()',ctx);
 if(!cardView.innerHTML.includes('Data &amp; model details')||!cardView.innerHTML.includes('CBS picks')||cardView.innerHTML.includes('Run Simulation</button>'))throw new Error('Home details do not open a focused data view');
+ctx.location={search:'?action=refresh-simulate'};
+vm.runInContext('renderFullCard()',ctx);
+if(cardView.hidden||!bodyClasses.has('run-mode'))throw new Error('Refresh route exposed the retired module');
+if(!cardView.innerHTML.includes('Updating today’s cards')||!cardView.innerHTML.includes('CBS data')||!cardView.innerHTML.includes('Market odds')||!cardView.innerHTML.includes('Simulation'))throw new Error('Refresh route lacks focused progress steps');
+if(cardView.innerHTML.includes('Week 3 tournament card')||cardView.innerHTML.includes('Run Simulation</button>'))throw new Error('Refresh route still renders retired dashboard content');
 delete ctx.document;delete ctx.location;
 if(typeof t.iqProb!=='function'||typeof t.formProb!=='function'||typeof t.refreshIqModel!=='function')throw new Error('IQ probability engine exports missing');
 if(typeof t.probabilityProfile!=='function'||typeof t.strategicPickEvidence!=='function'||typeof t.allocateConfidence!=='function'||typeof t.compareCards!=='function')throw new Error('Separated decision-layer exports missing');
