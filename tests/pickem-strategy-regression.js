@@ -43,6 +43,27 @@ const maxOnlyDog=game(102,{awayP:.31,awayPct:8,pick:1,weight:1});
 if(t.strategyFlipEvidence(maxOnlyDog,0,'aggressive').eligible)throw new Error('Aggressive admitted a max-upside-only play');
 if(!t.strategyFlipEvidence(maxOnlyDog,0,'maxUpside').eligible)throw new Error('Max Upside rejected its intended broader leverage lane');
 
+// Four strategy mandates must be able to select materially different cards
+// when rational alternatives exist, including a late-slate two-game state.
+const lateMaxDog=game(103,{awayP:.28,awayPct:18,pick:1,weight:1});
+if(t.strategyFlipEvidence(lateMaxDog,0,'aggressive').eligible)throw new Error('Aggressive admitted a max-upside-only 28% play');
+if(!t.strategyFlipEvidence(lateMaxDog,0,'maxUpside').eligible)throw new Error('Max Upside rejected a rational late-slate 28% leverage play');
+const laneBase={choices:[1,1],weights:[1,2]};
+const laneBalanced={choices:[1,1],weights:[2,1]};
+const laneAggressive={choices:[0,1],weights:[1,2]};
+const laneMax={choices:[0,0],weights:[1,2]};
+const fakeEval=(card,avg,top2,win,bottomHalf)=>({card,training:{avg,top2,win,top10:.1,bottomHalf},eval:{avg,top2,win,top10:.1,bottomHalf}});
+const selectedAgg=t.chooseLaneCard('aggressive',[
+  fakeEval(laneBalanced,90,.020,.006,.45),
+  fakeEval(laneAggressive,88,.0195,.010,.49)
+],[laneBase,laneBalanced],new Set());
+if(!t.strategyEquivalent(selectedAgg.card,laneAggressive))throw new Error('Aggressive reconverged on the Balanced card despite a near-optimal distinct portfolio');
+const selectedMax=t.chooseLaneCard('maxUpside',[
+  fakeEval(laneAggressive,88,.030,.015,.50),
+  fakeEval(laneMax,82,.027,.022,.60)
+],[laneBase,laneBalanced,laneAggressive],new Set());
+if(!t.strategyEquivalent(selectedMax.card,laneMax))throw new Error('Max Upside reconverged on Aggressive despite a rational distinct ceiling portfolio');
+
 // Near-ties retain the user's prior relative order instead of creating churn.
 const ties=[game(20,{awayP:.44,weight:3}),game(21,{awayP:.445,weight:1}),game(22,{awayP:.45,weight:2})];
 const tieCard={choices:[1,1,1],weights:[3,1,2]};
