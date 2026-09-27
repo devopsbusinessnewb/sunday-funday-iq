@@ -77,7 +77,7 @@ async function bootHome(){
   }
   $('strategies').innerHTML=snapshot.cards.map(c=>{const d=snapshot.currentEval?c.eval.top2-snapshot.currentEval.top2:null,equivalent=c.equivalentTo?`Same card as ${STRATEGIES.find(x=>x[0]===c.equivalentTo)?.[1]||c.equivalentTo}`:null;return`<a class="strategy ${snapshot.status==='stale'?'stale':''}" href="${c.href}"><strong>${c.label}</strong>${snapshot.status==='stale'?'<span class="tag">OLD SIMULATION</span>':''}<div class="odds">${pct(c.eval.top2)} <span style="font-size:12px;font-weight:600;color:var(--muted)">Top 2</span></div><div class="secondary">Win ${pct(c.eval.win)} · Expected ${Number(c.eval.avg).toFixed(1)} pts<br>Bottom-half risk ${pct(c.eval.bottomHalf,0)}${d!==null?` · ${d>=0?'+':''}${(d*100).toFixed(1)} pts vs current`:''}${equivalent?`<br>${equivalent}`:''}</div><span class="foot">View complete card →</span></a>`}).join('');
 }
-globalThis.SFIQ_HOME_TEST={strategySnapshot,strategyRecommendation};
+globalThis.SFIQ_HOME_TEST={MODEL_BUILD,strategySnapshot,strategyRecommendation};
 if(!TESTING)bootHome();
 </script>
 </body>
