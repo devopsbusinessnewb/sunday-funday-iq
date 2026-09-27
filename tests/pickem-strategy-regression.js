@@ -22,6 +22,14 @@ const ownershipChanged=JSON.parse(JSON.stringify(games));ownershipChanged.forEac
 const allocatedAgain=t.allocateConfidence(contrarian,ownershipChanged,new Set());
 if(JSON.stringify(allocated.weights)!==JSON.stringify(allocatedAgain.weights))throw new Error('Ownership changed confidence allocation');
 
+// Max-upside search may consider a credible, highly under-owned 30–40%
+// underdog that is too volatile for Balanced, while still excluding longshots.
+const upsideDog=game(99,{awayP:.36,awayPct:10,pick:1,weight:1});
+if(t.strategicPickEvidence(upsideDog,1,0,{proxyField:true}).eligible)throw new Error('Standard flip gate unexpectedly admitted the upside-only underdog');
+if(!t.upsidePickEvidence(upsideDog,0).eligible)throw new Error('Max-upside gate rejected a credible under-owned underdog');
+const lotteryDog=game(100,{awayP:.20,awayPct:5,pick:1,weight:1});
+if(t.upsidePickEvidence(lotteryDog,0).eligible)throw new Error('Max-upside gate admitted an irrational longshot');
+
 // Near-ties retain the user's prior relative order instead of creating churn.
 const ties=[game(20,{awayP:.44,weight:3}),game(21,{awayP:.445,weight:1}),game(22,{awayP:.45,weight:2})];
 const tieCard={choices:[1,1,1],weights:[3,1,2]};
@@ -99,6 +107,7 @@ for(const key of ['safest','balanced','aggressive','maxUpside']){
   if(frontier.safest.eval.avg+1e-9<p.eval.avg)throw new Error(`${key} has more expected points than Safest`);
 }
 if(frontier.maxUpside.objective!=='win-first'||frontier.aggressive.objective!=='top2-first'||frontier.safest.objective!=='floor-first')throw new Error('Frontier strategies do not expose independent objectives');
+if(frontier.balanced.flips>1||frontier.aggressive.flips>3)throw new Error('Balanced or Aggressive exceeded its declared risk lane');
 if(frontier.validationSeeds<1||!Number.isInteger(frontier.candidateCount)||frontier.candidateCount<2)throw new Error('Frontier search coverage is not reported');
 
 // Import failures must identify exact games and confidence defects.
