@@ -146,6 +146,26 @@ if(frontier.maxUpside.objective!=='win-first'||frontier.aggressive.objective!=='
 if(frontier.balanced.flips>1||frontier.aggressive.flips>3)throw new Error('Balanced or Aggressive exceeded its declared risk lane');
 if(frontier.validationSeeds<1||!Number.isInteger(frontier.candidateCount)||frontier.candidateCount<2)throw new Error('Frontier search coverage is not reported');
 
+// Full-slate strategy-lab regression: future-week behavior must produce four
+// genuinely different portfolio constructions when the slate offers rational
+// leverage at multiple risk levels. This is the acceptance test for the
+// four-card product concept; late-Sunday locked slates are not.
+const labGames=[
+  game(200,{awayP:.48,awayPct:34,pick:1,weight:1}),
+  game(201,{awayP:.44,awayPct:24,pick:1,weight:2}),
+  game(202,{awayP:.40,awayPct:20,pick:1,weight:3}),
+  game(203,{awayP:.36,awayPct:14,pick:1,weight:4}),
+  game(204,{awayP:.31,awayPct:10,pick:1,weight:5}),
+  game(205,{awayP:.27,awayPct:8,pick:1,weight:6}),
+  ...Array.from({length:10},(_,j)=>game(206+j,{awayP:.16+j*.01,awayPct:12+j, pick:1, weight:7+j}))
+];
+const labCard={choices:labGames.map(()=>1),weights:labGames.map((_,i)=>i+1)};
+const lab=t.runOptimizer(labGames,102,{currentCard:labCard,searchIters:500,finalIters:1400,seed:424242});
+const labKeys=['safest','balanced','aggressive','maxUpside'].map(k=>t.cardKey?t.cardKey(lab.strategies[k].card):lab.strategies[k].card.choices.join('')+'|'+lab.strategies[k].card.weights.join(','));
+if(new Set(labKeys).size!==4)throw new Error('Full-slate strategy lab did not produce four distinct portfolio cards');
+if(!(lab.strategies.safest.flips<=lab.strategies.balanced.flips&&lab.strategies.balanced.flips<=lab.strategies.aggressive.flips&&lab.strategies.aggressive.flips<=lab.strategies.maxUpside.flips))throw new Error('Full-slate strategy lab risk lanes are not ordered from safest to max upside');
+console.log('Full-slate strategy lab:', ['safest','balanced','aggressive','maxUpside'].map(k=>({strategy:k,flips:lab.strategies[k].flips,avg:lab.strategies[k].eval.avg,top2:lab.strategies[k].eval.top2,win:lab.strategies[k].eval.win,card:labKeys[['safest','balanced','aggressive','maxUpside'].indexOf(k)]})));
+
 // Import failures must identify exact games and confidence defects.
 const broken=JSON.parse(JSON.stringify(games));broken[0].pick=null;broken[1].weight=null;broken[2].weight=broken[3].weight;
 const issues=t.cardImportIssues(broken).join(' | ');
