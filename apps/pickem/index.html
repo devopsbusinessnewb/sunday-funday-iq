@@ -31,7 +31,7 @@ table{width:100%;border-collapse:collapse;font-size:12px;min-width:830px}.tablew
 <body>
 <div class="app">
   <div class="header">
-    <div class="brand"><h1>🏈 Sunday Funday IQ</h1><p>CBS Pick'em · Pick'em Coach</p><p style="font-size:10px;color:#5f7898">Build 1.11.1 · independent strategy engines</p></div>
+    <div class="brand"><h1>🏈 Sunday Funday IQ</h1><p>CBS Pick'em · Pick'em Coach</p><p style="font-size:10px;color:#5f7898">Build 1.11.2 · independent strategy engines</p></div>
     <div class="actions">
       <a class="btn" href="../../">⌂ Home</a>
       <button class="btn primary" id="refreshBtn">Refresh CBS Data</button>
@@ -132,7 +132,7 @@ const POOL_HISTORY_URL='../../data/analysis/cbs-pool-history-report.json';
 const SEARCH_ITERS=700;
 const FINAL_ITERS=3000;
 const VALIDATION_SEEDS=3;
-const MODEL_BUILD='1.11.1';
+const MODEL_BUILD='1.11.2';
 const CONFIDENCE_TIE_BAND=.025;
 const MIN_OPTIONAL_FLIP_PROB=.40;
 const MIN_OPTIONAL_MARKET_PROB=.38;
@@ -598,9 +598,11 @@ function cardKey(c){return c.choices.join('')+'|'+c.weights.join(',')}
 function strategyEquivalent(a,b){return!!a&&!!b&&cardKey(a)===cardKey(b)}
 function strategyObjective(strategy,x){
   if(strategy==='safest')return x.avg-x.bottomHalf*3;
-  if(strategy==='balanced')return x.top2*.58+x.win*.12+x.top10*.20-x.bottomHalf*.05+x.avg*.0001;
-  if(strategy==='aggressive')return x.top2*.56+x.win*.28+x.top10*.16-x.bottomHalf*.01;
-  return x.win*.62+x.top2*.30+x.top10*.08;
+  // Tournament finish is the primary objective. Expected points and downside
+  // constrain the candidate pool; they must not numerically overwhelm Top 2.
+  if(strategy==='balanced')return x.top2*5+x.win*.5+x.top10*.03-x.bottomHalf*.01+x.avg*.00001;
+  if(strategy==='aggressive')return x.top2*5+x.win*2+x.top10*.02-x.bottomHalf*.002;
+  return x.win*6+x.top2*1.5+x.top10*.01;
 }
 function searchCandidates(games,current,poolSize,opts={}){
   const worlds=opts.worlds||buildWorldEnsemble(games,poolSize,opts.searchIters||SEARCH_ITERS,opts.seed||20260908,opts.fieldModel||null,opts.poolPrior||null);
