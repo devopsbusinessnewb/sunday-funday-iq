@@ -9,7 +9,7 @@ vm.createContext(context);vm.runInContext(js.includes('if(!TESTING)bootHome()')?
 const home=context.SFIQ_HOME_TEST;
 if(!home?.strategySnapshot)throw new Error('Home does not expose saved CBS strategies');
 const cards=Object.fromEntries(['safest','balanced','aggressive','maxUpside'].map((key,i)=>[key,{label:key,card:{choices:[1],weights:[i+1]},eval:{top2:.02+i*.01,win:.01,bottomHalf:.4,avg:90},stability:{top2Min:.01,top2Max:.06}}]));
-const state={week:3,season:2026,optimization:{modelBuild:'1.10.0',ranAt:'2026-09-27T12:00:00Z',strategies:cards},cbsUpdatedAt:'2026-09-27T11:00:00Z',marketUpdatedAt:'2026-09-27T11:00:00Z'};
+const state={week:3,season:2026,optimization:{modelBuild:'1.11.0',ranAt:'2026-09-27T12:00:00Z',strategies:cards},cbsUpdatedAt:'2026-09-27T11:00:00Z',marketUpdatedAt:'2026-09-27T11:00:00Z'};
 const result=home.strategySnapshot(state,{season:2026,week:3},Date.parse('2026-09-27T12:30:00Z'));
 if(result.status!=='ready'||result.cards.length!==4||result.cards[3].key!=='maxUpside')throw new Error('Current week four-strategy dashboard missing');
 if(!result.cards.every(x=>x.href.includes('strategy='+x.key)))throw new Error('Strategy tiles do not open corresponding full cards');
