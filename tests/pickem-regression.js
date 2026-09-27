@@ -31,6 +31,7 @@ ctx.testGames=clone(t.SEED);ctx.testCard={choices:ctx.testGames.map(g=>g.pick===
 vm.runInContext("state.games=testGames;state.week=3;state.optimization={modelBuild:MODEL_BUILD,ranAt:new Date().toISOString(),current:testCard,strategies:{balanced:{label:'Balanced',card:testCard,eval:{top2:.04,win:.01,bottomHalf:.3,avg:85}}}};renderFullCard()",ctx);
 if(cardView.hidden||!cardView.innerHTML.includes('16 picks')||(cardView.innerHTML.match(/<details class="row">/g)||[]).length!==16)throw new Error('Strategy navigation did not render a complete 16-game card');
 if(cardView.innerHTML.indexOf('class="points">16')>cardView.innerHTML.indexOf('class="points">1'))throw new Error('Full card displays points in the wrong order');
+if(!cardView.innerHTML.includes('CBS data, market data, or this simulation is out of date'))throw new Error('Card suppressed stale input warning');
 if(/PICK CHANGE|CONFIDENCE MOVE|Submitted confidence|Keep the winner|difference(?:s)? from the card/.test(cardView.innerHTML))throw new Error('Strategy card still reads like a change list');
 if(!/Pick [A-Z]+ for 16 points/.test(cardView.innerHTML)||!cardView.innerHTML.includes('Data &amp; model details')||!cardView.innerHTML.includes('strategy=balanced&amp;details=1'))throw new Error('Card lacks direct pick instructions or focused details navigation');
 ctx.location={search:'?strategy=balanced&details=1'};
