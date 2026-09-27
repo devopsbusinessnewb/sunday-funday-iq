@@ -6,9 +6,10 @@ from pathlib import Path
 
 ROOT=Path(__file__).resolve().parents[1]
 html=(ROOT/'apps/yahoo/index.html').read_text(encoding='utf-8')
-assert 'Build 0.4.0' in html
+assert 'Build 0.5.0' in html
 assert 'function recommendations()' in html
 assert 'function bestSwap' in html
+assert "capabilities?.lockState!==true" in html
 assert "if(locked(starter))return null" in html
 assert "!locked(b)" in html
 assert "age<=2?'CURRENT':age<=12?'AGING':'STALE'" in html
@@ -40,6 +41,9 @@ for rel in ['data/live/yahoo.json','data/examples/yahoo-snapshot.example.json']:
     d=json.loads((ROOT/rel).read_text(encoding='utf-8'))
     assert isinstance(d.get('lineup'),list) and isinstance(d.get('bench'),list)
     assert isinstance(d.get('waivers'),list) and isinstance(d.get('watch'),list)
+    if rel.endswith('yahoo.json') and d.get('meta',{}).get('status')=='connected':
+        assert d['meta'].get('source')=='Flaim Fantasy / Yahoo'
+        assert d['meta'].get('capabilities',{}).get('lockState') is False
     assert isinstance(d.get('meta'),dict) and 'status' in d['meta']
 
 public=(ROOT/'apps/yahoo/index.html').read_text(encoding='utf-8')+(ROOT/'data/live/yahoo.json').read_text(encoding='utf-8')
