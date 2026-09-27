@@ -97,6 +97,8 @@ const floorCard={avg:90,bottomHalf:.32,top2:.012,win:.004,top10:.12};
 const ceilingCard={avg:80,bottomHalf:.66,top2:.055,win:.035,top10:.19};
 if(t.strategyObjective('safest',floorCard)<=t.strategyObjective('safest',ceilingCard))throw new Error('Safest objective did not prioritize the scoring floor');
 if(t.strategyObjective('maxUpside',ceilingCard)<=t.strategyObjective('maxUpside',floorCard))throw new Error('Max-upside objective remained anchored to the safe card');
+const balancedTop2={avg:81,bottomHalf:.48,top2:.021,win:.010,top10:.10},balancedCosmetic={avg:87,bottomHalf:.38,top2:.001,win:0,top10:.17};
+if(t.strategyObjective('balanced',balancedTop2)<=t.strategyObjective('balanced',balancedCosmetic))throw new Error('Balanced sacrificed Top-2 probability for cosmetic safety metrics');
 if(!t.strategyEquivalent(favoriteCard,JSON.parse(JSON.stringify(favoriteCard))))throw new Error('Equivalent strategy cards were not detected');
 
 // The frontier must expose explicit risk choices, preserve valid confidence,
