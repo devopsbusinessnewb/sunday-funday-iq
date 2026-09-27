@@ -3,7 +3,7 @@ const vm=require('vm');
 const path=require('path');
 const root=path.resolve(__dirname,'..');
 const html=fs.readFileSync(path.join(root,'apps/pickem/index.html'),'utf8');
-if(!html.includes('Build 1.11.0')) throw new Error('Expected Pickem Build 1.11.0');
+if(!html.includes('Build 1.11.1')) throw new Error('Expected Pickem Build 1.11.1');
 if(!html.includes("POOL_HISTORY_URL='../../data/analysis/cbs-pool-history-report.json'"))throw new Error('Completed-pool history is not wired into the module');
 if(!html.includes('PROVISIONAL · PARTIAL POOL REVEAL')) throw new Error('Partial pool reveal label missing');
 if(!html.includes('CURRENT CARD STILL LEADS THIS SEARCH')||!html.includes('Safety → upside strategy frontier'))throw new Error('Risk-return frontier or current-card guardrail missing');
