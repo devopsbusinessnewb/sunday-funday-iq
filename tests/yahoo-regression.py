@@ -6,7 +6,7 @@ from pathlib import Path
 
 ROOT=Path(__file__).resolve().parents[1]
 html=(ROOT/'apps/yahoo/index.html').read_text(encoding='utf-8')
-assert 'Build 0.5.0' in html
+assert 'Build 0.5.1' in html
 assert 'function recommendations()' in html
 assert 'function bestSwap' in html
 assert "capabilities?.lockState!==true" in html
@@ -59,3 +59,7 @@ assert 'Paste the FULL redirected URL' in collector
 callback=(ROOT/'oauth/yahoo/index.html').read_text(encoding='utf-8')
 assert 'authorization code' in callback.lower()
 assert 'client_secret' not in callback.lower() and 'refresh_token' not in callback.lower() and 'access_token' not in callback.lower()
+
+assert 'Lineup status needs verification' not in html
+assert "return['VERIFY','locked']" not in html
+assert 'Waiver Priority' in html
