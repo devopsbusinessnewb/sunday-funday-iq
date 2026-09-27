@@ -132,7 +132,7 @@ const POOL_HISTORY_URL='../../data/analysis/cbs-pool-history-report.json';
 const SEARCH_ITERS=700;
 const FINAL_ITERS=3000;
 const VALIDATION_SEEDS=3;
-const MODEL_BUILD='1.12.0';
+const MODEL_BUILD='1.12.1';
 const CONFIDENCE_TIE_BAND=.025;
 const MIN_OPTIONAL_FLIP_PROB=.40;
 const MIN_OPTIONAL_MARKET_PROB=.38;
@@ -573,7 +573,7 @@ function confidenceStrategyConfig(strategy='maxUpside'){
   if(strategy==='balanced')return{probBand:.07,maxInversions:2,passes:2};
   if(strategy==='aggressive')return{probBand:.12,maxInversions:4,passes:3};
   if(strategy==='maxUpside')return{probBand:.18,maxInversions:7,passes:4};
-  return{probBand:0,maxInversions:0,passes:0};
+  return{probBand:.05,maxInversions:1,passes:3};
 }
 function confidenceStrategyScore(strategy,x){
   if(strategy==='balanced')return x.top2*.62+x.win*.10+x.top10*.12-x.bottomHalf*.08+x.avg*.00001;
@@ -586,7 +586,7 @@ function optimizeTournamentConfidence(card,worlds,locked=new Set(),games=null,ma
   const passes=maxPass==null?cfg.passes:maxPass;
   const inversionLimit=maxInversions==null?cfg.maxInversions:maxInversions;
   let best=allocateConfidence(card,games,locked),bestEval=evaluateCard(best,worlds),bestScore=confidenceStrategyScore(strategy,bestEval),evaluatedCount=1;
-  if(strategy==='safest'||passes<=0)return{card:best,eval:bestEval,score:bestScore,evaluatedCount};
+  if(passes<=0)return{card:best,eval:bestEval,score:bestScore,evaluatedCount};
   const open=[...Array(best.choices.length).keys()].filter(i=>!locked.has(i));
   for(let pass=0;pass<passes;pass++){
     let nextCard=null,nextEval=null,nextScore=bestScore;
@@ -723,9 +723,10 @@ function buildStrategyCards(strategy,games,safeSeed,tuningWorlds,locked){
 }
 function buildStrategyFrontier(games,current,worlds,extraCards=[],poolSize=102,poolPrior=null,tuningWorlds=worlds){
   const locked=lockedIndices(games),safeSeed=safestExpectedCard(games,current);
-  const safestCard=allocateConfidence(safeSeed,games,locked);
-  const safestEval=evaluateCard(safestCard,tuningWorlds);
-  let confidenceSearchEvaluations=0;
+  const safestTune=optimizeTournamentConfidence(safeSeed,tuningWorlds,locked,games,null,null,'safest');
+  const safestCard=safestTune.card;
+  const safestEval=safestTune.eval;
+  let confidenceSearchEvaluations=safestTune.evaluatedCount;
   const laneResults={};
 
   for(const strategy of ['balanced','aggressive','maxUpside']){
