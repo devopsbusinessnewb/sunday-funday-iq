@@ -50,7 +50,7 @@ function strategyRecommendation(snapshot){
   nearBest.sort((a,b)=>(Number(a.eval?.bottomHalf)||0)-(Number(b.eval?.bottomHalf)||0)||(Number(b.eval?.avg)||0)-(Number(a.eval?.avg)||0)||(Number(b.eval?.top2)||0)-(Number(a.eval?.top2)||0));
   const choice=nearBest[0],max=snapshot.cards.reduce((a,b)=>b.eval.top2>a.eval.top2?b:a),delta=choice.eval.top2-snapshot.currentEval.top2;
   let reason=choice.key==='current'?'The alternatives do not add enough Top-2 upside to justify their added downside.':`${choice.label} adds ${delta>=0?'+':''}${(delta*100).toFixed(1)} percentage points of Top-2 probability versus your current card.`;
-  if(choice.key!==max.key){const topGap=max.eval.top2-choice.eval.top2,riskGap=max.eval.bottomHalf-choice.eval.bottomHalf;reason+=` ${max.label} adds only ${(topGap*100).toFixed(1)} more point${Math.abs(topGap*100-1)<.05?'':'s'} of Top-2 probability while adding ${(riskGap*100).toFixed(0)} points of bottom-half risk.`}
+  if(choice.key!==max.key){const topGap=max.eval.top2-choice.eval.top2,riskGap=max.eval.bottomHalf-choice.eval.bottomHalf,topPoints=topGap*100,riskPoints=riskGap*100;reason+=` ${max.label} adds only ${topPoints.toFixed(1)} more percentage point${Math.abs(topPoints-1)<.05?'':'s'} of Top-2 probability while adding ${riskPoints.toFixed(1)} percentage point${Math.abs(riskPoints-1)<.05?'':'s'} of bottom-half risk.`}
   return{choice,max,delta,reason};
 }
 async function bootHome(){
