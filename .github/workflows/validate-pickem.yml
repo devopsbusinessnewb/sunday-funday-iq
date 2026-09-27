@@ -3,6 +3,7 @@ name: Validate Pickem
 on:
   push:
     paths:
+      - 'index.html'
       - 'apps/pickem/**'
       - 'data/live/cbs-pickem.json'
       - 'data/analysis/cbs-**'
@@ -12,6 +13,7 @@ on:
       - '.github/workflows/validate-pickem.yml'
   pull_request:
     paths:
+      - 'index.html'
       - 'apps/pickem/**'
       - 'data/live/cbs-pickem.json'
       - 'data/analysis/cbs-**'
@@ -46,6 +48,12 @@ jobs:
           Path('/tmp/pickem.js').write_text(s.split('<script>',1)[1].rsplit('</script>',1)[0])
           PY2
           node --check /tmp/pickem.js
+          python - <<'PY2'
+          from pathlib import Path
+          s=Path('index.html').read_text()
+          Path('/tmp/pickem-home.js').write_text(s.split('<script>',1)[1].rsplit('</script>',1)[0])
+          PY2
+          node --check /tmp/pickem-home.js
           node --check tools/cbs-pool-archive.js
           node --check tools/cbs-pool-report.js
           node --check extensions/cbs-pickem-bridge/background.js
@@ -56,6 +64,7 @@ jobs:
         run: |
           cd repo
           node tests/pickem-regression.js
+          node tests/pickem-home-regression.js
           node tests/pickem-strategy-regression.js
           node tests/cbs-history-regression.js
           node tests/cbs-pool-archive-regression.js

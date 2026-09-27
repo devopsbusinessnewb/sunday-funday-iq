@@ -1,0 +1,28 @@
+const fs=require('fs');
+const vm=require('vm');
+const path=require('path');
+const html=fs.readFileSync(path.join(__dirname,'../index.html'),'utf8');
+const js=html.split('<script>',2)[1]?.split('</script>',1)[0];
+if(!js)throw new Error('Home has no executable script');
+const context={console,globalThis:null,localStorage:{getItem:()=>null}};context.globalThis=context;context.__SFIQ_TESTING__=true;
+vm.createContext(context);vm.runInContext(js.includes('if(!TESTING)bootHome()')?js:js.slice(0,js.lastIndexOf("\ndocument.querySelectorAll('.tile').forEach")),context);
+const home=context.SFIQ_HOME_TEST;
+if(!home?.strategySnapshot)throw new Error('Home does not expose saved CBS strategies');
+const cards=Object.fromEntries(['safest','balanced','aggressive','maxUpside'].map((key,i)=>[key,{label:key,card:{choices:[1],weights:[i+1]},eval:{top2:.02+i*.01,win:.01,bottomHalf:.4,avg:90},stability:{top2Min:.01,top2Max:.06}}]));
+const state={week:3,season:2026,optimization:{modelBuild:'1.10.0',ranAt:'2026-09-27T12:00:00Z',strategies:cards},cbsUpdatedAt:'2026-09-27T11:00:00Z',marketUpdatedAt:'2026-09-27T11:00:00Z'};
+const result=home.strategySnapshot(state,{season:2026,week:3},Date.parse('2026-09-27T12:30:00Z'));
+if(result.status!=='ready'||result.cards.length!==4||result.cards[3].key!=='maxUpside')throw new Error('Current week four-strategy dashboard missing');
+if(!result.cards.every(x=>x.href.includes('strategy='+x.key)))throw new Error('Strategy tiles do not open corresponding full cards');
+if(home.strategySnapshot(state,{season:2026,week:4},Date.now()).status!=='missing')throw new Error('Old week projections appeared as current cards');
+if(home.strategySnapshot({...state,marketUpdatedAt:'2026-09-27T12:05:00Z'},{season:2026,week:3},Date.parse('2026-09-27T12:30:00Z')).status!=='stale')throw new Error('New market inputs did not stale the saved simulation');
+if(home.strategySnapshot(state,{season:2026,week:3,exportedAt:'2026-09-27T12:10:00Z'},Date.parse('2026-09-27T12:30:00Z')).status!=='stale')throw new Error('New published CBS picks did not stale the saved simulation');
+if(home.strategySnapshot(state,{season:2026,week:3},Date.parse('2026-09-29T12:00:00Z')).status!=='stale')throw new Error('Old simulation was presented as current');
+const nodes=Object.fromEntries(['week','status','strategies'].map(id=>[id,{textContent:'',innerHTML:''}]));
+context.localStorage={getItem:()=>JSON.stringify(state)};
+context.fetch=async()=>({ok:true,json:async()=>({season:2026,week:3})});
+context.document={getElementById:id=>nodes[id]};
+vm.runInContext('bootHome()',context).then(()=>{
+  if(nodes.week.textContent!=='Week 3'||(nodes.strategies.innerHTML.match(/View complete card/g)||[]).length!==4)throw new Error('Home does not present four usable complete-card links');
+  if(!html.includes('href="./apps/pickem/?action=refresh-simulate"')||!html.includes('href="./legacy-home.html"'))throw new Error('Home lost simulation action or paused fantasy access');
+  console.log('CBS home regression passed: four strategies, deep links, week and input freshness.');
+}).catch(e=>{console.error(e);process.exitCode=1});
