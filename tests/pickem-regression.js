@@ -3,10 +3,10 @@ const vm=require('vm');
 const path=require('path');
 const root=path.resolve(__dirname,'..');
 const html=fs.readFileSync(path.join(root,'apps/pickem/index.html'),'utf8');
-if(!html.includes('Build 1.10.0')) throw new Error('Expected Pickem Build 1.10.0');
+if(!html.includes('Build 1.11.0')) throw new Error('Expected Pickem Build 1.11.0');
 if(!html.includes("POOL_HISTORY_URL='../../data/analysis/cbs-pool-history-report.json'"))throw new Error('Completed-pool history is not wired into the module');
 if(!html.includes('PROVISIONAL · PARTIAL POOL REVEAL')) throw new Error('Partial pool reveal label missing');
-if(!html.includes('NO DEMONSTRATED FIELD EDGE')||!html.includes('Safety → upside strategy frontier'))throw new Error('Risk-return frontier or no-edge guardrail missing');
+if(!html.includes('CURRENT CARD STILL LEADS THIS SEARCH')||!html.includes('Safety → upside strategy frontier'))throw new Error('Risk-return frontier or current-card guardrail missing');
 if(!html.includes("state.originalConfidenceStatus==='placeholder'"))throw new Error('Placeholder confidence must not be presented as a meaningful baseline');
 if(!html.includes("sfiqPickemV04")) throw new Error('Clean standings storage migration missing');
 if(!html.includes('fieldModelComplete(state)')) throw new Error('Partial field must remain provisional');
@@ -31,7 +31,7 @@ ctx.testGames=clone(t.SEED);ctx.testCard={choices:ctx.testGames.map(g=>g.pick===
 vm.runInContext("state.games=testGames;state.week=3;state.optimization={modelBuild:MODEL_BUILD,ranAt:new Date().toISOString(),current:testCard,strategies:{balanced:{label:'Balanced',card:testCard,eval:{top2:.04,win:.01,bottomHalf:.3,avg:85}}}};renderFullCard()",ctx);
 if(cardView.hidden||!cardView.innerHTML.includes('16 picks')||(cardView.innerHTML.match(/<details class="row">/g)||[]).length!==16)throw new Error('Strategy navigation did not render a complete 16-game card');
 if(cardView.innerHTML.indexOf('class="points">16')>cardView.innerHTML.indexOf('class="points">1'))throw new Error('Full card displays points in the wrong order');
-if(!cardView.innerHTML.includes('CBS data, market data, or this simulation is out of date'))throw new Error('Card suppressed stale input warning');
+if(!cardView.innerHTML.includes('The simulation should be rerun before using these picks'))throw new Error('Card suppressed stale simulation warning');
 if(/PICK CHANGE|CONFIDENCE MOVE|Submitted confidence|Keep the winner|difference(?:s)? from the card/.test(cardView.innerHTML))throw new Error('Strategy card still reads like a change list');
 if(!/Pick [A-Z]+ for 16 points/.test(cardView.innerHTML)||!cardView.innerHTML.includes('Data &amp; model details')||!cardView.innerHTML.includes('strategy=balanced&amp;details=1'))throw new Error('Card lacks direct pick instructions or focused details navigation');
 ctx.location={search:'?strategy=balanced&details=1'};
@@ -131,5 +131,5 @@ const poolHistory=JSON.parse(fs.readFileSync(path.join(root,'data/analysis/cbs-p
 if(!poolPrior||poolPrior.weeks!==2||Math.abs(poolPrior.reliability-.2)>1e-12)throw new Error('Two-week pool history must be conservatively weighted at 20%');
 const learnedRun=t.runOptimizer(postGames,93,{...stableOpts,searchIters:100,finalIters:240,poolPrior});
 if(!learnedRun.poolPrior||learnedRun.poolPrior.weeks!==2)throw new Error('Optimizer did not preserve historical-prior provenance');
-if(learnedRun.strategies.balanced.flips>1||learnedRun.strategies.aggressive.flips>2||learnedRun.strategies.maxUpside.flips>3)throw new Error('Strategy frontier exceeded portfolio flip limits');
+if(learnedRun.strategies.balanced.objective!=='risk-adjusted-top2'||learnedRun.strategies.aggressive.objective!=='top2-first'||learnedRun.strategies.maxUpside.objective!=='win-first')throw new Error('Strategy frontier did not preserve independent objectives');
 console.log('Pickem regression suite passed: imports valid, live card flexible, recommendations stable after application.');
