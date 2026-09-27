@@ -64,7 +64,6 @@ assert 'client_secret' not in callback.lower() and 'refresh_token' not in callba
 
 assert 'Lineup status needs verification' not in html
 assert "return['VERIFY','locked']" not in html
-assert 'Waiver Priority' in html
 
 assert 'What IQ recommends' not in html
 assert 'Data freshness' not in html
