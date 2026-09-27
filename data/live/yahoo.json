@@ -1,17 +1,73 @@
 {
   "meta": {
-    "source": "Yahoo Fantasy API",
-    "status": "awaiting_oauth",
-    "updatedAt": null,
+    "source": "Flaim Fantasy / Yahoo",
+    "status": "connected",
+    "updatedAt": "2026-09-27T07:01:19.616Z",
     "season": 2026,
-    "week": null,
-    "contractVersion": 1
+    "week": 3,
+    "contractVersion": 2,
+    "refreshMode": "chatgpt_plugin_snapshot",
+    "capabilities": {
+      "playerStatus": false,
+      "lockState": false,
+      "playerProjections": false,
+      "teamProjections": true,
+      "waiverMarket": true,
+      "transactions": true
+    }
   },
-  "league": {},
-  "team": {},
-  "opponent": {},
-  "lineup": [],
-  "bench": [],
-  "waivers": [],
+  "league": {
+    "key": "470.l.904626",
+    "name": "Fourth & Regret",
+    "teamCount": 10,
+    "scoring": "Head-to-head",
+    "waivers": "Rolling priority",
+    "usesFaab": false,
+    "faabBudget": null
+  },
+  "team": {
+    "key": "470.l.904626.t.1",
+    "name": "Jamo Unchained",
+    "record": "1-1",
+    "standing": 4,
+    "waiverPriority": 5,
+    "faabRemaining": null,
+    "score": 0,
+    "projection": 132.81
+  },
+  "opponent": {
+    "key": "470.l.904626.t.4",
+    "name": "Duuuuuuuvvvaaalllllll",
+    "score": 38.3,
+    "projection": 117.33
+  },
+  "lineup": [
+    {"slot":"QB","name":"Jalen Hurts","pos":"QB","nflTeam":"Phi","projection":null,"points":0,"status":null,"gameState":null,"locked":null,"eligiblePositions":["QB"]},
+    {"slot":"RB","name":"Saquon Barkley","pos":"RB","nflTeam":"Phi","projection":null,"points":0,"status":null,"gameState":null,"locked":null,"eligiblePositions":["RB"]},
+    {"slot":"RB","name":"Breece Hall","pos":"RB","nflTeam":"NYJ","projection":null,"points":0,"status":null,"gameState":null,"locked":null,"eligiblePositions":["RB"]},
+    {"slot":"WR","name":"CeeDee Lamb","pos":"WR","nflTeam":"Dal","projection":null,"points":0,"status":null,"gameState":null,"locked":null,"eligiblePositions":["WR"]},
+    {"slot":"WR","name":"Tee Higgins","pos":"WR","nflTeam":"Cin","projection":null,"points":0,"status":null,"gameState":null,"locked":null,"eligiblePositions":["WR"]},
+    {"slot":"WR","name":"Jameson Williams","pos":"WR","nflTeam":"Det","projection":null,"points":0,"status":null,"gameState":null,"locked":null,"eligiblePositions":["WR"]},
+    {"slot":"TE","name":"Dalton Kincaid","pos":"TE","nflTeam":"Buf","projection":null,"points":0,"status":null,"gameState":null,"locked":null,"eligiblePositions":["TE"]},
+    {"slot":"W/R/T","name":"Chuba Hubbard","pos":"RB","nflTeam":"Car","projection":null,"points":0,"status":null,"gameState":null,"locked":null,"eligiblePositions":["RB","WR","TE"]},
+    {"slot":"DEF","name":"Seahawks","pos":"DEF","nflTeam":"Sea","projection":null,"points":0,"status":null,"gameState":null,"locked":null,"eligiblePositions":["DEF"]}
+  ],
+  "bench": [
+    {"slot":"BN","name":"Tyler Warren","pos":"TE","nflTeam":"Ind","projection":null,"points":0,"status":null,"gameState":null,"locked":null,"eligiblePositions":["TE"]},
+    {"slot":"BN","name":"Brian Thomas Jr.","pos":"WR","nflTeam":"Jax","projection":null,"points":0,"status":null,"gameState":null,"locked":null,"eligiblePositions":["WR"]},
+    {"slot":"BN","name":"Bo Nix","pos":"QB","nflTeam":"Den","projection":null,"points":0,"status":null,"gameState":null,"locked":null,"eligiblePositions":["QB"]},
+    {"slot":"BN","name":"Deebo Samuel Sr.","pos":"WR","nflTeam":"SF","projection":null,"points":0,"status":null,"gameState":null,"locked":null,"eligiblePositions":["WR"]},
+    {"slot":"BN","name":"Tank Bigsby","pos":"RB","nflTeam":"Phi","projection":null,"points":0,"status":null,"gameState":null,"locked":null,"eligiblePositions":["RB"]}
+  ],
+  "waivers": [
+    {"name":"J.K. Dobbins","pos":"RB","nflTeam":"Den","percentOwned":82},
+    {"name":"Jake Ferguson","pos":"TE","nflTeam":"Dal","percentOwned":78},
+    {"name":"RJ Harvey","pos":"RB","nflTeam":"Den","percentOwned":77},
+    {"name":"Denzel Boston","pos":"WR","nflTeam":"Cle","percentOwned":75},
+    {"name":"MarShawn Lloyd","pos":"RB","nflTeam":"GB","percentOwned":74},
+    {"name":"Bryce Young","pos":"QB","nflTeam":"Car","percentOwned":72},
+    {"name":"Quentin Johnston","pos":"WR","nflTeam":"LAC","percentOwned":71},
+    {"name":"Michael Pittman Jr.","pos":"WR","nflTeam":"Pit","percentOwned":69,"status":"Q"}
+  ],
   "watch": []
 }
