@@ -6,10 +6,11 @@ from pathlib import Path
 
 ROOT=Path(__file__).resolve().parents[1]
 html=(ROOT/'apps/yahoo/index.html').read_text(encoding='utf-8')
-assert 'Build 0.5.1' in html
-assert 'function recommendations()' in html
+assert 'Yahoo Build 0.6.0' in html
+assert 'function actionable()' in html
 assert 'function bestSwap' in html
 assert "capabilities?.lockState!==true" in html
+assert "capabilities?.playerProjections!==true" in html
 assert "if(locked(starter))return null" in html
 assert "!locked(b)" in html
 assert "age<=2?'CURRENT':age<=12?'AGING':'STALE'" in html
@@ -28,10 +29,11 @@ data={
  bench:[{slot:'BN',name:'Bench Star',pos:'WR',projection:20,status:'Active',locked:false,gameState:'upcoming'}]
 };
 assert(bestSwap(data.lineup[0],data.bench)===null,'locked starter received a swap');
-assert(!recommendations().some(x=>/Bench Star over Locked Starter/.test(x.title)),'illegal locked-player recommendation');
+assert(!actionable().some(x=>/Bench Star over Locked Starter/.test(x.title)),'illegal locked-player recommendation');
 assert(freshness().status==='STALE','stale threshold failed');
 data.lineup=[{slot:'WR',name:'Open Starter',pos:'WR',projection:5,status:'Active',locked:false,eligiblePositions:['WR']}];
-assert(recommendations().some(x=>/Bench Star over Open Starter/.test(x.title)),'eligible unlocked swap was not surfaced');
+data.meta.capabilities.playerProjections=true;
+assert(actionable().some(x=>/Bench Star over Open Starter/.test(x.title)),'eligible unlocked swap was not surfaced');
 ''')
     path=f.name
 subprocess.run(['node','--check',path],check=True)
@@ -62,4 +64,10 @@ assert 'client_secret' not in callback.lower() and 'refresh_token' not in callba
 
 assert 'Lineup status needs verification' not in html
 assert "return['VERIFY','locked']" not in html
-assert 'Waiver Priority' in html
+
+assert 'What IQ recommends' not in html
+assert 'Data freshness' not in html
+assert 'Action Items' not in html
+assert '0.0 proj' not in html
+assert 'env(safe-area-inset-top' in html
+assert 'Available now' in html
