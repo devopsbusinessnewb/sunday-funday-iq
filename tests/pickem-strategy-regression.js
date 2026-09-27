@@ -30,6 +30,19 @@ if(!t.upsidePickEvidence(upsideDog,0).eligible)throw new Error('Max-upside gate 
 const lotteryDog=game(100,{awayP:.20,awayPct:5,pick:1,weight:1});
 if(t.upsidePickEvidence(lotteryDog,0).eligible)throw new Error('Max-upside gate admitted an irrational longshot');
 
+// Strategy lanes must stay structurally distinct. This is a regression guard
+// against collapsing four portfolio mandates back into one shared optimizer.
+const balancedLane=t.strategyLaneConfig('balanced'),aggressiveLane=t.strategyLaneConfig('aggressive'),maxLane=t.strategyLaneConfig('maxUpside');
+if(!(balancedLane.maxFlips<aggressiveLane.maxFlips&&aggressiveLane.maxFlips<maxLane.maxFlips))throw new Error('Strategy flip budgets collapsed together');
+const balancedConf=t.confidenceStrategyConfig('balanced'),aggressiveConf=t.confidenceStrategyConfig('aggressive'),maxConf=t.confidenceStrategyConfig('maxUpside');
+if(!(balancedConf.probBand<aggressiveConf.probBand&&aggressiveConf.probBand<maxConf.probBand))throw new Error('Strategy confidence risk bands collapsed together');
+const aggressiveOnlyDog=game(101,{awayP:.36,awayPct:10,pick:1,weight:1});
+if(t.strategyFlipEvidence(aggressiveOnlyDog,0,'balanced').eligible)throw new Error('Balanced admitted an aggressive-only leverage play');
+if(!t.strategyFlipEvidence(aggressiveOnlyDog,0,'aggressive').eligible)throw new Error('Aggressive rejected its intended leverage lane');
+const maxOnlyDog=game(102,{awayP:.31,awayPct:8,pick:1,weight:1});
+if(t.strategyFlipEvidence(maxOnlyDog,0,'aggressive').eligible)throw new Error('Aggressive admitted a max-upside-only play');
+if(!t.strategyFlipEvidence(maxOnlyDog,0,'maxUpside').eligible)throw new Error('Max Upside rejected its intended broader leverage lane');
+
 // Near-ties retain the user's prior relative order instead of creating churn.
 const ties=[game(20,{awayP:.44,weight:3}),game(21,{awayP:.445,weight:1}),game(22,{awayP:.45,weight:2})];
 const tieCard={choices:[1,1,1],weights:[3,1,2]};
