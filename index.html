@@ -30,7 +30,7 @@
     <button class="tile espn selected" id="espnCard" data-module="espn" type="button"><div class="tilehead"><span class="module">🏈 ESPN</span><span class="status"><span class="dot"></span>LOADING</span></div><div class="loading">Loading matchup…</div></button>
     <button class="tile guillotine" id="guillotineCard" data-module="guillotine" type="button"><div class="tilehead"><span class="module">🪓 Guillotine</span><span class="status"><span class="dot"></span>LOADING</span></div><div class="loading">Loading chop board…</div></button>
     <button class="tile pickem" id="pickemCard" data-module="pickem" type="button"><div class="tilehead"><span class="module">🎯 CBS Pick’em</span><span class="status"><span class="dot"></span>LOADING</span></div><div class="loading">Loading weekly card…</div></button>
-    <button class="tile yahoo" id="yahooCard" data-module="yahoo" type="button"><div class="tilehead"><span class="module">🏆 Yahoo</span><span class="status"><span class="dot pending"></span>PENDING</span></div><div class="main">Coming next</div><div class="context">Official Yahoo API</div><div class="tilebottom"><span class="key warn">Connection setup</span><span class="trendmini">— Waiting</span></div></button>
+    <button class="tile yahoo" id="yahooCard" data-module="yahoo" type="button"><div class="tilehead"><span class="module">🏆 Yahoo</span><span class="status"><span class="dot"></span>LOADING</span></div><div class="loading">Loading Yahoo snapshot…</div></button>
   </section>
   <section class="detailpanel" id="detailPanel" aria-live="polite"><div class="loading">Loading selected module…</div></section>
 </main>
@@ -40,7 +40,7 @@ const LEAGUE_ID='1383615005433274368';
 const SLEEPER='https://api.sleeper.app/v1';
 const TREND_KEY='sfiqHubTrendV1';
 const SELECT_KEY='sfiqHubSelectedV1';
-const BUILD='1.4.2';
+const BUILD='1.5.0';
 const CURRENT_SNAPSHOT_MINUTES=120;
 const STALE_SNAPSHOT_MINUTES=240;
 const summaries={};
@@ -97,7 +97,7 @@ function trendMini(t){return `<span class="trendmini ${t.cls==='down'?'down':t.c
 function tile(module,main,context,key,tr,state='CURRENT',kind='',warn=false){
   const card=$(`${module}Card`);
   card.classList.toggle('is-stale',kind==='stale');
-  card.innerHTML=`<div class="tilehead"><span class="module">${module==='espn'?'🏈 ESPN':module==='guillotine'?'🪓 Guillotine':'🎯 CBS Pick’em'}</span>${status(state,kind)}</div><div class="main">${esc(main)}</div><div class="context">${esc(context)}</div><div class="tilebottom"><span class="key ${warn?'warn':''}">${esc(key)}</span>${trendMini(tr)}</div>`;
+  card.innerHTML=`<div class="tilehead"><span class="module">${module==='espn'?'🏈 ESPN':module==='guillotine'?'🪓 Guillotine':module==='yahoo'?'🏆 Yahoo':'🎯 CBS Pick’em'}</span>${status(state,kind)}</div><div class="main">${esc(main)}</div><div class="context">${esc(context)}</div><div class="tilebottom"><span class="key ${warn?'warn':''}">${esc(key)}</span>${trendMini(tr)}</div>`;
 }
 
 function setHealth(module,state){health[module]={state};updateOverview()}
@@ -294,7 +294,20 @@ function errorTile(module,message){
 
 function ordinal(n){const v=n%100;return n+(v>=11&&v<=13?'th':n%10===1?'st':n%10===2?'nd':n%10===3?'rd':'th')}
 
-summaries.yahoo={label:'🏆 Yahoo Fantasy',href:'',version:'pending',headline:'Official API connection is pending',why:'Yahoo will join the command center after the approved API access is provisioned. It is not counted as live.',metrics:[['Pending','Status'],['Official','Data path'],['—','Trend']],insights:[['Approval','DocuSign completed'],['Effective date','September 15'],['Next milestone','Yahoo provisioning and credentials','warn']],trend:{arrow:'—',cls:'wait',label:'Waiting',detail:'No performance trend available yet'},fresh:'Yahoo API provisioning'};
+summaries.yahoo={label:'🏆 Yahoo Fantasy',href:'./apps/yahoo/',version:'loading',headline:'Loading Yahoo snapshot',why:'Checking the latest Flaim-backed Yahoo data.',metrics:[['—','Record'],['—','Projected margin'],['—','Waiver priority']],trend:{arrow:'—',cls:'wait',label:'Loading',detail:'Checking Yahoo snapshot'},fresh:'Checking'};
+
+async function loadYahoo(){
+  try{
+    const d=await json('./data/live/yahoo.json');
+    if(d?.meta?.status!=='connected')throw new Error('Yahoo snapshot not connected');
+    const t=d.team||{},o=d.opponent||{},info=ageInfo(d.meta?.updatedAt);
+    const margin=(Number.isFinite(+t.projection)&&Number.isFinite(+o.projection))?(+t.projection-+o.projection):null;
+    const tr={arrow:'→',cls:margin!==null&&margin<0?'down':'good',label:'Week '+(d.meta?.week||'—'),detail:'Flaim-backed Yahoo snapshot'};
+    tile('yahoo',(t.record||'—')+' · '+(t.name||'Yahoo'),'Week '+(d.meta?.week||'—')+' · '+(d.league?.name||'Yahoo Fantasy'),margin===null?'Projection —':(margin>=0?'+':'')+margin.toFixed(1)+' projected',tr,info.label,info.kind,margin!==null&&margin<0);
+    setHealth('yahoo',info.state);
+    setSummary('yahoo',{label:'🏆 Yahoo Fantasy',href:'./apps/yahoo/',version:d.meta?.updatedAt||'live',headline:margin===null?'Yahoo lineup is connected':margin>=3?'Projected ahead this week':margin<=-3?'Projected behind this week':'Matchup is essentially even',why:(t.name||'Your team')+' vs '+(o.name||'Opponent')+' · Flaim-backed Yahoo data.',metrics:[[t.record||'—','Record'],[margin===null?'—':(margin>=0?'+':'')+margin.toFixed(1),'Projected margin'],[t.waiverPriority||'—','Waiver priority']],trend:tr,fresh:info.age});
+  }catch(e){errorTile('yahoo','Yahoo snapshot unavailable: '+e.message)}
+}
 
 function snapshotVersions(){
   return JSON.stringify(Object.fromEntries(Object.entries(summaries).map(([k,v])=>[k,v.version])));
@@ -307,7 +320,7 @@ async function loadAll(manual=false){
   button.disabled=true;
   button.textContent='Checking…';
   $('updated').textContent='Checking sources';
-  loadingPromise=Promise.allSettled([loadEspn(),loadGuillotine(),loadPickem()]);
+  loadingPromise=Promise.allSettled([loadEspn(),loadGuillotine(),loadPickem(),loadYahoo()]);
   await loadingPromise;
   loadingPromise=null;
   lastCheckedAt=Date.now();
