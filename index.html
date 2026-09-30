@@ -31,7 +31,7 @@
 <script>
 const TESTING=!!globalThis.__SFIQ_TESTING__;
 const STRATEGIES=[['safest','Safest'],['balanced','Balanced'],['aggressive','Aggressive'],['maxUpside','Max Upside']];
-const MODEL_BUILD='1.14.0';
+const MODEL_BUILD='1.15.0';
 function strategySnapshot(state,live,now=Date.now()){
   const opt=state?.optimization,week=Number(live?.week||state?.week||0),season=Number(live?.season||state?.season||2026);
   if(!opt||opt.modelBuild!==MODEL_BUILD||Number(state?.week)!==week||Number(state?.season||2026)!==season||!STRATEGIES.every(([key])=>opt.strategies?.[key]?.card&&opt.strategies[key]?.eval))return{status:'missing',week,cards:[]};
