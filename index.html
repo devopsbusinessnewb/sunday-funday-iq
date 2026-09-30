@@ -31,13 +31,13 @@
 <script>
 const TESTING=!!globalThis.__SFIQ_TESTING__;
 const STRATEGIES=[['safest','Safest'],['balanced','Balanced'],['aggressive','Aggressive'],['maxUpside','Max Upside']];
-const MODEL_BUILD='1.13.0';
+const MODEL_BUILD='1.14.0';
 function strategySnapshot(state,live,now=Date.now()){
   const opt=state?.optimization,week=Number(live?.week||state?.week||0),season=Number(live?.season||state?.season||2026);
   if(!opt||opt.modelBuild!==MODEL_BUILD||Number(state?.week)!==week||Number(state?.season||2026)!==season||!STRATEGIES.every(([key])=>opt.strategies?.[key]?.card&&opt.strategies[key]?.eval))return{status:'missing',week,cards:[]};
   const ran=Date.parse(opt.ranAt||''),cbs=Date.parse(state.cbsUpdatedAt||''),market=Date.parse(state.marketUpdatedAt||'');
   const published=Date.parse(live?.exportedAt||''),stale=!Number.isFinite(ran)||now-ran>12*3600e3||now<ran||cbs>ran||market>ran||published>ran||live?.unavailable;
-  return{status:stale?'stale':'ready',week,ranAt:opt.ranAt,provisional:!!opt.provisional,currentEval:opt.currentControl?.eval||opt.currentEval,fieldImpact:opt.currentControl?.fieldImpact||null,cards:STRATEGIES.map(([key,label])=>({key,label,href:'./apps/pickem/?strategy='+key,eval:opt.strategies[key].eval,stability:opt.strategies[key].stability,changes:opt.strategies[key].changes,objective:opt.strategies[key].objective,equivalentTo:opt.strategies[key].equivalentTo}))};
+  return{status:stale?'stale':'ready',week,ranAt:opt.ranAt,provisional:!!opt.provisional,currentSource:opt.currentSource||'submitted',currentEval:opt.currentControl?.eval||opt.currentEval,fieldImpact:opt.currentControl?.fieldImpact||null,cards:STRATEGIES.map(([key,label])=>({key,label,href:'./apps/pickem/?strategy='+key,eval:opt.strategies[key].eval,stability:opt.strategies[key].stability,changes:opt.strategies[key].changes,objective:opt.strategies[key].objective,equivalentTo:opt.strategies[key].equivalentTo}))};
 }
 function esc(s){return String(s??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]))}
 function pct(n,d=1){if(!Number.isFinite(n))return'—';if(n>0&&n<.001)return'<0.1%';return(n*100).toFixed(d)+'%'}
@@ -70,7 +70,7 @@ async function bootHome(){
   if(recommendation){
     $('decision').classList.add('show');
     $('currentOdds').textContent=pct(snapshot.currentEval.top2);
-    $('currentDetail').textContent=`Win ${pct(snapshot.currentEval.win)} · Expected ${Number(snapshot.currentEval.avg).toFixed(1)} pts`;
+    $('currentDetail').textContent=`${snapshot.currentSource==='generated_baseline'?'Pregame baseline · ':''}Win ${pct(snapshot.currentEval.win)} · Expected ${Number(snapshot.currentEval.avg).toFixed(1)} pts`;
     $('bestStrategy').textContent=recommendation.choice.label;
     $('bestOdds').textContent=`${pct(recommendation.choice.eval.top2)} Top 2 · Win ${pct(recommendation.choice.eval.win)}`;
     $('modelRead').innerHTML=`<b>${esc(recommendation.choice.key==='current'?'Keep the current card.':`Use ${recommendation.choice.label}.`)}</b> ${esc(recommendation.reason)}`;
