@@ -11,6 +11,9 @@ if(!html.includes("state.originalConfidenceStatus==='placeholder'"))throw new Er
 if(!html.includes("sfiqPickemV04")) throw new Error('Clean standings storage migration missing');
 if(!html.includes('fieldModelComplete(state)')) throw new Error('Partial field must remain provisional');
 if(!html.includes('href="?lab=1">Model Lab</a>')||!html.includes('Full-Slate Model Lab'))throw new Error('Full-slate Model Lab UI missing');
+if(html.includes('View 0 changes and full card')||html.includes('winner flip')&&html.includes('Top-2 vs Safest'))throw new Error('Model Lab leaked cross-card comparison language into individual strategy cards');
+if(!html.includes('<summary>View all 16 picks</summary>'))throw new Error('Model Lab cards do not expose a simple full-card action');
+
 
 if(html.includes('EMBEDDED_CBS_SCAN')) throw new Error('CBS live scan must not be embedded in app code');
 if(!html.includes("LIVE_CBS_URL='../../data/live/cbs-pickem.json'")) throw new Error('Live CBS data URL missing');
