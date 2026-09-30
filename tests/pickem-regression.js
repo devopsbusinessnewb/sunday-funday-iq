@@ -104,9 +104,15 @@ const livePickSnap=(live.snapshots||[]).find(x=>/Picks/i.test(x.title||'')),live
 if(liveMatchups.length!==16)throw new Error(`published live CBS: expected 16 matchups, got ${liveMatchups.length}`);
 const liveGames=liveMatchups.map((g,i)=>({id:'g'+(i+1),...g,pick:null,weight:null,locked:false,completed:false,winner:null}));
 const liveCard=t.extractStructuredCard(live,liveGames);
-if(liveCard.pickCount!==16||liveCard.weightCount!==16)throw new Error(`published live CBS: ${liveCard.pickCount}/${liveCard.weightCount}`);
-if(new Set(liveCard.weights).size!==16||liveCard.weights.some(x=>x<1||x>16))throw new Error('published live CBS: confidence values must be unique 1–16');
-if(liveCard.picks.some((pick,i)=>pick!==liveGames[i].away&&pick!==liveGames[i].home))throw new Error('published live CBS: invalid matchup pick');
+if(live.confidenceStatus==='unsubmitted'){
+  if(liveCard.pickCount!==0||liveCard.weightCount!==0)throw new Error(`published live CBS blank slate unexpectedly contains picks/confidence: ${liveCard.pickCount}/${liveCard.weightCount}`);
+  const generated=t.simulationCurrentCard(liveGames);
+  if(generated.source!=='generated_baseline'||!t.validConfidence(generated.card.weights,16))throw new Error('published blank CBS slate cannot generate a valid Week baseline');
+}else{
+  if(liveCard.pickCount!==16||liveCard.weightCount!==16)throw new Error(`published live CBS: ${liveCard.pickCount}/${liveCard.weightCount}`);
+  if(new Set(liveCard.weights).size!==16||liveCard.weights.some(x=>x<1||x>16))throw new Error('published live CBS: confidence values must be unique 1–16');
+  if(liveCard.picks.some((pick,i)=>pick!==liveGames[i].away&&pick!==liveGames[i].home))throw new Error('published live CBS: invalid matchup pick');
+}
 // A version upgrade must retire old model odds without losing submitted cards
 // or the decision history used for postgame analysis.
 const saved={games:liveGames,optimization:{modelBuild:'1.9.1',recommended:{choices:[],weights:[]}},recommendedCard:{choices:[],weights:[]},sim:{top2:.053},originalCard:{choices:[0],weights:[11]},decisionHistory:[{type:'locked',at:'2026-09-24'}]};
