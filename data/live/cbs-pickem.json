@@ -1,167 +1,136 @@
 {
-  "product": "CBS Pick'em IQ Screenshot Import",
-  "version": "1.1.0",
+  "product": "CBS Pick'em IQ Bridge — sanitized live input",
+  "version": "1.2.0",
   "season": 2026,
-  "week": 3,
-  "poolSize": 102,
-  "exportedAt": "2026-09-27T14:21:48.930Z",
-  "source": "CBS Pick’em IQ Bridge — current card confirmed; sanitized post-Thursday standings",
-  "tiebreaker": 41,
-  "confidenceStatus": "submitted",
-  "confidenceSource": "CBS Weekly Standings row confirmed the final submitted card",
-  "confidenceNote": "The September 27 CBS standings scan confirmed the submitted card is unchanged, including Green Bay at 11.",
-  "privacy": "Participant names and CBS account, entry, pool, request, and authentication identifiers removed before publication.",
-  "games": [
+  "week": 4,
+  "poolSize": 94,
+  "exportedAt": "2026-09-30T19:20:41.148Z",
+  "source": "Week 4 CBS Picks + CBS Sports odds capture",
+  "privacy": "Pool/account identifiers and participant names removed before publication.",
+  "confidenceStatus": "unsubmitted",
+  "confidenceSource": "CBS Week 4 Picks page shows 0/16 picks",
+  "marketCapturedAt": "2026-09-30T19:20:34.947Z",
+  "marketSource": "CBS Sports Week 4 odds snapshot",
+  "market": [
     {
-      "away": "ATL",
-      "home": "GB",
-      "awayPct": 5,
-      "homePct": 95,
-      "pick": "GB",
-      "confidence": 11
-    },
-    {
-      "away": "LAC",
-      "home": "BUF",
-      "awayPct": 2,
-      "homePct": 98,
-      "pick": "BUF",
-      "confidence": 16
-    },
-    {
-      "away": "CAR",
+      "away": "PIT",
       "home": "CLE",
-      "awayPct": 83,
-      "homePct": 17,
-      "pick": "CAR",
-      "confidence": 15
+      "awayML": -147,
+      "homeML": 126,
+      "total": 38.5
     },
     {
-      "away": "NYJ",
-      "home": "DET",
-      "awayPct": 5,
-      "homePct": 95,
-      "pick": "DET",
-      "confidence": 14
-    },
-    {
-      "away": "HOU",
-      "home": "IND",
-      "awayPct": 55,
-      "homePct": 45,
-      "pick": "HOU",
-      "confidence": 13
+      "away": "IND",
+      "home": "WAS",
+      "awayML": -192,
+      "homeML": 162,
+      "total": 47.5
     },
     {
       "away": "NE",
-      "home": "JAX",
-      "awayPct": 29,
-      "homePct": 71,
-      "pick": "JAX",
-      "confidence": 12
-    },
-    {
-      "away": "KC",
-      "home": "MIA",
-      "awayPct": 99,
-      "homePct": 1,
-      "pick": "KC",
-      "confidence": 10
+      "home": "BUF",
+      "awayML": 270,
+      "homeML": -290,
+      "total": 48.5
     },
     {
       "away": "TEN",
-      "home": "NYG",
-      "awayPct": 34,
-      "homePct": 66,
-      "pick": "NYG",
-      "confidence": 9
+      "home": "BAL",
+      "awayML": 540,
+      "homeML": -699,
+      "total": 43.5
     },
     {
-      "away": "CIN",
-      "home": "PIT",
-      "awayPct": 90,
-      "homePct": 10,
-      "pick": "CIN",
-      "confidence": 8
+      "away": "NYJ",
+      "home": "CHI",
+      "awayML": 150,
+      "homeML": -176,
+      "total": 42.5
     },
     {
-      "away": "SEA",
-      "home": "WAS",
-      "awayPct": 99,
-      "homePct": 1,
-      "pick": "SEA",
-      "confidence": 7
+      "away": "JAX",
+      "home": "CIN",
+      "awayML": 124,
+      "homeML": -136,
+      "total": 51
+    },
+    {
+      "away": "DAL",
+      "home": "HOU",
+      "awayML": 130,
+      "homeML": -142,
+      "total": 47.5
     },
     {
       "away": "ARI",
-      "home": "SF",
-      "awayPct": 2,
-      "homePct": 98,
-      "pick": "SF",
-      "confidence": 6
-    },
-    {
-      "away": "MIN",
-      "home": "TB",
-      "awayPct": 72,
-      "homePct": 28,
-      "pick": "MIN",
-      "confidence": 5
-    },
-    {
-      "away": "BAL",
-      "home": "DAL",
-      "awayPct": 67,
-      "homePct": 33,
-      "pick": "BAL",
-      "confidence": 4
-    },
-    {
-      "away": "LV",
-      "home": "NO",
-      "awayPct": 31,
-      "homePct": 69,
-      "pick": "NO",
-      "confidence": 3
+      "home": "NYG",
+      "awayML": -122,
+      "homeML": 110,
+      "total": 43.5
     },
     {
       "away": "LAR",
-      "home": "DEN",
-      "awayPct": 74,
-      "homePct": 26,
-      "pick": "LAR",
-      "confidence": 2
+      "home": "PHI",
+      "awayML": -158,
+      "homeML": 136,
+      "total": 43
     },
     {
-      "away": "PHI",
-      "home": "CHI",
-      "awayPct": 92,
-      "homePct": 8,
-      "pick": "PHI",
-      "confidence": 1
+      "away": "GB",
+      "home": "TB",
+      "awayML": -180,
+      "homeML": 165,
+      "total": 39.5
+    },
+    {
+      "away": "MIA",
+      "home": "MIN",
+      "awayML": 480,
+      "homeML": -625,
+      "total": 38.5
+    },
+    {
+      "away": "KC",
+      "home": "LV",
+      "awayML": -213,
+      "homeML": 185,
+      "total": 47.5
+    },
+    {
+      "away": "DEN",
+      "home": "SF",
+      "awayML": 130,
+      "homeML": -148,
+      "total": 47.5
+    },
+    {
+      "away": "LAC",
+      "home": "SEA",
+      "awayML": 300,
+      "homeML": -350,
+      "total": 42.5
+    },
+    {
+      "away": "DET",
+      "home": "CAR",
+      "awayML": -185,
+      "homeML": 168,
+      "total": 50.5
+    },
+    {
+      "away": "ATL",
+      "home": "NO",
+      "awayML": 124,
+      "homeML": -143,
+      "total": 47.5
     }
   ],
   "snapshots": [
     {
       "title": "NFL Football Tourney 2026 | Picks",
-      "url": "bridge://cbs-pickem/week-3-confirmed",
-      "ts": "2026-09-27T14:21:48.930Z",
-      "text": "NFL Football Tourney 2026\nWeek 3\n16/16 Picks\nTiebreaker Saved\n0-2\nFALCONS\n4%\n1-1\nPACKERS\n96%\n1-1\nCHARGERS\n2%\n2-0\nBILLS\n98%\n1-1\nPANTHERS\n84%\n0-2\nBROWNS\n16%\n1-1\nJETS\n5%\n1-1\nLIONS\n95%\n0-2\nTEXANS\n55%\n0-2\nCOLTS\n45%\n0-2\nPATRIOTS\n29%\n1-1\nJAGUARS\n71%\n2-0\nCHIEFS\n99%\n0-2\nDOLPHINS\n1%\n0-2\nTITANS\n34%\n1-1\nGIANTS\n66%\n2-0\nBENGALS\n90%\n1-1\nSTEELERS\n10%\n2-0\nSEAHAWKS\n99%\n0-2\nCOMMANDERS\n1%\n1-1\nCARDINALS\n2%\n2-0\n49ERS\n98%\n1-1\nVIKINGS\n72%\n1-1\nBUCCANEERS\n28%\n2-0\nRAVENS\n67%\n1-1\nCOWBOYS\n33%\n1-1\nRAIDERS\n31%\n0-2\nSAINTS\n69%\n1-1\nRAMS\n74%\n1-1\nBRONCOS\n26%\n2-0\nEAGLES\n92%\n1-1\nBEARS\n8%\nTiebreaker\n41"
-    },
-    {
-      "title": "NFL Football Tourney 2026 | Weekly Standings",
-      "url": "bridge://cbs-pickem/week-3-sanitized",
-      "ts": "2026-09-27T14:21:43.432Z",
-      "text": "NFL Football Tourney 2026 | Weekly Standings\nWeek 3\nSUN 12:00 PM\nLAC\nBUF\nSUN 12:00 PM\nCAR\nCLE\nSUN 12:00 PM\nNYJ\nDET\nSUN 12:00 PM\nHOU\nIND\nSUN 12:00 PM\nNE\nJAC\nSUN 12:00 PM\nKC\nMIA\nSUN 12:00 PM\nTEN\nNYG\nSUN 12:00 PM\nCIN\nPIT\nSUN 12:00 PM\nSEA\nWAS\nSUN 3:05 PM\nARI\nSF\nSUN 3:05 PM\nMIN\nTB\nSUN 3:25 PM\nBAL\nDAL\nSUN 3:25 PM\nLV\nNO\nSUN 7:20 PM\nLAR\nDEN\nMON 7:15 PM\nPHI\nCHI\nATL\n(12)\nATL\n(10)\nATL\n(8)\nATL\n(1)\nATL\n(1)\nATL\n(1)\nATL\n(1)\nGB\n(11)\nGB\n(12)\nGB\n(9)\nGB\n(10)\nGB\n(13)\nGB\n(12)\nGB\n(13)\nGB\n(12)\nGB\n(10)\nGB\n(13)\nGB\n(14)\nGB\n(12)\nGB\n(16)\nGB\n(11)\nGB\n(3)\nGB\n(11)\nBUF\n(16)\nCAR\n(15)\nDET\n(14)\nHOU\n(13)\nJAC\n(12)\nKC\n(10)\nNYG\n(9)\nCIN\n(8)\nSEA\n(7)\nSF\n(6)\nMIN\n(5)\nBAL\n(4)\nNO\n(3)\nLAR\n(2)\nPHI\n(1)\nGB\n(10)\nGB\n(14)\nGB\n(11)\nGB\n(6)\nGB\n(11)\nGB\n(4)\nGB\n(16)\nGB\n(12)\nGB\n(12)\nGB\n(12)\nGB\n(15)\nGB\n(13)\nGB\n(10)\nGB\n(12)\nGB\n(10)\nGB\n(1)\nGB\n(10)\nGB\n(11)\nGB\n(8)\nGB\n(16)\nGB\n(12)\nGB\n(13)\nGB\n(11)\nGB\n(16)\nGB\n(12)\nGB\n(11)\nGB\n(13)\nGB\n(1)\nGB\n(7)\nGB\n(12)\nGB\n(16)\nGB\n(11)\nGB\n(13)\nGB\n(12)\nGB\n(11)\nGB\n(14)\nGB\n(16)\nGB\n(11)\nGB\n(14)\nGB\n(3)\nGB\n(12)\nGB\n(14)\nGB\n(13)\nGB\n(13)\nGB\n(9)\nGB\n(16)\nGB\n(1)\nGB\n(14)\nGB\n(15)\nGB\n(14)\nGB\n(15)\nGB\n(14)\nGB\n(12)\nGB\n(16)\nGB\n(1)\nGB\n(3)"
+      "url": "sanitized://cbs-pickem/week-4",
+      "ts": "2026-09-30T19:20:21.257Z",
+      "text": "NFL Football Tourney 2026\nWeek 4\n0/16 Picks\n2-1\nSTEELERS\n70%\n2-1\nBROWNS\n30%\n1-2\nCOLTS\n63%\n1-2\nCOMMANDERS\n37%\n1-2\nPATRIOTS\n3%\n3-0\nBILLS\n97%\n0-3\nTITANS\n1%\n2-1\nRAVENS\n99%\n1-2\nJETS\n7%\n2-1\nBEARS\n93%\n2-1\nJAGUARS\n42%\n2-1\nBENGALS\n58%\n1-2\nCOWBOYS\n57%\n0-3\nTEXANS\n43%\n1-2\nCARDINALS\n38%\n2-1\nGIANTS\n62%\n1-2\nRAMS\n68%\n2-1\nEAGLES\n32%\n1-2\nPACKERS\n76%\n0-3\nBUCCANEERS\n24%\n0-3\nDOLPHINS\n2%\n3-0\nVIKINGS\n98%\n3-0\nCHIEFS\n81%\n3-0\nRAIDERS\n19%\n2-1\nBRONCOS\n13%\n3-0\n49ERS\n87%\n0-3\nCHARGERS\n5%\n2-1\nSEAHAWKS\n95%\n2-1\nLIONS\n89%\n1-2\nPANTHERS\n11%\n1-2\nFALCONS\n26%\n1-2\nSAINTS\n74%"
     }
-  ],
-  "standingsSummary": {
-    "capturedAt": "2026-09-27T14:21:43.432Z",
-    "week": 3,
-    "observedEntries": 79,
-    "lockedGame": "ATL @ GB",
-    "winner": "ATL",
-    "userPick": "GB",
-    "userConfidence": 11
-  }
+  ]
 }
