@@ -140,7 +140,7 @@ const POOL_HISTORY_URL='../../data/analysis/cbs-pool-history-report.json';
 const SEARCH_ITERS=700;
 const FINAL_ITERS=3000;
 const VALIDATION_SEEDS=3;
-const MODEL_BUILD='1.13.0';
+const MODEL_BUILD='1.14.0';
 const CONFIDENCE_TIE_BAND=.025;
 const MIN_OPTIONAL_FLIP_PROB=.40;
 const MIN_OPTIONAL_MARKET_PROB=.38;
@@ -1184,6 +1184,12 @@ function extractStructuredCard(obj,games){
   }
   return best;
 }
+function simulationCurrentCard(games){
+  if(completeCard(games))return{card:cardFromGames(games),source:'submitted'};
+  const n=games.length;
+  const seed={choices:games.map(g=>expectedWinnerSide(g)),weights:games.map((_,i)=>i+1)};
+  return{card:safestExpectedCard(games,ensureValidCard(seed,n)),source:'generated_baseline'};
+}
 function cardImportStatus(){const picks=state.games.filter(g=>sideOf(g)!=null).length,weights=state.games.map(g=>Number(g.weight)).filter(v=>Number.isInteger(v)&&v>=1&&v<=state.games.length).length,unique=new Set(state.games.map(g=>Number(g.weight)).filter(v=>Number.isInteger(v)&&v>=1&&v<=state.games.length)).size;return{picks,weights,unique,complete:picks===state.games.length&&unique===state.games.length}}
 
 function repairKnownWeek1LockedSeattle(){
@@ -1287,7 +1293,15 @@ async function importScan(obj){
   const detectedWeek=Number((String(pickSnap?.text||'').match(/\bWeek\s+(\d+)\b/i)||[])[1]);
   if(Number.isInteger(detectedWeek)&&detectedWeek>0){
     state.week=detectedWeek;
-    if(priorWeek&&detectedWeek!==priorWeek)lockedBeforeImport={};
+    if(priorWeek&&detectedWeek!==priorWeek){
+      lockedBeforeImport={};
+      state.originalCard=null;
+      state.originalConfidenceStatus=null;
+      state.recommendedCard=null;
+      state.optimization=null;
+      state.applied=false;
+      state.sim=null;
+    }
   }
   if(!picks.length){
     // Preserve the known Week 1 matchup structure if the newer bridge provides structured data but no visible text snapshot.
@@ -1323,7 +1337,8 @@ async function importScan(obj){
   const stand=newest(snaps.filter(s=>/Weekly Standings/i.test(s.title||'')));if(stand){const names=[...stand.text.matchAll(/\n\n\n(?:\d+(?:st|nd|rd|th))\n([^\n\t]{2,60})\n\t-?\d+\t-?\d+\t/g)].map(x=>x[1]);if(names.length>20)state.poolSize=new Set(names).size}
   if(Number.isInteger(Number(obj.poolSize))&&Number(obj.poolSize)>1)state.poolSize=Number(obj.poolSize);
   state.importedAt=obj.exportedAt||pickSnap?.ts||nowIso();state.cbsUpdatedAt=pickSnap?.ts||obj.exportedAt||nowIso();state.cbsSource='scan';
-  state.confidenceStatus=obj?.confidenceStatus||'submitted';state.confidenceSource=obj?.confidenceSource||'CBS import';state.originalConfidenceStatus=state.confidenceStatus;
+  const importedStatus=cardImportStatus();
+  state.confidenceStatus=obj?.confidenceStatus||(importedStatus.picks===0?'unsubmitted':'submitted');state.confidenceSource=obj?.confidenceSource||(importedStatus.picks===0?'CBS slate — no picks submitted':'CBS import');state.originalConfidenceStatus=state.confidenceStatus;
   if(odds.length){state.marketUpdatedAt=obj.marketCapturedAt||oddsSnap?.ts||obj.exportedAt||nowIso();state.marketSource=obj.marketSource||'CBS scan odds'}
   state.originalCard=completeCard(state.games)?snapshotCard():state.originalCard;state.recommendedCard=null;state.optimization=null;state.applied=false;state.sim=null;save();
   try{await refreshResults(true)}catch{}
@@ -1535,19 +1550,19 @@ function renderDecision(){
   const o=state.optimization,f=dataFreshness(state),provisional=!(f.cbs.current&&f.market.current&&fieldModelComplete(state)),partialField=!!state.fieldModel?.observedEntries&&!fieldModelComplete(state),provisionalNote=(!f.cbs.current||!f.market.current)?' Inputs are stale, so treat this as provisional until refreshed.':partialField?' Remaining pool picks are still hidden, so treat this as provisional.':' CBS-wide ownership is a proxy, so treat this as provisional.';$('decisionCard').classList.toggle('stale',provisional);
   if(!o){$('decisionHeadline').textContent='WHAT SHOULD I DO?';$('decisionSub').textContent='Refresh the data, then Run Simulation. IQ will compare tested safety and upside strategies against the neutral field benchmark.';$('decisionPill').textContent=provisional?'REFRESH DATA':'READY';$('decisionPill').className='pill '+(provisional?'yellow':'blue');$('currentCardLabel').textContent='Current CBS card';$('recommendedCardLabel').textContent='IQ balanced card';$('currentTop2').textContent='— Top 2';$('currentWin').textContent='Win —';$('recommendedTop2').textContent='— Top 2';$('recommendedWin').textContent='Win —';$('frontier').style.display='none';$('recommendations').innerHTML='<div class="note" style="margin-top:10px">No recommendation yet.</div>';$('applyBtn').disabled=true;$('revertBtn').disabled=!state.originalCard;return}
   const cur=o.currentEval,rec=o.recommendedEval,dt=rec.top2-cur.top2,dw=rec.win-cur.win,actions=o.actions||[];
-  const placeholder=state.originalConfidenceStatus==='placeholder'&&!state.applied,neutral=o.neutralTop2??neutralTop2(state.poolSize),edge=rec.top2-neutral,calibrationError=Math.abs(o.fieldCalibrationError||0),calibrationOk=calibrationError<=.006;
-  $('currentCardLabel').textContent=placeholder?'Neutral field benchmark':'Current CBS card';$('recommendedCardLabel').textContent=`IQ ${(o.strategies?.[o.selectedStrategy]?.label||'balanced')} card`;
+  const generated=o.currentSource==='generated_baseline',placeholder=state.originalConfidenceStatus==='placeholder'&&!state.applied,neutral=o.neutralTop2??neutralTop2(state.poolSize),edge=rec.top2-neutral,calibrationError=Math.abs(o.fieldCalibrationError||0),calibrationOk=calibrationError<=.006;
+  $('currentCardLabel').textContent=generated?'Pregame baseline':(placeholder?'Neutral field benchmark':'Current CBS card');$('recommendedCardLabel').textContent=`IQ ${(o.strategies?.[o.selectedStrategy]?.label||'balanced')} card`;
   $('currentTop2').textContent=pct(placeholder?neutral:cur.top2,1)+' Top 2';$('currentWin').textContent='Win '+pct(placeholder?(o.neutralWin??neutralWin(state.poolSize)):cur.win,1);$('recommendedTop2').textContent=pct(rec.top2,1)+' Top 2';$('recommendedWin').textContent='Win '+pct(rec.win,1);
   const strategyOrder=['safest','balanced','aggressive','maxUpside'],strategies=o.strategies||{};$('frontier').style.display='block';
   $('strategyGrid').innerHTML=strategyOrder.filter(k=>strategies[k]).map(k=>{const p=strategies[k],e=p.eval.top2-cur.top2,selected=k===o.selectedStrategy,m=p.changes?.confidenceMoves||0,range=p.stability?`${pct(p.stability.top2Min,1)}–${pct(p.stability.top2Max,1)}`:'—',same=p.equivalentTo?`<br>Same card as ${strategies[p.equivalentTo]?.label||p.equivalentTo}`:'';return`<div class="strategy ${selected?'selected':''}"><div class="strategy-name">${p.label}${p.sameAsCurrent?' · CURRENT CARD':''}</div><div class="strategy-top2">${pct(p.eval.top2,1)}</div><div class="strategy-edge ${e>=0?'good':'bad'}">${e>=0?'+':''}${(e*100).toFixed(1)} pts vs current</div><div class="strategy-stats">Win ${pct(p.eval.win,1)} · Top 10% ${pct(p.eval.top10,0)}<br>Expected ${p.eval.avg.toFixed(1)} pts · Bottom half ${pct(p.eval.bottomHalf,0)}<br>${p.flips} leverage pick${p.flips===1?'':'s'} · ${m} confidence difference${m===1?'':'s'}<br>Seed Top-2 range ${range}${same}</div><button class="btn ${selected?'primary':''}" data-strategy="${k}" ${selected?'disabled':''}>${selected?'Selected':'Review this card'}</button></div>`}).join('');
   const hp=o.poolPrior,historyText=hp?` Historical pool prior: ${hp.weeks} completed weeks / ${hp.participantWeeks} participant-weeks, weighted ${(hp.reliability*100).toFixed(0)}%; field averaged ${hp.averageContrarianPicks.toFixed(1)} minority picks and Top-2 cards ${hp.top2AverageContrarianPicks.toFixed(1)}.`:' Historical pool prior unavailable.';
   const coverage=o.strategies?` Search evaluated ${o.strategies.searchEvaluationCount||o.strategies.candidateCount||0} card variants, retained ${o.strategies.candidateCount||0} distinct finalists, and validated them across ${o.strategies.validationSeeds||1} independent simulation seeds.`:'';
   const impact=o.currentControl?.fieldImpact,impactText=impact?.classification==='WIDELY_SHARED_LOSS'?` Locked result context: ${pct(impact.samePickShare,0)} of observed entries made the same losing pick; only ${pct(impact.advantagedShare,0)} gained on you from that result.`:'';
-  $('calibrationNote').textContent=`Current submitted card is the post-lock control. Neutral ${pct(neutral,2)} is context only, not the hurdle each strategy must clear.${impactText} Held-out field calibration: ${pct(o.fieldCalibration?.top2,2)} (${calibrationOk?'within tolerance':'outside tolerance'}).${coverage}${historyText} Each strategy uses its own objective; identical results are labeled instead of presented as false variety. Bottom half is simulated finish risk.`;
+  $('calibrationNote').textContent=`${generated?'CBS has no submitted card yet, so IQ generated a probability-ordered pregame baseline for comparison.':'Current submitted card is the post-lock control.'} Neutral ${pct(neutral,2)} is context only, not the hurdle each strategy must clear.${impactText} Held-out field calibration: ${pct(o.fieldCalibration?.top2,2)} (${calibrationOk?'within tolerance':'outside tolerance'}).${coverage}${historyText} Each strategy uses its own objective; identical results are labeled instead of presented as false variety. Bottom half is simulated finish risk.`;
   document.querySelectorAll('[data-strategy]').forEach(b=>b.onclick=()=>selectStrategy(b.dataset.strategy));
   const d=o.diagnostics||{},material=d.material??dt>=MIN_MATERIAL_TOP2_GAIN;
   if(!calibrationOk){$('decisionHeadline').textContent='MODEL CALIBRATION WARNING';$('decisionSub').textContent=`The held-out synthetic-field entry did not reproduce the neutral ${pct(neutral,2)} Top-2 baseline closely enough. Treat absolute odds and card comparisons as diagnostic only.${provisional?provisionalNote:''}`;$('decisionPill').textContent='DO NOT TRUST ODDS';$('decisionPill').className='pill red'}
-  else if(dt<=0){$('decisionHeadline').textContent='CURRENT CARD STILL LEADS THIS SEARCH';$('decisionSub').textContent=`The selected ${o.strategies?.[o.selectedStrategy]?.label||'balanced'} card did not improve Top-2 probability versus your actual post-lock card. Its ${pct(rec.top2,1)} result is conditional on the games still available—not a declaration that Thursday eliminated you. Review the other independently optimized cards for a different risk target.${provisional?provisionalNote:''}`;$('decisionPill').textContent='NO GAIN VS CURRENT';$('decisionPill').className='pill red'}
+  else if(dt<=0){$('decisionHeadline').textContent=generated?'PREGAME BASELINE LEADS THIS SEARCH':'CURRENT CARD STILL LEADS THIS SEARCH';$('decisionSub').textContent=`The selected ${o.strategies?.[o.selectedStrategy]?.label||'balanced'} card did not improve Top-2 probability versus your actual post-lock card. Its ${pct(rec.top2,1)} result is conditional on the games still available—not a declaration that Thursday eliminated you. Review the other independently optimized cards for a different risk target.${provisional?provisionalNote:''}`;$('decisionPill').textContent='NO GAIN VS CURRENT';$('decisionPill').className='pill red'}
   else if(actions.length&&material){$('decisionHeadline').textContent=`${(o.strategies?.[o.selectedStrategy]?.label||'Balanced').toUpperCase()}: ${pp(dt,1)} TOP-2 VS CURRENT`;$('decisionSub').textContent=`This strategy tests at ${pct(rec.top2,1)} Top 2 and ${pct(rec.win,1)} to win, with ${pct(rec.bottomHalf,0)} bottom-half risk. Expected points: ${rec.avg.toFixed(1)}. Versus your submitted card: ${pp(dt,1)} Top 2 and ${pp(dw,1)} Win.${provisional?provisionalNote:''}`;$('decisionPill').textContent=provisional?'PROVISIONAL GAIN':'TESTED GAIN';$('decisionPill').className='pill '+(provisional?'yellow':'green')}
   else{$('decisionHeadline').textContent='NO MATERIAL IMPROVEMENT VALIDATED';$('decisionSub').textContent=`After evaluating ${o.strategies?.searchEvaluationCount||o.strategies?.candidateCount||0} card variants and validating ${o.strategies?.candidateCount||0} finalists across ${o.strategies?.validationSeeds||1} independent simulation seeds, this selected strategy did not materially improve on your current card. That is a bounded search result—not proof that the current card is globally optimal. The selected card tests at ${pp(edge,1)} versus the neutral field benchmark.${provisional?provisionalNote:''}`;$('decisionPill').textContent=provisional?'PROVISIONAL':'NO MATERIAL EDGE';$('decisionPill').className='pill '+(provisional?'yellow':'green')}
   const locked=state.games.map((g,i)=>({g,i})).filter(x=>x.g.locked);
@@ -1606,15 +1621,19 @@ async function runSimulation(){
   if(!state.fieldModel?.observedEntries){
     show('Pool-specific picks are still hidden. IQ is using CBS-wide pick percentages as a provisional proxy—not your pool’s actual distribution.','yellow');
   }
-  if(!completeCard(state.games)){const cis=cardImportStatus(),issues=cardImportIssues(state.games),message=`IQ imported ${cis.picks}/${state.games.length} winners and ${cis.unique}/${state.games.length} unique confidence values. ${issues.slice(0,4).join(' · ')}${issues.length>4?` · plus ${issues.length-4} more issue(s)`:''}.`;show(message+' Refresh CBS Data with a scan taken while the CBS Picks page is open.','red');if(new URLSearchParams(location.search).get('action')==='refresh-simulate')renderRunProgress('cbs',message,true);return}
-  const f=dataFreshness(state);if(!state.originalCard)state.originalCard=snapshotCard();const current=snapshotCard();$('optBtn').disabled=true;$('progress').classList.add('show');$('progressText').textContent='Locking completed games and optimizing the remaining card…';
+  const cis=cardImportStatus();
+  const partialCard=cis.picks>0&&!cis.complete;
+  if(partialCard){const issues=cardImportIssues(state.games),message=`IQ imported a partial CBS card: ${cis.picks}/${state.games.length} winners and ${cis.unique}/${state.games.length} unique confidence values. ${issues.slice(0,4).join(' · ')}${issues.length>4?` · plus ${issues.length-4} more issue(s)`:''}.`;show(message+' Finish or clear the partial CBS card before simulating so IQ does not guess which entries are intentional.','red');if(new URLSearchParams(location.search).get('action')==='refresh-simulate')renderRunProgress('cbs',message,true);return}
+  const f=dataFreshness(state),baseline=simulationCurrentCard(state.games),current=baseline.card;
+  if(baseline.source==='submitted'&&!state.originalCard)state.originalCard=snapshotCard();
+  $('optBtn').disabled=true;$('progress').classList.add('show');$('progressText').textContent=baseline.source==='submitted'?'Locking completed games and optimizing the remaining card…':'Building four Week '+(state.week||'')+' strategies from the blank CBS slate…';
   if(typeof location!=='undefined'&&new URLSearchParams(location.search).get('action')==='refresh-simulate')renderRunProgress('simulation','Testing Safest, Balanced, Aggressive, and Max Upside cards…');
   await new Promise(r=>setTimeout(r,50));
   try{
     const result=runOptimizer(state.games,state.poolSize,{currentCard:current,searchIters:SEARCH_ITERS,finalIters:FINAL_ITERS,seed:20260908,fieldModel:state.fieldModel||null,poolPrior:poolHistoryPrior});
     const actions=cardActions(state.games,result.current,result.recommended,result.finalWorlds);
-    state.recommendedCard=result.recommended;state.optimization={modelBuild:MODEL_BUILD,current:result.current,currentEval:result.currentEval,currentControl:result.currentControl,recommended:result.recommended,recommendedEval:result.recommendedEval,actions,diagnostics:result.diagnostics,strategies:result.strategies,selectedStrategy:result.selectedStrategy,neutralTop2:result.neutralTop2,neutralWin:result.neutralWin,fieldCalibration:result.fieldCalibration,fieldCalibrationError:result.fieldCalibrationError,poolPrior:result.poolPrior,ranAt:nowIso(),provisional:!(f.cbs.current&&f.market.current&&fieldModelComplete(state))};state.sim=result.currentEval;state.applied=false;recordDecision('simulation',{current:result.current,recommended:result.recommended,metrics:{current:result.currentEval,currentControl:result.currentControl,recommended:result.recommendedEval,diagnostics:result.diagnostics,strategies:result.strategies,fieldCalibration:result.fieldCalibration,poolPrior:result.poolPrior}});save();render();
-    show(`Simulation complete. ${state.games.filter(g=>g.locked).length} locked game(s) frozen; remaining card optimized.`);
+    state.recommendedCard=result.recommended;state.optimization={modelBuild:MODEL_BUILD,currentSource:baseline.source,current:result.current,currentEval:result.currentEval,currentControl:result.currentControl,recommended:result.recommended,recommendedEval:result.recommendedEval,actions,diagnostics:result.diagnostics,strategies:result.strategies,selectedStrategy:result.selectedStrategy,neutralTop2:result.neutralTop2,neutralWin:result.neutralWin,fieldCalibration:result.fieldCalibration,fieldCalibrationError:result.fieldCalibrationError,poolPrior:result.poolPrior,ranAt:nowIso(),provisional:!(f.cbs.current&&f.market.current&&fieldModelComplete(state))};state.sim=result.currentEval;state.applied=false;recordDecision('simulation',{current:result.current,recommended:result.recommended,metrics:{current:result.currentEval,currentControl:result.currentControl,recommended:result.recommendedEval,diagnostics:result.diagnostics,strategies:result.strategies,fieldCalibration:result.fieldCalibration,poolPrior:result.poolPrior}});save();render();
+    show(baseline.source==='submitted'?`Simulation complete. ${state.games.filter(g=>g.locked).length} locked game(s) frozen; remaining card optimized.`:`Simulation complete. Four strategies built from the unsubmitted Week ${state.week} slate.`);
     if(typeof location!=='undefined'&&new URLSearchParams(location.search).get('action')==='refresh-simulate'){renderRunProgress('simulation','Four strategy cards are ready. Returning to Home…');location.replace('../../')}
   }catch(e){console.error(e);show('Optimizer error: '+e.message,'red');if(typeof location!=='undefined'&&new URLSearchParams(location.search).get('action')==='refresh-simulate')renderRunProgress('simulation','IQ could not finish the simulation: '+e.message,true)}
   finally{$('optBtn').disabled=false;$('progress').classList.remove('show')}
@@ -1650,7 +1669,7 @@ async function boot(){
     await runSimulation();
   }
 }
-globalThis.SFIQ_TEST={MODEL_BUILD,fullSlateLabGames,labCardDiff,renderModelLabResult,strategyCardRows,validConfidence,ensureValidCard,completeCard,cardImportIssues,dataFreshness,buildWorlds,buildWorldEnsemble,evaluateCard,evaluateProxyField,compareCards,lockedFieldImpact,robustMetrics,optimizeConfidence,optimizeTournamentConfidence,seedStability,searchCandidates,runOptimizer,buildStrategyFrontier,strategyObjective,strategyEquivalent,strategyFlipEvidence,strategyLaneConfig,cardStrategyDistance,chooseLaneCard,confidenceStrategyConfig,confidenceStrategyScore,safestExpectedCard,neutralTop2,neutralWin,cardActions,marketProb,iqProb,formProb,iqFormWeight,scenarioProbability,probabilityProfile,confidenceSafetyProb,confidenceCeilingFromProbability,confidenceCeiling,confidenceRiskPenalty,allocateConfidence,seedRiskCalibratedConfidence,expectedWinnerSide,strategicPickEvidence,upsidePickEvidence,cardChangeCost,ownProb,clone,refreshResults,refreshIqModel,isLocked,fixedWinner,parsePicks,extractStructuredCard,extractFieldModel,applyStructuredCard,normalizePoolHistory,poolConfidenceSignal,drawFieldPicks,SEED,normalizeTeam};
+globalThis.SFIQ_TEST={MODEL_BUILD,simulationCurrentCard,fullSlateLabGames,labCardDiff,renderModelLabResult,strategyCardRows,validConfidence,ensureValidCard,completeCard,cardImportIssues,dataFreshness,buildWorlds,buildWorldEnsemble,evaluateCard,evaluateProxyField,compareCards,lockedFieldImpact,robustMetrics,optimizeConfidence,optimizeTournamentConfidence,seedStability,searchCandidates,runOptimizer,buildStrategyFrontier,strategyObjective,strategyEquivalent,strategyFlipEvidence,strategyLaneConfig,cardStrategyDistance,chooseLaneCard,confidenceStrategyConfig,confidenceStrategyScore,safestExpectedCard,neutralTop2,neutralWin,cardActions,marketProb,iqProb,formProb,iqFormWeight,scenarioProbability,probabilityProfile,confidenceSafetyProb,confidenceCeilingFromProbability,confidenceCeiling,confidenceRiskPenalty,allocateConfidence,seedRiskCalibratedConfidence,expectedWinnerSide,strategicPickEvidence,upsidePickEvidence,cardChangeCost,ownProb,clone,refreshResults,refreshIqModel,isLocked,fixedWinner,parsePicks,extractStructuredCard,extractFieldModel,applyStructuredCard,normalizePoolHistory,poolConfidenceSignal,drawFieldPicks,SEED,normalizeTeam};
 if(!TESTING)boot();
 </script>
 </body></html>
