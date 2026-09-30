@@ -15,6 +15,8 @@ if(html.includes('View 0 changes and full card')||html.includes('winner flip')&&
 if(!html.includes('<summary>View all 16 picks</summary>'))throw new Error('Model Lab cards do not expose a simple full-card action');
 if(!html.includes('Compare strategies')||!html.includes('Scenario Lab'))throw new Error('Strategy comparison or Scenario Lab UI missing');
 if(!html.includes('Tradeoff vs Safest')||!html.includes('Avg score'))throw new Error('Model Lab does not frame average score as a strategy tradeoff');
+if(!html.includes('Results update automatically')||!html.includes('scenario-livebar'))throw new Error('Scenario Lab lacks live recompute UX');
+if(html.includes('id="scenarioRun"'))throw new Error('Scenario Lab still requires scrolling to a Run button');
 
 
 if(html.includes('EMBEDDED_CBS_SCAN')) throw new Error('CBS live scan must not be embedded in app code');
