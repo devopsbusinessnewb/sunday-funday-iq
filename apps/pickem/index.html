@@ -24,7 +24,14 @@ h2{font-size:16px;margin:0 0 12px}.hero{display:flex;justify-content:space-betwe
 .intel{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:9px}.inputs{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:8px}.inputs label{font-size:8px;color:var(--muted);text-transform:uppercase}.inputs input{width:100%;margin-top:4px;background:#081422;border:1px solid #29415e;color:var(--text);border-radius:8px;padding:7px}
 table{width:100%;border-collapse:collapse;font-size:12px;min-width:830px}.tablewrap{overflow:auto}th{text-align:left;color:var(--muted);font-size:9px;text-transform:uppercase;letter-spacing:.06em;padding:8px;border-bottom:1px solid var(--line)}td{padding:9px 8px;border-bottom:1px solid rgba(36,57,84,.55)}.callout{background:#0a1728;border:1px solid #203854;border-radius:12px;padding:12px}.callout b{display:block;margin-bottom:5px}.note{font-size:11px;color:var(--muted);line-height:1.5}.footer{margin-top:16px;text-align:center;font-size:10px;color:#69829e}
 .progress{display:none;margin-top:10px;font-size:11px;color:var(--muted)}.progress.show{display:block}.spinner{display:inline-block;width:10px;height:10px;border:2px solid #38516e;border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;margin-right:6px}@keyframes spin{to{transform:rotate(360deg)}}
-.full-card{background:#10243b;border:1px solid #3c627e;border-radius:16px;padding:16px;margin-bottom:16px}.full-card h2{font-size:22px;margin:4px 0}.full-card .meta{font-size:12px;color:var(--muted);line-height:1.5}.full-card .numbers{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0}.full-card .numbers div{background:#091729;border-radius:10px;padding:10px}.full-card .numbers strong{display:block;font-size:19px}.full-card .numbers span{font-size:10px;color:var(--muted)}.full-card .row{border:1px solid var(--line);border-radius:11px;margin:7px 0;background:#0a1728}.full-card summary{display:flex;align-items:center;gap:11px;padding:12px;cursor:pointer;list-style:none}.full-card summary::-webkit-details-marker{display:none}.full-card .points{width:38px;flex:none;font-size:23px;font-weight:900;color:var(--accent)}.full-card .pick{flex:1;min-width:0;font-size:17px;font-weight:850}.full-card .match{display:block;font-size:10px;font-weight:450;color:var(--muted);margin-top:2px}.full-card .flag{font-size:9px;color:#ffe49a;text-align:right;max-width:100px}.full-card .detail{border-top:1px solid var(--line);padding:10px 12px 13px;font-size:11px;line-height:1.5;color:var(--muted)}.full-card .detail b{color:var(--text)}body.card-mode .app > :not(.header):not(#banner):not(#fullCardView){display:none}body.card-mode .header .actions button{display:none}body.card-mode .header{margin-bottom:10px}body.run-mode .header,body.run-mode #banner{display:none}.run-screen{min-height:70vh;display:flex;flex-direction:column;justify-content:center}.run-screen h2{font-size:26px}.run-steps{display:grid;gap:9px;margin:22px 0}.run-step{display:flex;align-items:center;gap:12px;border:1px solid var(--line);border-radius:12px;padding:14px;color:var(--muted);background:#091729}.run-step::before{content:'';width:12px;height:12px;border:2px solid #55718f;border-radius:50%;flex:none}.run-step.active{color:var(--text);border-color:var(--accent)}.run-step.active::before{border-color:var(--accent);box-shadow:0 0 0 4px rgba(139,224,204,.12)}.run-step.done{color:var(--text)}.run-step.done::before{background:var(--accent);border-color:var(--accent)}.run-message.error{color:#ff7a89}
+.full-card{background:#10243b;border:1px solid #3c627e;border-radius:16px;padding:16px;margin-bottom:16px}.full-card h2{font-size:22px;margin:4px 0}.full-card .meta{font-size:12px;color:var(--muted);line-height:1.5}.full-card .numbers{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0}.full-card .numbers div{background:#091729;border-radius:10px;padding:10px}.full-card .numbers strong{display:block;font-size:19px}.full-card .numbers span{font-size:10px;color:var(--muted)}.full-card .row{border:1px solid var(--line);border-radius:11px;margin:7px 0;background:#0a1728}.full-card summary{display:flex;align-items:center;gap:11px;padding:12px;cursor:pointer;list-style:none}.full-card summary::-webkit-details-marker{display:none}.full-card .points{width:38px;flex:none;font-size:23px;font-weight:900;color:var(--accent)}.full-card .pick{flex:1;min-width:0;font-size:17px;font-weight:850}.full-card .match{display:block;font-size:10px;font-weight:450;color:var(--muted);margin-top:2px}.full-card .flag{font-size:9px;color:#ffe49a;text-align:right;max-width:100px}.full-card .detail{border-top:1px solid var(--line);padding:10px 12px 13px;font-size:11px;line-height:1.5;color:var(--muted)}.full-card .detail b{color:var(--text)}
+.lab-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:14px}
+.lab-card{background:#091729;border:1px solid #2d4b69;border-radius:13px;padding:13px}
+.lab-card h3{font-size:16px;margin:0}.lab-card .mandate{font-size:10px;color:var(--accent);font-weight:850;text-transform:uppercase;letter-spacing:.05em;margin-top:4px}
+.lab-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:10px}.lab-metric{background:#0e2036;border-radius:9px;padding:8px}.lab-metric b{display:block;font-size:16px}.lab-metric span{font-size:8px;color:var(--muted);text-transform:uppercase}
+.lab-diff{font-size:10px;color:var(--muted);line-height:1.5;margin-top:9px}.lab-card details{margin-top:10px}.lab-card summary{display:block;padding:0;font-size:11px;color:var(--accent);font-weight:800}.lab-picks{margin-top:8px;font-size:10px;line-height:1.55;color:var(--muted)}
+@media(max-width:650px){.lab-grid{grid-template-columns:1fr}.lab-metrics{grid-template-columns:repeat(3,1fr)}}
+body.card-mode .app > :not(.header):not(#banner):not(#fullCardView){display:none}body.card-mode .header .actions button{display:none}body.card-mode .header{margin-bottom:10px}body.run-mode .header,body.run-mode #banner{display:none}.run-screen{min-height:70vh;display:flex;flex-direction:column;justify-content:center}.run-screen h2{font-size:26px}.run-steps{display:grid;gap:9px;margin:22px 0}.run-step{display:flex;align-items:center;gap:12px;border:1px solid var(--line);border-radius:12px;padding:14px;color:var(--muted);background:#091729}.run-step::before{content:'';width:12px;height:12px;border:2px solid #55718f;border-radius:50%;flex:none}.run-step.active{color:var(--text);border-color:var(--accent)}.run-step.active::before{border-color:var(--accent);box-shadow:0 0 0 4px rgba(139,224,204,.12)}.run-step.done{color:var(--text)}.run-step.done::before{background:var(--accent);border-color:var(--accent)}.run-message.error{color:#ff7a89}
 @media(max-width:850px){.metric{grid-column:span 4}.half{grid-column:span 12}.games{grid-template-columns:1fr}.rec-grid{grid-template-columns:1fr 1fr}.strategy-grid{grid-template-columns:1fr 1fr}}@media(max-width:520px){.metric{grid-column:span 6}.header{display:block}.actions{justify-content:flex-start;margin-top:10px}.intel,.inputs,.data-grid{grid-template-columns:1fr 1fr}.card-state{grid-template-columns:1fr}.compare{grid-template-columns:1fr 1fr}.btn{padding:9px 10px}}
 </style>
 </head>
@@ -34,6 +41,7 @@ table{width:100%;border-collapse:collapse;font-size:12px;min-width:830px}.tablew
     <div class="brand"><h1>🏈 Sunday Funday IQ</h1><p>CBS Pick'em · Pick'em Coach</p><p style="font-size:10px;color:#5f7898">Build <span id="buildLabel">—</span> · independent strategy engines</p></div>
     <div class="actions">
       <a class="btn" href="../../">⌂ Home</a>
+      <a class="btn" href="?lab=1">Model Lab</a>
       <button class="btn primary" id="refreshBtn">Refresh CBS Data</button>
       <button class="btn" id="marketBtn">Refresh Market</button>
       <button class="btn" id="optBtn">Run Simulation</button>
@@ -1450,6 +1458,47 @@ function selectStrategy(key){
   state.recommendedCard=clone(p.card);state.applied=false;save();render();show(`${p.label} strategy selected. Review its upside and bust risk before applying.`);
 }
 function htmlEscape(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function fullSlateLabGames(games){
+  return clone(games).map(g=>({...g,locked:false,completed:false,winner:null,statusText:'',protectedConfidence:false}));
+}
+function labCardDiff(base,card){
+  let flips=0,confidenceMoves=0,confidenceDistance=0;
+  const changed=[];
+  for(let i=0;i<card.choices.length;i++){
+    if(card.choices[i]!==base.choices[i])flips++;
+    if(card.weights[i]!==base.weights[i])confidenceMoves++;
+    confidenceDistance+=Math.abs(card.weights[i]-base.weights[i]);
+  }
+  return{flips,confidenceMoves,confidenceDistance};
+}
+function renderModelLabResult(result,games){
+  const keys=['safest','balanced','aggressive','maxUpside'],labels={safest:'Safest',balanced:'Balanced',aggressive:'Aggressive',maxUpside:'Max Upside'};
+  const mandates={safest:'Protect expected score',balanced:'Risk-adjusted Top 2',aggressive:'Push Top-2 / win upside',maxUpside:'Highest rational ceiling'};
+  const safe=result.strategies.safest;
+  const cards=keys.map(key=>{
+    const p=result.strategies[key],d=labCardDiff(safe.card,p.card);
+    const deltaAvg=p.eval.avg-safe.eval.avg,deltaTop2=p.eval.top2-safe.eval.top2;
+    const rows=strategyCardRows(games,p.card,safe.card);
+    const changed=rows.filter(r=>r.changedWinner||r.changedConfidence);
+    return `<div class="lab-card"><h3>${labels[key]}</h3><div class="mandate">${mandates[key]}</div><div class="lab-metrics"><div class="lab-metric"><b>${pct(p.eval.top2)}</b><span>Top 2</span></div><div class="lab-metric"><b>${pct(p.eval.win)}</b><span>Win</span></div><div class="lab-metric"><b>${Number(p.eval.avg).toFixed(1)}</b><span>Expected</span></div></div><div class="lab-diff">${key==='safest'?'Baseline portfolio':`${d.flips} winner flip${d.flips===1?'':'s'} · ${d.confidenceMoves} confidence changes · ${deltaAvg>=0?'+':''}${deltaAvg.toFixed(1)} expected pts · ${deltaTop2>=0?'+':''}${(deltaTop2*100).toFixed(1)} pts Top-2 vs Safest`}<br>Bottom-half risk ${pct(p.eval.bottomHalf,0)}</div><details><summary>${key==='safest'?'View all 16 picks':`View ${changed.length} changes and full card`}</summary><div class="lab-picks">${rows.map(r=>`${r.confidence} — <b>${htmlEscape(r.team)}</b> <span>(${htmlEscape(r.game.away)} @ ${htmlEscape(r.game.home)})</span>${r.changedWinner?' · WINNER FLIP':''}${r.changedConfidence&&!r.changedWinner?' · confidence move':''}`).join('<br>')}</div></details></div>`;
+  }).join('');
+  return `<a class="btn" href="../../">← Back to CBS Home</a><h2>Full-Slate Model Lab</h2><p class="meta">Week ${state.week||'—'} · all ${games.length} games temporarily treated as open for model testing. This does not change your live CBS card, saved simulation, locked results, or CBS itself.</p><div class="callout" style="margin-top:12px"><b>What this tests</b><div class="note">Whether Safest, Balanced, Aggressive, and Max Upside behave as four genuinely different portfolio mandates when the optimizer has a full slate to work with. Results use the latest stored market/model inputs and are for architecture validation—not a retrospective claim about what should have been picked before kickoff.</div></div><div class="lab-grid">${cards}</div><div class="actions"><a class="btn primary" href="?lab=1&rerun=1">Rerun Model Lab</a><a class="btn" href="../../">CBS Home</a></div>`;
+}
+async function runModelLab(){
+  const view=$('fullCardView');document.body.classList.add('card-mode','run-mode');view.hidden=false;
+  view.innerHTML='<div class="run-screen"><div class="meta">SUNDAY FUNDAY IQ · MODEL LAB</div><h2>Building four full-slate portfolios</h2><p class="meta">Unlocking a temporary copy of the slate and testing all four strategy mandates. Your live card is untouched.</p><div class="run-steps"><div class="run-step done">Current inputs</div><div class="run-step active">Four strategy search</div><div class="run-step">Comparison</div></div></div>';
+  await new Promise(r=>setTimeout(r,40));
+  try{
+    const games=fullSlateLabGames(state.games);
+    let current=ensureValidCard(cardFromGames(games),games.length);
+    if(!completeCard(games))current=safestExpectedCard(games,current);
+    const result=runOptimizer(games,state.poolSize,{currentCard:current,searchIters:SEARCH_ITERS,finalIters:FINAL_ITERS,seed:20261313,fieldModel:null,poolPrior:poolHistoryPrior});
+    document.body.classList.remove('run-mode');view.innerHTML=renderModelLabResult(result,games);
+    return result;
+  }catch(e){
+    console.error(e);document.body.classList.remove('run-mode');view.innerHTML=`<h2>Model Lab could not finish</h2><p class="meta">${htmlEscape(e.message)}</p><div class="actions"><a class="btn primary" href="?lab=1">Try again</a><a class="btn" href="../../">Back to CBS Home</a></div>`;return null;
+  }
+}
 function renderDataDetails(key){
   const o=state.optimization,p=o?.strategies?.[key],f=dataFreshness(state),runAt=Date.parse(o?.ranAt||''),back=p?`?strategy=${encodeURIComponent(key)}`:'../../';
   const cbsTime=state.cbsUpdatedAt?new Date(state.cbsUpdatedAt).toLocaleString():'Unknown',marketTime=state.marketUpdatedAt?new Date(state.marketUpdatedAt).toLocaleString():'Unknown';
@@ -1464,8 +1513,9 @@ function renderRunProgress(stage='cbs',message='Loading your current CBS card…
 }
 function renderFullCard(){
   if(typeof location==='undefined')return;
-  const params=new URLSearchParams(location.search),key=params.get('strategy'),details=params.get('details')==='1',action=params.get('action'),view=$('fullCardView');
+  const params=new URLSearchParams(location.search),key=params.get('strategy'),details=params.get('details')==='1',lab=params.get('lab')==='1',action=params.get('action'),view=$('fullCardView');
   if(action==='refresh-simulate'){renderRunProgress();return}
+  if(lab){document.body.classList.add('card-mode');view.hidden=false;if(!view.innerHTML.trim())view.innerHTML='<h2>Full-Slate Model Lab</h2><p class="meta">Preparing full-slate strategy test…</p>';return}
   document.body.classList.remove('run-mode');
   if(!details&&(!key||!['safest','balanced','aggressive','maxUpside'].includes(key))){document.body.classList.remove('card-mode');view.hidden=true;return}
   document.body.classList.add('card-mode');view.hidden=false;
@@ -1589,6 +1639,7 @@ async function boot(){
   $('marketBtn').onclick=()=>refreshMarket(false);$('optBtn').onclick=runSimulation;$('saveBtn').onclick=()=>{state.confidenceStatus='user_final';state.confidenceSource='User-saved final card';recordDecision('saved_card',{current:snapshotCard(),recommended:state.recommendedCard,note:'User saved the current IQ card locally.'});save();render();show('Saved locally in this browser and added to this week’s decision history.')};$('applyBtn').onclick=applyRecommended;$('revertBtn').onclick=revertOriginal;
   render();
   await Promise.all([loadPublishedCbs({silent:true,onlyIfNewer:true}),loadPoolHistory()]);
+  if(new URLSearchParams(location.search).get('lab')==='1'){await runModelLab();return}
   if(new URLSearchParams(location.search).get('action')==='refresh-simulate'){
     renderRunProgress('cbs','Loading the published CBS card and latest revealed standings…');
     const imported=await loadPublishedCbs({silent:false,onlyIfNewer:false});
@@ -1599,7 +1650,7 @@ async function boot(){
     await runSimulation();
   }
 }
-globalThis.SFIQ_TEST={MODEL_BUILD,strategyCardRows,validConfidence,ensureValidCard,completeCard,cardImportIssues,dataFreshness,buildWorlds,buildWorldEnsemble,evaluateCard,evaluateProxyField,compareCards,lockedFieldImpact,robustMetrics,optimizeConfidence,optimizeTournamentConfidence,seedStability,searchCandidates,runOptimizer,buildStrategyFrontier,strategyObjective,strategyEquivalent,strategyFlipEvidence,strategyLaneConfig,cardStrategyDistance,chooseLaneCard,confidenceStrategyConfig,confidenceStrategyScore,safestExpectedCard,neutralTop2,neutralWin,cardActions,marketProb,iqProb,formProb,iqFormWeight,scenarioProbability,probabilityProfile,confidenceSafetyProb,confidenceCeilingFromProbability,confidenceCeiling,confidenceRiskPenalty,allocateConfidence,seedRiskCalibratedConfidence,expectedWinnerSide,strategicPickEvidence,upsidePickEvidence,cardChangeCost,ownProb,clone,refreshResults,refreshIqModel,isLocked,fixedWinner,parsePicks,extractStructuredCard,extractFieldModel,applyStructuredCard,normalizePoolHistory,poolConfidenceSignal,drawFieldPicks,SEED,normalizeTeam};
+globalThis.SFIQ_TEST={MODEL_BUILD,fullSlateLabGames,labCardDiff,renderModelLabResult,strategyCardRows,validConfidence,ensureValidCard,completeCard,cardImportIssues,dataFreshness,buildWorlds,buildWorldEnsemble,evaluateCard,evaluateProxyField,compareCards,lockedFieldImpact,robustMetrics,optimizeConfidence,optimizeTournamentConfidence,seedStability,searchCandidates,runOptimizer,buildStrategyFrontier,strategyObjective,strategyEquivalent,strategyFlipEvidence,strategyLaneConfig,cardStrategyDistance,chooseLaneCard,confidenceStrategyConfig,confidenceStrategyScore,safestExpectedCard,neutralTop2,neutralWin,cardActions,marketProb,iqProb,formProb,iqFormWeight,scenarioProbability,probabilityProfile,confidenceSafetyProb,confidenceCeilingFromProbability,confidenceCeiling,confidenceRiskPenalty,allocateConfidence,seedRiskCalibratedConfidence,expectedWinnerSide,strategicPickEvidence,upsidePickEvidence,cardChangeCost,ownProb,clone,refreshResults,refreshIqModel,isLocked,fixedWinner,parsePicks,extractStructuredCard,extractFieldModel,applyStructuredCard,normalizePoolHistory,poolConfidenceSignal,drawFieldPicks,SEED,normalizeTeam};
 if(!TESTING)boot();
 </script>
 </body></html>
