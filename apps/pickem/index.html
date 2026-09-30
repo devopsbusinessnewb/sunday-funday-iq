@@ -33,7 +33,8 @@ table{width:100%;border-collapse:collapse;font-size:12px;min-width:830px}.tablew
 @media(max-width:650px){.lab-grid{grid-template-columns:1fr}.lab-metrics{grid-template-columns:repeat(3,1fr)}}
 .compare-wrap{overflow:auto}.compare-table{width:100%;border-collapse:collapse;min-width:680px;font-size:11px;margin-top:12px}.compare-table th,.compare-table td{padding:9px 7px;border-bottom:1px solid var(--line);vertical-align:middle}.compare-table th{background:#10243b}.compare-table tr.consensus{background:#102a28}.compare-table tr.split{background:#211d2d}.compare-team{font-weight:850}.compare-conf{display:block;color:var(--muted);font-size:9px;margin-top:2px}
 .scenario-row{display:grid;grid-template-columns:minmax(120px,1fr) 1.4fr 88px;gap:8px;align-items:center;border:1px solid var(--line);background:#091729;border-radius:11px;padding:9px;margin-top:8px}.scenario-picks{display:grid;grid-template-columns:1fr 1fr;gap:5px}.scenario-pick{border:1px solid #345170;background:#152a46;color:var(--text);border-radius:8px;padding:9px;font-weight:800}.scenario-pick.selected{background:#174b40;border-color:#2b8d74;color:#b9ffe8}.scenario-conf{width:100%;background:#081422;border:1px solid #29415e;color:var(--text);border-radius:8px;padding:9px}.scenario-results{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin:12px 0}.scenario-note{font-size:10px;color:var(--muted);line-height:1.45}.scenario-dirty{color:var(--yellow);font-weight:800}
-@media(max-width:650px){.scenario-row{grid-template-columns:1fr}.scenario-results{grid-template-columns:repeat(2,1fr)}}
+.scenario-livebar{position:fixed;left:max(12px,env(safe-area-inset-left));right:max(12px,env(safe-area-inset-right));bottom:max(10px,env(safe-area-inset-bottom));z-index:50;background:#10243b;border:1px solid #416587;border-radius:14px;padding:10px 12px;box-shadow:0 10px 30px rgba(0,0,0,.35);display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center}.scenario-livebar .live-title{font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);font-weight:900}.scenario-livebar .live-main{font-size:11px;font-weight:800;line-height:1.45}.scenario-livebar .live-sub{font-size:9px;color:var(--muted);margin-top:2px}.scenario-livebar .btn{white-space:nowrap}.scenario-mode #fullCardView{padding-bottom:110px}
+@media(max-width:650px){.scenario-row{grid-template-columns:1fr}.scenario-results{grid-template-columns:repeat(2,1fr)}.scenario-livebar{grid-template-columns:1fr auto}.scenario-livebar .live-main{font-size:10px}}
 body.card-mode .app > :not(.header):not(#banner):not(#fullCardView){display:none}body.card-mode .header .actions button{display:none}body.card-mode .header{margin-bottom:10px}body.run-mode .header,body.run-mode #banner{display:none}.run-screen{min-height:70vh;display:flex;flex-direction:column;justify-content:center}.run-screen h2{font-size:26px}.run-steps{display:grid;gap:9px;margin:22px 0}.run-step{display:flex;align-items:center;gap:12px;border:1px solid var(--line);border-radius:12px;padding:14px;color:var(--muted);background:#091729}.run-step::before{content:'';width:12px;height:12px;border:2px solid #55718f;border-radius:50%;flex:none}.run-step.active{color:var(--text);border-color:var(--accent)}.run-step.active::before{border-color:var(--accent);box-shadow:0 0 0 4px rgba(139,224,204,.12)}.run-step.done{color:var(--text)}.run-step.done::before{background:var(--accent);border-color:var(--accent)}.run-message.error{color:#ff7a89}
 @media(max-width:850px){.metric{grid-column:span 4}.half{grid-column:span 12}.games{grid-template-columns:1fr}.rec-grid{grid-template-columns:1fr 1fr}.strategy-grid{grid-template-columns:1fr 1fr}}@media(max-width:520px){.metric{grid-column:span 6}.header{display:block}.actions{justify-content:flex-start;margin-top:10px}.intel,.inputs,.data-grid{grid-template-columns:1fr 1fr}.card-state{grid-template-columns:1fr}.compare{grid-template-columns:1fr 1fr}.btn{padding:9px 10px}}
 </style>
@@ -143,7 +144,7 @@ const POOL_HISTORY_URL='../../data/analysis/cbs-pool-history-report.json';
 const SEARCH_ITERS=700;
 const FINAL_ITERS=3000;
 const VALIDATION_SEEDS=3;
-const MODEL_BUILD='1.15.1';
+const MODEL_BUILD='1.15.2';
 const CONFIDENCE_TIE_BAND=.025;
 const MIN_OPTIONAL_FLIP_PROB=.40;
 const MIN_OPTIONAL_MARKET_PROB=.38;
@@ -1537,21 +1538,28 @@ function scenarioMetricsHtml(m){
 function renderScenarioEditor(key,result,games){
   const labels={safest:'Safest',balanced:'Balanced',aggressive:'Aggressive',maxUpside:'Max Upside'},base=result.strategies[key],view=$('fullCardView');
   if(!base){view.innerHTML='<h2>Scenario unavailable</h2>';return}
-  let scenarioCard=clone(base.card);
+  document.body.classList.add('scenario-mode');
+  let scenarioCard=clone(base.card),recalcTimer=null;
   const rows=games.map((g,i)=>({g,i})).sort((a,b)=>base.card.weights[b.i]-base.card.weights[a.i]);
-  view.innerHTML=`<a class="btn" href="?lab=1">← Model Lab</a><h2>Scenario Lab · ${labels[key]}</h2><p class="meta">Change winners or confidence points, then rerun against the exact same simulated field. Nothing here changes CBS or your saved model cards.</p><div id="scenarioMetrics">${scenarioMetricsHtml(scenarioMetrics(base.eval,base.eval))}<div class="scenario-note">Starting point: original ${labels[key]} card.</div></div><div>${rows.map(({g,i})=>`<div class="scenario-row"><div><b>${htmlEscape(g.away)} @ ${htmlEscape(g.home)}</b><div class="scenario-note">CBS ${g.awayPct}% / ${g.homePct}%</div></div><div class="scenario-picks"><button type="button" class="scenario-pick ${scenarioCard.choices[i]===0?'selected':''}" data-pick-index="${i}" data-side="0">${htmlEscape(g.away)}</button><button type="button" class="scenario-pick ${scenarioCard.choices[i]===1?'selected':''}" data-pick-index="${i}" data-side="1">${htmlEscape(g.home)}</button></div><select class="scenario-conf" data-conf-index="${i}">${Array.from({length:games.length},(_,j)=>j+1).map(v=>`<option value="${v}" ${scenarioCard.weights[i]===v?'selected':''}>${v} pts</option>`).join('')}</select></div>`).join('')}</div><div class="actions"><button type="button" class="btn primary" id="scenarioRun">Run this scenario</button><button type="button" class="btn" id="scenarioReset">Reset</button><a class="btn" href="?compare=1">Compare strategies</a></div>`;
+  view.innerHTML=`<a class="btn" href="?lab=1">← Model Lab</a><h2>Scenario Lab · ${labels[key]}</h2><p class="meta">Change any winner or confidence value. Results update automatically against the exact same simulated field. Nothing here changes CBS or your saved model cards.</p><div id="scenarioMetrics">${scenarioMetricsHtml(scenarioMetrics(base.eval,base.eval))}<div class="scenario-note">Starting point: original ${labels[key]} card.</div></div><div>${rows.map(({g,i})=>`<div class="scenario-row"><div><b>${htmlEscape(g.away)} @ ${htmlEscape(g.home)}</b><div class="scenario-note">CBS ${g.awayPct}% / ${g.homePct}%</div></div><div class="scenario-picks"><button type="button" class="scenario-pick ${scenarioCard.choices[i]===0?'selected':''}" data-pick-index="${i}" data-side="0">${htmlEscape(g.away)}</button><button type="button" class="scenario-pick ${scenarioCard.choices[i]===1?'selected':''}" data-pick-index="${i}" data-side="1">${htmlEscape(g.home)}</button></div><select class="scenario-conf" data-conf-index="${i}">${Array.from({length:games.length},(_,j)=>j+1).map(v=>`<option value="${v}" ${scenarioCard.weights[i]===v?'selected':''}>${v} pts</option>`).join('')}</select></div>`).join('')}</div><div class="actions"><button type="button" class="btn" id="scenarioResetBottom">Reset to ${labels[key]}</button><a class="btn" href="?compare=1">Compare strategies</a></div><div class="scenario-livebar" id="scenarioLiveBar" aria-live="polite"><div><div class="live-title">Live scenario</div><div class="live-main" id="scenarioLiveMain">No changes yet</div><div class="live-sub" id="scenarioLiveSub">Top 2 ${pct(base.eval.top2)} · Win ${pct(base.eval.win)} · Avg ${Number(base.eval.avg).toFixed(1)}</div></div><button type="button" class="btn" id="scenarioResetLive">Reset</button></div>`;
   const sync=()=>{
     view.querySelectorAll('[data-pick-index]').forEach(btn=>btn.classList.toggle('selected',scenarioCard.choices[Number(btn.dataset.pickIndex)]===Number(btn.dataset.side)));
     view.querySelectorAll('[data-conf-index]').forEach(sel=>sel.value=String(scenarioCard.weights[Number(sel.dataset.confIndex)]));
   };
-  view.querySelectorAll('[data-pick-index]').forEach(btn=>btn.addEventListener('click',()=>{scenarioCard.choices[Number(btn.dataset.pickIndex)]=Number(btn.dataset.side);sync()}));
-  view.querySelectorAll('[data-conf-index]').forEach(sel=>sel.addEventListener('change',()=>{scenarioSwapConfidence(scenarioCard,Number(sel.dataset.confIndex),Number(sel.value));sync()}));
-  view.querySelector('#scenarioRun').addEventListener('click',()=>{
+  const renderLive=()=>{
     const ev=evaluateCard(scenarioCard,result.finalWorlds),m=scenarioMetrics(base.eval,ev);
-    const wp=scenarioCard.choices.filter((x,i)=>x!==base.card.choices[i]).length,cp=scenarioCard.weights.filter((x,i)=>x!==base.card.weights[i]).length;
+    const wp=scenarioCard.choices.filter((x,i)=>x!==base.card.choices[i]).length,cp=scenarioCard.weights.filter((x,i)=>x!==base.card.weights[i]).length,edits=wp+cp;
     view.querySelector('#scenarioMetrics').innerHTML=scenarioMetricsHtml(m)+`<div class="scenario-note"><span class="scenario-dirty">${wp} winner change${wp===1?'':'s'} · ${cp} confidence changes</span> vs the starting ${labels[key]} card. Same simulated field, so the deltas isolate your edits.</div>`;
-  });
-  view.querySelector('#scenarioReset').addEventListener('click',()=>{scenarioCard=clone(base.card);sync();view.querySelector('#scenarioMetrics').innerHTML=scenarioMetricsHtml(scenarioMetrics(base.eval,base.eval))+`<div class="scenario-note">Reset to original ${labels[key]} card.</div>`});
+    const s=x=>x>=0?'+':'';
+    view.querySelector('#scenarioLiveMain').textContent=edits?`${edits} edit${edits===1?'':'s'} · Top 2 ${pct(m.top2)} (${s(m.top2Delta)}${(m.top2Delta*100).toFixed(1)}) · Win ${pct(m.win)} (${s(m.winDelta)}${(m.winDelta*100).toFixed(1)})`:'No changes yet';
+    view.querySelector('#scenarioLiveSub').textContent=`Avg ${Number(m.avg).toFixed(1)} (${s(m.avgDelta)}${m.avgDelta.toFixed(1)}) · Bottom half ${pct(m.bottomHalf,0)} (${s(m.bottomHalfDelta)}${(m.bottomHalfDelta*100).toFixed(0)})`;
+  };
+  const scheduleLive=()=>{clearTimeout(recalcTimer);recalcTimer=setTimeout(renderLive,60)};
+  const reset=()=>{scenarioCard=clone(base.card);sync();renderLive()};
+  view.querySelectorAll('[data-pick-index]').forEach(btn=>btn.addEventListener('click',()=>{scenarioCard.choices[Number(btn.dataset.pickIndex)]=Number(btn.dataset.side);sync();scheduleLive()}));
+  view.querySelectorAll('[data-conf-index]').forEach(sel=>sel.addEventListener('change',()=>{scenarioSwapConfidence(scenarioCard,Number(sel.dataset.confIndex),Number(sel.value));sync();scheduleLive()}));
+  view.querySelector('#scenarioResetBottom').addEventListener('click',reset);
+  view.querySelector('#scenarioResetLive').addEventListener('click',reset);
 }
 async function runStrategyComparison(){
   const view=$('fullCardView');document.body.classList.add('card-mode','run-mode');view.hidden=false;view.innerHTML='<div class="run-screen"><h2>Building strategy comparison</h2></div>';
@@ -1592,6 +1600,7 @@ function renderRunProgress(stage='cbs',message='Loading your current CBS card…
 }
 function renderFullCard(){
   if(typeof location==='undefined')return;
+  document.body.classList.remove('scenario-mode');
   const params=new URLSearchParams(location.search),key=params.get('strategy'),details=params.get('details')==='1',lab=params.get('lab')==='1',compare=params.get('compare')==='1',scenario=params.get('scenario'),action=params.get('action'),view=$('fullCardView');
   if(action==='refresh-simulate'){renderRunProgress();return}
   if(compare){document.body.classList.add('card-mode');view.hidden=false;if(!view.innerHTML.trim())view.innerHTML='<h2>Strategy Comparison</h2>';return}
