@@ -1566,11 +1566,9 @@ async function runModelLab(){
   view.innerHTML='<div class="run-screen"><div class="meta">SUNDAY FUNDAY IQ · MODEL LAB</div><h2>Building four full-slate portfolios</h2><p class="meta">Unlocking a temporary copy of the slate and testing all four strategy mandates. Your live card is untouched.</p><div class="run-steps"><div class="run-step done">Current inputs</div><div class="run-step active">Four strategy search</div><div class="run-step">Comparison</div></div></div>';
   await new Promise(r=>setTimeout(r,40));
   try{
-    const games=fullSlateLabGames(state.games);
-    let current=ensureValidCard(cardFromGames(games),games.length);
-    if(!completeCard(games))current=safestExpectedCard(games,current);
-    const result=runOptimizer(games,state.poolSize,{currentCard:current,searchIters:SEARCH_ITERS,finalIters:FINAL_ITERS,seed:20261313,fieldModel:null,poolPrior:poolHistoryPrior});
-    document.body.classList.remove('run-mode');view.innerHTML=renderModelLabResult(result,games);
+    const x=await buildFullSlateLabResult();
+    document.body.classList.remove('run-mode');view.innerHTML=renderModelLabResult(x.result,x.games);
+    const result=x.result;
     return result;
   }catch(e){
     console.error(e);document.body.classList.remove('run-mode');view.innerHTML=`<h2>Model Lab could not finish</h2><p class="meta">${htmlEscape(e.message)}</p><div class="actions"><a class="btn primary" href="?lab=1">Try again</a><a class="btn" href="../../">Back to CBS Home</a></div>`;return null;
@@ -1590,8 +1588,10 @@ function renderRunProgress(stage='cbs',message='Loading your current CBS card…
 }
 function renderFullCard(){
   if(typeof location==='undefined')return;
-  const params=new URLSearchParams(location.search),key=params.get('strategy'),details=params.get('details')==='1',lab=params.get('lab')==='1',action=params.get('action'),view=$('fullCardView');
+  const params=new URLSearchParams(location.search),key=params.get('strategy'),details=params.get('details')==='1',lab=params.get('lab')==='1',compare=params.get('compare')==='1',scenario=params.get('scenario'),action=params.get('action'),view=$('fullCardView');
   if(action==='refresh-simulate'){renderRunProgress();return}
+  if(compare){document.body.classList.add('card-mode');view.hidden=false;if(!view.innerHTML.trim())view.innerHTML='<h2>Strategy Comparison</h2>';return}
+  if(scenario&&['safest','balanced','aggressive','maxUpside'].includes(scenario)){document.body.classList.add('card-mode');view.hidden=false;if(!view.innerHTML.trim())view.innerHTML='<h2>Scenario Lab</h2>';return}
   if(lab){document.body.classList.add('card-mode');view.hidden=false;if(!view.innerHTML.trim())view.innerHTML='<h2>Full-Slate Model Lab</h2><p class="meta">Preparing full-slate strategy test…</p>';return}
   document.body.classList.remove('run-mode');
   if(!details&&(!key||!['safest','balanced','aggressive','maxUpside'].includes(key))){document.body.classList.remove('card-mode');view.hidden=true;return}
@@ -1720,8 +1720,11 @@ async function boot(){
   $('marketBtn').onclick=()=>refreshMarket(false);$('optBtn').onclick=runSimulation;$('saveBtn').onclick=()=>{state.confidenceStatus='user_final';state.confidenceSource='User-saved final card';recordDecision('saved_card',{current:snapshotCard(),recommended:state.recommendedCard,note:'User saved the current IQ card locally.'});save();render();show('Saved locally in this browser and added to this week’s decision history.')};$('applyBtn').onclick=applyRecommended;$('revertBtn').onclick=revertOriginal;
   render();
   await Promise.all([loadPublishedCbs({silent:true,onlyIfNewer:true}),loadPoolHistory()]);
-  if(new URLSearchParams(location.search).get('lab')==='1'){await runModelLab();return}
-  if(new URLSearchParams(location.search).get('action')==='refresh-simulate'){
+  const routeParams=new URLSearchParams(location.search);
+  if(routeParams.get('compare')==='1'){await runStrategyComparison();return}
+  if(['safest','balanced','aggressive','maxUpside'].includes(routeParams.get('scenario'))){await runScenarioLab(routeParams.get('scenario'));return}
+  if(routeParams.get('lab')==='1'){await runModelLab();return}
+  if(routeParams.get('action')==='refresh-simulate'){
     renderRunProgress('cbs','Loading the published CBS card and latest revealed standings…');
     const imported=await loadPublishedCbs({silent:false,onlyIfNewer:false});
     if(!imported){const message='CBS data could not be loaded. The old card was not simulated.';show(message+' Check the published CBS JSON, then try again.','red');renderRunProgress('cbs',message,true);return}
@@ -1731,7 +1734,7 @@ async function boot(){
     await runSimulation();
   }
 }
-globalThis.SFIQ_TEST={MODEL_BUILD,simulationCurrentCard,fullSlateLabGames,labCardDiff,renderModelLabResult,strategyCardRows,validConfidence,ensureValidCard,completeCard,cardImportIssues,dataFreshness,buildWorlds,buildWorldEnsemble,evaluateCard,evaluateProxyField,compareCards,lockedFieldImpact,robustMetrics,optimizeConfidence,optimizeTournamentConfidence,seedStability,searchCandidates,runOptimizer,buildStrategyFrontier,strategyObjective,strategyEquivalent,strategyFlipEvidence,strategyLaneConfig,cardStrategyDistance,chooseLaneCard,confidenceStrategyConfig,confidenceStrategyScore,safestExpectedCard,neutralTop2,neutralWin,cardActions,marketProb,iqProb,formProb,iqFormWeight,scenarioProbability,probabilityProfile,confidenceSafetyProb,confidenceCeilingFromProbability,confidenceCeiling,confidenceRiskPenalty,allocateConfidence,seedRiskCalibratedConfidence,expectedWinnerSide,strategicPickEvidence,upsidePickEvidence,cardChangeCost,ownProb,clone,refreshResults,refreshIqModel,isLocked,fixedWinner,parsePicks,extractStructuredCard,extractFieldModel,applyStructuredCard,normalizePoolHistory,poolConfidenceSignal,drawFieldPicks,SEED,normalizeTeam};
+globalThis.SFIQ_TEST={MODEL_BUILD,simulationCurrentCard,fullSlateLabGames,labCardDiff,renderModelLabResult,renderStrategyComparison,scenarioSwapConfidence,scenarioMetrics,strategyCardRows,validConfidence,ensureValidCard,completeCard,cardImportIssues,dataFreshness,buildWorlds,buildWorldEnsemble,evaluateCard,evaluateProxyField,compareCards,lockedFieldImpact,robustMetrics,optimizeConfidence,optimizeTournamentConfidence,seedStability,searchCandidates,runOptimizer,buildStrategyFrontier,strategyObjective,strategyEquivalent,strategyFlipEvidence,strategyLaneConfig,cardStrategyDistance,chooseLaneCard,confidenceStrategyConfig,confidenceStrategyScore,safestExpectedCard,neutralTop2,neutralWin,cardActions,marketProb,iqProb,formProb,iqFormWeight,scenarioProbability,probabilityProfile,confidenceSafetyProb,confidenceCeilingFromProbability,confidenceCeiling,confidenceRiskPenalty,allocateConfidence,seedRiskCalibratedConfidence,expectedWinnerSide,strategicPickEvidence,upsidePickEvidence,cardChangeCost,ownProb,clone,refreshResults,refreshIqModel,isLocked,fixedWinner,parsePicks,extractStructuredCard,extractFieldModel,applyStructuredCard,normalizePoolHistory,poolConfidenceSignal,drawFieldPicks,SEED,normalizeTeam};
 if(!TESTING)boot();
 </script>
 </body></html>
