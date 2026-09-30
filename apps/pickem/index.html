@@ -1500,6 +1500,67 @@ function renderModelLabResult(result,games){
   }).join('');
   return `<a class="btn" href="../../">← Back to CBS Home</a><h2>Full-Slate Model Lab</h2><p class="meta">Week ${state.week||'—'} · all ${games.length} games temporarily treated as open for model testing. This does not change your live CBS card, saved simulation, locked results, or CBS itself.</p><div class="callout" style="margin-top:12px"><b>What this tests</b><div class="note">Whether Safest, Balanced, Aggressive, and Max Upside behave as four genuinely different portfolio mandates when the optimizer has a full slate to work with. Each card is shown on its own terms. Cross-strategy pick comparisons belong in a separate comparison view, not inside these cards. Results use the latest stored market/model inputs and are for architecture validation—not a retrospective claim about what should have been picked before kickoff.</div></div><div class="lab-grid">${cards}</div><div class="actions"><a class="btn primary" href="?lab=1&rerun=1">Rerun Model Lab</a><a class="btn" href="?compare=1">Compare strategies</a><a class="btn" href="../../">CBS Home</a></div>`;
 }
+async function buildFullSlateLabResult(){
+  const games=fullSlateLabGames(state.games);
+  let current=ensureValidCard(cardFromGames(games),games.length);
+  if(!completeCard(games))current=safestExpectedCard(games,current);
+  const result=runOptimizer(games,state.poolSize,{currentCard:current,searchIters:SEARCH_ITERS,finalIters:FINAL_ITERS,seed:20261313,fieldModel:null,poolPrior:poolHistoryPrior});
+  return{games,result};
+}
+function renderStrategyComparison(result,games){
+  const keys=['safest','balanced','aggressive','maxUpside'];
+  const labels={safest:'Safest',balanced:'Balanced',aggressive:'Aggressive',maxUpside:'Max Upside'};
+  const rows=games.map((g,i)=>{
+    const picks=keys.map(k=>({team:teamFor(g,result.strategies[k].card.choices[i]),confidence:result.strategies[k].card.weights[i]}));
+    return{g,picks,sameWinner:new Set(picks.map(x=>x.team)).size===1};
+  }).sort((a,b)=>Number(a.sameWinner)-Number(b.sameWinner));
+  const unanimous=rows.filter(r=>r.sameWinner).length;
+  return `<a class="btn" href="?lab=1">← Model Lab</a><h2>Strategy Comparison</h2><p class="meta">Week ${state.week||'—'} · ${unanimous}/${rows.length} games have the same winner across all four strategies. Split games are shown first. Confidence appears under each team.</p><div class="compare-wrap"><table class="compare-table"><thead><tr><th>Game</th>${keys.map(k=>`<th>${labels[k]}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>`<tr class="${r.sameWinner?'consensus':'split'}"><td><b>${htmlEscape(r.g.away)} @ ${htmlEscape(r.g.home)}</b><span class="compare-conf">${r.sameWinner?'4/4 same winner':'Models split'}</span></td>${r.picks.map(x=>`<td><span class="compare-team">${htmlEscape(x.team)}</span><span class="compare-conf">${x.confidence} pts</span></td>`).join('')}</tr>`).join('')}</tbody></table></div><div class="actions"><a class="btn primary" href="?scenario=maxUpside">Experiment from Max Upside</a><a class="btn" href="?lab=1">Back to Model Lab</a></div>`;
+}
+function scenarioSwapConfidence(card,index,newValue){
+  const old=Number(card.weights[index]),other=card.weights.findIndex((w,i)=>i!==index&&Number(w)===Number(newValue));
+  if(other>=0)card.weights[other]=old;
+  card.weights[index]=Number(newValue);
+  return card;
+}
+function scenarioMetrics(baseEval,ev){
+  return{top2:ev.top2,win:ev.win,avg:ev.avg,bottomHalf:ev.bottomHalf,top2Delta:ev.top2-baseEval.top2,winDelta:ev.win-baseEval.win,avgDelta:ev.avg-baseEval.avg,bottomHalfDelta:ev.bottomHalf-baseEval.bottomHalf};
+}
+function scenarioMetricsHtml(m){
+  const s=x=>x>=0?'+':'';
+  return `<div class="scenario-results"><div class="lab-metric"><b>${pct(m.top2)}</b><span>Top 2 (${s(m.top2Delta)}${(m.top2Delta*100).toFixed(1)} pts)</span></div><div class="lab-metric"><b>${pct(m.win)}</b><span>Win (${s(m.winDelta)}${(m.winDelta*100).toFixed(1)} pts)</span></div><div class="lab-metric"><b>${Number(m.avg).toFixed(1)}</b><span>Expected (${s(m.avgDelta)}${m.avgDelta.toFixed(1)})</span></div><div class="lab-metric"><b>${pct(m.bottomHalf,0)}</b><span>Bottom half (${s(m.bottomHalfDelta)}${(m.bottomHalfDelta*100).toFixed(1)} pts)</span></div></div>`;
+}
+function renderScenarioEditor(key,result,games){
+  const labels={safest:'Safest',balanced:'Balanced',aggressive:'Aggressive',maxUpside:'Max Upside'},base=result.strategies[key],view=$('fullCardView');
+  if(!base){view.innerHTML='<h2>Scenario unavailable</h2>';return}
+  let scenarioCard=clone(base.card);
+  const rows=games.map((g,i)=>({g,i})).sort((a,b)=>base.card.weights[b.i]-base.card.weights[a.i]);
+  view.innerHTML=`<a class="btn" href="?lab=1">← Model Lab</a><h2>Scenario Lab · ${labels[key]}</h2><p class="meta">Change winners or confidence points, then rerun against the exact same simulated field. Nothing here changes CBS or your saved model cards.</p><div id="scenarioMetrics">${scenarioMetricsHtml(scenarioMetrics(base.eval,base.eval))}<div class="scenario-note">Starting point: original ${labels[key]} card.</div></div><div>${rows.map(({g,i})=>`<div class="scenario-row"><div><b>${htmlEscape(g.away)} @ ${htmlEscape(g.home)}</b><div class="scenario-note">CBS ${g.awayPct}% / ${g.homePct}%</div></div><div class="scenario-picks"><button type="button" class="scenario-pick ${scenarioCard.choices[i]===0?'selected':''}" data-pick-index="${i}" data-side="0">${htmlEscape(g.away)}</button><button type="button" class="scenario-pick ${scenarioCard.choices[i]===1?'selected':''}" data-pick-index="${i}" data-side="1">${htmlEscape(g.home)}</button></div><select class="scenario-conf" data-conf-index="${i}">${Array.from({length:games.length},(_,j)=>j+1).map(v=>`<option value="${v}" ${scenarioCard.weights[i]===v?'selected':''}>${v} pts</option>`).join('')}</select></div>`).join('')}</div><div class="actions"><button type="button" class="btn primary" id="scenarioRun">Run this scenario</button><button type="button" class="btn" id="scenarioReset">Reset</button><a class="btn" href="?compare=1">Compare strategies</a></div>`;
+  const sync=()=>{
+    view.querySelectorAll('[data-pick-index]').forEach(btn=>btn.classList.toggle('selected',scenarioCard.choices[Number(btn.dataset.pickIndex)]===Number(btn.dataset.side)));
+    view.querySelectorAll('[data-conf-index]').forEach(sel=>sel.value=String(scenarioCard.weights[Number(sel.dataset.confIndex)]));
+  };
+  view.querySelectorAll('[data-pick-index]').forEach(btn=>btn.addEventListener('click',()=>{scenarioCard.choices[Number(btn.dataset.pickIndex)]=Number(btn.dataset.side);sync()}));
+  view.querySelectorAll('[data-conf-index]').forEach(sel=>sel.addEventListener('change',()=>{scenarioSwapConfidence(scenarioCard,Number(sel.dataset.confIndex),Number(sel.value));sync()}));
+  view.querySelector('#scenarioRun').addEventListener('click',()=>{
+    const ev=evaluateCard(scenarioCard,result.finalWorlds),m=scenarioMetrics(base.eval,ev);
+    const wp=scenarioCard.choices.filter((x,i)=>x!==base.card.choices[i]).length,cp=scenarioCard.weights.filter((x,i)=>x!==base.card.weights[i]).length;
+    view.querySelector('#scenarioMetrics').innerHTML=scenarioMetricsHtml(m)+`<div class="scenario-note"><span class="scenario-dirty">${wp} winner change${wp===1?'':'s'} · ${cp} confidence changes</span> vs the starting ${labels[key]} card. Same simulated field, so the deltas isolate your edits.</div>`;
+  });
+  view.querySelector('#scenarioReset').addEventListener('click',()=>{scenarioCard=clone(base.card);sync();view.querySelector('#scenarioMetrics').innerHTML=scenarioMetricsHtml(scenarioMetrics(base.eval,base.eval))+`<div class="scenario-note">Reset to original ${labels[key]} card.</div>`});
+}
+async function runStrategyComparison(){
+  const view=$('fullCardView');document.body.classList.add('card-mode','run-mode');view.hidden=false;view.innerHTML='<div class="run-screen"><h2>Building strategy comparison</h2></div>';
+  await new Promise(r=>setTimeout(r,30));
+  try{const x=await buildFullSlateLabResult();document.body.classList.remove('run-mode');view.innerHTML=renderStrategyComparison(x.result,x.games)}
+  catch(e){document.body.classList.remove('run-mode');view.innerHTML=`<h2>Comparison could not finish</h2><p class="meta">${htmlEscape(e.message)}</p>`}
+}
+async function runScenarioLab(key){
+  const view=$('fullCardView');document.body.classList.add('card-mode','run-mode');view.hidden=false;view.innerHTML='<div class="run-screen"><h2>Opening Scenario Lab</h2></div>';
+  await new Promise(r=>setTimeout(r,30));
+  try{const x=await buildFullSlateLabResult();document.body.classList.remove('run-mode');renderScenarioEditor(key,x.result,x.games)}
+  catch(e){document.body.classList.remove('run-mode');view.innerHTML=`<h2>Scenario Lab could not finish</h2><p class="meta">${htmlEscape(e.message)}</p>`}
+}
 async function runModelLab(){
   const view=$('fullCardView');document.body.classList.add('card-mode','run-mode');view.hidden=false;
   view.innerHTML='<div class="run-screen"><div class="meta">SUNDAY FUNDAY IQ · MODEL LAB</div><h2>Building four full-slate portfolios</h2><p class="meta">Unlocking a temporary copy of the slate and testing all four strategy mandates. Your live card is untouched.</p><div class="run-steps"><div class="run-step done">Current inputs</div><div class="run-step active">Four strategy search</div><div class="run-step">Comparison</div></div></div>';
