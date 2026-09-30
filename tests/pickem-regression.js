@@ -14,11 +14,6 @@ if(!html.includes('href="?lab=1">Model Lab</a>')||!html.includes('Full-Slate Mod
 if(html.includes('View 0 changes and full card')||html.includes('winner flip')&&html.includes('Top-2 vs Safest'))throw new Error('Model Lab leaked cross-card comparison language into individual strategy cards');
 if(!html.includes('<summary>View all 16 picks</summary>'))throw new Error('Model Lab cards do not expose a simple full-card action');
 if(!html.includes('Compare strategies')||!html.includes('Scenario Lab'))throw new Error('Strategy comparison or Scenario Lab UI missing');
-const swapCard={choices:[0,1,0],weights:[1,2,3]};
-t.scenarioSwapConfidence(swapCard,0,3);
-if(JSON.stringify(swapCard.weights)!==JSON.stringify([3,2,1]))throw new Error('Scenario confidence edit did not swap values to preserve uniqueness');
-
-
 
 if(html.includes('EMBEDDED_CBS_SCAN')) throw new Error('CBS live scan must not be embedded in app code');
 if(!html.includes("LIVE_CBS_URL='../../data/live/cbs-pickem.json'")) throw new Error('Live CBS data URL missing');
@@ -30,6 +25,10 @@ const js=html.split('<script>',2)[1].split('</script>',1)[0];
 const ctx={console,globalThis:null,setTimeout,clearTimeout,fetch:async()=>({ok:false})};ctx.globalThis=ctx;ctx.__SFIQ_TESTING__=true;
 vm.createContext(ctx);vm.runInContext(js,ctx,{filename:'pickem-index.js'});
 const t=ctx.SFIQ_TEST,clone=x=>JSON.parse(JSON.stringify(x));
+const swapCard={choices:[0,1,0],weights:[1,2,3]};
+t.scenarioSwapConfidence(swapCard,0,3);
+if(JSON.stringify(swapCard.weights)!==JSON.stringify([3,2,1]))throw new Error('Scenario confidence edit did not swap values to preserve uniqueness');
+
 const blankGames=Array.from({length:16},(_,i)=>({id:'b'+i,away:'A'+i,home:'H'+i,awayPct:35,homePct:65,awayML:150,homeML:-170,total:44,pick:null,weight:null,locked:false,completed:false,winner:null}));
 const blankBaseline=t.simulationCurrentCard(blankGames);
 if(blankBaseline.source!=='generated_baseline'||blankBaseline.card.choices.some(x=>x!==0&&x!==1)||!t.validConfidence(blankBaseline.card.weights,16))throw new Error('Blank weekly slate cannot generate a valid pregame baseline');
