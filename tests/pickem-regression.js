@@ -10,6 +10,8 @@ if(!html.includes('CURRENT CARD STILL LEADS THIS SEARCH')||!html.includes('Safet
 if(!html.includes("state.originalConfidenceStatus==='placeholder'"))throw new Error('Placeholder confidence must not be presented as a meaningful baseline');
 if(!html.includes("sfiqPickemV04")) throw new Error('Clean standings storage migration missing');
 if(!html.includes('fieldModelComplete(state)')) throw new Error('Partial field must remain provisional');
+if(!html.includes('href="?lab=1">Model Lab</a>')||!html.includes('Full-Slate Model Lab'))throw new Error('Full-slate Model Lab UI missing');
+
 if(html.includes('EMBEDDED_CBS_SCAN')) throw new Error('CBS live scan must not be embedded in app code');
 if(!html.includes("LIVE_CBS_URL='../../data/live/cbs-pickem.json'")) throw new Error('Live CBS data URL missing');
 if(html.includes('id="phoneSyncBtn"')||html.includes("$('phoneSyncBtn').onclick=pasteCbsPhoneSync"))throw new Error('Unused iPhone shortcut control must stay removed');
@@ -20,6 +22,10 @@ const js=html.split('<script>',2)[1].split('</script>',1)[0];
 const ctx={console,globalThis:null,setTimeout,clearTimeout,fetch:async()=>({ok:false})};ctx.globalThis=ctx;ctx.__SFIQ_TESTING__=true;
 vm.createContext(ctx);vm.runInContext(js,ctx,{filename:'pickem-index.js'});
 const t=ctx.SFIQ_TEST,clone=x=>JSON.parse(JSON.stringify(x));
+const labSource=[{id:'g1',away:'A',home:'H',awayPct:40,homePct:60,awayML:120,homeML:-140,pick:'H',weight:1,locked:true,completed:true,winner:0,statusText:'Final'}];
+const labCopy=t.fullSlateLabGames(labSource);
+if(labCopy[0].locked||labCopy[0].completed||labCopy[0].winner!==null||labSource[0].locked!==true)throw new Error('Model Lab did not isolate/unlock a temporary slate copy');
+
 if(typeof t.strategyCardRows!=='function')throw new Error('Complete strategy card view missing');
 const displayGames=[{id:'a',away:'BUF',home:'KC',awayPct:70,homePct:30,awayML:-180,homeML:160,pick:'BUF',weight:1},{id:'b',away:'DET',home:'GB',awayPct:55,homePct:45,awayML:-120,homeML:110,pick:'DET',weight:2}];
 const display=t.strategyCardRows(displayGames,{choices:[0,1],weights:[2,1]},{choices:[0,0],weights:[1,2]});
