@@ -98,6 +98,9 @@ if(JSON.stringify(calibrated.weights)!==JSON.stringify(ownershipCalibrated.weigh
 const iqFallback=t.iqProb(t.SEED[0],0),marketFallback=t.marketProb(t.SEED[0],0);if(Math.abs(iqFallback-marketFallback)>1e-12)throw new Error('IQ probability must fall back to market without team ratings');
 const week2Parsed=t.parsePicks('1-0\nBENGALS\n37%\n0-1\nTEXANS\n63%');
 if(week2Parsed.length!==1||week2Parsed[0].away!=='CIN'||week2Parsed[0].home!=='HOU')throw new Error('Week 2 records were not parsed');
+const directGames=[{away:'A',home:'B'},{away:'C',home:'D'}];
+const directCard=t.extractStructuredCard({myCard:{picks:['B','C'],weights:[2,1]}},directGames);
+if(directCard.pickCount!==2||directCard.picks[0]!=='B'||directCard.weights[1]!==1)throw new Error('Sanitized direct CBS card was not imported');
 const pre=JSON.parse(fs.readFileSync(path.join(root,'tests/fixtures/cbs-pregame.json'),'utf8'));
 const post=JSON.parse(fs.readFileSync(path.join(root,'tests/fixtures/cbs-postgame.json'),'utf8'));
 const expectedPre={picks:['SEA','LAR','CIN','BUF','BAL','CAR','DET','JAX','PIT','TEN','GB','PHI','LV','LAC','DAL','KC'],weights:[1,15,14,13,11,10,16,9,7,6,5,12,3,8,4,2]};
