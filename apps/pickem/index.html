@@ -1086,6 +1086,9 @@ function extractCardFromStandingsSnapshots(obj,games){
 }
 
 function extractFieldModel(obj,games){
+  if(obj?.fieldModel&&Array.isArray(obj.fieldModel.locked)){
+    return {...obj.fieldModel,source:obj.fieldModel.source||'Sanitized CBS field model',capturedAt:obj.fieldModel.capturedAt||obj.exportedAt||nowIso()};
+  }
   const snaps=(obj?.snapshots||[]).filter(s=>/weekly standings/i.test(String(s?.title||''))||/\/standings\/weekly/i.test(String(s?.url||'')));
   const stand=newest(snaps); if(!stand)return null;
   const text=String(stand.text||''),n=games.length;
