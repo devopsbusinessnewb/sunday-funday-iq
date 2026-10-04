@@ -1151,6 +1151,11 @@ function extractFieldModel(obj,games){
 }
 
 function extractStructuredCard(obj,games){
+  const direct=obj?.myCard;
+  if(direct&&Array.isArray(direct.picks)&&Array.isArray(direct.weights)&&direct.picks.length===games.length&&direct.weights.length===games.length&&validConfidence(direct.weights,games.length)){
+    const picks=direct.picks.map(normalizeTeam);
+    if(picks.every((p,i)=>p===games[i].away||p===games[i].home))return{picks,weights:direct.weights.map(Number),pickCount:games.length,weightCount:games.length,source:'sanitized published CBS card'};
+  }
   const standingsCard=extractCardFromStandingsSnapshots(obj,games);
   if(standingsCard)return standingsCard;
   const n=games.length,roots=parseCaptureBodies(obj),eventBySlot=new Map(),candidateArrays=[];
