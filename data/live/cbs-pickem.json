@@ -1,62 +1,67 @@
 {
   "product": "CBS Pick'em IQ Bridge — sanitized live input",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "season": 2026,
   "week": 4,
   "poolSize": 94,
-  "exportedAt": "2026-10-04T03:41:39.411Z",
+  "exportedAt": "2026-10-04T15:27:05.013Z",
   "source": "Week 4 CBS Picks + Weekly Standings + CBS Sports odds capture",
   "privacy": "Pool/account identifiers and participant names removed before publication.",
   "confidenceStatus": "submitted",
-  "confidenceSource": "CBS Week 4 Picks page shows 16/16 picks",
-  "marketCapturedAt": "2026-10-04T03:40:39.676Z",
+  "confidenceSource": "Latest CBS Week 4 Picks / Weekly Standings",
+  "marketCapturedAt": "2026-10-04T15:27:00.710Z",
   "marketSource": "CBS Sports odds snapshot",
   "myCard": {
     "picks": [
       "CLE",
       "IND",
-      "BUF",
+      "NE",
       "BAL",
-      "CHI",
-      "JAX",
-      "DAL",
-      "NYG",
-      "PHI",
+      "NYJ",
+      "CIN",
+      "HOU",
+      "ARI",
+      "LAR",
       "GB",
       "MIN",
       "KC",
-      "SF",
+      "DEN",
       "SEA",
       "DET",
       "NO"
     ],
     "weights": [
       4,
-      16,
-      15,
-      14,
-      13,
       12,
-      11,
-      10,
+      1,
+      16,
+      3,
       9,
       8,
-      7,
-      6,
+      10,
+      11,
       5,
-      3,
+      15,
+      13,
+      6,
+      14,
       2,
-      1
+      7
     ]
   },
   "standingsSummary": {
-    "observedEntries": 84,
-    "completedGame": "PIT @ CLE",
-    "winner": "CLE",
+    "thursdayGame": "PIT @ CLE",
+    "thursdayWinner": "CLE",
+    "observedThursday": 84,
     "clevelandPicks": 30,
     "pittsburghPicks": 54,
-    "clevelandShare": 0.35714285714285715,
-    "pittsburghShare": 0.6428571428571429
+    "londonGame": "IND @ WAS",
+    "londonStatus": "3RD 12:41",
+    "observedLondon": 88,
+    "indianapolisPicks": 59,
+    "washingtonPicks": 29,
+    "userLiveRank": "8th",
+    "userLivePoints": 16
   },
   "market": [
     {
@@ -69,63 +74,63 @@
     {
       "away": "IND",
       "home": "WAS",
-      "awayML": -205,
-      "homeML": 188,
+      "awayML": -225,
+      "homeML": 196,
       "total": 46.5
     },
     {
       "away": "NE",
       "home": "BUF",
-      "awayML": 275,
-      "homeML": -305,
-      "total": 50.5
+      "awayML": 270,
+      "homeML": -333,
+      "total": 49.5
     },
     {
       "away": "TEN",
       "home": "BAL",
       "awayML": 550,
-      "homeML": -699,
+      "homeML": -769,
       "total": 42.5
     },
     {
       "away": "NYJ",
       "home": "CHI",
       "awayML": 155,
-      "homeML": -180,
+      "homeML": -178,
       "total": 43.5
     },
     {
       "away": "JAX",
       "home": "CIN",
-      "awayML": 122,
-      "homeML": -142,
+      "awayML": 124,
+      "homeML": -136,
       "total": 51.5
     },
     {
       "away": "DAL",
       "home": "HOU",
-      "awayML": 136,
-      "homeML": -155,
+      "awayML": 132,
+      "homeML": -148,
       "total": 48.5
     },
     {
       "away": "ARI",
       "home": "NYG",
       "awayML": -135,
-      "homeML": 118,
+      "homeML": 120,
       "total": 44.5
     },
     {
       "away": "LAR",
       "home": "PHI",
-      "awayML": -180,
-      "homeML": 165,
-      "total": 43.5
+      "awayML": -184,
+      "homeML": 164,
+      "total": 43
     },
     {
       "away": "GB",
       "home": "TB",
-      "awayML": -166,
+      "awayML": -156,
       "homeML": 145,
       "total": 39
     },
@@ -146,8 +151,8 @@
     {
       "away": "DEN",
       "home": "SF",
-      "awayML": 126,
-      "homeML": -146,
+      "awayML": 136,
+      "homeML": -152,
       "total": 48.5
     },
     {
@@ -160,30 +165,30 @@
     {
       "away": "DET",
       "home": "CAR",
-      "awayML": -192,
+      "awayML": -198,
       "homeML": 172,
       "total": 51.5
     },
     {
       "away": "ATL",
       "home": "NO",
-      "awayML": 112,
-      "homeML": -125,
-      "total": 48
+      "awayML": 110,
+      "homeML": -126,
+      "total": 47.5
     }
   ],
   "snapshots": [
     {
       "title": "NFL Football Tourney 2026 | Picks",
       "url": "sanitized://cbs-pickem/week-4",
-      "ts": "2026-10-04T03:40:20.411Z",
-      "text": "NFL Football Tourney 2026\nWeek 4\n16/16 Picks\n2-2\nSTEELERS\n68%\n3-1\nBROWNS\n32%\n1-2\nCOLTS\n68%\n1-2\nCOMMANDERS\n32%\n1-2\nPATRIOTS\n3%\n3-0\nBILLS\n97%\n0-3\nTITANS\n2%\n2-1\nRAVENS\n98%\n1-2\nJETS\n8%\n2-1\nBEARS\n92%\n2-1\nJAGUARS\n41%\n2-1\nBENGALS\n59%\n1-2\nCOWBOYS\n54%\n0-3\nTEXANS\n46%\n1-2\nCARDINALS\n43%\n2-1\nGIANTS\n57%\n1-2\nRAMS\n69%\n2-1\nEAGLES\n31%\n1-2\nPACKERS\n78%\n0-3\nBUCCANEERS\n22%\n0-3\nDOLPHINS\n2%\n3-0\nVIKINGS\n98%\n3-0\nCHIEFS\n81%\n3-0\nRAIDERS\n19%\n2-1\nBRONCOS\n14%\n3-0\n49ERS\n86%\n0-3\nCHARGERS\n5%\n2-1\nSEAHAWKS\n95%\n2-1\nLIONS\n89%\n1-2\nPANTHERS\n11%\n1-2\nFALCONS\n27%\n1-2\nSAINTS\n73%"
+      "ts": "2026-10-04T15:26:42.904Z",
+      "text": "Week 4\n16/16 Picks\n2-2\nSTEELERS\n68%\n3-1\nBROWNS\n32%\n1-2\nCOLTS\n69%\n1-2\nCOMMANDERS\n31%\n1-2\nPATRIOTS\n3%\n3-0\nBILLS\n97%\n0-3\nTITANS\n2%\n2-1\nRAVENS\n98%\n1-2\nJETS\n8%\n2-1\nBEARS\n92%\n2-1\nJAGUARS\n41%\n2-1\nBENGALS\n59%\n1-2\nCOWBOYS\n53%\n0-3\nTEXANS\n47%\n1-2\nCARDINALS\n44%\n2-1\nGIANTS\n56%\n1-2\nRAMS\n69%\n2-1\nEAGLES\n31%\n1-2\nPACKERS\n78%\n0-3\nBUCCANEERS\n22%\n0-3\nDOLPHINS\n2%\n3-0\nVIKINGS\n98%\n3-0\nCHIEFS\n81%\n3-0\nRAIDERS\n19%\n2-1\nBRONCOS\n15%\n3-0\n49ERS\n85%\n0-3\nCHARGERS\n6%\n2-1\nSEAHAWKS\n94%\n2-1\nLIONS\n89%\n1-2\nPANTHERS\n11%\n1-2\nFALCONS\n27%\n1-2\nSAINTS\n73%"
     },
     {
       "title": "NFL Football Tourney 2026 | Weekly Standings",
       "url": "sanitized://cbs-pickem/week-4/standings/weekly",
-      "ts": "2026-10-04T03:40:28.641Z",
-      "text": "Weekly Standings\nWeek 4\nFINAL\nPIT\nCLE\n24\n27\nSUN 8:30 AM\nIND\nWAS\nSUN 12:00 PM\nNE\nBUF\nSUN 12:00 PM\nTEN\nBAL\nSUN 12:00 PM\nNYJ\nCHI\nSUN 12:00 PM\nJAX\nCIN\nSUN 12:00 PM\nDAL\nHOU\nSUN 12:00 PM\nARI\nNYG\nSUN 12:00 PM\nLAR\nPHI\nSUN 12:00 PM\nGB\nTB\nSUN 3:05 PM\nMIA\nMIN\nSUN 3:25 PM\nKC\nLV\nSUN 3:25 PM\nDEN\nSF\nSUN 3:25 PM\nLAC\nSEA\nSUN 7:20 PM\nDET\nCAR\nMON 7:15 PM\nATL\nNO\nCLE\n(1)\nCLE\n(1)\nCLE\n(1)\nCLE\n(1)\nCLE\n(1)\nCLE\n(1)\nCLE\n(1)\nCLE\n(2)\nCLE\n(2)\nCLE\n(2)\nCLE\n(2)\nCLE\n(3)\nCLE\n(3)\nCLE\n(3)\nCLE\n(4)\nCLE\n(4)\nCLE\n(4)\nCLE\n(5)\nCLE\n(5)\nCLE\n(6)\nCLE\n(6)\nCLE\n(7)\nCLE\n(9)\nCLE\n(11)\nCLE\n(12)\nCLE\n(13)\nCLE\n(13)\nCLE\n(14)\nCLE\n(16)\nCLE\n(16)\nPIT\n(1)\nPIT\n(1)\nPIT\n(1)\nPIT\n(1)\nPIT\n(1)\nPIT\n(1)\nPIT\n(1)\nPIT\n(2)\nPIT\n(2)\nPIT\n(2)\nPIT\n(2)\nPIT\n(2)\nPIT\n(2)\nPIT\n(3)\nPIT\n(3)\nPIT\n(3)\nPIT\n(3)\nPIT\n(3)\nPIT\n(4)\nPIT\n(4)\nPIT\n(4)\nPIT\n(5)\nPIT\n(6)\nPIT\n(6)\nPIT\n(6)\nPIT\n(6)\nPIT\n(7)\nPIT\n(7)\nPIT\n(7)\nPIT\n(7)\nPIT\n(7)\nPIT\n(7)\nPIT\n(8)\nPIT\n(8)\nPIT\n(8)\nPIT\n(8)\nPIT\n(9)\nPIT\n(9)\nPIT\n(9)\nPIT\n(9)\nPIT\n(9)\nPIT\n(9)\nPIT\n(10)\nPIT\n(11)\nPIT\n(12)\nPIT\n(12)\nPIT\n(12)\nPIT\n(12)\nPIT\n(13)\nPIT\n(16)\nPIT\n(16)\nPIT\n(16)\nPIT\n(16)\nPIT\n(16)"
+      "ts": "2026-10-04T15:26:50.075Z",
+      "text": "Weekly Standings\nWeek 4\nSUN 12:00 PM\nNE\nBUF\nSUN 12:00 PM\nTEN\nBAL\nSUN 12:00 PM\nNYJ\nCHI\nSUN 12:00 PM\nJAX\nCIN\nSUN 12:00 PM\nDAL\nHOU\nSUN 12:00 PM\nARI\nNYG\nSUN 12:00 PM\nLAR\nPHI\nSUN 12:00 PM\nGB\nTB\nSUN 3:05 PM\nMIA\nMIN\nSUN 3:25 PM\nKC\nLV\nSUN 3:25 PM\nDEN\nSF\nSUN 3:25 PM\nLAC\nSEA\nSUN 7:20 PM\nDET\nCAR\nMON 7:15 PM\nATL\nNO\nCLE\n(16)\nCLE\n(16)\nCLE\n(14)\nCLE\n(13)\nCLE\n(13)\nCLE\n(12)\nCLE\n(11)\nCLE\n(9)\nCLE\n(7)\nCLE\n(6)\nCLE\n(6)\nCLE\n(5)\nCLE\n(5)\nCLE\n(4)\nCLE\n(4)\nCLE\n(4)\nCLE\n(3)\nCLE\n(3)\nCLE\n(3)\nCLE\n(2)\nCLE\n(2)\nCLE\n(2)\nCLE\n(2)\nCLE\n(1)\nCLE\n(1)\nCLE\n(1)\nCLE\n(1)\nCLE\n(1)\nCLE\n(1)\nCLE\n(1)\nPIT\n(16)\nPIT\n(16)\nPIT\n(16)\nPIT\n(16)\nPIT\n(16)\nPIT\n(13)\nPIT\n(12)\nPIT\n(12)\nPIT\n(12)\nPIT\n(12)\nPIT\n(11)\nPIT\n(10)\nPIT\n(9)\nPIT\n(9)\nPIT\n(9)\nPIT\n(9)\nPIT\n(9)\nPIT\n(9)\nPIT\n(8)\nPIT\n(8)\nPIT\n(8)\nPIT\n(8)\nPIT\n(7)\nPIT\n(7)\nPIT\n(7)\nPIT\n(7)\nPIT\n(7)\nPIT\n(7)\nPIT\n(6)\nPIT\n(6)\nPIT\n(6)\nPIT\n(6)\nPIT\n(5)\nPIT\n(4)\nPIT\n(4)\nPIT\n(4)\nPIT\n(3)\nPIT\n(3)\nPIT\n(3)\nPIT\n(3)\nPIT\n(3)\nPIT\n(2)\nPIT\n(2)\nPIT\n(2)\nPIT\n(2)\nPIT\n(2)\nPIT\n(2)\nPIT\n(1)\nPIT\n(1)\nPIT\n(1)\nPIT\n(1)\nPIT\n(1)\nPIT\n(1)\nPIT\n(1)\nIND\n(16)\nIND\n(16)\nIND\n(16)\nIND\n(15)\nIND\n(15)\nIND\n(15)\nIND\n(15)\nIND\n(14)\nIND\n(14)\nIND\n(14)\nIND\n(13)\nIND\n(13)\nIND\n(13)\nIND\n(12)\nIND\n(12)\nIND\n(12)\nIND\n(12)\nIND\n(11)\nIND\n(11)\nIND\n(11)\nIND\n(11)\nIND\n(10)\nIND\n(10)\nIND\n(10)\nIND\n(10)\nIND\n(10)\nIND\n(9)\nIND\n(9)\nIND\n(9)\nIND\n(9)\nIND\n(9)\nIND\n(9)\nIND\n(9)\nIND\n(8)\nIND\n(8)\nIND\n(8)\nIND\n(8)\nIND\n(8)\nIND\n(7)\nIND\n(7)\nIND\n(7)\nIND\n(7)\nIND\n(7)\nIND\n(6)\nIND\n(6)\nIND\n(6)\nIND\n(6)\nIND\n(5)\nIND\n(5)\nIND\n(5)\nIND\n(5)\nIND\n(5)\nIND\n(4)\nIND\n(3)\nIND\n(3)\nIND\n(2)\nIND\n(2)\nIND\n(2)\nIND\n(1)\nWAS\n(15)\nWAS\n(15)\nWAS\n(12)\nWAS\n(11)\nWAS\n(11)\nWAS\n(11)\nWAS\n(11)\nWAS\n(10)\nWAS\n(10)\nWAS\n(10)\nWAS\n(9)\nWAS\n(9)\nWAS\n(8)\nWAS\n(7)\nWAS\n(7)\nWAS\n(7)\nWAS\n(6)\nWAS\n(6)\nWAS\n(5)\nWAS\n(5)\nWAS\n(5)\nWAS\n(5)\nWAS\n(4)\nWAS\n(4)\nWAS\n(3)\nWAS\n(3)\nWAS\n(1)\nWAS\n(1)\nWAS\n(1)"
     }
   ]
 }
