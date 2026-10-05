@@ -59,7 +59,7 @@ jobs:
           node --check extensions/cbs-pickem-bridge/background.js
           node --check extensions/cbs-pickem-bridge/bridge.js
           node --check extensions/cbs-pickem-bridge/popup.js
-          python -m py_compile tools/cbs-bridge-server.py
+          python -m py_compile tools/cbs-bridge-server.py tools/cbs-collector.py
       - name: Run CBS regression suite
         shell: bash
         run: |
