@@ -1,178 +1,195 @@
 #!/usr/bin/env python3
-"""Local receiver for CBS Pick'em IQ Bridge.
+"""Local automation service for Sunday Funday IQ CBS Pick'em.
 
-Listens only on 127.0.0.1:43128. Accepts sanitized CBS live payloads from the
-Chrome extension and writes data/live/cbs-pickem.json inside the Sunday Funday
-IQ repo. When SFIQ_AUTO_PUSH=1, each changed payload is committed and pushed to
-main automatically.
-
-Raw CBS scans, pool IDs, participant names, cookies, auth headers, and browser
-session data are not accepted by this endpoint.
+Raw CBS page data is accepted only on localhost and is never written to disk.
+The service sanitizes it in memory, writes data/live/cbs-pickem.json, and may
+commit/push when SFIQ_AUTO_PUSH=1.
 """
-import json
-import os
-import subprocess
-from http.server import BaseHTTPRequestHandler, HTTPServer
+import json, os, re, subprocess, sys, threading
+from datetime import datetime, timezone
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
-OUTPUT = ROOT / 'data' / 'live' / 'cbs-pickem.json'
-AUTO_PUSH = os.environ.get('SFIQ_AUTO_PUSH', '0') == '1'
-MAX_BODY = 2_000_000
-FORBIDDEN_KEYS = (
-    'cookie', 'authorization', 'csrf', 'token', 'jwt', 'session', 'secret',
-    'poolid', 'graphqlsummary', 'captures',
-)
-FORBIDDEN_URL_BITS = ('picks.cbssports.com/football/pickem/pools/', '/graphql?')
+ROOT=Path(__file__).resolve().parents[1]
+OUTPUT=ROOT/'data'/'live'/'cbs-pickem.json'
+COLLECTOR=ROOT/'tools'/'cbs-collector.py'
+AUTO_PUSH=os.environ.get('SFIQ_AUTO_PUSH','0')=='1'
+ENTRY_NAME=os.environ.get('SFIQ_CBS_ENTRY_NAME','').strip()
+MAX_BODY=8_000_000
+FORBIDDEN_KEYS=('cookie','authorization','csrf','token','jwt','session','secret','poolid','graphqlsummary','captures')
+FORBIDDEN_URL_BITS=('picks.cbssports.com/football/pickem/pools/','/graphql?')
+TEAM_MAP={'STEELERS':'PIT','BROWNS':'CLE','COLTS':'IND','COMMANDERS':'WAS','PATRIOTS':'NE','BILLS':'BUF','TITANS':'TEN','RAVENS':'BAL','JETS':'NYJ','BEARS':'CHI','JAGUARS':'JAX','JAC':'JAX','BENGALS':'CIN','COWBOYS':'DAL','TEXANS':'HOU','CARDINALS':'ARI','GIANTS':'NYG','RAMS':'LAR','EAGLES':'PHI','PACKERS':'GB','BUCCANEERS':'TB','DOLPHINS':'MIA','VIKINGS':'MIN','CHIEFS':'KC','RAIDERS':'LV','BRONCOS':'DEN','49ERS':'SF','CHARGERS':'LAC','SEAHAWKS':'SEA','LIONS':'DET','PANTHERS':'CAR','FALCONS':'ATL','SAINTS':'NO'}
+ABBR=set(TEAM_MAP.values())
+SERVICE={'refreshing':False,'lastRefreshStarted':None,'lastRefreshFinished':None,'lastRefreshOk':None,'lastRefreshError':None,'lastPublishedAt':None,'lastCommit':None}
+LOCK=threading.Lock()
 
+def iso_now(): return datetime.now(timezone.utc).isoformat().replace('+00:00','Z')
+def norm_team(v):
+    x=str(v or '').upper().strip(); return TEAM_MAP.get(x,'JAX' if x=='JAC' else x)
+def run_git(*args,check=True): return subprocess.run(['git',*args],cwd=ROOT,check=check,text=True,capture_output=True)
+def lower_blob(v): return json.dumps(v,separators=(',',':')).lower()
 
-def run_git(*args, check=True):
-    return subprocess.run(['git', *args], cwd=ROOT, check=check, text=True, capture_output=True)
-
-
-def lower_blob(value):
-    return json.dumps(value, separators=(',', ':')).lower()
-
-
-def validate(payload):
-    if not isinstance(payload, dict):
-        raise ValueError('Payload must be an object')
-
-    blob = lower_blob(payload)
+def validate_sanitized(p):
+    if not isinstance(p,dict): raise ValueError('Payload must be an object')
+    blob=lower_blob(p)
     for key in FORBIDDEN_KEYS:
-        if f'"{key}"' in blob:
-            raise ValueError(f'Forbidden raw/private field detected: {key}')
+        if f'"{key}"' in blob: raise ValueError(f'Forbidden raw/private field detected: {key}')
     for bit in FORBIDDEN_URL_BITS:
-        if bit.lower() in blob:
-            raise ValueError('Authenticated CBS URL or GraphQL data detected')
+        if bit.lower() in blob: raise ValueError('Authenticated CBS URL or GraphQL data detected')
+    if p.get('product')!="CBS Pick'em IQ Bridge — sanitized live input": raise ValueError('Unexpected CBS payload product')
+    if not isinstance(p.get('season'),int) or not isinstance(p.get('week'),int): raise ValueError('Missing season/week')
+    if not isinstance(p.get('poolSize'),int) or p['poolSize']<1: raise ValueError('Missing pool size')
+    if p.get('confidenceStatus') not in ('submitted','unsubmitted','partial'): raise ValueError('Invalid confidenceStatus')
+    card=p.get('myCard')
+    if p.get('confidenceStatus')=='submitted':
+        if not isinstance(card,dict): raise ValueError('Submitted payload requires myCard')
+        picks,weights=card.get('picks'),card.get('weights')
+        if not isinstance(picks,list) or not isinstance(weights,list) or len(picks)!=len(weights): raise ValueError('Invalid myCard arrays')
+        n=len(picks)
+        if sorted(weights)!=list(range(1,n+1)): raise ValueError('Submitted confidence weights must be unique 1..N')
 
-    if payload.get('product') != "CBS Pick'em IQ Bridge — sanitized live input":
-        raise ValueError('Unexpected CBS payload product')
-    if not isinstance(payload.get('season'), int):
-        raise ValueError('Missing integer season')
-    if not isinstance(payload.get('week'), int):
-        raise ValueError('Missing integer week')
-    if not isinstance(payload.get('poolSize'), int) or payload['poolSize'] < 1:
-        raise ValueError('Missing pool size')
-    if payload.get('confidenceStatus') not in ('submitted', 'unsubmitted', 'partial'):
-        raise ValueError('Invalid confidenceStatus')
+def latest_snapshot(raw,pattern):
+    hits=[s for s in raw.get('snapshots',[]) if re.search(pattern,str(s.get('title',''))+' '+str(s.get('url','')),re.I)]
+    return max(hits,key=lambda s:str(s.get('ts','')),default=None)
 
-    card = payload.get('myCard')
-    if payload.get('confidenceStatus') == 'submitted':
-        if not isinstance(card, dict):
-            raise ValueError('Submitted payload requires myCard')
-        picks = card.get('picks')
-        weights = card.get('weights')
-        if not isinstance(picks, list) or not isinstance(weights, list) or len(picks) != len(weights):
-            raise ValueError('Invalid myCard arrays')
-        n = len(picks)
-        if n < 1 or sorted(weights) != list(range(1, n + 1)):
-            raise ValueError('Submitted confidence weights must be unique 1..N')
-        if any(not isinstance(p, str) or not p.strip() for p in picks):
-            raise ValueError('Invalid pick value')
+def parse_schedule(text):
+    head=text.split('\n\n\n1st\n',1)[0]
+    pat=re.compile(r'(?:FINAL|(?:\d+(?:ST|ND|RD|TH)\s+\d+:\d+)|(?:SUN|MON|THU)\s+[^\n]+)\n([A-Z]{2,3})\n([A-Z]{2,3})')
+    return [(norm_team(a),norm_team(h)) for a,h in pat.findall(head)]
 
-    market = payload.get('market')
-    if market is not None and not isinstance(market, list):
-        raise ValueError('market must be an array')
+def parse_ownership(text):
+    record=r'\d+-\d+(?:-\d+)?'; rx=re.compile(record+r'\s*\n([A-Z0-9 ]+?)\s*\n(\d+)%[\s\S]{0,120}?'+record+r'\s*\n([A-Z0-9 ]+?)\s*\n(\d+)%')
+    out={}
+    for a,ap,h,hp in rx.findall(text):
+        a,h=norm_team(a),norm_team(h)
+        if a in ABBR and h in ABBR: out[f'{a}|{h}']={'away':a,'home':h,'awayPct':int(ap),'homePct':int(hp)}
+    return out
 
-    field_model = payload.get('fieldModel')
-    if field_model is not None:
-        if not isinstance(field_model, dict) or not isinstance(field_model.get('locked', []), list):
-            raise ValueError('Invalid fieldModel')
-        for game in field_model.get('locked', []):
-            if not isinstance(game, dict) or not isinstance(game.get('observations', []), list):
-                raise ValueError('Invalid fieldModel locked game')
-            for obs in game.get('observations', []):
-                if not isinstance(obs, dict) or not isinstance(obs.get('pick'), str):
-                    raise ValueError('Invalid field observation')
-                if not isinstance(obs.get('weight'), int):
-                    raise ValueError('Invalid field observation weight')
+def parse_entry_card(text,name,n):
+    if not name: return None
+    starts=[m.start() for m in re.finditer(re.escape(name),text,re.I)]
+    if not starts: return None
+    seg=text[starts[-1]:]; nxt=re.search(r'\n\n\n\d+(?:st|nd|rd|th)\n',seg,re.I)
+    if nxt: seg=seg[:nxt.start()]
+    pairs=[]
+    for team,w in re.findall(r'\n([A-Z]{2,3})\n\((\d{1,2})\)',seg):
+        team=norm_team(team)
+        if team in ABBR: pairs.append((team,int(w)))
+    return pairs[:n] if pairs else None
 
+def parse_revealed_field(text,schedule,pool_size):
+    team_to_game={}
+    for i,(a,h) in enumerate(schedule): team_to_game[a]=i; team_to_game[h]=i
+    groups={i:[] for i in range(len(schedule))}
+    for team,w in re.findall(r'\n([A-Z]{2,3})\n\((\d{1,2})\)',text):
+        team=norm_team(team); i=team_to_game.get(team); w=int(w)
+        if i is not None and 1<=w<=len(schedule): groups[i].append({'pick':team,'weight':w})
+    threshold=max(5,int(max(1,pool_size)*.25)); locked=[]
+    for i,obs in groups.items():
+        if len(obs)<threshold: continue
+        a,h=schedule[i]; locked.append({'key':f'{a}|{h}','gameId':f'{a}-{h}','away':a,'home':h,'observations':obs,'totalObserved':len(obs)})
+    return locked
+
+def ownership_text(schedule,ownership):
+    lines=['CBS Pickem sanitized ownership']
+    for a,h in schedule:
+        r=ownership.get(f'{a}|{h}')
+        if r: lines.extend(['0-0',a,f"{r['awayPct']}%",'0-0',h,f"{r['homePct']}%"])
+    return '\n'.join(lines)
+
+def standings_text(schedule,locked):
+    lines=['Weekly Standings','Sanitized observations']
+    for a,h in schedule: lines.extend(['SUN',a,h])
+    for g in locked:
+        for o in g['observations']: lines.extend([o['pick'],f"({o['weight']})"])
+    return '\n'.join(lines)
+
+def load_previous():
+    try: return json.loads(OUTPUT.read_text(encoding='utf-8')) if OUTPUT.exists() else {}
+    except Exception: return {}
+
+def sanitize_raw(raw):
+    if not isinstance(raw,dict) or not isinstance(raw.get('snapshots'),list): raise ValueError('Invalid raw CBS capture')
+    picks=latest_snapshot(raw,r'\|\s*Picks\b'); standings=latest_snapshot(raw,r'Weekly Standings|/standings/weekly')
+    if not picks or not standings: raise ValueError('CBS capture must include Picks and Weekly Standings')
+    pt,st=str(picks.get('text','')),str(standings.get('text','')); schedule=parse_schedule(st)
+    if len(schedule)<2: raise ValueError('Could not reconstruct CBS weekly schedule')
+    prev=load_previous(); wm=re.search(r'\bWeek\s+(\d{1,2})\b',pt+'\n'+st,re.I); week=int(wm.group(1)) if wm else int(prev.get('week') or 0)
+    if week<1: raise ValueError('Could not determine CBS week')
+    season=int(prev.get('season') or datetime.now().year); pool_size=int(prev.get('poolSize') or 94); own=parse_ownership(pt)
+    if len(own)<max(2,len(schedule)//2): raise ValueError('Could not parse enough CBS ownership rows')
+    pairs=parse_entry_card(st,ENTRY_NAME,len(schedule)); pm=re.search(r'\b(\d+)\s*/\s*(\d+)\s+Picks\b',pt,re.I); picked=int(pm.group(1)) if pm else (len(pairs) if pairs else 0); total=int(pm.group(2)) if pm else len(schedule)
+    my_card=None; status='unsubmitted' if picked==0 else 'partial'
+    if pairs and len(pairs)==len(schedule):
+        teams=[p for p,_ in pairs]; weights=[w for _,w in pairs]
+        if sorted(weights)==list(range(1,len(schedule)+1)) and all(team in schedule[i] for i,team in enumerate(teams)):
+            my_card={'picks':teams,'weights':weights}; status='submitted'
+    if picked==total and status!='submitted': raise ValueError('CBS shows a complete card but the sanitizer could not reconstruct it. Set SFIQ_CBS_ENTRY_NAME on the mini-PC.')
+    locked=parse_revealed_field(st,schedule,pool_size); exported=str(raw.get('exportedAt') or iso_now())
+    payload={'product':"CBS Pick'em IQ Bridge — sanitized live input",'version':'2.0.0','season':season,'week':week,'poolSize':pool_size,'exportedAt':exported,'source':'Automated local CBS browser capture','privacy':'Raw CBS session/page data sanitized locally; pool/account identifiers and participant names not published.','confidenceStatus':status,'confidenceSource':'Automated CBS Weekly Standings row' if my_card else 'CBS Picks status','marketCapturedAt':prev.get('marketCapturedAt'),'marketSource':prev.get('marketSource'),'market':prev.get('market',[]),'fieldModel':{'source':'Sanitized CBS revealed-pool observations','capturedAt':standings.get('ts') or exported,'observedEntries':max([g['totalObserved'] for g in locked],default=0),'locked':locked},'snapshots':[{'title':'NFL Football Tourney | Picks','url':f'sanitized://cbs-pickem/week-{week}','ts':picks.get('ts') or exported,'text':ownership_text(schedule,own)},{'title':'NFL Football Tourney | Weekly Standings','url':f'sanitized://cbs-pickem/week-{week}/standings/weekly','ts':standings.get('ts') or exported,'text':standings_text(schedule,locked)}]}
+    if my_card: payload['myCard']=my_card
+    return payload
 
 def push_snapshot():
-    if not AUTO_PUSH:
-        return {'pushed': False, 'reason': 'SFIQ_AUTO_PUSH is not enabled'}
+    if not AUTO_PUSH: return {'pushed':False,'reason':'SFIQ_AUTO_PUSH is not enabled'}
+    rel=str(OUTPUT.relative_to(ROOT)).replace('\\','/'); run_git('add',rel)
+    if run_git('diff','--cached','--quiet',check=False).returncode==0: return {'pushed':False,'reason':'No CBS data changes'}
+    week=json.loads(OUTPUT.read_text(encoding='utf-8')).get('week','unknown'); run_git('commit','-m',f'data: refresh CBS week {week}')
+    push=run_git('push','origin','main',check=False)
+    if push.returncode!=0:
+        rebase=run_git('pull','--rebase','--autostash','origin','main',check=False)
+        if rebase.returncode!=0: raise RuntimeError('GitHub sync needs attention: '+(rebase.stderr.strip() or rebase.stdout.strip()))
+        push=run_git('push','origin','main',check=False)
+        if push.returncode!=0: raise RuntimeError('Push failed: '+(push.stderr.strip() or push.stdout.strip()))
+    commit=run_git('rev-parse','--short','HEAD').stdout.strip()
+    with LOCK: SERVICE['lastCommit']=commit
+    return {'pushed':True,'commit':commit}
 
-    rel = str(OUTPUT.relative_to(ROOT)).replace('\\', '/')
-    run_git('add', rel)
-    if run_git('diff', '--cached', '--quiet', check=False).returncode == 0:
-        return {'pushed': False, 'reason': 'No CBS data changes'}
+def publish(payload):
+    validate_sanitized(payload); OUTPUT.parent.mkdir(parents=True,exist_ok=True); tmp=OUTPUT.with_suffix('.json.tmp'); tmp.write_text(json.dumps(payload,indent=2)+'\n',encoding='utf-8'); tmp.replace(OUTPUT); result=push_snapshot()
+    with LOCK: SERVICE['lastPublishedAt']=payload.get('exportedAt') or iso_now()
+    return result
 
-    data = json.loads(OUTPUT.read_text(encoding='utf-8'))
-    week = data.get('week', 'unknown')
-    run_git('commit', '-m', f'data: refresh CBS week {week}')
-
-    push = run_git('push', 'origin', 'main', check=False)
-    if push.returncode != 0:
-        rebase = run_git('pull', '--rebase', '--autostash', 'origin', 'main', check=False)
-        if rebase.returncode != 0:
-            raise RuntimeError('CBS payload committed locally, but GitHub sync needs attention: ' + (rebase.stderr.strip() or rebase.stdout.strip()))
-        push = run_git('push', 'origin', 'main', check=False)
-        if push.returncode != 0:
-            raise RuntimeError('CBS payload committed locally, but push failed: ' + (push.stderr.strip() or push.stdout.strip()))
-
-    return {'pushed': True, 'commit': run_git('rev-parse', '--short', 'HEAD').stdout.strip()}
-
+def run_collector():
+    with LOCK:
+        if SERVICE['refreshing']: return
+        SERVICE.update({'refreshing':True,'lastRefreshStarted':iso_now(),'lastRefreshFinished':None,'lastRefreshOk':None,'lastRefreshError':None})
+    try:
+        proc=subprocess.run([sys.executable,str(COLLECTOR)],cwd=ROOT,text=True,capture_output=True,timeout=180)
+        if proc.returncode!=0: raise RuntimeError((proc.stderr or proc.stdout or 'CBS collector failed').strip())
+        with LOCK: SERVICE['lastRefreshOk']=True
+    except Exception as exc:
+        with LOCK: SERVICE['lastRefreshOk']=False; SERVICE['lastRefreshError']=str(exc)
+    finally:
+        with LOCK: SERVICE['refreshing']=False; SERVICE['lastRefreshFinished']=iso_now()
 
 class Handler(BaseHTTPRequestHandler):
-    def _cors(self):
-        self.send_header('Access-Control-Allow-Origin', '*')
-        self.send_header('Access-Control-Allow-Headers', 'Content-Type')
-        self.send_header('Access-Control-Allow-Methods', 'POST,OPTIONS')
-
-    def do_OPTIONS(self):
-        self.send_response(204)
-        self._cors()
-        self.end_headers()
-
+    def _cors(self): self.send_header('Access-Control-Allow-Origin','*'); self.send_header('Access-Control-Allow-Headers','Content-Type'); self.send_header('Access-Control-Allow-Methods','GET,POST,OPTIONS')
+    def _json(self,code,value):
+        body=json.dumps(value).encode(); self.send_response(code); self._cors(); self.send_header('Content-Type','application/json'); self.send_header('Cache-Control','no-store'); self.end_headers(); self.wfile.write(body)
+    def do_OPTIONS(self): self.send_response(204); self._cors(); self.end_headers()
     def do_GET(self):
-        if self.path != '/health':
-            self.send_response(404)
-            self._cors()
-            self.end_headers()
-            return
-        body = json.dumps({'ok': True, 'service': 'CBS IQ sync', 'autoPush': AUTO_PUSH}).encode()
-        self.send_response(200)
-        self._cors()
-        self.send_header('Content-Type', 'application/json')
-        self.end_headers()
-        self.wfile.write(body)
-
+        if self.path=='/health': return self._json(200,{'ok':True,'service':'CBS IQ automation','autoPush':AUTO_PUSH})
+        if self.path=='/status':
+            with LOCK: status=dict(SERVICE)
+            return self._json(200,{'ok':True,'autoPush':AUTO_PUSH,**status})
+        self._json(404,{'ok':False,'error':'Not found'})
     def do_POST(self):
-        if self.path != '/cbs-sync':
-            self.send_response(404)
-            self._cors()
-            self.end_headers()
-            return
         try:
-            length = int(self.headers.get('Content-Length', '0'))
-            if length <= 0 or length > MAX_BODY:
-                raise ValueError('Invalid payload size')
-            payload = json.loads(self.rfile.read(length).decode('utf-8'))
-            validate(payload)
-            OUTPUT.parent.mkdir(parents=True, exist_ok=True)
-            OUTPUT.write_text(json.dumps(payload, indent=2) + '\n', encoding='utf-8')
-            result = push_snapshot()
-            body = json.dumps({'ok': True, 'path': str(OUTPUT.relative_to(ROOT)), **result}).encode()
-            self.send_response(200)
-            self._cors()
-            self.send_header('Content-Type', 'application/json')
-            self.end_headers()
-            self.wfile.write(body)
-        except Exception as exc:
-            body = json.dumps({'ok': False, 'error': str(exc)}).encode()
-            self.send_response(400)
-            self._cors()
-            self.send_header('Content-Type', 'application/json')
-            self.end_headers()
-            self.wfile.write(body)
+            if self.path=='/refresh':
+                with LOCK: busy=SERVICE['refreshing']
+                if not busy: threading.Thread(target=run_collector,daemon=True).start()
+                return self._json(202,{'ok':True,'started':not busy,'alreadyRunning':busy})
+            length=int(self.headers.get('Content-Length','0'))
+            if length<=0 or length>MAX_BODY: raise ValueError('Invalid payload size')
+            body=json.loads(self.rfile.read(length).decode('utf-8'))
+            if self.path=='/cbs-capture':
+                payload=sanitize_raw(body); result=publish(payload); return self._json(200,{'ok':True,'sanitized':True,'week':payload['week'],'confidenceStatus':payload['confidenceStatus'],**result})
+            if self.path=='/cbs-sync':
+                result=publish(body); return self._json(200,{'ok':True,'sanitized':True,'week':body.get('week'),**result})
+            self._json(404,{'ok':False,'error':'Not found'})
+        except Exception as exc: self._json(400,{'ok':False,'error':str(exc)})
+    def log_message(self,fmt,*args): print('[CBS IQ]',fmt%args)
 
-    def log_message(self, fmt, *args):
-        print('[CBS IQ]', fmt % args)
-
-
-if __name__ == '__main__':
-    print(f'CBS IQ sync listening on http://127.0.0.1:43128 -> {OUTPUT}')
-    print('Auto-push:', 'ON' if AUTO_PUSH else 'OFF')
-    print('Only sanitized CBS payloads are accepted. Raw CBS scans are rejected.')
-    HTTPServer(('127.0.0.1', 43128), Handler).serve_forever()
+if __name__=='__main__':
+    print(f'CBS IQ automation listening on http://127.0.0.1:43128 -> {OUTPUT}'); print('Auto-push:','ON' if AUTO_PUSH else 'OFF'); print('Entry name configured:','YES' if ENTRY_NAME else 'NO'); ThreadingHTTPServer(('127.0.0.1',43128),Handler).serve_forever()
