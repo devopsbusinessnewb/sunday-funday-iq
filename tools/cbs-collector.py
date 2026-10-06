@@ -27,6 +27,11 @@ def visit(page,url,wait_ms=3500):
     page.goto(url,wait_until='domcontentloaded',timeout=60000); page.wait_for_timeout(wait_ms); return {'text':page_text(page)[:1_500_000],'title':page.title(),'ts':iso_now(),'url':page.url}
 def assert_logged_in(snap):
     if 'picks.cbssports.com' not in snap.get('url','') or '/football/pickem/' not in snap.get('url','') or 'Week ' not in snap.get('text',''): raise RuntimeError('CBS login/session appears expired. Re-run with --login.')
+def parse_week(*texts):
+    joined='\n'.join(str(t or '') for t in texts)
+    m=re.search(r'\bWeek\s+(\d{1,2})\b',joined,re.I)
+    if not m: raise RuntimeError('Could not determine current CBS week before loading odds.')
+    return int(m.group(1))
 def post_capture(capture):
     req=urllib.request.Request(RECEIVER,data=json.dumps(capture).encode(),method='POST',headers={'Content-Type':'application/json'})
     try:
@@ -43,21 +48,29 @@ def login_mode():
             page=ctx.pages[0] if ctx.pages else ctx.new_page(); page.goto(POOL_URL,wait_until='domcontentloaded',timeout=60000)
             print('Log into CBS in the dedicated Sunday Funday IQ Chrome window.'); input('When the Pick’em pool is visible, press Enter here... '); assert_logged_in({'url':page.url,'text':page_text(page)}); print('CBS session saved in',PROFILE_DIR)
         finally: ctx.close()
-def collect():
+def collect(debug_odds=False):
     if not POOL_URL: raise RuntimeError('Set SFIQ_CBS_POOL_URL on the mini-PC.')
     with sync_playwright() as p:
         ctx=open_context(p,HEADLESS)
         try:
-            page=ctx.pages[0] if ctx.pages else ctx.new_page(); picks=visit(page,POOL_URL); assert_logged_in(picks); standings=visit(page,POOL_URL+'/standings/weekly',4000); odds=visit(page,'https://www.cbssports.com/nfl/odds/',4500)
-            # Use stable local labels instead of relying on CBS document titles, which change.
+            page=ctx.pages[0] if ctx.pages else ctx.new_page()
+            picks=visit(page,POOL_URL); assert_logged_in(picks)
+            standings=visit(page,POOL_URL+'/standings/weekly',4000)
+            week=parse_week(picks.get('text'),standings.get('text'))
+            season=datetime.now().year
+            odds_url=f'https://www.cbssports.com/nfl/odds/{season}/regular/week-{week}/'
+            odds=visit(page,odds_url,4500)
             picks['title']='NFL Football Tourney | Picks'
             standings['title']='NFL Football Tourney | Weekly Standings'
-            odds['title']='CBS NFL Odds'
-            capture={'product':'CBS Pick’em IQ automated local capture','version':'1.0.2','exportedAt':iso_now(),'privacy':'Raw browser text remains local and is sent only to the localhost sanitizer.','snapshots':[picks,standings,odds]}
+            odds['title']=f'CBS NFL Odds | Week {week}'
+            if debug_odds:
+                print(f'ODDS_URL={odds_url}')
+                print('\n'.join(odds.get('text','').splitlines()[:220]))
+            capture={'product':'CBS Pick’em IQ automated local capture','version':'1.0.3','exportedAt':iso_now(),'privacy':'Raw browser text remains local and is sent only to the localhost sanitizer.','snapshots':[picks,standings,odds]}
             result=post_capture(capture)
             if not result.get('ok'): raise RuntimeError(result.get('error') or 'CBS receiver rejected capture')
             print(json.dumps(result))
         finally: ctx.close()
 def main():
-    parser=argparse.ArgumentParser(); parser.add_argument('--login',action='store_true'); args=parser.parse_args(); login_mode() if args.login else collect()
+    parser=argparse.ArgumentParser(); parser.add_argument('--login',action='store_true'); parser.add_argument('--debug-odds',action='store_true'); args=parser.parse_args(); login_mode() if args.login else collect(args.debug_odds)
 if __name__=='__main__': main()
