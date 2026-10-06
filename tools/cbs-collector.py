@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 """Persistent-browser CBS collector for Sunday Funday IQ."""
-import argparse, json, os, sys, urllib.request
+import argparse, json, os, re, sys, urllib.request, urllib.error
 from datetime import datetime, timezone
 from pathlib import Path
 try:
     from playwright.sync_api import sync_playwright
 except ImportError:
     print('Playwright is not installed. Run: pip install playwright && playwright install chromium',file=sys.stderr); raise SystemExit(2)
-POOL_URL=os.environ.get('SFIQ_CBS_POOL_URL','').strip().rstrip('/')
+RAW_POOL_URL=os.environ.get('SFIQ_CBS_POOL_URL','').strip().rstrip('/')
+_POOL_MATCH=re.match(r'^(https://picks\.cbssports\.com/football/pickem/pools/[^/?#]+)',RAW_POOL_URL,re.I)
+POOL_URL=_POOL_MATCH.group(1) if _POOL_MATCH else RAW_POOL_URL
 LOCAL_APPDATA=os.environ.get('LOCALAPPDATA')
 DEFAULT_PROFILE=Path(LOCAL_APPDATA)/'SundayFundayIQ'/'cbs-profile' if LOCAL_APPDATA else Path.home()/'.sfiq'/'cbs-profile'
 PROFILE_DIR=Path(os.environ.get('SFIQ_CBS_PROFILE_DIR',str(DEFAULT_PROFILE))).expanduser()
@@ -51,7 +53,7 @@ def collect():
             picks['title']='NFL Football Tourney | Picks'
             standings['title']='NFL Football Tourney | Weekly Standings'
             odds['title']='CBS NFL Odds'
-            capture={'product':'CBS Pick’em IQ automated local capture','version':'1.0.1','exportedAt':iso_now(),'privacy':'Raw browser text remains local and is sent only to the localhost sanitizer.','snapshots':[picks,standings,odds]}
+            capture={'product':'CBS Pick’em IQ automated local capture','version':'1.0.2','exportedAt':iso_now(),'privacy':'Raw browser text remains local and is sent only to the localhost sanitizer.','snapshots':[picks,standings,odds]}
             result=post_capture(capture)
             if not result.get('ok'): raise RuntimeError(result.get('error') or 'CBS receiver rejected capture')
             print(json.dumps(result))
