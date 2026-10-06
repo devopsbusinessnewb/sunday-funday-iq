@@ -61,8 +61,12 @@ async function triggerMiniPcCbsRefresh(){
 '@
 $text=$text.Replace($functionAnchor,$phoneRefresh+"`r`n"+$functionAnchor)
 
-$oldHandler="$('refreshBtn').onclick=async()=>{const btn=$('refreshBtn');btn.disabled=true;try{await loadPublishedCbs({silent:false,onlyIfNewer:false})}finally{btn.disabled=false}};"
-$newHandler="$('refreshBtn').onclick=async()=>{const btn=$('refreshBtn'),label=btn.textContent;btn.disabled=true;btn.textContent='Refreshing CBS…';try{await triggerMiniPcCbsRefresh()}catch(e){console.error(e);show('CBS refresh failed: '+e.message,'red')}finally{btn.disabled=false;btn.textContent=label}};"
+$oldHandler=@'
+$('refreshBtn').onclick=async()=>{const btn=$('refreshBtn');btn.disabled=true;try{await loadPublishedCbs({silent:false,onlyIfNewer:false})}finally{btn.disabled=false}};
+'@
+$newHandler=@'
+$('refreshBtn').onclick=async()=>{const btn=$('refreshBtn'),label=btn.textContent;btn.disabled=true;btn.textContent='Refreshing CBS…';try{await triggerMiniPcCbsRefresh()}catch(e){console.error(e);show('CBS refresh failed: '+e.message,'red')}finally{btn.disabled=false;btn.textContent=label}};
+'@
 if(-not $text.Contains($oldHandler)){ throw 'Could not find Refresh CBS button handler. No changes were written.' }
 $text=$text.Replace($oldHandler,$newHandler)
 
