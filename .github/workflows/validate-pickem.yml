@@ -69,3 +69,4 @@ jobs:
           node tests/pickem-strategy-regression.js
           node tests/cbs-history-regression.js
           node tests/cbs-pool-archive-regression.js
+          python tests/cbs-market-parser-regression.py
