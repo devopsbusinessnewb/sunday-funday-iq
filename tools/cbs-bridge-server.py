@@ -92,6 +92,14 @@ def parse_revealed_field(text,schedule,pool_size):
     return locked
 
 def parse_market(text,schedule):
+    """Parse CBS odds from the stable seven-value team rows in page innerText.
+
+    CBS does not render an Expert Picks separator after every game, so using that
+    marker as the game boundary can swallow the following matchup. Each team row
+    itself is stable: team name, open total/spread price, current spread/price,
+    moneyline, and current total/price. We therefore parse each scheduled team
+    independently and use fixed local row boundaries instead of page separators.
+    """
     lines=[x.strip() for x in str(text or '').splitlines() if x.strip()]
     low=[x.lower() for x in lines]
     def idx_after(name,start=0):
@@ -99,17 +107,15 @@ def parse_market(text,schedule):
         for i in range(start,len(low)):
             if low[i]==needle: return i
         return -1
-    def vals(block):
-        total_pos=-1; total=None
-        for i,x in enumerate(block):
-            m=re.fullmatch(r'[ou](\d+(?:\.\d+)?)',x,re.I)
-            if m: total_pos=i; total=float(m.group(1))
-        if total_pos<0: return None,None
-        ml=None
-        for x in reversed(block[:total_pos]):
-            if re.fullmatch(r'[+-]\d{3,4}',x):
-                ml=int(x); break
-        return ml,total
+    def team_values(team_index):
+        block=lines[team_index+1:team_index+8]
+        if len(block)<7: return None
+        ml=block[4]
+        total=block[5]
+        if not re.fullmatch(r'[+-]\d{3,4}',ml): return None
+        tm=re.fullmatch(r'[ou](\d+(?:\.\d+)?)',total,re.I)
+        if not tm: return None
+        return int(ml),float(tm.group(1))
     out=[]; cursor=0
     for a,h in schedule:
         an=CANON.get(a); hn=CANON.get(h)
@@ -119,14 +125,13 @@ def parse_market(text,schedule):
         if ai<0: continue
         hi=idx_after(hn,ai+1)
         if hi<0: continue
-        end=len(lines)
-        for j in range(hi+1,len(lines)):
-            if re.search(r'Expert Picks$',lines[j],re.I): end=j; break
-        aml,total=vals(lines[ai+1:hi]); hml,htotal=vals(lines[hi+1:end])
-        if aml is None or hml is None or total is None: continue
-        if htotal is not None and abs(htotal-total)>1.0: continue
+        av=team_values(ai); hv=team_values(hi)
+        if not av or not hv: continue
+        aml,atotal=av; hml,htotal=hv
+        if abs(atotal-htotal)>1.0: continue
+        total=atotal if abs(atotal-htotal)<0.01 else round((atotal+htotal)/2,1)
         out.append({'away':a,'home':h,'awayML':aml,'homeML':hml,'total':total})
-        cursor=end
+        cursor=hi+8
     return out
 
 def ownership_text(schedule,ownership):
@@ -167,7 +172,7 @@ def sanitize_raw(raw):
             my_card={'picks':teams,'weights':weights}; status='submitted'
     if picked==total and status!='submitted': raise ValueError('CBS shows a complete card but the sanitizer could not reconstruct it. Set SFIQ_CBS_ENTRY_NAME on the mini-PC.')
     locked=parse_revealed_field(st,schedule,pool_size); exported=str(raw.get('exportedAt') or iso_now())
-    payload={'product':"CBS Pick'em IQ Bridge — sanitized live input",'version':'2.1.0','season':season,'week':week,'poolSize':pool_size,'exportedAt':exported,'source':'Automated local CBS browser capture','privacy':'Raw CBS session/page data sanitized locally; pool/account identifiers and participant names not published.','confidenceStatus':status,'confidenceSource':'Automated CBS Weekly Standings row' if my_card else 'CBS Picks status','marketCapturedAt':odds.get('ts') or exported,'marketSource':f'CBS Sports odds — Week {week}','market':market,'fieldModel':{'source':'Sanitized CBS revealed-pool observations','capturedAt':standings.get('ts') or exported,'observedEntries':max([g['totalObserved'] for g in locked],default=0),'locked':locked},'snapshots':[{'title':'NFL Football Tourney | Picks','url':f'sanitized://cbs-pickem/week-{week}','ts':picks.get('ts') or exported,'text':ownership_text(schedule,own)},{'title':'NFL Football Tourney | Weekly Standings','url':f'sanitized://cbs-pickem/week-{week}/standings/weekly','ts':standings.get('ts') or exported,'text':standings_text(schedule,locked)}]}
+    payload={'product':"CBS Pick'em IQ Bridge — sanitized live input",'version':'2.1.1','season':season,'week':week,'poolSize':pool_size,'exportedAt':exported,'source':'Automated local CBS browser capture','privacy':'Raw CBS session/page data sanitized locally; pool/account identifiers and participant names not published.','confidenceStatus':status,'confidenceSource':'Automated CBS Weekly Standings row' if my_card else 'CBS Picks status','marketCapturedAt':odds.get('ts') or exported,'marketSource':f'CBS Sports odds — Week {week}','market':market,'fieldModel':{'source':'Sanitized CBS revealed-pool observations','capturedAt':standings.get('ts') or exported,'observedEntries':max([g['totalObserved'] for g in locked],default=0),'locked':locked},'snapshots':[{'title':'NFL Football Tourney | Picks','url':f'sanitized://cbs-pickem/week-{week}','ts':picks.get('ts') or exported,'text':ownership_text(schedule,own)},{'title':'NFL Football Tourney | Weekly Standings','url':f'sanitized://cbs-pickem/week-{week}/standings/weekly','ts':standings.get('ts') or exported,'text':standings_text(schedule,locked)}]}
     if my_card: payload['myCard']=my_card
     return payload
 
