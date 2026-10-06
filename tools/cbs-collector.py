@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Persistent-browser CBS collector for Sunday Funday IQ."""
-import argparse, json, os, sys, urllib.error, urllib.request
+import argparse, json, os, sys, urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
 try:
@@ -30,13 +30,9 @@ def post_capture(capture):
     try:
         with urllib.request.urlopen(req,timeout=90) as r: return json.loads(r.read().decode())
     except urllib.error.HTTPError as exc:
-        body=exc.read().decode('utf-8','replace')
-        try:
-            parsed=json.loads(body)
-            detail=parsed.get('error') or body
-        except Exception:
-            detail=body
-        raise RuntimeError(f'CBS receiver rejected capture ({exc.code}): {detail}') from exc
+        try: detail=exc.read().decode('utf-8','replace')
+        except Exception: detail=''
+        raise RuntimeError(f'CBS receiver rejected capture ({exc.code}): {detail or exc.reason}') from exc
 def login_mode():
     if not POOL_URL: raise RuntimeError('Set SFIQ_CBS_POOL_URL before first login.')
     with sync_playwright() as p:
@@ -51,6 +47,10 @@ def collect():
         ctx=open_context(p,HEADLESS)
         try:
             page=ctx.pages[0] if ctx.pages else ctx.new_page(); picks=visit(page,POOL_URL); assert_logged_in(picks); standings=visit(page,POOL_URL+'/standings/weekly',4000); odds=visit(page,'https://www.cbssports.com/nfl/odds/',4500)
+            # Use stable local labels instead of relying on CBS document titles, which change.
+            picks['title']='NFL Football Tourney | Picks'
+            standings['title']='NFL Football Tourney | Weekly Standings'
+            odds['title']='CBS NFL Odds'
             capture={'product':'CBS Pick’em IQ automated local capture','version':'1.0.1','exportedAt':iso_now(),'privacy':'Raw browser text remains local and is sent only to the localhost sanitizer.','snapshots':[picks,standings,odds]}
             result=post_capture(capture)
             if not result.get('ok'): raise RuntimeError(result.get('error') or 'CBS receiver rejected capture')
