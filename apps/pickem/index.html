@@ -140,11 +140,12 @@ const VERIFIED_MARKET_SNAPSHOT={
 };
 
 const LIVE_CBS_URL='../../data/live/cbs-pickem.json';
+const CBS_AUTOMATION_URL='https://eickhoff-server.tail428df5.ts.net';
 const POOL_HISTORY_URL='../../data/analysis/cbs-pool-history-report.json';
 const SEARCH_ITERS=700;
 const FINAL_ITERS=3000;
 const VALIDATION_SEEDS=3;
-const MODEL_BUILD='1.15.2';
+const MODEL_BUILD='1.16.0';
 const CONFIDENCE_TIE_BAND=.025;
 const MIN_OPTIONAL_FLIP_PROB=.40;
 const MIN_OPTIONAL_MARKET_PROB=.38;
@@ -1723,6 +1724,40 @@ async function runSimulation(){
 }
 function applyRecommended(){if(!state.recommendedCard)return;if(!state.originalCard)state.originalCard=snapshotCard();const before=snapshotCard();applyCardToGames(state.games,state.recommendedCard);state.games.forEach((g,i)=>{if(isLocked(g)){g.pick=teamFor(g,before.choices[i]);g.weight=before.weights[i]}});state.applied=true;state.confidenceStatus='model_applied';state.confidenceSource=`IQ ${state.optimization?.selectedStrategy||'balanced'} strategy`;if(state.optimization)state.optimization.appliedEval=state.optimization.recommendedEval;recordDecision('applied_recommendation',{current:before,recommended:snapshotCard(),metrics:state.optimization?.diagnostics||null});save();render();show('Recommended card applied inside Sunday Funday IQ only. CBS was not changed.')}
 function revertOriginal(){if(!state.originalCard)return;applyCardToGames(state.games,state.originalCard);state.applied=false;state.confidenceStatus=state.originalConfidenceStatus||'submitted';state.confidenceSource=state.confidenceStatus==='placeholder'?'Synthetic import placeholder':'CBS import';if(state.optimization)delete state.optimization.appliedEval;save();render();show('Reverted to the original CBS card stored in IQ.')}
+const waitFor=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+async function triggerMiniPcCbsRefresh(){
+  const started=Date.now();
+  show('Starting CBS refresh on the mini-PCâ€¦');
+  const startResponse=await fetch(CBS_AUTOMATION_URL+'/refresh',{method:'POST',cache:'no-store'});
+  if(!startResponse.ok)throw new Error('Mini-PC refresh endpoint returned HTTP '+startResponse.status);
+  await startResponse.json();
+  const statusDeadline=Date.now()+120000;
+  while(Date.now()<statusDeadline){
+    await waitFor(1800);
+    let statusResponse;
+    try{statusResponse=await fetch(CBS_AUTOMATION_URL+'/status?v='+Date.now(),{cache:'no-store'})}catch(_){continue}
+    if(!statusResponse.ok)continue;
+    const status=await statusResponse.json();
+    if(status.refreshing){show('Mini-PC is refreshing CBSâ€¦');continue}
+    const finished=Date.parse(status.lastRefreshFinished||'');
+    if(Number.isFinite(finished)&&finished>=started-5000){
+      if(status.lastRefreshOk===false)throw new Error(status.lastRefreshError||'Mini-PC CBS refresh failed.');
+      if(status.lastRefreshOk===true){
+        show('CBS refreshed and pushed. Loading the new dataâ€¦');
+        const publishDeadline=Date.now()+120000;
+        while(Date.now()<publishDeadline){
+          if(await loadPublishedCbs({silent:true,onlyIfNewer:true})){
+            show('CBS refresh complete. Sunday Funday IQ is current.');
+            return true;
+          }
+          await waitFor(2500);
+        }
+        throw new Error('CBS refreshed successfully, but the published app data is still deploying. Try again in a moment.');
+      }
+    }
+  }
+  throw new Error('CBS refresh is taking longer than expected. Check Tailscale and try again.');
+}
 async function loadPublishedCbs({silent=true,onlyIfNewer=true}={}){
   try{
     const r=await fetch(LIVE_CBS_URL+'?v='+Date.now(),{cache:'no-store'});if(!r.ok)throw new Error('HTTP '+r.status);
@@ -1737,7 +1772,7 @@ async function loadPoolHistory(){
 }
 async function boot(){
   if($('buildLabel'))$('buildLabel').textContent=MODEL_BUILD;
-  $('refreshBtn').onclick=async()=>{const btn=$('refreshBtn');btn.disabled=true;try{await loadPublishedCbs({silent:false,onlyIfNewer:false})}finally{btn.disabled=false}};
+  $('refreshBtn').onclick=async()=>{const btn=$('refreshBtn'),label=btn.textContent;btn.disabled=true;btn.textContent='Refreshing CBSâ€¦';try{await triggerMiniPcCbsRefresh()}catch(e){console.error(e);show('CBS refresh failed: '+e.message,'red')}finally{btn.disabled=false;btn.textContent=label}};
   $('marketBtn').onclick=()=>refreshMarket(false);$('optBtn').onclick=runSimulation;$('saveBtn').onclick=()=>{state.confidenceStatus='user_final';state.confidenceSource='User-saved final card';recordDecision('saved_card',{current:snapshotCard(),recommended:state.recommendedCard,note:'User saved the current IQ card locally.'});save();render();show('Saved locally in this browser and added to this week’s decision history.')};$('applyBtn').onclick=applyRecommended;$('revertBtn').onclick=revertOriginal;
   render();
   await Promise.all([loadPublishedCbs({silent:true,onlyIfNewer:true}),loadPoolHistory()]);
