@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Persistent-browser CBS collector for Sunday Funday IQ."""
-import argparse, json, os, sys, urllib.request
+import argparse, json, os, sys, urllib.error, urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
 try:
@@ -27,7 +27,16 @@ def assert_logged_in(snap):
     if 'picks.cbssports.com' not in snap.get('url','') or '/football/pickem/' not in snap.get('url','') or 'Week ' not in snap.get('text',''): raise RuntimeError('CBS login/session appears expired. Re-run with --login.')
 def post_capture(capture):
     req=urllib.request.Request(RECEIVER,data=json.dumps(capture).encode(),method='POST',headers={'Content-Type':'application/json'})
-    with urllib.request.urlopen(req,timeout=90) as r: return json.loads(r.read().decode())
+    try:
+        with urllib.request.urlopen(req,timeout=90) as r: return json.loads(r.read().decode())
+    except urllib.error.HTTPError as exc:
+        body=exc.read().decode('utf-8','replace')
+        try:
+            parsed=json.loads(body)
+            detail=parsed.get('error') or body
+        except Exception:
+            detail=body
+        raise RuntimeError(f'CBS receiver rejected capture ({exc.code}): {detail}') from exc
 def login_mode():
     if not POOL_URL: raise RuntimeError('Set SFIQ_CBS_POOL_URL before first login.')
     with sync_playwright() as p:
@@ -42,7 +51,7 @@ def collect():
         ctx=open_context(p,HEADLESS)
         try:
             page=ctx.pages[0] if ctx.pages else ctx.new_page(); picks=visit(page,POOL_URL); assert_logged_in(picks); standings=visit(page,POOL_URL+'/standings/weekly',4000); odds=visit(page,'https://www.cbssports.com/nfl/odds/',4500)
-            capture={'product':'CBS Pick’em IQ automated local capture','version':'1.0.0','exportedAt':iso_now(),'privacy':'Raw browser text remains local and is sent only to the localhost sanitizer.','snapshots':[picks,standings,odds]}
+            capture={'product':'CBS Pick’em IQ automated local capture','version':'1.0.1','exportedAt':iso_now(),'privacy':'Raw browser text remains local and is sent only to the localhost sanitizer.','snapshots':[picks,standings,odds]}
             result=post_capture(capture)
             if not result.get('ok'): raise RuntimeError(result.get('error') or 'CBS receiver rejected capture')
             print(json.dumps(result))
