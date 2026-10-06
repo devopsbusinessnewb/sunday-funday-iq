@@ -20,6 +20,7 @@ FORBIDDEN_KEYS=('cookie','authorization','csrf','token','jwt','session','secret'
 FORBIDDEN_URL_BITS=('picks.cbssports.com/football/pickem/pools/','/graphql?')
 TEAM_MAP={'STEELERS':'PIT','BROWNS':'CLE','COLTS':'IND','COMMANDERS':'WAS','PATRIOTS':'NE','BILLS':'BUF','TITANS':'TEN','RAVENS':'BAL','JETS':'NYJ','BEARS':'CHI','JAGUARS':'JAX','JAC':'JAX','BENGALS':'CIN','COWBOYS':'DAL','TEXANS':'HOU','CARDINALS':'ARI','GIANTS':'NYG','RAMS':'LAR','EAGLES':'PHI','PACKERS':'GB','BUCCANEERS':'TB','DOLPHINS':'MIA','VIKINGS':'MIN','CHIEFS':'KC','RAIDERS':'LV','BRONCOS':'DEN','49ERS':'SF','CHARGERS':'LAC','SEAHAWKS':'SEA','LIONS':'DET','PANTHERS':'CAR','FALCONS':'ATL','SAINTS':'NO'}
 ABBR=set(TEAM_MAP.values())
+CANON={abbr:name.title() for name,abbr in TEAM_MAP.items() if len(name)>3}
 SERVICE={'refreshing':False,'lastRefreshStarted':None,'lastRefreshFinished':None,'lastRefreshOk':None,'lastRefreshError':None,'lastPublishedAt':None,'lastCommit':None}
 LOCK=threading.Lock()
 
@@ -90,6 +91,44 @@ def parse_revealed_field(text,schedule,pool_size):
         a,h=schedule[i]; locked.append({'key':f'{a}|{h}','gameId':f'{a}-{h}','away':a,'home':h,'observations':obs,'totalObserved':len(obs)})
     return locked
 
+def parse_market(text,schedule):
+    lines=[x.strip() for x in str(text or '').splitlines() if x.strip()]
+    low=[x.lower() for x in lines]
+    def idx_after(name,start=0):
+        needle=name.lower()
+        for i in range(start,len(low)):
+            if low[i]==needle: return i
+        return -1
+    def vals(block):
+        total_pos=-1; total=None
+        for i,x in enumerate(block):
+            m=re.fullmatch(r'[ou](\d+(?:\.\d+)?)',x,re.I)
+            if m: total_pos=i; total=float(m.group(1))
+        if total_pos<0: return None,None
+        ml=None
+        for x in reversed(block[:total_pos]):
+            if re.fullmatch(r'[+-]\d{3,4}',x):
+                ml=int(x); break
+        return ml,total
+    out=[]; cursor=0
+    for a,h in schedule:
+        an=CANON.get(a); hn=CANON.get(h)
+        if not an or not hn: continue
+        ai=idx_after(an,cursor)
+        if ai<0: ai=idx_after(an,0)
+        if ai<0: continue
+        hi=idx_after(hn,ai+1)
+        if hi<0: continue
+        end=len(lines)
+        for j in range(hi+1,len(lines)):
+            if re.search(r'Expert Picks$',lines[j],re.I): end=j; break
+        aml,total=vals(lines[ai+1:hi]); hml,htotal=vals(lines[hi+1:end])
+        if aml is None or hml is None or total is None: continue
+        if htotal is not None and abs(htotal-total)>1.0: continue
+        out.append({'away':a,'home':h,'awayML':aml,'homeML':hml,'total':total})
+        cursor=end
+    return out
+
 def ownership_text(schedule,ownership):
     lines=['CBS Pickem sanitized ownership']
     for a,h in schedule:
@@ -110,14 +149,16 @@ def load_previous():
 
 def sanitize_raw(raw):
     if not isinstance(raw,dict) or not isinstance(raw.get('snapshots'),list): raise ValueError('Invalid raw CBS capture')
-    picks=latest_snapshot(raw,r'\|\s*Picks\b'); standings=latest_snapshot(raw,r'Weekly Standings|/standings/weekly')
-    if not picks or not standings: raise ValueError('CBS capture must include Picks and Weekly Standings')
-    pt,st=str(picks.get('text','')),str(standings.get('text','')); schedule=parse_schedule(st)
+    picks=latest_snapshot(raw,r'\|\s*Picks\b'); standings=latest_snapshot(raw,r'Weekly Standings|/standings/weekly'); odds=latest_snapshot(raw,r'CBS NFL Odds|cbssports\.com/nfl/odds')
+    if not picks or not standings or not odds: raise ValueError('CBS capture must include Picks, Weekly Standings, and Odds')
+    pt,st,ot=str(picks.get('text','')),str(standings.get('text','')),str(odds.get('text','')); schedule=parse_schedule(st)
     if len(schedule)<2: raise ValueError('Could not reconstruct CBS weekly schedule')
     prev=load_previous(); wm=re.search(r'\bWeek\s+(\d{1,2})\b',pt+'\n'+st,re.I); week=int(wm.group(1)) if wm else int(prev.get('week') or 0)
     if week<1: raise ValueError('Could not determine CBS week')
     season=int(prev.get('season') or datetime.now().year); pool_size=int(prev.get('poolSize') or 94); own=parse_ownership(pt)
     if len(own)<max(2,len(schedule)//2): raise ValueError('Could not parse enough CBS ownership rows')
+    market=parse_market(ot,schedule)
+    if len(market)!=len(schedule): raise ValueError(f'Could not parse current CBS odds for full Week {week} slate ({len(market)}/{len(schedule)} games)')
     pairs=parse_entry_card(st,ENTRY_NAME,len(schedule)); pm=re.search(r'\b(\d+)\s*/\s*(\d+)\s+Picks\b',pt,re.I); picked=int(pm.group(1)) if pm else (len(pairs) if pairs else 0); total=int(pm.group(2)) if pm else len(schedule)
     my_card=None; status='unsubmitted' if picked==0 else 'partial'
     if pairs and len(pairs)==len(schedule):
@@ -126,7 +167,7 @@ def sanitize_raw(raw):
             my_card={'picks':teams,'weights':weights}; status='submitted'
     if picked==total and status!='submitted': raise ValueError('CBS shows a complete card but the sanitizer could not reconstruct it. Set SFIQ_CBS_ENTRY_NAME on the mini-PC.')
     locked=parse_revealed_field(st,schedule,pool_size); exported=str(raw.get('exportedAt') or iso_now())
-    payload={'product':"CBS Pick'em IQ Bridge — sanitized live input",'version':'2.0.0','season':season,'week':week,'poolSize':pool_size,'exportedAt':exported,'source':'Automated local CBS browser capture','privacy':'Raw CBS session/page data sanitized locally; pool/account identifiers and participant names not published.','confidenceStatus':status,'confidenceSource':'Automated CBS Weekly Standings row' if my_card else 'CBS Picks status','marketCapturedAt':prev.get('marketCapturedAt'),'marketSource':prev.get('marketSource'),'market':prev.get('market',[]),'fieldModel':{'source':'Sanitized CBS revealed-pool observations','capturedAt':standings.get('ts') or exported,'observedEntries':max([g['totalObserved'] for g in locked],default=0),'locked':locked},'snapshots':[{'title':'NFL Football Tourney | Picks','url':f'sanitized://cbs-pickem/week-{week}','ts':picks.get('ts') or exported,'text':ownership_text(schedule,own)},{'title':'NFL Football Tourney | Weekly Standings','url':f'sanitized://cbs-pickem/week-{week}/standings/weekly','ts':standings.get('ts') or exported,'text':standings_text(schedule,locked)}]}
+    payload={'product':"CBS Pick'em IQ Bridge — sanitized live input",'version':'2.1.0','season':season,'week':week,'poolSize':pool_size,'exportedAt':exported,'source':'Automated local CBS browser capture','privacy':'Raw CBS session/page data sanitized locally; pool/account identifiers and participant names not published.','confidenceStatus':status,'confidenceSource':'Automated CBS Weekly Standings row' if my_card else 'CBS Picks status','marketCapturedAt':odds.get('ts') or exported,'marketSource':f'CBS Sports odds — Week {week}','market':market,'fieldModel':{'source':'Sanitized CBS revealed-pool observations','capturedAt':standings.get('ts') or exported,'observedEntries':max([g['totalObserved'] for g in locked],default=0),'locked':locked},'snapshots':[{'title':'NFL Football Tourney | Picks','url':f'sanitized://cbs-pickem/week-{week}','ts':picks.get('ts') or exported,'text':ownership_text(schedule,own)},{'title':'NFL Football Tourney | Weekly Standings','url':f'sanitized://cbs-pickem/week-{week}/standings/weekly','ts':standings.get('ts') or exported,'text':standings_text(schedule,locked)}]}
     if my_card: payload['myCard']=my_card
     return payload
 
@@ -192,4 +233,7 @@ class Handler(BaseHTTPRequestHandler):
     def log_message(self,fmt,*args): print('[CBS IQ]',fmt%args)
 
 if __name__=='__main__':
-    print(f'CBS IQ automation listening on http://127.0.0.1:43128 -> {OUTPUT}'); print('Auto-push:','ON' if AUTO_PUSH else 'OFF'); print('Entry name configured:','YES' if ENTRY_NAME else 'NO'); ThreadingHTTPServer(('127.0.0.1',43128),Handler).serve_forever()
+    print(f'CBS IQ automation listening on http://127.0.0.1:43128 -> {OUTPUT}')
+    print('Auto-push:','ON' if AUTO_PUSH else 'OFF')
+    print('Entry name configured:','YES' if ENTRY_NAME else 'NO')
+    ThreadingHTTPServer(('127.0.0.1',43128),Handler).serve_forever()
