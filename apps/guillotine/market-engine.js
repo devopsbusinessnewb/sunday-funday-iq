@@ -6,6 +6,7 @@
   'use strict';
 
   const num=x=>Number.isFinite(Number(x))?Number(x):null;
+  const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
   const median=values=>{
     const a=(values||[]).map(Number).filter(Number.isFinite).sort((x,y)=>x-y);
     if(!a.length)return null;const m=Math.floor(a.length/2);return a.length%2?a[m]:(a[m-1]+a[m])/2;
@@ -101,22 +102,94 @@
     const rows=auctionResults(transactions).filter(a=>a.playerId===id).sort((a,b)=>Math.max(...b.attempts.map(x=>x.time))-Math.max(...a.attempts.map(x=>x.time)));
     return rows[0]||null;
   }
-  function bidBandFromComparables({transactions=[],position='',faabRemaining=1000,fallback=10,urgency=0,valueCeiling=null}={}){
+
+  // ----- Live competition model -----
+  // Historical clearing price is the anchor. Current roster needs only adjust that anchor modestly.
+  const BLOCKED_WORDS=['out','injured reserve','ir','pup','suspended','suspension','exempt','commissioner exempt','nfi','reserve'];
+  const UNCERTAIN_WORDS=['questionable','doubtful','concussion','limited','did not practice','dnp','day-to-day'];
+  function rosterPlayers(roster){return Array.isArray(roster?.players)?roster.players:[]}
+  function playerStatusText(p){return [p?.status,p?.injuryStatus,p?.injury_status,p?.administrativeStatus].filter(Boolean).join(' ').toLowerCase()}
+  function weekAvailability(p,week){
+    const bye=Number(p?.bye??p?.byeWeek??0);
+    const status=playerStatusText(p);
+    if(p?.active===false)return {usable:false,reason:'INACTIVE'};
+    if(week!=null&&bye===Number(week))return {usable:false,reason:'BYE'};
+    if(BLOCKED_WORDS.some(w=>status.includes(w)))return {usable:false,reason:'BLOCKED'};
+    if(UNCERTAIN_WORDS.some(w=>status.includes(w)))return {usable:true,reason:'UNCERTAIN'};
+    return {usable:true,reason:null};
+  }
+  function leagueSlotCounts(league={}){
+    const slots=league?.rosterPositions||league?.roster_positions||[];
+    const counts={};for(const s of slots)counts[String(s).toUpperCase()]=(counts[String(s).toUpperCase()]||0)+1;
+    return counts;
+  }
+  function rosterPositionPressure({roster,position,week,league}={}){
+    const pos=String(position||'').toUpperCase();
+    const players=rosterPlayers(roster);
+    const counts=leagueSlotCounts(league);
+    const exactRequired=Number(counts[pos]||0);
+    const flexRequired=Number(counts.FLEX||0)+Number(counts.WRT||0)+Number(counts.WRRB_FLEX||0);
+    const activeAtPos=players.filter(p=>playerPosition(p)===pos&&weekAvailability(p,week).usable).length;
+    const unavailableAtPos=players.filter(p=>playerPosition(p)===pos&&!weekAvailability(p,week).usable).length;
+    const uncertainAtPos=players.filter(p=>playerPosition(p)===pos&&weekAvailability(p,week).reason==='UNCERTAIN').length;
+    const flexEligible=p=>['RB','WR','TE'].includes(playerPosition(p));
+    const activeFlex=players.filter(p=>flexEligible(p)&&weekAvailability(p,week).usable).length;
+    const flexBase=Number(counts.RB||0)+Number(counts.WR||0)+Number(counts.TE||0)+flexRequired;
+    const hardDeficit=Math.max(0,exactRequired-activeAtPos);
+    const flexDeficit=['RB','WR','TE'].includes(pos)?Math.max(0,flexBase-activeFlex):0;
+    // Hard lineup holes dominate. Uncertainty and flex squeeze add softer demand pressure.
+    const pressure=hardDeficit*3+Math.min(2,unavailableAtPos)*1.1+Math.min(2,uncertainAtPos)*.6+Math.min(2,flexDeficit)*.7;
+    return {rosterId:String(roster?.rosterId??roster?.roster_id??''),position:pos,activeAtPos,unavailableAtPos,uncertainAtPos,hardDeficit,flexDeficit,pressure,urgent:hardDeficit>0,likely:pressure>=1.2};
+  }
+  function rosterFaab(roster,startFaab=1000){
+    const direct=num(roster?.faabRemaining??roster?.faab_balance??roster?.faabBalance);
+    if(direct!=null)return Math.max(0,direct);
+    const used=num(roster?.faabUsed??roster?.settings?.waiver_budget_used);
+    return used==null?Number(startFaab||1000):Math.max(0,Number(startFaab||1000)-used);
+  }
+  function competitionContext({rosters=[],position,week,league,myRosterId=null,releasedPlayers=[],startFaab=1000,targetScarcity=.5}={}){
+    const pos=String(position||'').toUpperCase();
+    const rivals=(rosters||[]).filter(r=>String(r?.rosterId??r?.roster_id??'')!==String(myRosterId??'')&&rosterPlayers(r).length);
+    const rows=rivals.map(r=>{
+      const need=rosterPositionPressure({roster:r,position:pos,week,league});
+      const faab=rosterFaab(r,startFaab);
+      const budgetWeight=clamp(faab/Math.max(1,Number(startFaab||1000)),.15,1.2);
+      return {...need,faabRemaining:faab,weightedPressure:need.pressure*budgetWeight};
+    });
+    const urgentBidders=rows.filter(r=>r.urgent&&r.faabRemaining>0);
+    const likelyBidders=rows.filter(r=>r.likely&&r.faabRemaining>0);
+    const pressure=rows.reduce((s,r)=>s+r.weightedPressure,0);
+    const supply=(releasedPlayers||[]).filter(p=>playerPosition(p)===pos&&weekAvailability(p,week).usable);
+    const alternatives=Math.max(0,supply.length-1);
+    const scarcity=clamp(Number(targetScarcity||0),0,1);
+    // Demand can increase forecast, but not explode it. Multiple released alternatives spread bidding.
+    const demandLift=Math.min(.32,urgentBidders.length*.055+Math.max(0,likelyBidders.length-urgentBidders.length)*.02+Math.min(8,pressure)*.008);
+    const supplyRelief=Math.min(.22,alternatives*.045)*(1-.75*scarcity);
+    const multiplier=clamp(1+demandLift-supplyRelief,.82,1.35);
+    return {position:pos,rivals:rows.length,urgentBidders:urgentBidders.length,likelyBidders:likelyBidders.length,pressure,availableFaab:rows.reduce((s,r)=>s+r.faabRemaining,0),releasedSupply:supply.length,alternatives,multiplier,rows};
+  }
+
+  function bidBandFromComparables({transactions=[],position='',faabRemaining=1000,fallback=10,urgency=0,valueCeiling=null,competition=null}={}){
     const auctions=positionAuctions(transactions,position);
     const vals=auctions.map(x=>x.minimumWinningBid).filter(Number.isFinite);
     const budget=Math.max(0,Number(faabRemaining||0));
     const ceiling=valueCeiling==null?budget:Math.min(budget,Math.max(0,Number(valueCeiling)));
     const u=Math.max(0,Math.min(1,Number(urgency||0)));
+    const competitionMultiplier=competition?.multiplier==null?1:clamp(Number(competition.multiplier),.82,1.35);
     if(vals.length<2){
       const base=Math.max(1,Number(fallback||10));
-      const target=Math.min(ceiling,Math.max(1,Math.round(base*(1+.20*u))));
-      return {sampleSize:vals.length,low:Math.max(1,Math.round(target*.8)),target,high:Math.min(ceiling,Math.max(target,Math.round(target*1.20))),confidence:'LOW',basis:'CLEARING_THRESHOLD'};
+      const raw=base*(1+.20*u)*competitionMultiplier;
+      const target=Math.min(ceiling,Math.max(1,Math.round(raw)));
+      return {sampleSize:vals.length,low:Math.max(1,Math.round(target*.8)),target,high:Math.min(ceiling,Math.max(target,Math.round(target*1.20))),confidence:'LOW',basis:'CLEARING_THRESHOLD_PLUS_LIVE_DEMAND',competitionMultiplier};
     }
     const low=percentile(vals,.50),base=percentile(vals,.70),upper=percentile(vals,.85);
-    const market=base+(upper-base)*(.25+.25*u);
+    const historical=base+(upper-base)*(.25+.25*u);
+    const market=historical*competitionMultiplier;
     const target=Math.min(ceiling,Math.max(1,Math.round(market+1)));
-    const high=Math.min(ceiling,Math.max(target,Math.round(upper+2)));
-    return {sampleSize:vals.length,low:Math.min(ceiling,Math.max(1,Math.round(low))),target,high,confidence:vals.length>=6?'HIGH':'MEDIUM',basis:'CLEARING_THRESHOLD'};
+    // Even with intense live demand, do not create an unlimited insurance premium over the adjusted market.
+    const highBase=Math.max(target,Math.round((upper+2)*competitionMultiplier));
+    const high=Math.min(ceiling,highBase);
+    return {sampleSize:vals.length,low:Math.min(ceiling,Math.max(1,Math.round(low*competitionMultiplier))),target,high,confidence:vals.length>=6?'HIGH':'MEDIUM',basis:'CLEARING_THRESHOLD_PLUS_LIVE_DEMAND',competitionMultiplier};
   }
-  return {median,percentile,completedWaiverBids,waiverAttempts,auctionResults,positionClears,positionAuctions,marketSnapshot,managerProfile,playerAuction,bidBandFromComparables};
+  return {median,percentile,completedWaiverBids,waiverAttempts,auctionResults,positionClears,positionAuctions,marketSnapshot,managerProfile,playerAuction,weekAvailability,rosterPositionPressure,competitionContext,bidBandFromComparables};
 });
