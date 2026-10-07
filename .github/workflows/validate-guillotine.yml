@@ -24,6 +24,8 @@ jobs:
         run: node tests/guillotine-regression.js
       - name: Guillotine roster engine regression
         run: node tests/guillotine-roster-engine.js
+      - name: Guillotine FAAB market regression
+        run: node tests/guillotine-market-engine.js
       - name: Production smoke test
         run: node tests/guillotine-smoke.js
       - name: Worker syntax check
