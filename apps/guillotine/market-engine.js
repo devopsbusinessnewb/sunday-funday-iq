@@ -41,7 +41,6 @@
     }).map(tx=>({...tx,bid:txBid(tx),addsNormalized:txAdds(tx),statusNormalized:txStatus(tx)}));
   }
   function auctionKey(tx,p){
-    // Sleeper processes one waiver batch at a common timestamp. Bucket to 5 minutes for normalized sources.
     const t=txTime(tx),bucket=t?Math.floor(t/300000):0;
     return `${playerId(p)}|${bucket}`;
   }
@@ -52,18 +51,15 @@
         const id=playerId(p);if(!id)continue;
         const key=auctionKey(tx,p);
         if(!groups.has(key))groups.set(key,{key,playerId:id,position:playerPosition(p),attempts:[]});
-        groups.get(key).attempts.push({
-          bid:tx.bid,status:tx.statusNormalized,rosterIds:txRosterIds(tx).map(String),time:txTime(tx),player:p,tx
-        });
+        groups.get(key).attempts.push({bid:tx.bid,status:tx.statusNormalized,rosterIds:txRosterIds(tx).map(String),time:txTime(tx),player:p,tx});
       }
     }
     const out=[];
     for(const g of groups.values()){
       const winners=g.attempts.filter(a=>['complete','completed','success'].includes(a.status));
-      if(winners.length!==1)continue; // ambiguous/no-winner batches are not safe market evidence
+      if(winners.length!==1)continue;
       const winner=winners[0];
       const losers=g.attempts.filter(a=>a.status==='failed'&&a.bid<=winner.bid);
-      // Keep only each manager's highest submitted losing bid so duplicate/reordered claims do not inflate demand.
       const byManager=new Map();
       for(const a of losers){
         const rid=a.rosterIds[0]||'unknown';
@@ -72,17 +68,7 @@
       const losing=[...byManager.values()].map(a=>a.bid).sort((a,b)=>b-a);
       const secondBid=losing.length?losing[0]:null;
       const minimumWinningBid=secondBid==null?1:Math.min(winner.bid,secondBid+1);
-      out.push({
-        ...g,
-        winnerBid:winner.bid,
-        winnerRosterId:winner.rosterIds[0]||null,
-        losingBids:losing,
-        secondBid,
-        minimumWinningBid,
-        overpay:Math.max(0,winner.bid-minimumWinningBid),
-        bidderCount:1+losing.length,
-        competitive:losing.length>0
-      });
+      out.push({...g,winnerBid:winner.bid,winnerRosterId:winner.rosterIds[0]||null,losingBids:losing,secondBid,minimumWinningBid,overpay:Math.max(0,winner.bid-minimumWinningBid),bidderCount:1+losing.length,competitive:losing.length>0});
     }
     return out;
   }
@@ -101,27 +87,9 @@
     for(const p of ['QB','RB','WR','TE']){
       const wins=positionClears(rows,p).map(x=>x.bid);
       const a=positionAuctions(transactions,p),req=a.map(x=>x.minimumWinningBid),ov=a.map(x=>x.overpay);
-      byPosition[p]={
-        count:wins.length,
-        medianWinningBid:median(wins),
-        p75WinningBid:percentile(wins,.75),
-        auctionCount:a.length,
-        medianRequiredBid:median(req),
-        p75RequiredBid:percentile(req,.75),
-        averageOverpay:ov.length?ov.reduce((s,x)=>s+x,0)/ov.length:null,
-        max:wins.length?Math.max(...wins):null
-      };
+      byPosition[p]={count:wins.length,medianWinningBid:median(wins),p75WinningBid:percentile(wins,.75),auctionCount:a.length,medianRequiredBid:median(req),p75RequiredBid:percentile(req,.75),averageOverpay:ov.length?ov.reduce((s,x)=>s+x,0)/ov.length:null,max:wins.length?Math.max(...wins):null};
     }
-    return {
-      count:bids.length,
-      median:median(bids),p25:percentile(bids,.25),p75:percentile(bids,.75),p90:percentile(bids,.90),
-      max:bids.length?Math.max(...bids):null,totalSpent:bids.reduce((s,x)=>s+x,0),
-      auctionCount:auctions.length,
-      medianRequiredBid:median(thresholds),
-      p75RequiredBid:percentile(thresholds,.75),
-      totalObservedOverpay:overpay.reduce((s,x)=>s+x,0),
-      byPosition
-    };
+    return {count:bids.length,median:median(bids),p25:percentile(bids,.25),p75:percentile(bids,.75),p90:percentile(bids,.90),max:bids.length?Math.max(...bids):null,totalSpent:bids.reduce((s,x)=>s+x,0),auctionCount:auctions.length,medianRequiredBid:median(thresholds),p75RequiredBid:percentile(thresholds,.75),totalObservedOverpay:overpay.reduce((s,x)=>s+x,0),byPosition};
   }
   function managerProfile(transactions=[],rosterId){
     const rows=completedWaiverBids(transactions).filter(tx=>txRosterIds(tx).some(id=>String(id)===String(rosterId)));
@@ -134,21 +102,17 @@
     return rows[0]||null;
   }
   function bidBandFromComparables({transactions=[],position='',faabRemaining=1000,fallback=10,urgency=0,valueCeiling=null}={}){
-    // Critical rule: model what it took to WIN, not what winners happened to PAY.
-    // Winning bids can be severe overpays and must not teach the model to repeat them.
     const auctions=positionAuctions(transactions,position);
     const vals=auctions.map(x=>x.minimumWinningBid).filter(Number.isFinite);
     const budget=Math.max(0,Number(faabRemaining||0));
-    const ceiling=num(valueCeiling)==null?budget:Math.min(budget,Math.max(0,Number(valueCeiling)));
+    const ceiling=valueCeiling==null?budget:Math.min(budget,Math.max(0,Number(valueCeiling)));
     const u=Math.max(0,Math.min(1,Number(urgency||0)));
     if(vals.length<2){
-      // Sparse data => conservative, small urgency premium. Urgency affects willingness ceiling more than market clearing price.
       const base=Math.max(1,Number(fallback||10));
       const target=Math.min(ceiling,Math.max(1,Math.round(base*(1+.20*u))));
       return {sampleSize:vals.length,low:Math.max(1,Math.round(target*.8)),target,high:Math.min(ceiling,Math.max(target,Math.round(target*1.20))),confidence:'LOW',basis:'CLEARING_THRESHOLD'};
     }
     const low=percentile(vals,.50),base=percentile(vals,.70),upper=percentile(vals,.85);
-    // Add only a small insurance premium over observed clearing thresholds. Do not scale bids linearly with roster value.
     const market=base+(upper-base)*(.25+.25*u);
     const target=Math.min(ceiling,Math.max(1,Math.round(market+1)));
     const high=Math.min(ceiling,Math.max(target,Math.round(upper+2)));
