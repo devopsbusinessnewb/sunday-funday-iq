@@ -9,6 +9,9 @@ $Yahoo=Join-Path $Repo 'tools\yahoo-sync.ps1'
 $Runner=Join-Path $Repo 'tools\run-yahoo-sync.ps1'
 $ServerRoot='C:\Server'
 $LogDir=Join-Path $ServerRoot 'Logs\SundayFundayIQ\Yahoo'
+$PrivateDir=Join-Path $env:USERPROFILE '.sunday-funday-iq'
+$CredPath=Join-Path $PrivateDir 'yahoo-credentials.json'
+$TokenPath=Join-Path $PrivateDir 'yahoo-oauth.json'
 
 if(-not (Test-Path $Yahoo)){throw 'tools\yahoo-sync.ps1 not found.'}
 if(-not (Test-Path $Runner)){throw 'tools\run-yahoo-sync.ps1 not found.'}
@@ -23,8 +26,8 @@ Write-Host ''
 
 if($ResetAuth){
   Write-Host 'Clearing old Yahoo OAuth state so the newly-live Yahoo app can be authorized.' -ForegroundColor Yellow
-  & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $Yahoo -ResetAuth
-  if($LASTEXITCODE -ne 0){throw 'Yahoo auth reset failed.'}
+  Remove-Item $CredPath -Force -ErrorAction SilentlyContinue
+  Remove-Item $TokenPath -Force -ErrorAction SilentlyContinue
 }
 
 Write-Host 'Running one interactive Yahoo API validation.' -ForegroundColor Yellow
