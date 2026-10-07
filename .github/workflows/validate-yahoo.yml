@@ -6,6 +6,8 @@ on:
       - 'apps/yahoo/**'
       - 'tools/yahoo-sync.py'
       - 'tools/yahoo-sync.ps1'
+      - 'tools/run-yahoo-sync.ps1'
+      - 'tools/setup-yahoo-mini-pc.ps1'
       - 'Start Yahoo IQ Sync.cmd'
       - 'Reset Yahoo IQ Auth.cmd'
       - 'data/live/yahoo.json'
@@ -17,6 +19,9 @@ on:
     paths:
       - 'apps/yahoo/**'
       - 'tools/yahoo-sync.py'
+      - 'tools/yahoo-sync.ps1'
+      - 'tools/run-yahoo-sync.ps1'
+      - 'tools/setup-yahoo-mini-pc.ps1'
       - 'data/live/yahoo.json'
       - 'data/examples/yahoo-snapshot.example.json'
       - 'tests/yahoo-regression.py'
@@ -38,6 +43,8 @@ jobs:
           python -m py_compile tools/yahoo-sync.py
           python tests/yahoo-regression.py
           pwsh -NoProfile -Command "[scriptblock]::Create((Get-Content -Raw 'tools/yahoo-sync.ps1')) | Out-Null"
+          pwsh -NoProfile -Command "[scriptblock]::Create((Get-Content -Raw 'tools/run-yahoo-sync.ps1')) | Out-Null"
+          pwsh -NoProfile -Command "[scriptblock]::Create((Get-Content -Raw 'tools/setup-yahoo-mini-pc.ps1')) | Out-Null"
       - name: Reject Yahoo secrets in public assets
         shell: bash
         run: |
@@ -50,10 +57,17 @@ jobs:
           assert not leaked, f'Forbidden Yahoo credential markers in public assets: {leaked}'
           collector=Path('tools/yahoo-sync.py').read_text()
           ps=Path('tools/yahoo-sync.ps1').read_text().lower()
+          runner=Path('tools/run-yahoo-sync.ps1').read_text().lower()
+          setup=Path('tools/setup-yahoo-mini-pc.ps1').read_text().lower()
           assert 'convertfrom-securestring' in ps
           assert "'.sunday-funday-iq'" in ps
           assert 'forbidden public field' in ps
           assert 'reset-auth' in ps
+          assert 'c:\\server' in runner
+          assert '-publish' in runner
+          assert 'yahoo-sync.log' in runner
+          assert 'register-scheduledtask' in setup
+          assert 'yahoo-credentials.json' in setup and 'yahoo-oauth.json' in setup
           reset=Path('Reset Yahoo IQ Auth.cmd').read_text().lower()
           assert '-resetauth' in reset
           assert 'TOKEN_PATH' in collector and '.sunday-funday-iq' in collector
