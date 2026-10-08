@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - '.github/workflows/patch-cbs-refresh-flow.yml'
+      - 'tools/patch-cbs-refresh-flow.py'
 
 permissions:
   contents: write
@@ -24,15 +25,20 @@ jobs:
           python - <<'PY'
           from pathlib import Path
           s=Path('apps/pickem/index.html').read_text(encoding='utf-8')
-          assert "const MODEL_BUILD='1.16.1';" in s
-          assert "CBS_AUTOMATION_URL+'/status'" in s
-          assert 'Refreshing CBS and market data on the mini-PC' in s
+          assert "const MODEL_BUILD='1.16.2';" in s
+          assert 'const baselineStarted=baseline?.lastRefreshStarted||null;' in s
+          assert 'const baselineFinished=baseline?.lastRefreshFinished||null;' in s
+          assert 'finished>=started-5000' not in s
+          assert 'CBSâ€¦' not in s
           Path('/tmp/pickem.js').write_text(s.split('<script>',1)[1].rsplit('</script>',1)[0],encoding='utf-8')
           PY
           node --check /tmp/pickem.js
-          if git diff --quiet -- apps/pickem/index.html; then exit 0; fi
+          node tests/pickem-regression.js
+          node tests/pickem-home-regression.js
+          python tests/cbs-market-parser-regression.py
+          if git diff --quiet -- apps/pickem/index.html tests/pickem-regression.js; then exit 0; fi
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add apps/pickem/index.html
-          git commit -m 'Wire mini-PC refresh into simulation'
+          git add apps/pickem/index.html tests/pickem-regression.js
+          git commit -m 'Fix CBS refresh completion detection'
           git push origin main
