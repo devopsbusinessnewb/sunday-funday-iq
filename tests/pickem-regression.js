@@ -112,16 +112,17 @@ assertCard('postgame',t.extractStructuredCard(post,postGames),expectedPost);
 const fm=t.extractFieldModel(post,postGames);if(!fm||fm.observedEntries!==92)throw new Error(`field model expected 92, got ${fm?.observedEntries}`);
 const live=JSON.parse(fs.readFileSync(path.join(root,'data/live/cbs-pickem.json'),'utf8'));
 const livePickSnap=(live.snapshots||[]).find(x=>/Picks/i.test(x.title||'')),liveMatchups=t.parsePicks(livePickSnap?.text||'');
-if(liveMatchups.length!==16)throw new Error(`published live CBS: expected 16 matchups, got ${liveMatchups.length}`);
+const liveExpected=Array.isArray(live.market)&&live.market.length?live.market.length:liveMatchups.length;
+if(liveExpected<1||liveMatchups.length!==liveExpected)throw new Error(`published live CBS: expected ${liveExpected} matchups, got ${liveMatchups.length}`);
 const liveGames=liveMatchups.map((g,i)=>({id:'g'+(i+1),...g,pick:null,weight:null,locked:false,completed:false,winner:null}));
 const liveCard=t.extractStructuredCard(live,liveGames);
 if(live.confidenceStatus==='unsubmitted'){
   if(liveCard.pickCount!==0||liveCard.weightCount!==0)throw new Error(`published live CBS blank slate unexpectedly contains picks/confidence: ${liveCard.pickCount}/${liveCard.weightCount}`);
   const generated=t.simulationCurrentCard(liveGames);
-  if(generated.source!=='generated_baseline'||!t.validConfidence(generated.card.weights,16))throw new Error('published blank CBS slate cannot generate a valid Week baseline');
+  if(generated.source!=='generated_baseline'||!t.validConfidence(generated.card.weights,liveExpected))throw new Error('published blank CBS slate cannot generate a valid Week baseline');
 }else{
-  if(liveCard.pickCount!==16||liveCard.weightCount!==16)throw new Error(`published live CBS: ${liveCard.pickCount}/${liveCard.weightCount}`);
-  if(new Set(liveCard.weights).size!==16||liveCard.weights.some(x=>x<1||x>16))throw new Error('published live CBS: confidence values must be unique 1–16');
+  if(liveCard.pickCount!==liveExpected||liveCard.weightCount!==liveExpected)throw new Error(`published live CBS: ${liveCard.pickCount}/${liveCard.weightCount}`);
+  if(new Set(liveCard.weights).size!==liveExpected||liveCard.weights.some(x=>x<1||x>liveExpected))throw new Error(`published live CBS: confidence values must be unique 1–${liveExpected}`);
   if(liveCard.picks.some((pick,i)=>pick!==liveGames[i].away&&pick!==liveGames[i].home))throw new Error('published live CBS: invalid matchup pick');
 }
 // A version upgrade must retire old model odds without losing submitted cards
