@@ -33,15 +33,13 @@ const tx=[
   assert.equal(p.max,75);
 }
 
-// Sparse markets should no longer double a fallback just because urgency is high.
 {
   const sparse=m.bidBandFromComparables({transactions:tx,position:'QB',faabRemaining:100,fallback:20,urgency:.5});
   assert.equal(sparse.confidence,'LOW');
   assert.equal(sparse.target,22);
-  assert.equal(sparse.basis,'CLEARING_THRESHOLD_PLUS_LIVE_DEMAND');
+  assert.equal(sparse.basis,'CLEARING_THRESHOLD_PLUS_FULL_LINEUP_DEMAND');
 }
 
-// Real Week 5 pattern: winner bid should NOT become the learned market price.
 const real=[
   {type:'waiver',status:'complete',timestamp:batch,faab_bid:37,roster_ids:[18],adds:[{id:'stafford',position:'QB'}]},
   {type:'waiver',status:'failed',timestamp:batch,faab_bid:10,roster_ids:[12],adds:[{id:'stafford',position:'QB'}]},
@@ -75,7 +73,6 @@ const real=[
   assert.equal(brown.overpay,31);
 }
 
-// The pricing engine must learn required-to-win prices, not historical winning bids.
 {
   const history=[
     ...real,
@@ -87,7 +84,6 @@ const real=[
   assert(qb.high<=20,`QB high should stay disciplined, got ${qb.high}`);
 }
 
-// Live roster context matters: multiple rivals with a QB bye should raise competition modestly.
 {
   const league={roster_positions:['QB','RB','RB','WR','WR','TE','FLEX','FLEX','BN']};
   const mk=(id,qbBye,faab=900)=>({rosterId:id,faabRemaining:faab,players:[
@@ -102,7 +98,6 @@ const real=[
   assert(ctx.multiplier>1,'Two rival QB holes should lift expected clearing price');
 }
 
-// Injuries and uncertain starters should contribute to demand pressure.
 {
   const league={roster_positions:['QB','RB','RB','WR','WR','TE','FLEX','FLEX','BN']};
   const roster={rosterId:1,players:[
@@ -116,7 +111,6 @@ const real=[
   assert(p.uncertainAtPos>=1);
 }
 
-// A chop releasing several viable players at the same position should spread demand and lower the bid forecast.
 {
   const league={roster_positions:['QB','RB','RB','WR','WR','TE','FLEX','FLEX','BN']};
   const roster={rosterId:1,faabRemaining:900,players:[
@@ -128,7 +122,6 @@ const real=[
   assert(many.multiplier<one.multiplier,'More viable released QBs should reduce bid pressure');
 }
 
-// Live demand should adjust, not replace, the historical clearing-price anchor.
 {
   const history=[
     ...real,
@@ -139,6 +132,47 @@ const real=[
   const high=m.bidBandFromComparables({transactions:history,position:'QB',faabRemaining:894,fallback:15,urgency:.3,valueCeiling:40,competition:{multiplier:1.25}});
   assert(high.target>low.target);
   assert(high.target<=25,'Demand adjustment should stay disciplined around historical clearing prices');
+}
+
+// Critical regression: an elite RB must create demand by displacing a weak FLEX even when RB1/RB2 are healthy.
+{
+  const league={roster_positions:['QB','RB','RB','WR','WR','TE','FLEX','FLEX','BN']};
+  const roster={rosterId:7,faabRemaining:940,players:[
+    {id:'qb',position:'QB',projectedPoints:18,active:true,starter:true},
+    {id:'rb1',position:'RB',projectedPoints:14,active:true,starter:true},
+    {id:'rb2',position:'RB',projectedPoints:12,active:true,starter:true},
+    {id:'wr1',position:'WR',projectedPoints:13,active:true,starter:true},
+    {id:'wr2',position:'WR',projectedPoints:11,active:true,starter:true},
+    {id:'te',position:'TE',projectedPoints:8,active:true,starter:true},
+    {id:'weakflex',position:'WR',projectedPoints:5,active:true,starter:true},
+    {id:'flex2',position:'WR',projectedPoints:7,active:true,starter:true},
+    {id:'bench',position:'WR',projectedPoints:4,active:true}
+  ]};
+  const barkley={id:'barkley',position:'RB',projectedPoints:16,active:true};
+  const fit=m.targetRosterFit({roster,target:barkley,week:5,league});
+  assert.equal(fit.targetStarts,true,'Elite RB should start through FLEX even with two healthy RB starters');
+  assert(['FLEX','WRT'].includes(fit.targetSlot),'Target should enter a FLEX slot');
+  assert(fit.marginalUpgrade>=9,'Target should displace weak FLEX and create meaningful upgrade');
+  assert.equal(fit.displacedPlayer.id,'weakflex');
+
+  const ctx=m.competitionContext({rosters:[roster],target:barkley,position:'RB',week:5,league,myRosterId:18,releasedPlayers:[barkley],targetScarcity:.9});
+  assert.equal(ctx.starterUpgradeBidders,1,'Roster should count as a bidder because Barkley improves FLEX');
+  assert(ctx.rows[0].likely,'FLEX upgrade must contribute to likely bidder status');
+  assert(ctx.multiplier>1,'FLEX-driven demand should increase expected clearing price');
+}
+
+// Cross-position chop supply can relieve FLEX demand, but less than a true same-position substitute.
+{
+  const league={roster_positions:['QB','RB','RB','WR','WR','TE','FLEX','FLEX','BN']};
+  const roster={rosterId:1,faabRemaining:900,players:[
+    {position:'QB',projectedPoints:18,active:true},{position:'RB',projectedPoints:13,active:true},{position:'RB',projectedPoints:12,active:true},
+    {position:'WR',projectedPoints:10,active:true},{position:'WR',projectedPoints:9,active:true},{position:'TE',projectedPoints:7,active:true},
+    {position:'WR',projectedPoints:4,active:true},{position:'WR',projectedPoints:5,active:true}
+  ]};
+  const target={id:'elite-rb',position:'RB',projectedPoints:16,active:true};
+  const same=m.competitionContext({rosters:[roster],target,position:'RB',week:5,league,myRosterId:99,releasedPlayers:[target,{id:'rb-alt',position:'RB',projectedPoints:12,active:true}],targetScarcity:.3});
+  const cross=m.competitionContext({rosters:[roster],target,position:'RB',week:5,league,myRosterId:99,releasedPlayers:[target,{id:'wr-alt',position:'WR',projectedPoints:12,active:true}],targetScarcity:.3});
+  assert(same.multiplier<cross.multiplier,'Same-position substitute should relieve demand more than flex-only substitute');
 }
 
 console.log('Guillotine market engine regression suite passed');
