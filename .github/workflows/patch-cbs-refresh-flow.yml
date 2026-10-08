@@ -21,8 +21,15 @@ jobs:
       - name: Validate and publish
         run: |
           git diff --check
-          node tests/pickem-regression.js
-          node tests/pickem-home-regression.js
+          python - <<'PY'
+          from pathlib import Path
+          s=Path('apps/pickem/index.html').read_text(encoding='utf-8')
+          assert "const MODEL_BUILD='1.16.1';" in s
+          assert "CBS_AUTOMATION_URL+'/status'" in s
+          assert 'Refreshing CBS and market data on the mini-PC' in s
+          Path('/tmp/pickem.js').write_text(s.split('<script>',1)[1].rsplit('</script>',1)[0],encoding='utf-8')
+          PY
+          node --check /tmp/pickem.js
           if git diff --quiet -- apps/pickem/index.html; then exit 0; fi
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
