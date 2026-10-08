@@ -145,7 +145,7 @@ const POOL_HISTORY_URL='../../data/analysis/cbs-pool-history-report.json';
 const SEARCH_ITERS=700;
 const FINAL_ITERS=3000;
 const VALIDATION_SEEDS=3;
-const MODEL_BUILD='1.16.0';
+const MODEL_BUILD='1.16.1';
 const CONFIDENCE_TIE_BAND=.025;
 const MIN_OPTIONAL_FLIP_PROB=.40;
 const MIN_OPTIONAL_MARKET_PROB=.38;
@@ -1735,7 +1735,7 @@ async function triggerMiniPcCbsRefresh(){
   while(Date.now()<statusDeadline){
     await waitFor(1800);
     let statusResponse;
-    try{statusResponse=await fetch(CBS_AUTOMATION_URL+'/status?v='+Date.now(),{cache:'no-store'})}catch(_){continue}
+    try{statusResponse=await fetch(CBS_AUTOMATION_URL+'/status',{cache:'no-store'})}catch(_){continue}
     if(!statusResponse.ok)continue;
     const status=await statusResponse.json();
     if(status.refreshing){show('Mini-PC is refreshing CBSâ€¦');continue}
@@ -1781,11 +1781,10 @@ async function boot(){
   if(['safest','balanced','aggressive','maxUpside'].includes(routeParams.get('scenario'))){await runScenarioLab(routeParams.get('scenario'));return}
   if(routeParams.get('lab')==='1'){await runModelLab();return}
   if(routeParams.get('action')==='refresh-simulate'){
-    renderRunProgress('cbs','Loading the published CBS card and latest revealed standings…');
-    const imported=await loadPublishedCbs({silent:false,onlyIfNewer:false});
-    if(!imported){const message='CBS data could not be loaded. The old card was not simulated.';show(message+' Check the published CBS JSON, then try again.','red');renderRunProgress('cbs',message,true);return}
-    renderRunProgress('market','CBS data loaded. Verifying current market odds…');
-    if(!dataFreshness(state).market.current){const message='Market odds are stale or unavailable. IQ did not simulate with old odds.';show(message,'red');renderRunProgress('market',message,true);return}
+    renderRunProgress('cbs','Refreshing CBS and market data on the mini-PC…');
+    try{await triggerMiniPcCbsRefresh()}catch(e){const message='CBS refresh failed: '+e.message;show(message,'red');renderRunProgress('cbs',message,true);return}
+    renderRunProgress('market','CBS and market data refreshed. Verifying current inputs…');
+    if(!dataFreshness(state).market.current){const message='Fresh market odds were not available after the mini-PC refresh. IQ did not simulate with old odds.';show(message,'red');renderRunProgress('market',message,true);return}
     renderRunProgress('simulation','Inputs are current. Building and stress-testing all four cards…');
     await runSimulation();
   }
