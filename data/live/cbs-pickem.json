@@ -4,18 +4,18 @@
   "season": 2026,
   "week": 5,
   "poolSize": 94,
-  "exportedAt": "2026-10-08T22:35:49.367702Z",
+  "exportedAt": "2026-10-08T22:46:59.324575Z",
   "source": "Automated local CBS browser capture",
   "privacy": "Raw CBS session/page data sanitized locally; pool/account identifiers and participant names not published.",
-  "confidenceStatus": "unsubmitted",
-  "confidenceSource": "CBS Picks status",
-  "marketCapturedAt": "2026-10-08T22:35:49.367665Z",
+  "confidenceStatus": "submitted",
+  "confidenceSource": "Automated CBS Weekly Standings row",
+  "marketCapturedAt": "2026-10-08T22:46:59.324534Z",
   "marketSource": "CBS Sports odds \u2014 Week 5",
   "market": [
     {
       "away": "TB",
       "home": "DAL",
-      "awayML": 400,
+      "awayML": 390,
       "homeML": -461,
       "total": 48.8
     },
@@ -120,7 +120,7 @@
   ],
   "fieldModel": {
     "source": "Sanitized CBS revealed-pool observations",
-    "capturedAt": "2026-10-08T22:35:42.036064Z",
+    "capturedAt": "2026-10-08T22:46:53.098965Z",
     "observedEntries": 0,
     "locked": []
   },
@@ -128,14 +128,50 @@
     {
       "title": "NFL Football Tourney | Picks",
       "url": "sanitized://cbs-pickem/week-5",
-      "ts": "2026-10-08T22:35:36.791117Z",
-      "text": "CBS Pickem sanitized ownership\n0-0\nTB\n4%\n0-0\nDAL\n96%\n0-0\nPHI\n11%\n0-0\nJAX\n89%\n0-0\nCIN\n97%\n0-0\nMIA\n3%\n0-0\nLV\n40%\n0-0\nNE\n60%\n0-0\nMIN\n84%\n0-0\nNO\n16%\n0-0\nCLE\n77%\n0-0\nNYJ\n23%\n0-0\nIND\n34%\n0-0\nPIT\n66%\n0-0\nHOU\n90%\n0-0\nTEN\n10%\n0-0\nNYG\n69%\n0-0\nWAS\n31%\n0-0\nCHI\n76%\n0-0\nGB\n24%\n0-0\nDEN\n84%\n0-0\nLAC\n16%\n0-0\nDET\n92%\n0-0\nARI\n8%\n0-0\nSF\n45%\n0-0\nSEA\n55%\n0-0\nBAL\n46%\n0-0\nATL\n54%\n0-0\nBUF\n52%\n0-0\nLAR\n48%"
+      "ts": "2026-10-08T22:46:47.702716Z",
+      "text": "CBS Pickem sanitized ownership\n0-0\nTB\n4%\n0-0\nDAL\n96%\n0-0\nPHI\n11%\n0-0\nJAX\n89%\n0-0\nCIN\n97%\n0-0\nMIA\n3%\n0-0\nLV\n40%\n0-0\nNE\n60%\n0-0\nMIN\n84%\n0-0\nNO\n16%\n0-0\nCLE\n77%\n0-0\nNYJ\n23%\n0-0\nIND\n34%\n0-0\nPIT\n66%\n0-0\nHOU\n90%\n0-0\nTEN\n10%\n0-0\nNYG\n68%\n0-0\nWAS\n32%\n0-0\nCHI\n76%\n0-0\nGB\n24%\n0-0\nDEN\n84%\n0-0\nLAC\n16%\n0-0\nDET\n92%\n0-0\nARI\n8%\n0-0\nSF\n45%\n0-0\nSEA\n55%\n0-0\nBAL\n46%\n0-0\nATL\n54%\n0-0\nBUF\n52%\n0-0\nLAR\n48%"
     },
     {
       "title": "NFL Football Tourney | Weekly Standings",
       "url": "sanitized://cbs-pickem/week-5/standings/weekly",
-      "ts": "2026-10-08T22:35:42.036064Z",
+      "ts": "2026-10-08T22:46:53.098965Z",
       "text": "Weekly Standings\nSanitized observations\nSUN\nTB\nDAL\nSUN\nPHI\nJAX\nSUN\nCIN\nMIA\nSUN\nLV\nNE\nSUN\nMIN\nNO\nSUN\nCLE\nNYJ\nSUN\nIND\nPIT\nSUN\nHOU\nTEN\nSUN\nNYG\nWAS\nSUN\nCHI\nGB\nSUN\nDEN\nLAC\nSUN\nDET\nARI\nSUN\nSF\nSEA\nSUN\nBAL\nATL\nSUN\nBUF\nLAR"
     }
-  ]
+  ],
+  "myCard": {
+    "picks": [
+      "DAL",
+      "JAX",
+      "CIN",
+      "LV",
+      "MIN",
+      "CLE",
+      "PIT",
+      "HOU",
+      "NYG",
+      "GB",
+      "DEN",
+      "DET",
+      "SF",
+      "ATL",
+      "BUF"
+    ],
+    "weights": [
+      15,
+      14,
+      13,
+      12,
+      11,
+      10,
+      9,
+      8,
+      7,
+      6,
+      5,
+      4,
+      3,
+      2,
+      1
+    ]
+  }
 }
