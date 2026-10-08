@@ -104,10 +104,13 @@
   }
 
   // ----- Live competition model -----
-  // Historical clearing price is the anchor. Current roster needs only adjust that anchor modestly.
+  // Historical clearing price is the anchor. Current roster need and full-lineup fit adjust that anchor.
   const BLOCKED_WORDS=['out','injured reserve','ir','pup','suspended','suspension','exempt','commissioner exempt','nfi','reserve'];
   const UNCERTAIN_WORDS=['questionable','doubtful','concussion','limited','did not practice','dnp','day-to-day'];
-  function rosterPlayers(roster){return Array.isArray(roster?.players)?roster.players:[]}
+  function rosterPlayers(roster){
+    if(Array.isArray(roster?.players))return roster.players;
+    return [...(roster?.starters||[]),...(roster?.bench||[])].filter(p=>p&&!p.empty);
+  }
   function playerStatusText(p){return [p?.status,p?.injuryStatus,p?.injury_status,p?.administrativeStatus].filter(Boolean).join(' ').toLowerCase()}
   function weekAvailability(p,week){
     const bye=Number(p?.bye??p?.byeWeek??0);
@@ -123,12 +126,78 @@
     const counts={};for(const s of slots)counts[String(s).toUpperCase()]=(counts[String(s).toUpperCase()]||0)+1;
     return counts;
   }
+  function lineupSlots(league={}){
+    const slots=league?.rosterPositions||league?.roster_positions||[];
+    return slots.map(String).map(x=>x.toUpperCase()).filter(s=>!['BN','BENCH','IR','RESERVE','TAXI'].includes(s));
+  }
+  function eligibleForSlot(position,slot){
+    const pos=String(position||'').toUpperCase(),s=String(slot||'').toUpperCase();
+    if(s===pos)return true;
+    if(['FLEX','WRT'].includes(s))return ['RB','WR','TE'].includes(pos);
+    if(['WRRB_FLEX','RBWR_FLEX'].includes(s))return ['RB','WR'].includes(pos);
+    if(['REC_FLEX','WRTE_FLEX'].includes(s))return ['WR','TE'].includes(pos);
+    if(['SUPER_FLEX','SUPERFLEX'].includes(s))return ['QB','RB','WR','TE'].includes(pos);
+    return false;
+  }
+  function playerValue(p){
+    for(const k of ['projectedPoints','projection','projected','proj','valueScore','fantasyPoints','points']){
+      const v=num(p?.[k]);if(v!=null)return v;
+    }
+    // Fallback preserves current starters above unknown bench players without pretending to know a projection.
+    return p?.starter?10:0;
+  }
+  function bestLineup({players=[],league={},week=null}={}){
+    const slots=lineupSlots(league);
+    const pool=(players||[]).filter(p=>weekAvailability(p,week).usable);
+    let best={score:-Infinity,assignments:[]};
+    function dfs(i,used,score,assignments){
+      if(i>=slots.length){if(score>best.score)best={score,assignments:[...assignments]};return;}
+      const slot=slots[i];
+      // Leaving a slot empty is allowed so this can quantify hard lineup holes.
+      dfs(i+1,used,score,assignments.concat([{slot,player:null,value:0}]));
+      for(let j=0;j<pool.length;j++){
+        if(used.has(j)||!eligibleForSlot(playerPosition(pool[j]),slot))continue;
+        used.add(j);
+        dfs(i+1,used,score+playerValue(pool[j]),assignments.concat([{slot,player:pool[j],value:playerValue(pool[j])}]));
+        used.delete(j);
+      }
+    }
+    dfs(0,new Set(),0,[]);
+    return best.score===-Infinity?{score:0,assignments:[]}:best;
+  }
+  function targetRosterFit({roster,target,week,league,targetValue=null}={}){
+    const players=rosterPlayers(roster);
+    const before=bestLineup({players,league,week});
+    const t={...(target||{})};
+    if(targetValue!=null)t.projectedPoints=Number(targetValue);
+    const after=bestLineup({players:[...players,t],league,week});
+    const tid=playerId(t)||'__TARGET__';
+    if(!playerId(t))t.id=tid;
+    const selected=after.assignments.find(a=>a.player&&(a.player===t||playerId(a.player)===tid));
+    const beforeIds=new Set(before.assignments.filter(a=>a.player).map(a=>playerId(a.player)));
+    const afterIds=new Set(after.assignments.filter(a=>a.player&&a.player!==t).map(a=>playerId(a.player)));
+    const displaced=before.assignments.map(a=>a.player).find(p=>p&&!afterIds.has(playerId(p)))||null;
+    const emptyBefore=before.assignments.filter(a=>!a.player).length;
+    const emptyAfter=after.assignments.filter(a=>!a.player).length;
+    return {
+      rosterId:String(roster?.rosterId??roster?.roster_id??''),
+      targetStarts:Boolean(selected),
+      targetSlot:selected?.slot||null,
+      marginalUpgrade:Math.max(0,after.score-before.score),
+      fillsLineupHole:emptyAfter<emptyBefore,
+      emptySlotsBefore:emptyBefore,
+      emptySlotsAfter:emptyAfter,
+      displacedPlayer:displaced,
+      beforeScore:before.score,
+      afterScore:after.score
+    };
+  }
   function rosterPositionPressure({roster,position,week,league}={}){
     const pos=String(position||'').toUpperCase();
     const players=rosterPlayers(roster);
     const counts=leagueSlotCounts(league);
     const exactRequired=Number(counts[pos]||0);
-    const flexRequired=Number(counts.FLEX||0)+Number(counts.WRT||0)+Number(counts.WRRB_FLEX||0);
+    const flexRequired=Number(counts.FLEX||0)+Number(counts.WRT||0)+Number(counts.WRRB_FLEX||0)+Number(counts.RBWR_FLEX||0)+Number(counts.REC_FLEX||0)+Number(counts.WRTE_FLEX||0);
     const activeAtPos=players.filter(p=>playerPosition(p)===pos&&weekAvailability(p,week).usable).length;
     const unavailableAtPos=players.filter(p=>playerPosition(p)===pos&&!weekAvailability(p,week).usable).length;
     const uncertainAtPos=players.filter(p=>playerPosition(p)===pos&&weekAvailability(p,week).reason==='UNCERTAIN').length;
@@ -137,7 +206,6 @@
     const flexBase=Number(counts.RB||0)+Number(counts.WR||0)+Number(counts.TE||0)+flexRequired;
     const hardDeficit=Math.max(0,exactRequired-activeAtPos);
     const flexDeficit=['RB','WR','TE'].includes(pos)?Math.max(0,flexBase-activeFlex):0;
-    // Hard lineup holes dominate. Uncertainty and flex squeeze add softer demand pressure.
     const pressure=hardDeficit*3+Math.min(2,unavailableAtPos)*1.1+Math.min(2,uncertainAtPos)*.6+Math.min(2,flexDeficit)*.7;
     return {rosterId:String(roster?.rosterId??roster?.roster_id??''),position:pos,activeAtPos,unavailableAtPos,uncertainAtPos,hardDeficit,flexDeficit,pressure,urgent:hardDeficit>0,likely:pressure>=1.2};
   }
@@ -147,26 +215,38 @@
     const used=num(roster?.faabUsed??roster?.settings?.waiver_budget_used);
     return used==null?Number(startFaab||1000):Math.max(0,Number(startFaab||1000)-used);
   }
-  function competitionContext({rosters=[],position,week,league,myRosterId=null,releasedPlayers=[],startFaab=1000,targetScarcity=.5}={}){
-    const pos=String(position||'').toUpperCase();
+  function sharedLineupSlot(target,alternative,league){
+    const slots=lineupSlots(league);
+    return slots.some(s=>eligibleForSlot(playerPosition(target),s)&&eligibleForSlot(playerPosition(alternative),s));
+  }
+  function competitionContext({rosters=[],position,week,league,myRosterId=null,releasedPlayers=[],startFaab=1000,targetScarcity=.5,target=null,targetValue=null}={}){
+    const pos=String(position||playerPosition(target)||'').toUpperCase();
     const rivals=(rosters||[]).filter(r=>String(r?.rosterId??r?.roster_id??'')!==String(myRosterId??'')&&rosterPlayers(r).length);
     const rows=rivals.map(r=>{
       const need=rosterPositionPressure({roster:r,position:pos,week,league});
+      const fit=target?targetRosterFit({roster:r,target,week,league,targetValue}):null;
       const faab=rosterFaab(r,startFaab);
       const budgetWeight=clamp(faab/Math.max(1,Number(startFaab||1000)),.15,1.2);
-      return {...need,faabRemaining:faab,weightedPressure:need.pressure*budgetWeight};
+      // A target that cracks the best legal lineup creates demand even when the nominal position is already healthy.
+      const flexFitPressure=fit?.targetStarts?(fit.fillsLineupHole?3:1+Math.min(2.5,fit.marginalUpgrade/4)):0;
+      const totalPressure=need.pressure+flexFitPressure;
+      return {...need,fit,faabRemaining:faab,pressure:totalPressure,weightedPressure:totalPressure*budgetWeight,urgent:need.urgent||Boolean(fit?.fillsLineupHole),likely:need.likely||Boolean(fit?.targetStarts)||totalPressure>=1.2};
     });
     const urgentBidders=rows.filter(r=>r.urgent&&r.faabRemaining>0);
     const likelyBidders=rows.filter(r=>r.likely&&r.faabRemaining>0);
+    const starterUpgradeBidders=rows.filter(r=>r.fit?.targetStarts&&r.faabRemaining>0);
     const pressure=rows.reduce((s,r)=>s+r.weightedPressure,0);
-    const supply=(releasedPlayers||[]).filter(p=>playerPosition(p)===pos&&weekAvailability(p,week).usable);
-    const alternatives=Math.max(0,supply.length-1);
+    const supply=(releasedPlayers||[]).filter(p=>weekAvailability(p,week).usable&&(target?sharedLineupSlot(target,p,league):playerPosition(p)===pos));
+    const equivalentAlternatives=supply.reduce((s,p)=>{
+      if(target&&playerId(p)===playerId(target))return s;
+      return s+(playerPosition(p)===pos?1:.4);
+    },0);
+    const alternatives=Math.max(0,equivalentAlternatives);
     const scarcity=clamp(Number(targetScarcity||0),0,1);
-    // Demand can increase forecast, but not explode it. Multiple released alternatives spread bidding.
-    const demandLift=Math.min(.32,urgentBidders.length*.055+Math.max(0,likelyBidders.length-urgentBidders.length)*.02+Math.min(8,pressure)*.008);
-    const supplyRelief=Math.min(.22,alternatives*.045)*(1-.75*scarcity);
-    const multiplier=clamp(1+demandLift-supplyRelief,.82,1.35);
-    return {position:pos,rivals:rows.length,urgentBidders:urgentBidders.length,likelyBidders:likelyBidders.length,pressure,availableFaab:rows.reduce((s,r)=>s+r.faabRemaining,0),releasedSupply:supply.length,alternatives,multiplier,rows};
+    const demandLift=Math.min(.40,urgentBidders.length*.055+Math.max(0,likelyBidders.length-urgentBidders.length)*.02+starterUpgradeBidders.length*.018+Math.min(10,pressure)*.008);
+    const supplyRelief=Math.min(.24,alternatives*.04)*(1-.75*scarcity);
+    const multiplier=clamp(1+demandLift-supplyRelief,.82,1.42);
+    return {position:pos,rivals:rows.length,urgentBidders:urgentBidders.length,likelyBidders:likelyBidders.length,starterUpgradeBidders:starterUpgradeBidders.length,pressure,availableFaab:rows.reduce((s,r)=>s+r.faabRemaining,0),releasedSupply:supply.length,equivalentAlternatives:alternatives,multiplier,rows};
   }
 
   function bidBandFromComparables({transactions=[],position='',faabRemaining=1000,fallback=10,urgency=0,valueCeiling=null,competition=null}={}){
@@ -175,21 +255,20 @@
     const budget=Math.max(0,Number(faabRemaining||0));
     const ceiling=valueCeiling==null?budget:Math.min(budget,Math.max(0,Number(valueCeiling)));
     const u=Math.max(0,Math.min(1,Number(urgency||0)));
-    const competitionMultiplier=competition?.multiplier==null?1:clamp(Number(competition.multiplier),.82,1.35);
+    const competitionMultiplier=competition?.multiplier==null?1:clamp(Number(competition.multiplier),.82,1.42);
     if(vals.length<2){
       const base=Math.max(1,Number(fallback||10));
       const raw=base*(1+.20*u)*competitionMultiplier;
       const target=Math.min(ceiling,Math.max(1,Math.round(raw)));
-      return {sampleSize:vals.length,low:Math.max(1,Math.round(target*.8)),target,high:Math.min(ceiling,Math.max(target,Math.round(target*1.20))),confidence:'LOW',basis:'CLEARING_THRESHOLD_PLUS_LIVE_DEMAND',competitionMultiplier};
+      return {sampleSize:vals.length,low:Math.max(1,Math.round(target*.8)),target,high:Math.min(ceiling,Math.max(target,Math.round(target*1.20))),confidence:'LOW',basis:'CLEARING_THRESHOLD_PLUS_FULL_LINEUP_DEMAND',competitionMultiplier};
     }
     const low=percentile(vals,.50),base=percentile(vals,.70),upper=percentile(vals,.85);
     const historical=base+(upper-base)*(.25+.25*u);
     const market=historical*competitionMultiplier;
     const target=Math.min(ceiling,Math.max(1,Math.round(market+1)));
-    // Even with intense live demand, do not create an unlimited insurance premium over the adjusted market.
     const highBase=Math.max(target,Math.round((upper+2)*competitionMultiplier));
     const high=Math.min(ceiling,highBase);
-    return {sampleSize:vals.length,low:Math.min(ceiling,Math.max(1,Math.round(low*competitionMultiplier))),target,high,confidence:vals.length>=6?'HIGH':'MEDIUM',basis:'CLEARING_THRESHOLD_PLUS_LIVE_DEMAND',competitionMultiplier};
+    return {sampleSize:vals.length,low:Math.min(ceiling,Math.max(1,Math.round(low*competitionMultiplier))),target,high,confidence:vals.length>=6?'HIGH':'MEDIUM',basis:'CLEARING_THRESHOLD_PLUS_FULL_LINEUP_DEMAND',competitionMultiplier};
   }
-  return {median,percentile,completedWaiverBids,waiverAttempts,auctionResults,positionClears,positionAuctions,marketSnapshot,managerProfile,playerAuction,weekAvailability,rosterPositionPressure,competitionContext,bidBandFromComparables};
+  return {median,percentile,completedWaiverBids,waiverAttempts,auctionResults,positionClears,positionAuctions,marketSnapshot,managerProfile,playerAuction,weekAvailability,lineupSlots,eligibleForSlot,playerValue,bestLineup,targetRosterFit,rosterPositionPressure,competitionContext,bidBandFromComparables};
 });
