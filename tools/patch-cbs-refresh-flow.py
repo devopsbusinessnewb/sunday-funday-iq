@@ -53,6 +53,14 @@ s = s[:start] + new_refresh + s[end:]
 s = s.replace('â€¦','…')
 app.write_text(s, encoding='utf-8')
 
+home = Path('index.html')
+h = home.read_text(encoding='utf-8')
+h = h.replace("const MODEL_BUILD='1.15.2';", "const MODEL_BUILD='1.16.2';")
+h = h.replace("const MODEL_BUILD='1.16.1';", "const MODEL_BUILD='1.16.2';")
+if "const MODEL_BUILD='1.16.2';" not in h:
+    raise SystemExit('home MODEL_BUILD anchor not found')
+home.write_text(h, encoding='utf-8')
+
 # Week length is not always 16 games. Keep live-data validation tied to the
 # published market/slate size while preserving the fixed 16-game fixture tests.
 test = Path('tests/pickem-regression.js')
@@ -87,4 +95,4 @@ if old in t:
 elif 'const liveExpected=' not in t:
     raise SystemExit('live-week regression block not found; refusing partial patch')
 test.write_text(t,encoding='utf-8')
-print('patched refresh lifecycle and variable-week regression')
+print('patched refresh lifecycle, home build, and variable-week regression')
