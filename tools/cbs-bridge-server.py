@@ -5,12 +5,15 @@ Raw CBS page data is accepted only on localhost and is never written to disk.
 The service sanitizes it in memory, writes data/live/cbs-pickem.json, and may
 commit/push when SFIQ_AUTO_PUSH=1.
 """
+import importlib.util
 import json, os, re, subprocess, sys, threading, uuid, uuid
 from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
 ROOT=Path(__file__).resolve().parents[1]
+_runtime_spec=importlib.util.spec_from_file_location('cbs_worker_runtime',Path(__file__).with_name('cbs-worker-runtime.py'))
+runtime=importlib.util.module_from_spec(_runtime_spec); _runtime_spec.loader.exec_module(runtime)
 OUTPUT=ROOT/'data'/'live'/'cbs-pickem.json'
 COLLECTOR=ROOT/'tools'/'cbs-collector.py'
 AUTO_PUSH=os.environ.get('SFIQ_AUTO_PUSH','0')=='1'
@@ -244,7 +247,7 @@ class Handler(BaseHTTPRequestHandler):
         if self.path=='/health': return self._json(200,{'ok':True,'service':'CBS IQ automation','autoPush':AUTO_PUSH})
         if self.path=='/status':
             with LOCK: status=dict(SERVICE)
-            return self._json(200,{'ok':True,'autoPush':AUTO_PUSH,**status})
+            return self._json(200,{'ok':True,'autoPush':AUTO_PUSH,**status,'collector':runtime.read_status()})
         if self.path=='/live':
             try: payload=json.loads(OUTPUT.read_text(encoding='utf-8'))
             except Exception as exc: return self._json(404,{'ok':False,'error':'Sanitized CBS payload is unavailable: '+str(exc)})
