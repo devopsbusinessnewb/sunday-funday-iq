@@ -1,0 +1,47 @@
+name: Fix CBS current week import
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/patch-cbs-current-week.py'
+      - 'tests/cbs-current-week-regression.py'
+      - '.github/workflows/fix-cbs-current-week.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Patch current-week import
+        run: python tools/patch-cbs-current-week.py
+      - name: Validate current-week behavior
+        run: |
+          git diff --check
+          python tests/cbs-current-week-regression.py
+          python - <<'PY'
+          from pathlib import Path
+          for path in ('apps/pickem/index.html','index.html'):
+            s=Path(path).read_text(encoding='utf-8')
+            Path('/tmp/'+path.replace('/','-')+'.js').write_text(s.split('<script>',1)[1].rsplit('</script>',1)[0],encoding='utf-8')
+          PY
+          node --check /tmp/apps-pickem-index.html.js
+          node --check /tmp/index.html.js
+          node tests/pickem-regression.js
+          node tests/pickem-home-regression.js
+          node tests/pickem-strategy-regression.js
+          node tests/cbs-phone-refresh-regression.js
+          python tests/cbs-market-parser-regression.py
+      - name: Publish fix
+        run: |
+          if git diff --quiet -- index.html apps/pickem/index.html; then exit 0; fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html apps/pickem/index.html
+          git commit -m 'Fix current-week CBS import and model lab slate'
+          git push origin main
