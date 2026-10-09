@@ -11,6 +11,7 @@ $names = @($serverName) + @(1..9 | ForEach-Object { 'Sunday Funday IQ - CBS Refr
 $scheduler = New-Object -ComObject 'Schedule.Service'
 $scheduler.Connect()
 $folder = $scheduler.GetFolder('\')
+if ($folder.GetTask($serverName).State -ne 4) { throw 'CBS server task must be running before setup; no tasks changed.' }
 $originals = @($names | ForEach-Object {
     $task = $folder.GetTask($_)
     if (-not $task.Enabled) { throw 'An expected CBS task is disabled; no tasks changed.' }
