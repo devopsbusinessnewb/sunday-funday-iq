@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Persistent-browser CBS collector for Sunday Funday IQ."""
+import importlib.util
 import argparse, json, os, re, sys, urllib.request, urllib.error
 from datetime import datetime, timezone
 from pathlib import Path
@@ -15,6 +16,8 @@ DEFAULT_PROFILE=Path(LOCAL_APPDATA)/'SundayFundayIQ'/'cbs-profile' if LOCAL_APPD
 PROFILE_DIR=Path(os.environ.get('SFIQ_CBS_PROFILE_DIR',str(DEFAULT_PROFILE))).expanduser()
 RECEIVER=os.environ.get('SFIQ_CBS_RECEIVER','http://127.0.0.1:43128/cbs-capture')
 HEADLESS=os.environ.get('SFIQ_CBS_HEADLESS','1')=='1'
+_runtime_spec=importlib.util.spec_from_file_location('cbs_worker_runtime',Path(__file__).with_name('cbs-worker-runtime.py'))
+runtime=importlib.util.module_from_spec(_runtime_spec); _runtime_spec.loader.exec_module(runtime)
 def iso_now(): return datetime.now(timezone.utc).isoformat().replace('+00:00','Z')
 def open_context(p,headless):
     PROFILE_DIR.mkdir(parents=True,exist_ok=True); kwargs=dict(user_data_dir=str(PROFILE_DIR),headless=headless,viewport={'width':1440,'height':1000})
@@ -72,5 +75,12 @@ def collect(debug_odds=False):
             print(json.dumps(result))
         finally: ctx.close()
 def main():
-    parser=argparse.ArgumentParser(); parser.add_argument('--login',action='store_true'); parser.add_argument('--debug-odds',action='store_true'); args=parser.parse_args(); login_mode() if args.login else collect(args.debug_odds)
+    parser=argparse.ArgumentParser(); parser.add_argument('--login',action='store_true'); parser.add_argument('--debug-odds',action='store_true'); args=parser.parse_args()
+    try:
+        with runtime.ProfileLock(PROFILE_DIR):
+            if args.login: login_mode()
+            else: runtime.run_recorded(lambda: collect(args.debug_odds))
+    except runtime.CollectorBusy as exc:
+        print(str(exc),file=sys.stderr)
+        raise SystemExit(75)
 if __name__=='__main__': main()

@@ -26,11 +26,21 @@ try{
     exit 0
   }
 
+  # Never update/restart while a scheduled collector or bridge refresh is active.
+  $active=@(Get-ScheduledTask -TaskName 'Sunday Funday IQ - CBS Refresh *' -ErrorAction SilentlyContinue | Where-Object { $_.State -eq 'Running' })
+  if($active.Count -gt 0){ Write-Log 'Deferred update: scheduled CBS collection is active.'; exit 0 }
+  try{
+    $status=Invoke-RestMethod 'http://127.0.0.1:43128/status' -TimeoutSec 10
+    if($status.refreshing){ Write-Log 'Deferred update: bridge CBS collection is active.'; exit 0 }
+  }catch{
+    Write-Log 'Deferred update: CBS status could not be verified.'
+    exit 0
+  }
   $changed=@(& git diff --name-only $local $remote)
   & git merge --ff-only origin/main --quiet
   if($LASTEXITCODE -ne 0){ throw 'git fast-forward merge failed' }
 
-  $restart=$changed | Where-Object { $_ -in @('tools/cbs-bridge-server.py','tools/cbs-collector.py','tools/enable-cbs-production.ps1') }
+  $restart=$changed | Where-Object { $_ -in @('tools/cbs-bridge-server.py','tools/cbs-collector.py','tools/cbs-worker-runtime.py','tools/enable-cbs-production.ps1') }
   if($restart){
     $task='Sunday Funday IQ - CBS Automation Server'
     if(Get-ScheduledTask -TaskName $task -ErrorAction SilentlyContinue){
