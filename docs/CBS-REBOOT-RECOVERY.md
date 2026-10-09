@@ -47,7 +47,22 @@ After making changes:
 
 If the new logon context cannot access the CBS session or publish, restore the saved interactive task registrations and start the original server task. Keep the existing browser profile unchanged. Do not auto-login Windows, reset browser sessions, discard repository changes, or disable security controls.
 
-The migration implementation and live reboot test remain pending. The read-only report is preparation, not a completed fix. Do not reboot automatically as part of installation.
+## Bundled unattended setup
+
+Run tools/enable-cbs-unattended.ps1 explicitly from elevated Windows PowerShell under the existing CBS account. It prompts locally for that account's password. It requires all 11 expected tasks to be enabled, interactive, and owned by the same current user. It defers while known refreshes or updates are active.
+
+The script backs up original task XML under C:\\Server\\Backups\\CBS-Tasks with access limited to the current account, SYSTEM and Administrators. It disables scheduled launches, rechecks idle state, stages disabled password-logon registrations, starts the bridge in that context, validates authenticated collection and remote snapshot publication, then enables remaining tasks. It does not reboot or change the browser profile. On migration failure it attempts to restore all original interactive definitions and restart the original bridge. Task registration passwords are only passed in memory to Windows; they are not written by the script.
+
+Manual recovery, from elevated PowerShell:
+`& .\\tools\\restore-cbs-task-backup.ps1 -BackupDirectory 'the directory printed by setup'`
+
+The task backups are local recovery copies, not off-device backups. Do not upload them. Updating the Windows account password later requires updating these task credentials locally.
+
+Both legacy installers now protect existing unattended registrations: the production installer refuses to recreate them; the updater installer preserves an existing password-logon task with the expected action.
+
+Windows CI checks script syntax and uses the native Task Scheduler serializer to verify identity, action and schedule preservation, disabled staging, delayed boot, and nonduplicating triggers. It does not exercise live account credentials, CBS authentication, task registration rollback, or startup before sign-in.
+
+The live migration and controlled reboot test remain pending until this setup is run on EICKHOFF-SERVER. A successful migration report proves the new execution context works while Windows is signed in; it does not prove behavior after reboot. Do not reboot automatically as part of installation.
 
 ## Platform boundaries and follow-up
 
