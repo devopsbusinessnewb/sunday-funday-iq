@@ -145,7 +145,7 @@ const POOL_HISTORY_URL='../../data/analysis/cbs-pool-history-report.json';
 const SEARCH_ITERS=700;
 const FINAL_ITERS=3000;
 const VALIDATION_SEEDS=3;
-const MODEL_BUILD='1.16.4';
+const MODEL_BUILD='1.16.5';
 const CONFIDENCE_TIE_BAND=.025;
 const MIN_OPTIONAL_FLIP_PROB=.40;
 const MIN_OPTIONAL_MARKET_PROB=.38;
@@ -1726,35 +1726,15 @@ function applyRecommended(){if(!state.recommendedCard)return;if(!state.originalC
 function revertOriginal(){if(!state.originalCard)return;applyCardToGames(state.games,state.originalCard);state.applied=false;state.confidenceStatus=state.originalConfidenceStatus||'submitted';state.confidenceSource=state.confidenceStatus==='placeholder'?'Synthetic import placeholder':'CBS import';if(state.optimization)delete state.optimization.appliedEval;save();render();show('Reverted to the original CBS card stored in IQ.')}
 const waitFor=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 async function triggerMiniPcCbsRefresh(){
-  const rawLiveUrl='https://raw.githubusercontent.com/devopsbusinessnewb/sunday-funday-iq/main/data/live/cbs-pickem.json';
-  let baselineExportedAt=null;
-  try{
-    const baselineResponse=await fetch(rawLiveUrl+'?baseline='+Date.now(),{cache:'no-store'});
-    if(baselineResponse.ok)baselineExportedAt=(await baselineResponse.json())?.exportedAt||null;
-  }catch(_){}
-
-  show('Starting CBS refresh on the mini-PC…');
-  const startResponse=await fetch(CBS_AUTOMATION_URL+'/refresh',{method:'POST',cache:'no-store'});
-  if(!startResponse.ok)throw new Error('Mini-PC refresh endpoint returned HTTP '+startResponse.status);
-
-  const deadline=Date.now()+180000;
-  let attempts=0;
-  while(Date.now()<deadline){
-    await waitFor(attempts++<2?1800:2500);
-    show(attempts<3?'Mini-PC is refreshing CBS…':'Waiting for the refreshed CBS data…');
-    try{
-      const publishedResponse=await fetch(rawLiveUrl+'?refresh='+Date.now(),{cache:'no-store'});
-      if(!publishedResponse.ok)continue;
-      const obj=await publishedResponse.json();
-      const exportedAt=obj?.exportedAt||null;
-      if(!exportedAt)continue;
-      if(baselineExportedAt&&exportedAt===baselineExportedAt)continue;
-      importScan(obj);
-      show('CBS refresh complete. Building today’s cards…');
-      return true;
-    }catch(_){}
-  }
-  throw new Error('The mini-PC refresh did not publish new CBS data within 3 minutes.');
+  show('Refreshing CBS and market data on the mini-PC…');
+  const response=await fetch(CBS_AUTOMATION_URL+'/refresh-sync',{method:'POST',cache:'no-store'});
+  let result=null;
+  try{result=await response.json()}catch(_){}
+  if(!response.ok||!result?.ok)throw new Error(result?.error||('Mini-PC refresh endpoint returned HTTP '+response.status));
+  if(!result.payload)throw new Error('Mini-PC refresh completed without a sanitized CBS payload.');
+  importScan(result.payload);
+  show('CBS refresh complete. Sunday Funday IQ is current.');
+  return true;
 }
 async function loadPublishedCbs({silent=true,onlyIfNewer=true}={}){
   try{

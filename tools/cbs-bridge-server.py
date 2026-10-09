@@ -234,6 +234,17 @@ class Handler(BaseHTTPRequestHandler):
         self._json(404,{'ok':False,'error':'Not found'})
     def do_POST(self):
         try:
+            if self.path=='/refresh-sync':
+                with LOCK: busy=SERVICE['refreshing']
+                if busy: return self._json(409,{'ok':False,'error':'CBS refresh is already running. Try again in a moment.'})
+                run_collector()
+                with LOCK: status=dict(SERVICE)
+                if not status.get('lastRefreshOk'):
+                    detail=str(status.get('lastRefreshError') or 'CBS refresh failed').strip().splitlines()[-1]
+                    return self._json(400,{'ok':False,'error':detail})
+                try: payload=json.loads(OUTPUT.read_text(encoding='utf-8'))
+                except Exception as exc: return self._json(500,{'ok':False,'error':'CBS refreshed but the sanitized payload could not be loaded: '+str(exc)})
+                return self._json(200,{'ok':True,'payload':payload,'lastCommit':status.get('lastCommit'),'publishedAt':status.get('lastPublishedAt')})
             if self.path=='/refresh':
                 with LOCK: busy=SERVICE['refreshing']
                 if not busy: threading.Thread(target=run_collector,daemon=True).start()

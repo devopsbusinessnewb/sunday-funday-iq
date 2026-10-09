@@ -14,7 +14,7 @@ LOCAL_APPDATA=os.environ.get('LOCALAPPDATA')
 DEFAULT_PROFILE=Path(LOCAL_APPDATA)/'SundayFundayIQ'/'cbs-profile' if LOCAL_APPDATA else Path.home()/'.sfiq'/'cbs-profile'
 PROFILE_DIR=Path(os.environ.get('SFIQ_CBS_PROFILE_DIR',str(DEFAULT_PROFILE))).expanduser()
 RECEIVER=os.environ.get('SFIQ_CBS_RECEIVER','http://127.0.0.1:43128/cbs-capture')
-HEADLESS=os.environ.get('SFIQ_CBS_HEADLESS','0')=='1'
+HEADLESS=os.environ.get('SFIQ_CBS_HEADLESS','1')=='1'
 def iso_now(): return datetime.now(timezone.utc).isoformat().replace('+00:00','Z')
 def open_context(p,headless):
     PROFILE_DIR.mkdir(parents=True,exist_ok=True); kwargs=dict(user_data_dir=str(PROFILE_DIR),headless=headless,viewport={'width':1440,'height':1000})
