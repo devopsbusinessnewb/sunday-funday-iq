@@ -31,7 +31,7 @@ jobs:
           c=Path('tools/cbs-collector.py').read_text(encoding='utf-8')
           assert "const MODEL_BUILD='1.16.6';" in s
           assert "const MODEL_BUILD='1.16.6';" in h
-          assert "CBS_AUTOMATION_URL+'/refresh'" in s
+          assert "baseUrl+'/refresh'" in s
           assert "baseUrl+'/status'" in s
           assert "baseUrl+'/live'" in s
           assert 'await importFn(live.payload)' in s
@@ -56,7 +56,7 @@ jobs:
           python tests/cbs-market-parser-regression.py
           if git diff --quiet -- index.html apps/pickem/index.html tools/cbs-bridge-server.py tools/cbs-collector.py; then exit 0; fi
           git config user.name 'github-actions[bot]'
-          git config user.email '4189822+github-actions[bot]@users.noreply.github.com'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add index.html apps/pickem/index.html tools/cbs-bridge-server.py tools/cbs-collector.py
           git commit -m 'Harden CBS phone refresh handshake'
           git push origin main
