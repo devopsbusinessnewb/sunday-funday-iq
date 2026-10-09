@@ -12,7 +12,7 @@ if(!html.includes("sfiqPickemV04")) throw new Error('Clean standings storage mig
 if(!html.includes('fieldModelComplete(state)')) throw new Error('Partial field must remain provisional');
 if(!html.includes('href="?lab=1">Model Lab</a>')||!html.includes('Full-Slate Model Lab'))throw new Error('Full-slate Model Lab UI missing');
 if(html.includes('View 0 changes and full card')||html.includes('winner flip')&&html.includes('Top-2 vs Safest'))throw new Error('Model Lab leaked cross-card comparison language into individual strategy cards');
-if(!html.includes('<summary>View all 16 picks</summary>'))throw new Error('Model Lab cards do not expose a simple full-card action');
+if(!html.includes('<summary>View all ${games.length} picks</summary>'))throw new Error('Model Lab cards do not expose a dynamic full-card action');
 if(!html.includes('Compare strategies')||!html.includes('Scenario Lab'))throw new Error('Strategy comparison or Scenario Lab UI missing');
 if(!html.includes('Tradeoff vs Safest')||!html.includes('Avg score'))throw new Error('Model Lab does not frame average score as a strategy tradeoff');
 if(!html.includes('Results update automatically')||!html.includes('scenario-livebar'))throw new Error('Scenario Lab lacks live recompute UX');
