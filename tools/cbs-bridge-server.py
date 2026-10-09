@@ -162,8 +162,20 @@ def sanitize_raw(raw):
     if week<1: raise ValueError('Could not determine CBS week')
     season=int(prev.get('season') or datetime.now().year); pool_size=int(prev.get('poolSize') or 94); own=parse_ownership(pt)
     if len(own)<max(2,len(schedule)//2): raise ValueError('Could not parse enough CBS ownership rows')
-    market=parse_market(ot,schedule)
-    if len(market)!=len(schedule): raise ValueError(f'Could not parse current CBS odds for full Week {week} slate ({len(market)}/{len(schedule)} games)')
+    current_market=parse_market(ot,schedule)
+    current_by_key={(m['away'],m['home']):m for m in current_market}
+    prev_by_key={(m.get('away'),m.get('home')):m for m in prev.get('market',[]) if isinstance(m,dict)}
+    final_games={(norm_team(a),norm_team(h)) for a,h in re.findall(r'(?:^|\n)FINAL\s*\n([A-Z]{2,3})\n([A-Z]{2,3})(?:\n|$)',st,re.I)}
+    market=[]; missing=[]
+    for game in schedule:
+        fresh=current_by_key.get(game)
+        if fresh:
+            market.append(fresh); continue
+        if game in final_games and game in prev_by_key:
+            market.append(prev_by_key[game]); continue
+        missing.append(game)
+    if missing:
+        raise ValueError(f'Could not parse current CBS odds for {len(missing)} unplayed Week {week} game(s): '+', '.join(f'{a}-{h}' for a,h in missing))
     pairs=parse_entry_card(st,ENTRY_NAME,len(schedule)); pm=re.search(r'\b(\d+)\s*/\s*(\d+)\s+Picks\b',pt,re.I); picked=int(pm.group(1)) if pm else (len(pairs) if pairs else 0); total=int(pm.group(2)) if pm else len(schedule)
     my_card=None; status='unsubmitted' if picked==0 else 'partial'
     if pairs and len(pairs)==len(schedule):
