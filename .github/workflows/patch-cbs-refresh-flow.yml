@@ -40,7 +40,7 @@ jobs:
           assert 'def claim_refresh(' in b
           assert "self.path=='/live'" in b
           assert "'runId':run_id" in b
-          assert "'lastCompletedRunId':rid" in b
+          assert "SERVICE['lastCompletedRunId']=rid" in b
           assert "HEADLESS=os.environ.get('SFIQ_CBS_HEADLESS','1')=='1'" in c
           assert "current_by_key=" in b
           assert "final_games=" in b
