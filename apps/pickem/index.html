@@ -145,7 +145,7 @@ const POOL_HISTORY_URL='../../data/analysis/cbs-pool-history-report.json';
 const SEARCH_ITERS=700;
 const FINAL_ITERS=3000;
 const VALIDATION_SEEDS=3;
-const MODEL_BUILD='1.16.7';
+const MODEL_BUILD='1.16.8';
 const CONFIDENCE_TIE_BAND=.025;
 const MIN_OPTIONAL_FLIP_PROB=.40;
 const MIN_OPTIONAL_MARKET_PROB=.38;
@@ -1303,7 +1303,8 @@ async function importScan(obj){
   const priorWeek=Number(state.week||0);
   const snaps=obj.snapshots||[],pickSnap=newest(snaps.filter(s=>/\|\s*Picks/i.test(s.title||'')||/Picks$/i.test(s.title||'')))||newest(snaps.filter(s=>/pickem/i.test(s.url||'')));
   let picks=pickSnap?parsePicks(pickSnap.text):[];
-  const detectedWeek=Number((String(pickSnap?.text||'').match(/\bWeek\s+(\d+)\b/i)||[])[1]);
+  const detectedWeek=Number(obj?.week||((String(pickSnap?.text||'').match(/\bWeek\s+(\d+)\b/i)||[])[1]));
+  if(Number.isInteger(Number(obj?.season))&&Number(obj.season)>2000)state.season=Number(obj.season);
   if(Number.isInteger(detectedWeek)&&detectedWeek>0){
     state.week=detectedWeek;
     if(priorWeek&&detectedWeek!==priorWeek){
@@ -1316,8 +1317,14 @@ async function importScan(obj){
       state.sim=null;
     }
   }
+  if(!picks.length&&Array.isArray(obj?.market)&&obj.market.length){
+    const ownership=new Map();
+    const text=String(pickSnap?.text||'');
+    const rx=/0-0\s*\n([A-Z]{2,3})\s*\n(\d+)%\s*\n0-0\s*\n([A-Z]{2,3})\s*\n(\d+)%/g;
+    let m;while((m=rx.exec(text))!==null){ownership.set(normalizeTeam(m[1])+'|'+normalizeTeam(m[3]),{awayPct:Number(m[2]),homePct:Number(m[4])})}
+    picks=obj.market.map(x=>{const away=normalizeTeam(x.away),home=normalizeTeam(x.home),o=ownership.get(away+'|'+home)||{};return{away,home,awayPct:o.awayPct??50,homePct:o.homePct??50}});
+  }
   if(!picks.length){
-    // Preserve the known Week 1 matchup structure if the newer bridge provides structured data but no visible text snapshot.
     picks=state.games.map(g=>({away:g.away,home:g.home,awayPct:g.awayPct,homePct:g.homePct}));
   }
   restoreFullWeekState();
@@ -1325,7 +1332,7 @@ async function importScan(obj){
   let odds=oddsSnap?parseOdds(oddsSnap.text,matchups):[];
   if(Array.isArray(obj.market))odds=[...odds,...obj.market.map(x=>({...x,away:normalizeTeam(x.away),home:normalizeTeam(x.home)}))];
   const om=new Map(odds.map(x=>[x.away+'|'+x.home,x])),old=new Map(state.games.map(x=>[x.away+'|'+x.home,x]));
-  if(picks.length===state.games.length){
+  if(picks.length&&(detectedWeek!==priorWeek||picks.length===state.games.length)){
     state.games=picks.map((p,i)=>{const k=p.away+'|'+p.home,prev=old.get(k)||{},o=om.get(k)||{};return{id:'g'+(i+1),...p,awayML:o.awayML??prev.awayML??null,homeML:o.homeML??prev.homeML??null,total:o.total??prev.total??null,pick:prev.pick??null,weight:prev.weight??null,locked:prev.locked??false,completed:prev.completed??false,winner:prev.winner??null,statusText:prev.statusText??''}});
   }else{
     // Postgame CBS often removes completed games from Picks. Merge remaining games into the
