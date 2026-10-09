@@ -5,6 +5,8 @@ on:
       - 'tools/cbs-worker-runtime.py'
       - 'tools/cbs-collector.py'
       - 'tools/cbs-bridge-server.py'
+      - 'tools/sfiq-auto-update.ps1'
+      - 'tools/install-cbs-reliability.ps1'
       - 'tests/test_cbs_worker_runtime.py'
       - '.github/workflows/cbs-worker-runtime.yml'
   workflow_dispatch:
@@ -23,3 +25,13 @@ jobs:
           python-version: '3.12'
       - run: python -m unittest discover -s tests -p test_cbs_worker_runtime.py -v
       - run: python -m py_compile tools/cbs-worker-runtime.py tools/cbs-collector.py tools/cbs-bridge-server.py
+      - name: Validate PowerShell syntax
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          foreach ($path in @('tools/sfiq-auto-update.ps1','tools/install-cbs-reliability.ps1')) {
+            $tokens = $null
+            $errors = $null
+            [System.Management.Automation.Language.Parser]::ParseFile((Join-Path $PWD $path), [ref]$tokens, [ref]$errors) | Out-Null
+            if ($errors.Count) { throw ($errors | Out-String) }
+          }
