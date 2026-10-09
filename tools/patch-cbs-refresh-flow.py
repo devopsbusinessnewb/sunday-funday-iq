@@ -2,7 +2,8 @@ from pathlib import Path
 
 app = Path('apps/pickem/index.html')
 s = app.read_text(encoding='utf-8')
-s = s.replace("const MODEL_BUILD='1.16.1';", "const MODEL_BUILD='1.16.2';")
+for old in ("const MODEL_BUILD='1.16.1';", "const MODEL_BUILD='1.16.2';"):
+    s = s.replace(old, "const MODEL_BUILD='1.16.3';")
 
 start = s.find('async function triggerMiniPcCbsRefresh(){')
 end = s.find('async function loadPublishedCbs(', start)
@@ -10,43 +11,35 @@ if start < 0 or end < 0:
     raise SystemExit('refresh lifecycle boundaries not found; refusing partial patch')
 
 new_refresh = """async function triggerMiniPcCbsRefresh(){
-  let baseline=null;
+  const rawLiveUrl='https://raw.githubusercontent.com/devopsbusinessnewb/sunday-funday-iq/main/data/live/cbs-pickem.json';
+  let baselineExportedAt=null;
   try{
-    const r=await fetch(CBS_AUTOMATION_URL+'/status',{cache:'no-store'});
-    if(r.ok)baseline=await r.json();
+    const baselineResponse=await fetch(rawLiveUrl+'?baseline='+Date.now(),{cache:'no-store'});
+    if(baselineResponse.ok)baselineExportedAt=(await baselineResponse.json())?.exportedAt||null;
   }catch(_){}
-  const baselineStarted=baseline?.lastRefreshStarted||null;
-  const baselineFinished=baseline?.lastRefreshFinished||null;
+
   show('Starting CBS refresh on the mini-PC…');
   const startResponse=await fetch(CBS_AUTOMATION_URL+'/refresh',{method:'POST',cache:'no-store'});
   if(!startResponse.ok)throw new Error('Mini-PC refresh endpoint returned HTTP '+startResponse.status);
-  const startResult=await startResponse.json();
-  let observedRun=!!startResult.alreadyRunning;
-  const statusDeadline=Date.now()+180000;
-  while(Date.now()<statusDeadline){
-    await waitFor(1800);
-    let statusResponse;
-    try{statusResponse=await fetch(CBS_AUTOMATION_URL+'/status',{cache:'no-store'})}catch(_){continue}
-    if(!statusResponse.ok)continue;
-    const status=await statusResponse.json();
-    if(status.refreshing){observedRun=true;show('Mini-PC is refreshing CBS…');continue}
-    const completedNewRun=observedRun||status.lastRefreshStarted!==baselineStarted||status.lastRefreshFinished!==baselineFinished;
-    if(!completedNewRun)continue;
-    if(status.lastRefreshOk===false)throw new Error(status.lastRefreshError||'Mini-PC CBS refresh failed.');
-    if(status.lastRefreshOk===true){
-      show('CBS refreshed and pushed. Loading the new data…');
-      const publishDeadline=Date.now()+120000;
-      while(Date.now()<publishDeadline){
-        if(await loadPublishedCbs({silent:true,onlyIfNewer:true})){
-          show('CBS refresh complete. Sunday Funday IQ is current.');
-          return true;
-        }
-        await waitFor(2500);
-      }
-      throw new Error('CBS refreshed successfully, but the published app data is still deploying. Try again in a moment.');
-    }
+
+  const deadline=Date.now()+180000;
+  let attempts=0;
+  while(Date.now()<deadline){
+    await waitFor(attempts++<2?1800:2500);
+    show(attempts<3?'Mini-PC is refreshing CBS…':'Waiting for the refreshed CBS data…');
+    try{
+      const publishedResponse=await fetch(rawLiveUrl+'?refresh='+Date.now(),{cache:'no-store'});
+      if(!publishedResponse.ok)continue;
+      const obj=await publishedResponse.json();
+      const exportedAt=obj?.exportedAt||null;
+      if(!exportedAt)continue;
+      if(baselineExportedAt&&exportedAt===baselineExportedAt)continue;
+      importScan(obj);
+      show('CBS refresh complete. Building today’s cards…');
+      return true;
+    }catch(_){}
   }
-  throw new Error('CBS refresh is taking longer than expected. Check Tailscale and try again.');
+  throw new Error('The mini-PC refresh did not publish new CBS data within 3 minutes.');
 }
 """
 s = s[:start] + new_refresh + s[end:]
@@ -55,14 +48,14 @@ app.write_text(s, encoding='utf-8')
 
 home = Path('index.html')
 h = home.read_text(encoding='utf-8')
-h = h.replace("const MODEL_BUILD='1.15.2';", "const MODEL_BUILD='1.16.2';")
-h = h.replace("const MODEL_BUILD='1.16.1';", "const MODEL_BUILD='1.16.2';")
-if "const MODEL_BUILD='1.16.2';" not in h:
+for old in ("const MODEL_BUILD='1.15.2';", "const MODEL_BUILD='1.16.1';", "const MODEL_BUILD='1.16.2';"):
+    h = h.replace(old, "const MODEL_BUILD='1.16.3';")
+if "const MODEL_BUILD='1.16.3';" not in h:
     raise SystemExit('home MODEL_BUILD anchor not found')
 home.write_text(h, encoding='utf-8')
 
 # Week length is not always 16 games. Keep live-data validation tied to the
-# published market/slate size while preserving the fixed 16-game fixture tests.
+# published market/slate size while preserving fixed-size fixture tests.
 test = Path('tests/pickem-regression.js')
 t = test.read_text(encoding='utf-8')
 old = """const live=JSON.parse(fs.readFileSync(path.join(root,'data/live/cbs-pickem.json'),'utf8'));
@@ -95,4 +88,4 @@ if old in t:
 elif 'const liveExpected=' not in t:
     raise SystemExit('live-week regression block not found; refusing partial patch')
 test.write_text(t,encoding='utf-8')
-print('patched refresh lifecycle, home build, and variable-week regression')
+print('patched refresh flow to advance on new published CBS data')
