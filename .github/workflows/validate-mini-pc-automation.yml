@@ -1,0 +1,46 @@
+name: Validate mini-PC automation
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/cbs-bridge-server.py'
+      - 'tools/cbs-collector.py'
+      - 'tools/enable-cbs-production.ps1'
+      - 'tools/sfiq-auto-update.ps1'
+      - 'tools/enable-sfiq-auto-update.ps1'
+      - 'tests/cbs-refresh-handshake.py'
+      - 'tests/cbs-phone-refresh-regression.js'
+      - 'apps/pickem/index.html'
+      - '.github/workflows/validate-mini-pc-automation.yml'
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Python syntax
+        run: python -m py_compile tools/cbs-bridge-server.py tools/cbs-collector.py tests/cbs-refresh-handshake.py
+      - name: PowerShell syntax
+        shell: pwsh
+        run: |
+          $files=@(
+            'tools/enable-cbs-production.ps1',
+            'tools/sfiq-auto-update.ps1',
+            'tools/enable-sfiq-auto-update.ps1'
+          )
+          foreach($file in $files){
+            $tokens=$null; $errors=$null
+            [System.Management.Automation.Language.Parser]::ParseFile((Resolve-Path $file),[ref]$tokens,[ref]$errors) | Out-Null
+            if($errors.Count){ $errors | Format-List | Out-String | Write-Error; exit 1 }
+          }
+      - name: Bridge handshake regression
+        run: python tests/cbs-refresh-handshake.py
+      - name: Phone orchestration regression
+        run: node tests/cbs-phone-refresh-regression.js
+      - name: Existing CBS regressions
+        run: |
+          node tests/pickem-regression.js
+          node tests/pickem-home-regression.js
+          python tests/cbs-market-parser-regression.py
