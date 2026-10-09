@@ -30,12 +30,14 @@ jobs:
           h=Path('index.html').read_text(encoding='utf-8')
           b=Path('tools/cbs-bridge-server.py').read_text(encoding='utf-8')
           c=Path('tools/cbs-collector.py').read_text(encoding='utf-8')
+          t=Path('tests/pickem-regression.js').read_text(encoding='utf-8')
           assert "const MODEL_BUILD='1.16.9';" in s
           assert "const MODEL_BUILD='1.16.9';" in h
           assert "if(Number(state?.week||1)!==1)return;" in s
           assert 'const structuredFullSlate=' in s
           assert '<summary>View all ${games.length} picks</summary>' in s
           assert 'Current slate mismatch' in s
+          assert "View all ${games.length} picks" in t
           assert "baseUrl+'/status'" in s
           assert "baseUrl+'/refresh-sync'" in s
           assert "baseUrl+'/refresh'" in s
@@ -53,11 +55,13 @@ jobs:
           python -m py_compile tools/cbs-bridge-server.py tools/cbs-collector.py tests/cbs-refresh-handshake.py
           python tests/cbs-refresh-handshake.py
           node tests/cbs-phone-refresh-regression.js
+          node tests/pickem-regression.js
           node tests/pickem-home-regression.js
+          node tests/pickem-strategy-regression.js
           python tests/cbs-market-parser-regression.py
-          if git diff --quiet -- index.html apps/pickem/index.html tools/cbs-bridge-server.py tools/cbs-collector.py; then exit 0; fi
+          if git diff --quiet -- index.html apps/pickem/index.html tools/cbs-bridge-server.py tools/cbs-collector.py tests/pickem-regression.js; then exit 0; fi
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add index.html apps/pickem/index.html tools/cbs-bridge-server.py tools/cbs-collector.py
+          git add index.html apps/pickem/index.html tools/cbs-bridge-server.py tools/cbs-collector.py tests/pickem-regression.js
           git commit -m 'Fix dynamic CBS slate handling'
           git push origin main
