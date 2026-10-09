@@ -27,11 +27,15 @@ jobs:
           s=Path('apps/pickem/index.html').read_text(encoding='utf-8')
           h=Path('index.html').read_text(encoding='utf-8')
           b=Path('tools/cbs-bridge-server.py').read_text(encoding='utf-8')
-          assert "const MODEL_BUILD='1.16.4';" in s
-          assert "const MODEL_BUILD='1.16.4';" in h
+          c=Path('tools/cbs-collector.py').read_text(encoding='utf-8')
+          assert "const MODEL_BUILD='1.16.5';" in s
+          assert "const MODEL_BUILD='1.16.5';" in h
+          assert "CBS_AUTOMATION_URL+'/refresh-sync'" in s
+          assert 'raw.githubusercontent.com/devopsbusinessnewb/sunday-funday-iq/main/data/live/cbs-pickem.json' not in s
+          assert "self.path=='/refresh-sync'" in b
+          assert "HEADLESS=os.environ.get('SFIQ_CBS_HEADLESS','1')=='1'" in c
           assert "current_by_key=" in b
           assert "final_games=" in b
-          assert "if game in final_games and game in prev_by_key:" in b
           Path('/tmp/pickem.js').write_text(s.split('<script>',1)[1].rsplit('</script>',1)[0],encoding='utf-8')
           Path('/tmp/pickem-home.js').write_text(h.split('<script>',1)[1].rsplit('</script>',1)[0],encoding='utf-8')
           PY
@@ -41,9 +45,9 @@ jobs:
           node tests/pickem-regression.js
           node tests/pickem-home-regression.js
           python tests/cbs-market-parser-regression.py
-          if git diff --quiet -- index.html apps/pickem/index.html tools/cbs-bridge-server.py; then exit 0; fi
+          if git diff --quiet -- index.html apps/pickem/index.html tools/cbs-bridge-server.py tools/cbs-collector.py; then exit 0; fi
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add index.html apps/pickem/index.html tools/cbs-bridge-server.py
-          git commit -m 'Handle completed-game odds in CBS refresh'
+          git add index.html apps/pickem/index.html tools/cbs-bridge-server.py tools/cbs-collector.py
+          git commit -m 'Use direct headless CBS refresh handoff'
           git push origin main
