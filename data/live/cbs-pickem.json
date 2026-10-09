@@ -4,12 +4,12 @@
   "season": 2026,
   "week": 5,
   "poolSize": 94,
-  "exportedAt": "2026-10-09T04:44:38.826124Z",
+  "exportedAt": "2026-10-09T04:45:45.777638Z",
   "source": "Automated local CBS browser capture",
   "privacy": "Raw CBS session/page data sanitized locally; pool/account identifiers and participant names not published.",
   "confidenceStatus": "submitted",
   "confidenceSource": "Automated CBS Weekly Standings row",
-  "marketCapturedAt": "2026-10-09T04:44:38.826085Z",
+  "marketCapturedAt": "2026-10-09T04:45:45.777593Z",
   "marketSource": "CBS Sports odds \u2014 Week 5",
   "market": [
     {
@@ -120,7 +120,7 @@
   ],
   "fieldModel": {
     "source": "Sanitized CBS revealed-pool observations",
-    "capturedAt": "2026-10-09T04:44:31.194906Z",
+    "capturedAt": "2026-10-09T04:45:39.925904Z",
     "observedEntries": 80,
     "locked": [
       {
@@ -458,13 +458,13 @@
     {
       "title": "NFL Football Tourney | Picks",
       "url": "sanitized://cbs-pickem/week-5",
-      "ts": "2026-10-09T04:44:25.401418Z",
+      "ts": "2026-10-09T04:45:34.582113Z",
       "text": "CBS Pickem sanitized ownership\n0-0\nTB\n4%\n0-0\nDAL\n96%\n0-0\nPHI\n11%\n0-0\nJAX\n89%\n0-0\nCIN\n96%\n0-0\nMIA\n4%\n0-0\nLV\n40%\n0-0\nNE\n60%\n0-0\nMIN\n84%\n0-0\nNO\n16%\n0-0\nCLE\n77%\n0-0\nNYJ\n23%\n0-0\nIND\n33%\n0-0\nPIT\n67%\n0-0\nHOU\n90%\n0-0\nTEN\n10%\n0-0\nNYG\n68%\n0-0\nWAS\n32%\n0-0\nCHI\n76%\n0-0\nGB\n24%\n0-0\nDEN\n84%\n0-0\nLAC\n16%\n0-0\nDET\n91%\n0-0\nARI\n9%\n0-0\nSF\n45%\n0-0\nSEA\n55%\n0-0\nBAL\n46%\n0-0\nATL\n54%\n0-0\nBUF\n52%\n0-0\nLAR\n48%"
     },
     {
       "title": "NFL Football Tourney | Weekly Standings",
       "url": "sanitized://cbs-pickem/week-5/standings/weekly",
-      "ts": "2026-10-09T04:44:31.194906Z",
+      "ts": "2026-10-09T04:45:39.925904Z",
       "text": "Weekly Standings\nSanitized observations\nSUN\nTB\nDAL\nSUN\nPHI\nJAX\nSUN\nCIN\nMIA\nSUN\nLV\nNE\nSUN\nMIN\nNO\nSUN\nCLE\nNYJ\nSUN\nIND\nPIT\nSUN\nHOU\nTEN\nSUN\nNYG\nWAS\nSUN\nCHI\nGB\nSUN\nDEN\nLAC\nSUN\nDET\nARI\nSUN\nSF\nSEA\nSUN\nBAL\nATL\nSUN\nBUF\nLAR\nTB\n(1)\nDAL\n(15)\nDAL\n(15)\nDAL\n(15)\nDAL\n(15)\nDAL\n(15)\nDAL\n(15)\nDAL\n(12)\nDAL\n(13)\nDAL\n(12)\nDAL\n(15)\nDAL\n(15)\nDAL\n(15)\nDAL\n(15)\nDAL\n(15)\nDAL\n(15)\nDAL\n(15)\nDAL\n(15)\nDAL\n(14)\nDAL\n(15)\nDAL\n(15)\nDAL\n(12)\nDAL\n(15)\nDAL\n(15)\nDAL\n(13)\nDAL\n(15)\nDAL\n(15)\nDAL\n(13)\nDAL\n(15)\nDAL\n(15)\nDAL\n(15)\nDAL\n(15)\nDAL\n(15)\nDAL\n(15)\nDAL\n(15)\nDAL\n(1)\nDAL\n(15)\nDAL\n(15)\nDAL\n(13)\nDAL\n(14)\nDAL\n(15)\nDAL\n(15)\nDAL\n(15)\nDAL\n(15)\nDAL\n(14)\nDAL\n(15)\nDAL\n(15)\nDAL\n(15)\nDAL\n(14)\nDAL\n(15)\nDAL\n(15)\nDAL\n(15)\nDAL\n(4)\nDAL\n(15)\nDAL\n(15)\nDAL\n(12)\nDAL\n(8)\nDAL\n(13)\nDAL\n(15)\nDAL\n(15)\nDAL\n(13)\nDAL\n(15)\nDAL\n(14)\nDAL\n(14)\nDAL\n(15)\nDAL\n(10)\nDAL\n(7)\nDAL\n(15)\nDAL\n(15)\nDAL\n(2)\nDAL\n(15)\nDAL\n(15)\nDAL\n(12)\nDAL\n(15)\nDAL\n(15)\nDAL\n(2)\nDAL\n(7)\nDAL\n(15)\nDAL\n(15)\nDAL\n(15)"
     }
   ],
