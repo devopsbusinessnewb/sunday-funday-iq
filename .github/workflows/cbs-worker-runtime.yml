@@ -7,6 +7,7 @@ on:
       - 'tools/cbs-bridge-server.py'
       - 'tools/sfiq-auto-update.ps1'
       - 'tools/install-cbs-reliability.ps1'
+      - 'tools/test-cbs-reboot-readiness.ps1'
       - 'tests/test_cbs_worker_runtime.py'
       - '.github/workflows/cbs-worker-runtime.yml'
   workflow_dispatch:
@@ -29,7 +30,7 @@ jobs:
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
-          foreach ($path in @('tools/sfiq-auto-update.ps1','tools/install-cbs-reliability.ps1')) {
+          foreach ($path in @('tools/sfiq-auto-update.ps1','tools/install-cbs-reliability.ps1','tools/test-cbs-reboot-readiness.ps1')) {
             $tokens = $null
             $errors = $null
             [System.Management.Automation.Language.Parser]::ParseFile((Join-Path $PWD $path), [ref]$tokens, [ref]$errors) | Out-Null
