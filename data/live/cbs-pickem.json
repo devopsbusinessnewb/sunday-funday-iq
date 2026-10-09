@@ -4,26 +4,26 @@
   "season": 2026,
   "week": 5,
   "poolSize": 94,
-  "exportedAt": "2026-10-08T23:27:04.513764Z",
+  "exportedAt": "2026-10-09T02:42:02.883314Z",
   "source": "Automated local CBS browser capture",
   "privacy": "Raw CBS session/page data sanitized locally; pool/account identifiers and participant names not published.",
   "confidenceStatus": "submitted",
   "confidenceSource": "Automated CBS Weekly Standings row",
-  "marketCapturedAt": "2026-10-08T23:27:04.513722Z",
+  "marketCapturedAt": "2026-10-09T02:42:02.883283Z",
   "marketSource": "CBS Sports odds \u2014 Week 5",
   "market": [
     {
       "away": "TB",
       "home": "DAL",
-      "awayML": 380,
-      "homeML": -461,
-      "total": 48.8
+      "awayML": 400,
+      "homeML": -500,
+      "total": 49.0
     },
     {
       "away": "PHI",
       "home": "JAX",
       "awayML": 310,
-      "homeML": -370,
+      "homeML": -380,
       "total": 41.5
     },
     {
@@ -78,9 +78,9 @@
     {
       "away": "CHI",
       "home": "GB",
-      "awayML": -124,
-      "homeML": 110,
-      "total": 45.5
+      "awayML": -120,
+      "homeML": 106,
+      "total": 45.8
     },
     {
       "away": "DEN",
@@ -99,7 +99,7 @@
     {
       "away": "SF",
       "home": "SEA",
-      "awayML": 146,
+      "awayML": 144,
       "homeML": -162,
       "total": 46.0
     },
@@ -120,22 +120,352 @@
   ],
   "fieldModel": {
     "source": "Sanitized CBS revealed-pool observations",
-    "capturedAt": "2026-10-08T23:26:56.673112Z",
-    "observedEntries": 0,
-    "locked": []
+    "capturedAt": "2026-10-09T02:41:55.523528Z",
+    "observedEntries": 80,
+    "locked": [
+      {
+        "key": "TB|DAL",
+        "gameId": "TB-DAL",
+        "away": "TB",
+        "home": "DAL",
+        "observations": [
+          {
+            "pick": "TB",
+            "weight": 1
+          },
+          {
+            "pick": "DAL",
+            "weight": 15
+          },
+          {
+            "pick": "DAL",
+            "weight": 15
+          },
+          {
+            "pick": "DAL",
+            "weight": 15
+          },
+          {
+            "pick": "DAL",
+            "weight": 15
+          },
+          {
+            "pick": "DAL",
+            "weight": 15
+          },
+          {
+            "pick": "DAL",
+            "weight": 15
+          },
+          {
+            "pick": "DAL",
+            "weight": 12
+          },
+          {
+            "pick": "DAL",
+            "weight": 13
+          },
+          {
+            "pick": "DAL",
+            "weight": 12
+          },
+          {
+            "pick": "DAL",
+            "weight": 15
+          },
+          {
+            "pick": "DAL",
+            "weight": 15
+          },
+          {
+            "pick": "DAL",
+            "weight": 15
+          },
+          {
+            "pick": "DAL",
+            "weight": 15
+          },
+          {
+            "pick": "DAL",
+            "weight": 15
+          },
+          {
+            "pick": "DAL",
+            "weight": 15
+          },
+          {
+            "pick": "DAL",
+            "weight": 15
+          },
+          {
+            "pick": "DAL",
+            "weight": 15
+          },
+          {
+            "pick": "DAL",
+            "weight": 14
+          },
+          {
+            "pick": "DAL",
+            "weight": 15
+          },
+          {
+            "pick": "DAL",
+            "weight": 15
+          },
+          {
+            "pick": "DAL",
+            "weight": 12
+          },
+          {
+            "pick": "DAL",
+            "weight": 15
+          },
+          {
+            "pick": "DAL",
+            "weight": 15
+          },
+          {
+            "pick": "DAL",
+            "weight": 13
+          },
+          {
+            "pick": "DAL",
+            "weight": 15
+          },
+          {
+            "pick": "DAL",
+            "weight": 15
+          },
+          {
+            "pick": "DAL",
+            "weight": 13
+          },
+          {
+            "pick": "DAL",
+            "weight": 15
+          },
+          {
+            "pick": "DAL",
+            "weight": 15
+          },
+          {
+            "pick": "DAL",
+            "weight": 15
+          },
+          {
+            "pick": "DAL",
+            "weight": 15
+          },
+          {
+            "pick": "DAL",
+            "weight": 15
+          },
+          {
+            "pick": "DAL",
+            "weight": 15
+          },
+          {
+            "pick": "DAL",
+            "weight": 15
+          },
+          {
+            "pick": "DAL",
+            "weight": 1
+          },
+          {
+            "pick": "DAL",
+            "weight": 15
+          },
+          {
+            "pick": "DAL",
+            "weight": 15
+          },
+          {
+            "pick": "DAL",
+            "weight": 13
+          },
+          {
+            "pick": "DAL",
+            "weight": 14
+          },
+          {
+            "pick": "DAL",
+            "weight": 15
+          },
+          {
+            "pick": "DAL",
+            "weight": 15
+          },
+          {
+            "pick": "DAL",
+            "weight": 15
+          },
+          {
+            "pick": "DAL",
+            "weight": 15
+          },
+          {
+            "pick": "DAL",
+            "weight": 14
+          },
+          {
+            "pick": "DAL",
+            "weight": 15
+          },
+          {
+            "pick": "DAL",
+            "weight": 15
+          },
+          {
+            "pick": "DAL",
+            "weight": 15
+          },
+          {
+            "pick": "DAL",
+            "weight": 14
+          },
+          {
+            "pick": "DAL",
+            "weight": 15
+          },
+          {
+            "pick": "DAL",
+            "weight": 15
+          },
+          {
+            "pick": "DAL",
+            "weight": 15
+          },
+          {
+            "pick": "DAL",
+            "weight": 4
+          },
+          {
+            "pick": "DAL",
+            "weight": 15
+          },
+          {
+            "pick": "DAL",
+            "weight": 15
+          },
+          {
+            "pick": "DAL",
+            "weight": 12
+          },
+          {
+            "pick": "DAL",
+            "weight": 8
+          },
+          {
+            "pick": "DAL",
+            "weight": 13
+          },
+          {
+            "pick": "DAL",
+            "weight": 15
+          },
+          {
+            "pick": "DAL",
+            "weight": 15
+          },
+          {
+            "pick": "DAL",
+            "weight": 13
+          },
+          {
+            "pick": "DAL",
+            "weight": 15
+          },
+          {
+            "pick": "DAL",
+            "weight": 14
+          },
+          {
+            "pick": "DAL",
+            "weight": 14
+          },
+          {
+            "pick": "DAL",
+            "weight": 15
+          },
+          {
+            "pick": "DAL",
+            "weight": 10
+          },
+          {
+            "pick": "DAL",
+            "weight": 7
+          },
+          {
+            "pick": "DAL",
+            "weight": 15
+          },
+          {
+            "pick": "DAL",
+            "weight": 15
+          },
+          {
+            "pick": "DAL",
+            "weight": 2
+          },
+          {
+            "pick": "DAL",
+            "weight": 15
+          },
+          {
+            "pick": "DAL",
+            "weight": 15
+          },
+          {
+            "pick": "DAL",
+            "weight": 12
+          },
+          {
+            "pick": "DAL",
+            "weight": 15
+          },
+          {
+            "pick": "DAL",
+            "weight": 15
+          },
+          {
+            "pick": "DAL",
+            "weight": 2
+          },
+          {
+            "pick": "DAL",
+            "weight": 7
+          },
+          {
+            "pick": "DAL",
+            "weight": 15
+          },
+          {
+            "pick": "DAL",
+            "weight": 15
+          },
+          {
+            "pick": "DAL",
+            "weight": 15
+          }
+        ],
+        "totalObserved": 80
+      }
+    ]
   },
   "snapshots": [
     {
       "title": "NFL Football Tourney | Picks",
       "url": "sanitized://cbs-pickem/week-5",
-      "ts": "2026-10-08T23:26:50.913224Z",
-      "text": "CBS Pickem sanitized ownership\n0-0\nTB\n4%\n0-0\nDAL\n96%\n0-0\nPHI\n11%\n0-0\nJAX\n89%\n0-0\nCIN\n97%\n0-0\nMIA\n3%\n0-0\nLV\n40%\n0-0\nNE\n60%\n0-0\nMIN\n84%\n0-0\nNO\n16%\n0-0\nCLE\n77%\n0-0\nNYJ\n23%\n0-0\nIND\n33%\n0-0\nPIT\n67%\n0-0\nHOU\n90%\n0-0\nTEN\n10%\n0-0\nNYG\n68%\n0-0\nWAS\n32%\n0-0\nCHI\n76%\n0-0\nGB\n24%\n0-0\nDEN\n84%\n0-0\nLAC\n16%\n0-0\nDET\n92%\n0-0\nARI\n8%\n0-0\nSF\n45%\n0-0\nSEA\n55%\n0-0\nBAL\n46%\n0-0\nATL\n54%\n0-0\nBUF\n52%\n0-0\nLAR\n48%"
+      "ts": "2026-10-09T02:41:47.477743Z",
+      "text": "CBS Pickem sanitized ownership\n0-0\nTB\n4%\n0-0\nDAL\n96%\n0-0\nPHI\n11%\n0-0\nJAX\n89%\n0-0\nCIN\n96%\n0-0\nMIA\n4%\n0-0\nLV\n40%\n0-0\nNE\n60%\n0-0\nMIN\n84%\n0-0\nNO\n16%\n0-0\nCLE\n77%\n0-0\nNYJ\n23%\n0-0\nIND\n33%\n0-0\nPIT\n67%\n0-0\nHOU\n90%\n0-0\nTEN\n10%\n0-0\nNYG\n68%\n0-0\nWAS\n32%\n0-0\nCHI\n76%\n0-0\nGB\n24%\n0-0\nDEN\n84%\n0-0\nLAC\n16%\n0-0\nDET\n91%\n0-0\nARI\n9%\n0-0\nSF\n45%\n0-0\nSEA\n55%\n0-0\nBAL\n46%\n0-0\nATL\n54%\n0-0\nBUF\n52%\n0-0\nLAR\n48%"
     },
     {
       "title": "NFL Football Tourney | Weekly Standings",
       "url": "sanitized://cbs-pickem/week-5/standings/weekly",
-      "ts": "2026-10-08T23:26:56.673112Z",
-      "text": "Weekly Standings\nSanitized observations\nSUN\nTB\nDAL\nSUN\nPHI\nJAX\nSUN\nCIN\nMIA\nSUN\nLV\nNE\nSUN\nMIN\nNO\nSUN\nCLE\nNYJ\nSUN\nIND\nPIT\nSUN\nHOU\nTEN\nSUN\nNYG\nWAS\nSUN\nCHI\nGB\nSUN\nDEN\nLAC\nSUN\nDET\nARI\nSUN\nSF\nSEA\nSUN\nBAL\nATL\nSUN\nBUF\nLAR"
+      "ts": "2026-10-09T02:41:55.523528Z",
+      "text": "Weekly Standings\nSanitized observations\nSUN\nTB\nDAL\nSUN\nPHI\nJAX\nSUN\nCIN\nMIA\nSUN\nLV\nNE\nSUN\nMIN\nNO\nSUN\nCLE\nNYJ\nSUN\nIND\nPIT\nSUN\nHOU\nTEN\nSUN\nNYG\nWAS\nSUN\nCHI\nGB\nSUN\nDEN\nLAC\nSUN\nDET\nARI\nSUN\nSF\nSEA\nSUN\nBAL\nATL\nSUN\nBUF\nLAR\nTB\n(1)\nDAL\n(15)\nDAL\n(15)\nDAL\n(15)\nDAL\n(15)\nDAL\n(15)\nDAL\n(15)\nDAL\n(12)\nDAL\n(13)\nDAL\n(12)\nDAL\n(15)\nDAL\n(15)\nDAL\n(15)\nDAL\n(15)\nDAL\n(15)\nDAL\n(15)\nDAL\n(15)\nDAL\n(15)\nDAL\n(14)\nDAL\n(15)\nDAL\n(15)\nDAL\n(12)\nDAL\n(15)\nDAL\n(15)\nDAL\n(13)\nDAL\n(15)\nDAL\n(15)\nDAL\n(13)\nDAL\n(15)\nDAL\n(15)\nDAL\n(15)\nDAL\n(15)\nDAL\n(15)\nDAL\n(15)\nDAL\n(15)\nDAL\n(1)\nDAL\n(15)\nDAL\n(15)\nDAL\n(13)\nDAL\n(14)\nDAL\n(15)\nDAL\n(15)\nDAL\n(15)\nDAL\n(15)\nDAL\n(14)\nDAL\n(15)\nDAL\n(15)\nDAL\n(15)\nDAL\n(14)\nDAL\n(15)\nDAL\n(15)\nDAL\n(15)\nDAL\n(4)\nDAL\n(15)\nDAL\n(15)\nDAL\n(12)\nDAL\n(8)\nDAL\n(13)\nDAL\n(15)\nDAL\n(15)\nDAL\n(13)\nDAL\n(15)\nDAL\n(14)\nDAL\n(14)\nDAL\n(15)\nDAL\n(10)\nDAL\n(7)\nDAL\n(15)\nDAL\n(15)\nDAL\n(2)\nDAL\n(15)\nDAL\n(15)\nDAL\n(12)\nDAL\n(15)\nDAL\n(15)\nDAL\n(2)\nDAL\n(7)\nDAL\n(15)\nDAL\n(15)\nDAL\n(15)"
     }
   ],
   "myCard": {
