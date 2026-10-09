@@ -30,6 +30,9 @@ const ctx={console,globalThis:null,setTimeout,clearTimeout,fetch:async()=>({ok:f
 vm.createContext(ctx);vm.runInContext(js,ctx,{filename:'pickem-index.js'});
 const t=ctx.SFIQ_TEST,clone=x=>JSON.parse(JSON.stringify(x));
 const swapCard={choices:[0,1,0],weights:[1,2,3]};
+if(typeof t.scenarioGameLocked!=='function')throw new Error('Scenario lock helper missing');
+if(!t.scenarioGameLocked({locked:true,completed:false})||!t.scenarioGameLocked({locked:false,completed:true})||t.scenarioGameLocked({locked:false,completed:false}))throw new Error('Scenario Lab does not preserve completed/locked games');
+if(!html.includes('Completed and CBS-locked games stay frozen')||!html.includes('buildLiveScenarioResult()')||!html.includes('disabled aria-disabled=\"true\"'))throw new Error('Scenario Lab is not wired to live locked-week behavior');
 t.scenarioSwapConfidence(swapCard,0,3);
 if(JSON.stringify(swapCard.weights)!==JSON.stringify([3,2,1]))throw new Error('Scenario confidence edit did not swap values to preserve uniqueness');
 
