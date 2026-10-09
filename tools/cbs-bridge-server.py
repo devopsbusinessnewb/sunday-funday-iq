@@ -5,7 +5,7 @@ Raw CBS page data is accepted only on localhost and is never written to disk.
 The service sanitizes it in memory, writes data/live/cbs-pickem.json, and may
 commit/push when SFIQ_AUTO_PUSH=1.
 """
-import json, os, re, subprocess, sys, threading
+import json, os, re, subprocess, sys, threading, uuid
 from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -21,7 +21,7 @@ FORBIDDEN_URL_BITS=('picks.cbssports.com/football/pickem/pools/','/graphql?')
 TEAM_MAP={'STEELERS':'PIT','BROWNS':'CLE','COLTS':'IND','COMMANDERS':'WAS','PATRIOTS':'NE','BILLS':'BUF','TITANS':'TEN','RAVENS':'BAL','JETS':'NYJ','BEARS':'CHI','JAGUARS':'JAX','JAC':'JAX','BENGALS':'CIN','COWBOYS':'DAL','TEXANS':'HOU','CARDINALS':'ARI','GIANTS':'NYG','RAMS':'LAR','EAGLES':'PHI','PACKERS':'GB','BUCCANEERS':'TB','DOLPHINS':'MIA','VIKINGS':'MIN','CHIEFS':'KC','RAIDERS':'LV','BRONCOS':'DEN','49ERS':'SF','CHARGERS':'LAC','SEAHAWKS':'SEA','LIONS':'DET','PANTHERS':'CAR','FALCONS':'ATL','SAINTS':'NO'}
 ABBR=set(TEAM_MAP.values())
 CANON={abbr:name.title() for name,abbr in TEAM_MAP.items() if len(name)>3}
-SERVICE={'refreshing':False,'lastRefreshStarted':None,'lastRefreshFinished':None,'lastRefreshOk':None,'lastRefreshError':None,'lastPublishedAt':None,'lastCommit':None}
+SERVICE={'refreshing':False,'currentRunId':None,'lastCompletedRunId':None,'lastRefreshStarted':None,'lastRefreshFinished':None,'lastRefreshOk':None,'lastRefreshError':None,'lastPublishedAt':None,'lastCommit':None}
 LOCK=threading.Lock()
 
 def iso_now(): return datetime.now(timezone.utc).isoformat().replace('+00:00','Z')
@@ -208,18 +208,32 @@ def publish(payload):
     with LOCK: SERVICE['lastPublishedAt']=payload.get('exportedAt') or iso_now()
     return result
 
-def run_collector():
+def claim_refresh(run_id=None):
+    rid=run_id or uuid.uuid4().hex
     with LOCK:
-        if SERVICE['refreshing']: return
-        SERVICE.update({'refreshing':True,'lastRefreshStarted':iso_now(),'lastRefreshFinished':None,'lastRefreshOk':None,'lastRefreshError':None})
+        if SERVICE['refreshing']: return False,SERVICE.get('currentRunId')
+        SERVICE.update({'refreshing':True,'currentRunId':rid,'lastRefreshStarted':iso_now(),'lastRefreshFinished':None,'lastRefreshOk':None,'lastRefreshError':None})
+    return True,rid
+
+def run_collector(run_id=None,claimed=False):
+    rid=run_id
+    if not claimed:
+        started,rid=claim_refresh(run_id)
+        if not started: return False
     try:
         proc=subprocess.run([sys.executable,str(COLLECTOR)],cwd=ROOT,text=True,capture_output=True,timeout=180)
         if proc.returncode!=0: raise RuntimeError((proc.stderr or proc.stdout or 'CBS collector failed').strip())
         with LOCK: SERVICE['lastRefreshOk']=True
+        return True
     except Exception as exc:
         with LOCK: SERVICE['lastRefreshOk']=False; SERVICE['lastRefreshError']=str(exc)
+        return False
     finally:
-        with LOCK: SERVICE['refreshing']=False; SERVICE['lastRefreshFinished']=iso_now()
+        with LOCK:
+            SERVICE['refreshing']=False
+            SERVICE['currentRunId']=None
+            SERVICE['lastCompletedRunId']=rid
+            SERVICE['lastRefreshFinished']=iso_now()
 
 class Handler(BaseHTTPRequestHandler):
     def _cors(self): self.send_header('Access-Control-Allow-Origin','*'); self.send_header('Access-Control-Allow-Headers','Content-Type'); self.send_header('Access-Control-Allow-Methods','GET,POST,OPTIONS')
@@ -231,6 +245,11 @@ class Handler(BaseHTTPRequestHandler):
         if self.path=='/status':
             with LOCK: status=dict(SERVICE)
             return self._json(200,{'ok':True,'autoPush':AUTO_PUSH,**status})
+        if self.path=='/live':
+            try: payload=json.loads(OUTPUT.read_text(encoding='utf-8'))
+            except Exception as exc: return self._json(404,{'ok':False,'error':'Sanitized CBS payload is unavailable: '+str(exc)})
+            with LOCK: status=dict(SERVICE)
+            return self._json(200,{'ok':True,'payload':payload,'lastCompletedRunId':status.get('lastCompletedRunId'),'lastCommit':status.get('lastCommit'),'publishedAt':status.get('lastPublishedAt')})
         self._json(404,{'ok':False,'error':'Not found'})
     def do_POST(self):
         try:
@@ -246,9 +265,9 @@ class Handler(BaseHTTPRequestHandler):
                 except Exception as exc: return self._json(500,{'ok':False,'error':'CBS refreshed but the sanitized payload could not be loaded: '+str(exc)})
                 return self._json(200,{'ok':True,'payload':payload,'lastCommit':status.get('lastCommit'),'publishedAt':status.get('lastPublishedAt')})
             if self.path=='/refresh':
-                with LOCK: busy=SERVICE['refreshing']
-                if not busy: threading.Thread(target=run_collector,daemon=True).start()
-                return self._json(202,{'ok':True,'started':not busy,'alreadyRunning':busy})
+                started,run_id=claim_refresh()
+                if started: threading.Thread(target=run_collector,args=(run_id,True),daemon=True).start()
+                return self._json(202,{'ok':True,'started':started,'alreadyRunning':not started,'runId':run_id})
             length=int(self.headers.get('Content-Length','0'))
             if length<=0 or length>MAX_BODY: raise ValueError('Invalid payload size')
             body=json.loads(self.rfile.read(length).decode('utf-8'))

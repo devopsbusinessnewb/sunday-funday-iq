@@ -145,7 +145,7 @@ const POOL_HISTORY_URL='../../data/analysis/cbs-pool-history-report.json';
 const SEARCH_ITERS=700;
 const FINAL_ITERS=3000;
 const VALIDATION_SEEDS=3;
-const MODEL_BUILD='1.16.5';
+const MODEL_BUILD='1.16.6';
 const CONFIDENCE_TIE_BAND=.025;
 const MIN_OPTIONAL_FLIP_PROB=.40;
 const MIN_OPTIONAL_MARKET_PROB=.38;
@@ -1725,17 +1725,52 @@ async function runSimulation(){
 function applyRecommended(){if(!state.recommendedCard)return;if(!state.originalCard)state.originalCard=snapshotCard();const before=snapshotCard();applyCardToGames(state.games,state.recommendedCard);state.games.forEach((g,i)=>{if(isLocked(g)){g.pick=teamFor(g,before.choices[i]);g.weight=before.weights[i]}});state.applied=true;state.confidenceStatus='model_applied';state.confidenceSource=`IQ ${state.optimization?.selectedStrategy||'balanced'} strategy`;if(state.optimization)state.optimization.appliedEval=state.optimization.recommendedEval;recordDecision('applied_recommendation',{current:before,recommended:snapshotCard(),metrics:state.optimization?.diagnostics||null});save();render();show('Recommended card applied inside Sunday Funday IQ only. CBS was not changed.')}
 function revertOriginal(){if(!state.originalCard)return;applyCardToGames(state.games,state.originalCard);state.applied=false;state.confidenceStatus=state.originalConfidenceStatus||'submitted';state.confidenceSource=state.confidenceStatus==='placeholder'?'Synthetic import placeholder':'CBS import';if(state.optimization)delete state.optimization.appliedEval;save();render();show('Reverted to the original CBS card stored in IQ.')}
 const waitFor=ms=>new Promise(resolve=>setTimeout(resolve,ms));
-async function triggerMiniPcCbsRefresh(){
-  show('Refreshing CBS and market data on the mini-PC…');
-  const response=await fetch(CBS_AUTOMATION_URL+'/refresh-sync',{method:'POST',cache:'no-store'});
-  let result=null;
-  try{result=await response.json()}catch(_){}
-  if(!response.ok||!result?.ok)throw new Error(result?.error||('Mini-PC refresh endpoint returned HTTP '+response.status));
-  if(!result.payload)throw new Error('Mini-PC refresh completed without a sanitized CBS payload.');
-  importScan(result.payload);
-  show('CBS refresh complete. Sunday Funday IQ is current.');
-  return true;
+async function miniPcRefreshHandshake({fetchFn=fetch,importFn=importScan,waitFn=waitFor,notify=show,baseUrl=CBS_AUTOMATION_URL,maxWaitMs=150000}={}){
+  notify('Starting CBS refresh on the mini-PC…');
+  let startResponse;
+  try{startResponse=await fetchFn(baseUrl+'/refresh',{method:'POST',cache:'no-store'})}
+  catch(e){throw new Error('Could not reach the mini-PC. Make sure Tailscale is connected, then try again.')}
+  let started=null;
+  try{started=await startResponse.json()}catch(_){}
+  if(!startResponse.ok||!started?.ok)throw new Error(started?.error||('Mini-PC refresh endpoint returned HTTP '+startResponse.status));
+  const runId=started.runId;
+  if(!runId)throw new Error('Mini-PC did not return a refresh run ID.');
+
+  const deadline=Date.now()+maxWaitMs;
+  let lastError='';
+  while(Date.now()<deadline){
+    await waitFn(1600);
+    let statusResponse;
+    try{statusResponse=await fetchFn(baseUrl+'/status',{cache:'no-store'})}
+    catch(e){lastError='Could not read mini-PC refresh status.';continue}
+    if(!statusResponse.ok){lastError='Mini-PC status returned HTTP '+statusResponse.status;continue}
+    let status=null;
+    try{status=await statusResponse.json()}catch(_){lastError='Mini-PC status was not valid JSON.';continue}
+
+    if(status.lastCompletedRunId===runId){
+      if(status.lastRefreshOk!==true)throw new Error(status.lastRefreshError||'Mini-PC CBS refresh failed.');
+      notify('CBS refreshed. Loading the sanitized data…');
+      let liveResponse;
+      try{liveResponse=await fetchFn(baseUrl+'/live',{cache:'no-store'})}
+      catch(e){throw new Error('CBS refreshed, but the phone could not retrieve the sanitized payload from the mini-PC.')}
+      let live=null;
+      try{live=await liveResponse.json()}catch(_){}
+      if(!liveResponse.ok||!live?.ok||!live?.payload)throw new Error(live?.error||'Mini-PC did not return the refreshed CBS payload.');
+      if(live.lastCompletedRunId&&live.lastCompletedRunId!==runId)throw new Error('Mini-PC returned data from a different refresh run. Try once more.');
+      await importFn(live.payload);
+      notify('CBS refresh complete. Sunday Funday IQ is current.');
+      return true;
+    }
+
+    if(status.currentRunId===runId||status.refreshing){
+      notify('Mini-PC is refreshing CBS and market data…');
+      continue;
+    }
+    lastError='The requested mini-PC refresh has not started yet.';
+  }
+  throw new Error(lastError||'CBS refresh took longer than expected.');
 }
+async function triggerMiniPcCbsRefresh(){return miniPcRefreshHandshake()}
 async function loadPublishedCbs({silent=true,onlyIfNewer=true}={}){
   try{
     const r=await fetch(LIVE_CBS_URL+'?v='+Date.now(),{cache:'no-store'});if(!r.ok)throw new Error('HTTP '+r.status);
@@ -1767,7 +1802,7 @@ async function boot(){
     await runSimulation();
   }
 }
-globalThis.SFIQ_TEST={MODEL_BUILD,simulationCurrentCard,fullSlateLabGames,labCardDiff,renderModelLabResult,renderStrategyComparison,scenarioSwapConfidence,scenarioMetrics,strategyCardRows,validConfidence,ensureValidCard,completeCard,cardImportIssues,dataFreshness,buildWorlds,buildWorldEnsemble,evaluateCard,evaluateProxyField,compareCards,lockedFieldImpact,robustMetrics,optimizeConfidence,optimizeTournamentConfidence,seedStability,searchCandidates,runOptimizer,buildStrategyFrontier,strategyObjective,strategyEquivalent,strategyFlipEvidence,strategyLaneConfig,cardStrategyDistance,chooseLaneCard,confidenceStrategyConfig,confidenceStrategyScore,safestExpectedCard,neutralTop2,neutralWin,cardActions,marketProb,iqProb,formProb,iqFormWeight,scenarioProbability,probabilityProfile,confidenceSafetyProb,confidenceCeilingFromProbability,confidenceCeiling,confidenceRiskPenalty,allocateConfidence,seedRiskCalibratedConfidence,expectedWinnerSide,strategicPickEvidence,upsidePickEvidence,cardChangeCost,ownProb,clone,refreshResults,refreshIqModel,isLocked,fixedWinner,parsePicks,extractStructuredCard,extractFieldModel,applyStructuredCard,normalizePoolHistory,poolConfidenceSignal,drawFieldPicks,SEED,normalizeTeam};
+globalThis.SFIQ_TEST={miniPcRefreshHandshake,MODEL_BUILD,simulationCurrentCard,fullSlateLabGames,labCardDiff,renderModelLabResult,renderStrategyComparison,scenarioSwapConfidence,scenarioMetrics,strategyCardRows,validConfidence,ensureValidCard,completeCard,cardImportIssues,dataFreshness,buildWorlds,buildWorldEnsemble,evaluateCard,evaluateProxyField,compareCards,lockedFieldImpact,robustMetrics,optimizeConfidence,optimizeTournamentConfidence,seedStability,searchCandidates,runOptimizer,buildStrategyFrontier,strategyObjective,strategyEquivalent,strategyFlipEvidence,strategyLaneConfig,cardStrategyDistance,chooseLaneCard,confidenceStrategyConfig,confidenceStrategyScore,safestExpectedCard,neutralTop2,neutralWin,cardActions,marketProb,iqProb,formProb,iqFormWeight,scenarioProbability,probabilityProfile,confidenceSafetyProb,confidenceCeilingFromProbability,confidenceCeiling,confidenceRiskPenalty,allocateConfidence,seedRiskCalibratedConfidence,expectedWinnerSide,strategicPickEvidence,upsidePickEvidence,cardChangeCost,ownProb,clone,refreshResults,refreshIqModel,isLocked,fixedWinner,parsePicks,extractStructuredCard,extractFieldModel,applyStructuredCard,normalizePoolHistory,poolConfidenceSignal,drawFieldPicks,SEED,normalizeTeam};
 if(!TESTING)boot();
 </script>
 </body></html>
