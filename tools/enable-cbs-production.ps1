@@ -23,7 +23,7 @@ $env:SFIQ_CBS_HEADLESS='1'
 $User="$env:USERDOMAIN\$env:USERNAME"
 $ServerAction=New-ScheduledTaskAction -Execute $PythonW -Argument ('"'+$Server+'"') -WorkingDirectory $Repo
 $ServerTrigger=New-ScheduledTaskTrigger -AtLogOn -User $User
-$ServerSettings=New-ScheduledTaskSettingsSet -StartWhenAvailable -RestartCount 5 -RestartInterval (New-TimeSpan -Minutes 1) -ExecutionTimeLimit (New-TimeSpan -Days 3650)
+$ServerSettings=New-ScheduledTaskSettingsSet -StartWhenAvailable -RestartCount 5 -RestartInterval (New-TimeSpan -Minutes 1) -ExecutionTimeLimit (New-TimeSpan -Days 3650) -Hidden
 Register-ScheduledTask -TaskName 'Sunday Funday IQ - CBS Automation Server' -Action $ServerAction -Trigger $ServerTrigger -Settings $ServerSettings -RunLevel Limited -Force | Out-Null
 
 Get-ScheduledTask -TaskName "$TaskPrefix*" -ErrorAction SilentlyContinue | Unregister-ScheduledTask -Confirm:$false
@@ -43,7 +43,7 @@ $i=0
 foreach($slot in $times){
   $i++
   $trigger=New-ScheduledTaskTrigger -Weekly -DaysOfWeek $slot.Day -At $slot.At
-  $settings=New-ScheduledTaskSettingsSet -StartWhenAvailable -MultipleInstances IgnoreNew
+  $settings=New-ScheduledTaskSettingsSet -StartWhenAvailable -MultipleInstances IgnoreNew -Hidden
   Register-ScheduledTask -TaskName ("$TaskPrefix{0:D2}" -f $i) -Action $RefreshAction -Trigger $trigger -Settings $settings -RunLevel Limited -Force | Out-Null
 }
 
@@ -61,10 +61,16 @@ if($LASTEXITCODE -ne 0){
   throw 'Headless production validation failed. Headless mode was reverted to OFF; no schedules need to be removed.'
 }
 
+$AutoUpdateInstaller=Join-Path $Repo 'tools\enable-sfiq-auto-update.ps1'
+if(Test-Path $AutoUpdateInstaller){
+  & $AutoUpdateInstaller
+}
+
 Write-Host ''
 Write-Host 'CBS production automation is ON.' -ForegroundColor Green
 Write-Host 'Auto-push: ON'
 Write-Host 'Headless scheduled collection: ON'
 Write-Host ('Scheduled refresh tasks: '+$times.Count)
 Write-Host 'Server runs quietly via pythonw.exe.'
-Write-Host 'Next phase: phone-triggered refresh + app status.'
+Write-Host 'Silent code auto-update: ON (when installed from current main).'
+Write-Host 'Phone-triggered refresh is available through the private Tailscale bridge.'
