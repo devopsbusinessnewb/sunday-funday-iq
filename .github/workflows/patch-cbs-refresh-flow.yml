@@ -7,6 +7,7 @@ on:
       - '.github/workflows/patch-cbs-refresh-flow.yml'
       - 'tools/patch-cbs-refresh-flow.py'
       - 'tests/cbs-refresh-handshake.py'
+      - 'tests/cbs-phone-refresh-regression.js'
 
 permissions:
   contents: write
@@ -29,13 +30,15 @@ jobs:
           h=Path('index.html').read_text(encoding='utf-8')
           b=Path('tools/cbs-bridge-server.py').read_text(encoding='utf-8')
           c=Path('tools/cbs-collector.py').read_text(encoding='utf-8')
-          assert "const MODEL_BUILD='1.16.6';" in s
-          assert "const MODEL_BUILD='1.16.6';" in h
-          assert "baseUrl+'/refresh'" in s
+          assert "const MODEL_BUILD='1.16.7';" in s
+          assert "const MODEL_BUILD='1.16.7';" in h
           assert "baseUrl+'/status'" in s
+          assert "baseUrl+'/refresh-sync'" in s
+          assert "baseUrl+'/refresh'" in s
           assert "baseUrl+'/live'" in s
+          assert 'await importFn(legacy.payload)' in s
           assert 'await importFn(live.payload)' in s
-          assert "CBS_AUTOMATION_URL+'/refresh-sync'" not in s
+          assert 'Object.prototype.hasOwnProperty.call(capability' in s
           assert 'raw.githubusercontent.com/devopsbusinessnewb/sunday-funday-iq/main/data/live/cbs-pickem.json' not in s
           assert 'def claim_refresh(' in b
           assert "self.path=='/live'" in b
@@ -51,6 +54,7 @@ jobs:
           node --check /tmp/pickem-home.js
           python -m py_compile tools/cbs-bridge-server.py tools/cbs-collector.py tests/cbs-refresh-handshake.py
           python tests/cbs-refresh-handshake.py
+          node tests/cbs-phone-refresh-regression.js
           node tests/pickem-regression.js
           node tests/pickem-home-regression.js
           python tests/cbs-market-parser-regression.py
@@ -58,5 +62,5 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add index.html apps/pickem/index.html tools/cbs-bridge-server.py tools/cbs-collector.py
-          git commit -m 'Harden CBS phone refresh handshake'
+          git commit -m 'Ship backward-compatible CBS phone refresh'
           git push origin main
