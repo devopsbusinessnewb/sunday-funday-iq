@@ -1,0 +1,54 @@
+name: Patch CBS Scenario Lab locks
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/patch-cbs-scenario-locks.py'
+      - '.github/workflows/patch-cbs-scenario-locks.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Patch Scenario Lab locking
+        run: python tools/patch-cbs-scenario-locks.py
+      - name: Validate
+        run: |
+          git diff --check
+          python - <<'PY'
+          from pathlib import Path
+          app=Path('apps/pickem/index.html').read_text(encoding='utf-8')
+          home=Path('index.html').read_text(encoding='utf-8')
+          assert "const MODEL_BUILD='1.16.10';" in app
+          assert "const MODEL_BUILD='1.16.10';" in home
+          assert 'function scenarioGameLocked' in app
+          assert 'async function buildLiveScenarioResult' in app
+          assert 'Completed and CBS-locked games stay frozen' in app
+          assert "try{const x=await buildLiveScenarioResult();" in app
+          assert 'disabled aria-disabled="true"' in app
+          assert 'Open live Scenario Lab' in app
+          Path('/tmp/pickem.js').write_text(app.split('<script>',1)[1].rsplit('</script>',1)[0],encoding='utf-8')
+          Path('/tmp/home.js').write_text(home.split('<script>',1)[1].rsplit('</script>',1)[0],encoding='utf-8')
+          PY
+          node --check /tmp/pickem.js
+          node --check /tmp/home.js
+          node tests/pickem-regression.js
+          node tests/pickem-home-regression.js
+          node tests/pickem-strategy-regression.js
+          node tests/cbs-phone-refresh-regression.js
+          python tests/cbs-market-parser-regression.py
+      - name: Publish
+        run: |
+          if git diff --quiet -- index.html apps/pickem/index.html tests/pickem-regression.js; then exit 0; fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html apps/pickem/index.html tests/pickem-regression.js
+          git commit -m 'Lock completed games in live Scenario Lab'
+          git push origin main
