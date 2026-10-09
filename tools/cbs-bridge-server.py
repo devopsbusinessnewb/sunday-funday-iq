@@ -5,7 +5,7 @@ Raw CBS page data is accepted only on localhost and is never written to disk.
 The service sanitizes it in memory, writes data/live/cbs-pickem.json, and may
 commit/push when SFIQ_AUTO_PUSH=1.
 """
-import json, os, re, subprocess, sys, threading, uuid
+import json, os, re, subprocess, sys, threading, uuid, uuid
 from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
