@@ -54,6 +54,7 @@ $changed = $false
 $serverStopped = $false
 $registrationsStarted = $false
 $password = $null
+$verificationEvidence = @{}
 $phase = 'FenceTasks'
 try {
     # Fence scheduled launches; recheck before interrupting the idle bridge.
@@ -90,7 +91,7 @@ try {
     if (-not $ready) { throw 'CBS did not become ready in unattended context.' }
     Write-Host 'Checking authenticated collection and publication in unattended context...'
     $phase = 'CollectAndPublish'
-    $status = Invoke-CbsRefreshVerification
+    $status = Invoke-CbsRefreshVerification -Evidence $verificationEvidence
     $phase = 'ConfirmSnapshot'
     $repo = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
     $snapshotCommit = (& git -C $repo log -1 --format=%H -- data/live/cbs-pickem.json).Trim()
@@ -112,6 +113,9 @@ try {
     Write-Host 'CBS setup failure details (sanitized):' -ForegroundColor Yellow
     $report | Add-Member -NotePropertyName ExceptionType -NotePropertyValue $failure.Exception.GetType().FullName
     $report | Add-Member -NotePropertyName ExceptionHResult -NotePropertyValue $failure.Exception.HResult
+    foreach ($key in $verificationEvidence.Keys) {
+        $report | Add-Member -NotePropertyName $key -NotePropertyValue $verificationEvidence[$key]
+    }
     $report | Format-List | Out-Host
     try {
         $report | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $backup 'failure-report.json') -Encoding UTF8
