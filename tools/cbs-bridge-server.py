@@ -211,6 +211,24 @@ def publish(payload):
     with LOCK: SERVICE['lastPublishedAt']=payload.get('exportedAt') or iso_now()
     return result
 
+def snapshot_status():
+    with LOCK: status=dict(SERVICE)
+    collector=runtime.read_status()
+    bridge_run_id=str(collector.get('bridgeRunId') or '').strip().lower()
+    valid_id=len(bridge_run_id)==32 and all(char in '0123456789abcdef' for char in bridge_run_id)
+    if valid_id and not status.get('refreshing') and status.get('lastCompletedRunId')!=bridge_run_id:
+        outcome=collector.get('outcome')
+        if outcome=='running':
+            status.update(refreshing=True,currentRunId=bridge_run_id,
+                          lastRefreshStarted=collector.get('startedAt'),
+                          lastRefreshFinished=None,lastRefreshOk=None,lastRefreshError=None)
+        elif outcome in ('succeeded','failed') and collector.get('finishedAt'):
+            status.update(refreshing=False,currentRunId=None,lastCompletedRunId=bridge_run_id,
+                          lastRefreshStarted=collector.get('startedAt'),
+                          lastRefreshFinished=collector.get('finishedAt'),
+                          lastRefreshOk=(outcome=='succeeded'),lastRefreshError=None)
+    return status,collector
+
 def claim_refresh(run_id=None):
     rid=run_id or uuid.uuid4().hex
     with LOCK:
@@ -224,7 +242,9 @@ def run_collector(run_id=None,claimed=False):
         started,rid=claim_refresh(run_id)
         if not started: return False
     try:
-        proc=subprocess.run([sys.executable,str(COLLECTOR)],cwd=ROOT,text=True,capture_output=True,timeout=180)
+        child_env=os.environ.copy()
+        if rid: child_env['SFIQ_CBS_BRIDGE_RUN_ID']=rid
+        proc=subprocess.run([sys.executable,str(COLLECTOR)],cwd=ROOT,text=True,capture_output=True,timeout=180,env=child_env)
         if proc.returncode!=0: raise RuntimeError((proc.stderr or proc.stdout or 'CBS collector failed').strip())
         with LOCK: SERVICE['lastRefreshOk']=True
         return True
@@ -246,12 +266,12 @@ class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
         if self.path=='/health': return self._json(200,{'ok':True,'service':'CBS IQ automation','autoPush':AUTO_PUSH})
         if self.path=='/status':
-            with LOCK: status=dict(SERVICE)
-            return self._json(200,{'ok':True,'autoPush':AUTO_PUSH,**status,'collector':runtime.read_status()})
+            status,collector=snapshot_status()
+            return self._json(200,{'ok':True,'autoPush':AUTO_PUSH,**status,'collector':collector})
         if self.path=='/live':
             try: payload=json.loads(OUTPUT.read_text(encoding='utf-8'))
             except Exception as exc: return self._json(404,{'ok':False,'error':'Sanitized CBS payload is unavailable: '+str(exc)})
-            with LOCK: status=dict(SERVICE)
+            status,_=snapshot_status()
             return self._json(200,{'ok':True,'payload':payload,'lastCompletedRunId':status.get('lastCompletedRunId'),'lastCommit':status.get('lastCommit'),'publishedAt':status.get('lastPublishedAt')})
         self._json(404,{'ok':False,'error':'Not found'})
     def do_POST(self):
@@ -260,7 +280,7 @@ class Handler(BaseHTTPRequestHandler):
                 with LOCK: busy=SERVICE['refreshing']
                 if busy: return self._json(409,{'ok':False,'error':'CBS refresh is already running. Try again in a moment.'})
                 run_collector()
-                with LOCK: status=dict(SERVICE)
+                status,_=snapshot_status()
                 if not status.get('lastRefreshOk'):
                     detail=str(status.get('lastRefreshError') or 'CBS refresh failed').strip().splitlines()[-1]
                     return self._json(400,{'ok':False,'error':detail})
