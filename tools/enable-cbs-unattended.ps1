@@ -1,6 +1,7 @@
 # Explicit local setup only. Never called by the automatic updater. Never reboots Windows.
 $ErrorActionPreference = 'Stop'
 . (Join-Path $PSScriptRoot 'cbs-task-definition.ps1')
+. (Join-Path $PSScriptRoot 'cbs-setup-diagnostics.ps1')
 $identity = [System.Security.Principal.WindowsIdentity]::GetCurrent()
 $principal = [System.Security.Principal.WindowsPrincipal]::new($identity)
 if (-not $principal.IsInRole([System.Security.Principal.WindowsBuiltInRole]::Administrator)) {
@@ -52,11 +53,13 @@ $changed = $false
 $serverStopped = $false
 $registrationsStarted = $false
 $password = $null
+$phase = 'FenceTasks'
 try {
     # Fence scheduled launches; recheck before interrupting the idle bridge.
     $changed = $true
     foreach ($name in $names) { $folder.GetTask($name).Enabled = $false }
     Assert-CbsIdle
+    $phase = 'StopServer'
     $folder.GetTask($serverName).Stop(0)
     $serverStopped = $true
     for ($attempt = 0; $attempt -lt 15; $attempt++) {
@@ -65,12 +68,15 @@ try {
     }
     if ($folder.GetTask($serverName).State -eq 4) { throw 'CBS server did not stop.' }
     $password = $credential.GetNetworkCredential().Password
+    $phase = 'RegisterTasks'
     $registrationsStarted = $true
     foreach ($item in $staged) {
         $folder.RegisterTask($item.Name, $item.Xml, 6, $credential.UserName, $password, 1, $null) | Out-Null
     }
+    $phase = 'StartServer'
     $folder.GetTask($serverName).Enabled = $true
     $folder.GetTask($serverName).Run($null) | Out-Null
+    $phase = 'CheckHealth'
     $ready = $false
     for ($attempt = 0; $attempt -lt 30; $attempt++) {
         try {
@@ -82,9 +88,11 @@ try {
     }
     if (-not $ready) { throw 'CBS did not become ready in unattended context.' }
     Write-Host 'Checking authenticated collection and publication in unattended context...'
+    $phase = 'CollectAndPublish'
     $result = Invoke-RestMethod 'http://127.0.0.1:43128/refresh-sync' -Method Post -TimeoutSec 210
     $status = Invoke-RestMethod 'http://127.0.0.1:43128/status' -TimeoutSec 10
     if (-not $result.ok -or $status.collector.outcome -ne 'succeeded') { throw 'Unattended authenticated collection failed.' }
+    $phase = 'ConfirmSnapshot'
     $repo = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
     $snapshotCommit = (& git -C $repo log -1 --format=%H -- data/live/cbs-pickem.json).Trim()
     if ($LASTEXITCODE -ne 0 -or $snapshotCommit -notmatch '^[0-9a-f]{40}$') { throw 'Cannot verify snapshot commit.' }
@@ -92,9 +100,21 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'Cannot verify publication.' }
     & git -C $repo merge-base --is-ancestor $snapshotCommit origin/main
     if ($LASTEXITCODE -ne 0) { throw 'Snapshot publication not confirmed.' }
+    $phase = 'EnableSchedules'
     foreach ($name in $names) { $folder.GetTask($name).Enabled = $true }
     [pscustomobject]@{ UnattendedCollection = 'Verified'; SnapshotCommit = $snapshotCommit; TaskCount = $names.Count; BackupDirectory = $backup; RebootBeforeSignIn = 'Still requires a controlled reboot test'; WindowsRebooted = $false } | Format-List
 } catch {
+    $failure = $_
+    $httpStatus = 0
+    try { $httpStatus = [int]$failure.Exception.Response.StatusCode } catch { }
+    $failureStatus = $null
+    try { $failureStatus = Invoke-RestMethod 'http://127.0.0.1:43128/status' -TimeoutSec 5 } catch { }
+    $report = Get-CbsSetupFailureReport -Phase $phase -FailureText $failure.Exception.Message -BridgeStatus $failureStatus -HttpStatus $httpStatus
+    Write-Host 'CBS setup failure details (sanitized):' -ForegroundColor Yellow
+    $report | Format-List | Out-Host
+    try {
+        $report | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $backup 'failure-report.json') -Encoding UTF8
+    } catch { Write-Host 'Could not save failure report; details are displayed above.' }
     if ($changed) {
         try {
             if ($registrationsStarted) {
