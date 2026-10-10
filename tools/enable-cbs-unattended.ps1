@@ -2,6 +2,7 @@
 $ErrorActionPreference = 'Stop'
 . (Join-Path $PSScriptRoot 'cbs-task-definition.ps1')
 . (Join-Path $PSScriptRoot 'cbs-setup-diagnostics.ps1')
+. (Join-Path $PSScriptRoot 'cbs-refresh-verification.ps1')
 $identity = [System.Security.Principal.WindowsIdentity]::GetCurrent()
 $principal = [System.Security.Principal.WindowsPrincipal]::new($identity)
 if (-not $principal.IsInRole([System.Security.Principal.WindowsBuiltInRole]::Administrator)) {
@@ -89,9 +90,7 @@ try {
     if (-not $ready) { throw 'CBS did not become ready in unattended context.' }
     Write-Host 'Checking authenticated collection and publication in unattended context...'
     $phase = 'CollectAndPublish'
-    $result = Invoke-RestMethod 'http://127.0.0.1:43128/refresh-sync' -Method Post -TimeoutSec 210
-    $status = Invoke-RestMethod 'http://127.0.0.1:43128/status' -TimeoutSec 10
-    if (-not $result.ok -or $status.collector.outcome -ne 'succeeded') { throw 'Unattended authenticated collection failed.' }
+    $status = Invoke-CbsRefreshVerification
     $phase = 'ConfirmSnapshot'
     $repo = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
     $snapshotCommit = (& git -C $repo log -1 --format=%H -- data/live/cbs-pickem.json).Trim()
@@ -111,6 +110,8 @@ try {
     try { $failureStatus = Invoke-RestMethod 'http://127.0.0.1:43128/status' -TimeoutSec 5 } catch { }
     $report = Get-CbsSetupFailureReport -Phase $phase -FailureText $failure.Exception.Message -BridgeStatus $failureStatus -HttpStatus $httpStatus
     Write-Host 'CBS setup failure details (sanitized):' -ForegroundColor Yellow
+    $report | Add-Member -NotePropertyName ExceptionType -NotePropertyValue $failure.Exception.GetType().FullName
+    $report | Add-Member -NotePropertyName ExceptionHResult -NotePropertyValue $failure.Exception.HResult
     $report | Format-List | Out-Host
     try {
         $report | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $backup 'failure-report.json') -Encoding UTF8
