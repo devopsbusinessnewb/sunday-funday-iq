@@ -77,6 +77,9 @@ def run_recorded(action):
     state = {'schemaVersion': 1, 'runId': uuid.uuid4().hex,
              'startedAt': now(), 'finishedAt': None, 'outcome': 'running',
              'lastSuccessAt': previous.get('lastSuccessAt'), 'errorType': None}
+    bridge_run_id = os.environ.get('SFIQ_CBS_BRIDGE_RUN_ID', '').strip().lower()
+    if len(bridge_run_id) == 32 and all(char in '0123456789abcdef' for char in bridge_run_id):
+        state['bridgeRunId'] = bridge_run_id
     write_status(state)
     try:
         result = action()
