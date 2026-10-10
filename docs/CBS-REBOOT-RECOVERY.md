@@ -9,7 +9,12 @@ The live migration completed successfully at 00:44 Central:
 - The original tasks were backed up under `C:\Server\Backups\CBS-Tasks`.
 - No reboot occurred during migration.
 
-The remaining proof is a controlled reboot with no Windows sign-in for at least three minutes. After sign-in, `tools/test-cbs-reboot-readiness.ps1` compares the server task start time with Windows boot and the interactive Explorer session. It reports `RebootBeforeSignInVerified: true` only when the password-logon server started after boot but before the interactive desktop, remains running, has its boot trigger, and the local bridge is reachable.
+A controlled reboot was completed at 01:15 Central. The read-only verification confirmed:
+- `BridgeReachable: true`
+- `ServerStartedBeforeSignIn: true`
+- `RebootBeforeSignInVerified: true`
+
+CBS reboot recovery is verified. The workload no longer depends on an interactive Windows sign-in. Future work is operational monitoring, freshness alerting, backup/restore validation, and Command Center visibility rather than additional lifecycle migration.
 
 
 ## Verified installation — October 9, 2026
@@ -23,7 +28,7 @@ The live Windows installation report at 16:07 Central confirms:
 
 This verifies that collection and publication worked at that time. It does not establish continuous availability, scheduled execution, or successful startup before sign-in.
 
-## Current gap
+## Historical gap
 
 The earlier live inventory showed the server task using an interactive account and a logon trigger. Nine refresh tasks also used interactive logon. The new updater was installed subsequently; its installer uses the signed-in user. None of these observations proves that the tasks can run before sign-in after a reboot.
 
@@ -74,7 +79,7 @@ Both legacy installers now protect existing unattended registrations: the produc
 
 Windows CI checks script syntax and uses the native Task Scheduler serializer to verify identity, action and schedule preservation, disabled staging, delayed boot, and nonduplicating triggers. It does not exercise live account credentials, CBS authentication, task registration rollback, or startup before sign-in.
 
-The live migration and controlled reboot test remain pending until this setup is run on EICKHOFF-SERVER. A successful migration report proves the new execution context works while Windows is signed in; it does not prove behavior after reboot. Do not reboot automatically as part of installation.
+The live migration and controlled reboot-before-sign-in test were completed successfully on October 10, 2026. Keep the setup script explicit and never reboot automatically as part of installation.
 
 ## Platform boundaries and follow-up
 
