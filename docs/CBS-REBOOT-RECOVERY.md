@@ -1,5 +1,17 @@
 # CBS reboot recovery
 
+## Unattended migration verified — October 10, 2026
+
+The live migration completed successfully at 00:44 Central:
+- Authenticated unattended collection succeeded.
+- Snapshot commit `44b9539e1bd90ce05235606808e9f81b8a3ac5bf` was confirmed on origin/main.
+- All 11 CBS tasks use password logon under the existing CBS account.
+- The original tasks were backed up under `C:\Server\Backups\CBS-Tasks`.
+- No reboot occurred during migration.
+
+The remaining proof is a controlled reboot with no Windows sign-in for at least three minutes. After sign-in, `tools/test-cbs-reboot-readiness.ps1` compares the server task start time with Windows boot and the interactive Explorer session. It reports `RebootBeforeSignInVerified: true` only when the password-logon server started after boot but before the interactive desktop, remains running, has its boot trigger, and the local bridge is reachable.
+
+
 ## Verified installation — October 9, 2026
 
 The live Windows installation report at 16:07 Central confirms:
