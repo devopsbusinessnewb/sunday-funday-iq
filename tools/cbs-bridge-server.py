@@ -264,7 +264,7 @@ class Handler(BaseHTTPRequestHandler):
         body=json.dumps(value).encode(); self.send_response(code); self._cors(); self.send_header('Content-Type','application/json'); self.send_header('Cache-Control','no-store'); self.end_headers(); self.wfile.write(body)
     def do_OPTIONS(self): self.send_response(204); self._cors(); self.end_headers()
     def do_GET(self):
-        if self.path=='/health': return self._json(200,{'ok':True,'service':'CBS IQ automation','autoPush':AUTO_PUSH})
+        if self.path=='/health': return self._json(200,{'ok':True,'service':'CBS IQ automation','autoPush':AUTO_PUSH,'stateRecoveryVersion':1})
         if self.path=='/status':
             status,collector=snapshot_status()
             return self._json(200,{'ok':True,'autoPush':AUTO_PUSH,**status,'collector':collector})
