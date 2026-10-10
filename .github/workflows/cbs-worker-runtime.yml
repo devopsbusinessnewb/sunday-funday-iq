@@ -14,6 +14,7 @@ on:
       - 'tools/enable-sfiq-auto-update.ps1'
       - 'tools/enable-cbs-production.ps1'
       - 'tools/cbs-setup-diagnostics.ps1'
+      - 'tools/cbs-refresh-verification.ps1'
       - 'tests/windows/**'
       - 'tests/test_cbs_worker_runtime.py'
       - '.github/workflows/cbs-worker-runtime.yml'
@@ -37,7 +38,7 @@ jobs:
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
-          foreach ($path in @('tools/sfiq-auto-update.ps1','tools/install-cbs-reliability.ps1','tools/test-cbs-reboot-readiness.ps1','tools/cbs-task-definition.ps1','tools/enable-cbs-unattended.ps1','tools/restore-cbs-task-backup.ps1','tools/enable-sfiq-auto-update.ps1','tools/enable-cbs-production.ps1','tests/windows/test-cbs-task-definition.ps1','tests/windows/test-cbs-installer-guards.ps1','tools/cbs-setup-diagnostics.ps1','tests/windows/test-cbs-setup-diagnostics.ps1')) {
+          foreach ($path in @('tools/sfiq-auto-update.ps1','tools/install-cbs-reliability.ps1','tools/test-cbs-reboot-readiness.ps1','tools/cbs-task-definition.ps1','tools/enable-cbs-unattended.ps1','tools/restore-cbs-task-backup.ps1','tools/enable-sfiq-auto-update.ps1','tools/enable-cbs-production.ps1','tests/windows/test-cbs-task-definition.ps1','tests/windows/test-cbs-installer-guards.ps1','tools/cbs-setup-diagnostics.ps1','tests/windows/test-cbs-setup-diagnostics.ps1','tools/cbs-refresh-verification.ps1','tests/windows/test-cbs-refresh-verification.ps1')) {
             $tokens = $null
             $errors = $null
             [System.Management.Automation.Language.Parser]::ParseFile((Join-Path $PWD $path), [ref]$tokens, [ref]$errors) | Out-Null
@@ -55,3 +56,7 @@ jobs:
         if: runner.os == 'Windows'
         shell: powershell
         run: ./tests/windows/test-cbs-setup-diagnostics.ps1
+      - name: Verify CBS refresh completion polling
+        if: runner.os == 'Windows'
+        shell: powershell
+        run: ./tests/windows/test-cbs-refresh-verification.ps1
