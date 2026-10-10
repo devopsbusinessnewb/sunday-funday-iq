@@ -28,3 +28,11 @@ try { & (Join-Path $repo 'tools\enable-cbs-production.ps1') } catch { $rejected 
 $after = [Environment]::GetEnvironmentVariable('SFIQ_AUTO_PUSH', 'User')
 if (-not $rejected -or $global:cbsGuardRegistrations -ne 0 -or $before -ne $after) { throw 'Legacy production installer changed unattended setup.' }
 Write-Host 'PASS: legacy production installer rejects unattended tasks before changing configuration.'
+
+$unattendedSource = Get-Content -LiteralPath (Join-Path $repo 'tools\enable-cbs-unattended.ps1') -Raw
+foreach ($required in @('Stop-CbsVerifiedBridgeListener', 'Get-NetTCPConnection -LocalPort 43128', 'stateRecoveryVersion -eq 1')) {
+    if ($unattendedSource.IndexOf($required, [System.StringComparison]::Ordinal) -lt 0) {
+        throw "Unattended installer is missing stale-bridge guard: $required"
+    }
+}
+Write-Host 'PASS: unattended installer replaces only a verified stale CBS bridge and requires the recovery-capable version.'

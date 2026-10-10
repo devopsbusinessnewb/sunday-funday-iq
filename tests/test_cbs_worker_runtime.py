@@ -54,6 +54,27 @@ class RuntimeTests(unittest.TestCase):
             self.assertEqual(state['errorType'], 'ValueError')
             self.assertNotIn('credential', json.dumps(state))
 
+    def test_bridge_recovers_running_job_after_restart(self):
+        durable = {
+            'bridgeRunId': 'd' * 32,
+            'startedAt': '2026-10-10T05:39:44Z',
+            'finishedAt': None,
+            'outcome': 'running',
+            'lastSuccessAt': None,
+        }
+        initial = {
+            'refreshing': False, 'currentRunId': None, 'lastCompletedRunId': None,
+            'lastRefreshStarted': None, 'lastRefreshFinished': None,
+            'lastRefreshOk': None, 'lastRefreshError': None,
+            'lastPublishedAt': None, 'lastCommit': None,
+        }
+        with patch.dict(bridge.SERVICE, initial, clear=True), patch.object(bridge.runtime, 'read_status', return_value=durable):
+            status, collector = bridge.snapshot_status()
+        self.assertTrue(status['refreshing'])
+        self.assertEqual(status['currentRunId'], 'd' * 32)
+        self.assertIsNone(status['lastCompletedRunId'])
+        self.assertEqual(collector, durable)
+
     def test_bridge_recovers_completed_job_after_restart(self):
         durable = {
             'bridgeRunId': 'b' * 32,

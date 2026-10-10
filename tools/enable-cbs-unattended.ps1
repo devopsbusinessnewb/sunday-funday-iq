@@ -10,6 +10,7 @@ if (-not $principal.IsInRole([System.Security.Principal.WindowsBuiltInRole]::Adm
 }
 $serverName = 'Sunday Funday IQ - CBS Automation Server'
 $names = @($serverName) + @(1..9 | ForEach-Object { 'Sunday Funday IQ - CBS Refresh {0:D2}' -f $_ }) + @('Sunday Funday IQ - Auto Update')
+$repo = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
 $scheduler = New-Object -ComObject 'Schedule.Service'
 $scheduler.Connect()
 $folder = $scheduler.GetFolder('\')
@@ -28,6 +29,26 @@ function Assert-CbsIdle {
     if (-not $current.ok -or $current.refreshing) { throw 'CBS is unavailable or refreshing; setup deferred.' }
     foreach ($name in $names | Where-Object { $_ -ne $serverName }) {
         if ($folder.GetTask($name).State -eq 4) { throw 'A refresh or updater is running; setup deferred.' }
+    }
+}
+function Test-CbsBridgeResponding {
+    try {
+        $health = Invoke-RestMethod 'http://127.0.0.1:43128/health' -TimeoutSec 1
+        return [bool]$health.ok
+    } catch { return $false }
+}
+function Stop-CbsVerifiedBridgeListener {
+    $expectedScript = Join-Path $repo 'tools\cbs-bridge-server.py'
+    $listeners = @(Get-NetTCPConnection -LocalPort 43128 -State Listen -ErrorAction SilentlyContinue)
+    foreach ($processId in @($listeners | Select-Object -ExpandProperty OwningProcess -Unique)) {
+        $process = Get-CimInstance Win32_Process -Filter ("ProcessId = " + [int]$processId)
+        $commandLine = [string]$process.CommandLine
+        $validName = [string]$process.Name -match '^pythonw?\.exe$'
+        $validCommand = $commandLine.IndexOf($expectedScript, [System.StringComparison]::OrdinalIgnoreCase) -ge 0
+        if (-not $validName -or -not $validCommand) {
+            throw 'Port 43128 is owned by an unexpected process. It was not stopped.'
+        }
+        Stop-Process -Id ([int]$processId) -Force
     }
 }
 Assert-CbsIdle
@@ -69,6 +90,14 @@ try {
         Start-Sleep -Seconds 1
     }
     if ($folder.GetTask($serverName).State -eq 4) { throw 'CBS server did not stop.' }
+    # A prior task registration can report stopped while a detached pythonw listener survives.
+    # Terminate only the verified CBS bridge command, then prove the old listener is gone.
+    if (Test-CbsBridgeResponding) { Stop-CbsVerifiedBridgeListener }
+    for ($attempt = 0; $attempt -lt 15; $attempt++) {
+        if (-not (Test-CbsBridgeResponding)) { break }
+        Start-Sleep -Seconds 1
+    }
+    if (Test-CbsBridgeResponding) { throw 'The previous CBS bridge listener did not stop.' }
     $password = $credential.GetNetworkCredential().Password
     $phase = 'RegisterTasks'
     $registrationsStarted = $true
@@ -84,7 +113,7 @@ try {
         try {
             $health = Invoke-RestMethod 'http://127.0.0.1:43128/health' -TimeoutSec 2
             $status = Invoke-RestMethod 'http://127.0.0.1:43128/status' -TimeoutSec 2
-            if ($health.ok -and $health.autoPush -and $status.PSObject.Properties.Name -contains 'collector') { $ready = $true; break }
+            if ($health.ok -and $health.autoPush -and $health.stateRecoveryVersion -eq 1 -and $status.PSObject.Properties.Name -contains 'collector') { $ready = $true; break }
         } catch { }
         Start-Sleep -Seconds 1
     }
@@ -93,7 +122,6 @@ try {
     $phase = 'CollectAndPublish'
     $status = Invoke-CbsRefreshVerification -Evidence $verificationEvidence
     $phase = 'ConfirmSnapshot'
-    $repo = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
     $snapshotCommit = (& git -C $repo log -1 --format=%H -- data/live/cbs-pickem.json).Trim()
     if ($LASTEXITCODE -ne 0 -or $snapshotCommit -notmatch '^[0-9a-f]{40}$') { throw 'Cannot verify snapshot commit.' }
     & git -C $repo fetch origin main --quiet
