@@ -29,9 +29,25 @@ $rows = @($tasks | ForEach-Object {
         StartWhenAvailable = [bool]$task.Settings.StartWhenAvailable
         MultipleInstances = [string]$task.Settings.MultipleInstances
         ExecutionTimeLimit = $task.Settings.ExecutionTimeLimit
+        LastRunTimeUtc = $info.LastRunTime.ToUniversalTime().ToString('o')
         LastTaskResult = ('0x{0:X8}' -f [uint32]$info.LastTaskResult)
     }
 })
+$serverInfo = Get-ScheduledTaskInfo -TaskName $ServerName -TaskPath '\'
+$lastBoot = (Get-CimInstance Win32_OperatingSystem).LastBootUpTime
+$currentSessionId = (Get-Process -Id $PID).SessionId
+$interactiveShellStart = $null
+try {
+    $interactiveShell = @(Get-Process -Name explorer -ErrorAction Stop |
+        Where-Object { $_.SessionId -eq $currentSessionId } |
+        Sort-Object StartTime | Select-Object -First 1)
+    if ($interactiveShell.Count -eq 1) { $interactiveShellStart = $interactiveShell[0].StartTime }
+} catch { }
+$serverStartedBeforeSignIn = (
+    $null -ne $interactiveShellStart -and
+    $serverInfo.LastRunTime -gt $lastBoot -and
+    $serverInfo.LastRunTime -lt $interactiveShellStart
+)
 $bridgeReachable = $false
 $busy = $null
 $collectorOutcome = $null
@@ -52,6 +68,15 @@ try {
     BridgeReachable = $bridgeReachable
     BridgeRefreshing = $busy
     CollectorOutcome = $collectorOutcome
+    WindowsBootTimeUtc = $lastBoot.ToUniversalTime().ToString('o')
+    InteractiveShellStartUtc = $(if ($null -ne $interactiveShellStart) { $interactiveShellStart.ToUniversalTime().ToString('o') } else { $null })
+    ServerStartedBeforeSignIn = $serverStartedBeforeSignIn
     Tasks = $rows
-    RebootBeforeSignInVerified = $false
+    RebootBeforeSignInVerified = (
+        $serverStartedBeforeSignIn -and
+        [string]$server.Principal.LogonType -eq 'Password' -and
+        @($server.Triggers | Where-Object { $_.CimClass.CimClassName -eq 'MSFT_TaskBootTrigger' }).Count -gt 0 -and
+        [string]$server.State -eq 'Running' -and
+        $bridgeReachable
+    )
 } | ConvertTo-Json -Depth 5
