@@ -1,4 +1,11 @@
 $ErrorActionPreference='Stop'
+# This legacy installer recreates task identities; never let it undo unattended setup.
+$ExistingCbsTasks=@(Get-ScheduledTask -TaskPath '\' -ErrorAction SilentlyContinue | Where-Object {
+  $_.TaskName -eq 'Sunday Funday IQ - CBS Automation Server' -or $_.TaskName -match '^Sunday Funday IQ - CBS Refresh [0-9]{2}$'
+})
+if(@($ExistingCbsTasks | Where-Object { [string]$_.Principal.LogonType -ne 'Interactive' }).Count){
+  throw 'Existing CBS tasks use unattended or unexpected logon mode. Preserved without modification; this legacy installer must not recreate them.'
+}
 $Repo=(Resolve-Path (Join-Path $PSScriptRoot '..')).Path
 $Python=(Get-Command python -ErrorAction Stop).Source
 $PythonW=Join-Path (Split-Path $Python -Parent) 'pythonw.exe'

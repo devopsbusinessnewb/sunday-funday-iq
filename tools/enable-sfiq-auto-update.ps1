@@ -4,6 +4,19 @@ $Updater=Join-Path $Repo 'tools\sfiq-auto-update.ps1'
 if(-not (Test-Path $Updater)){ throw 'sfiq-auto-update.ps1 is missing.' }
 
 $TaskName='Sunday Funday IQ - Auto Update'
+# Preserve an existing unattended registration and its Windows-managed credential.
+$Existing=Get-ScheduledTask -TaskName $TaskName -TaskPath '\' -ErrorAction SilentlyContinue
+if($Existing -and [string]$Existing.Principal.LogonType -ne 'Interactive'){
+  if([string]$Existing.Principal.LogonType -ne 'Password'){
+    throw 'Existing updater has an unexpected logon mode; preserved without modification.'
+  }
+  $ExpectedArguments='-NoProfile -NonInteractive -ExecutionPolicy Bypass -WindowStyle Hidden -File "'+$Updater+'"'
+  if(@($Existing.Actions).Count -ne 1 -or $Existing.Actions[0].Arguments -ne $ExpectedArguments -or $Existing.Actions[0].WorkingDirectory -ne $Repo){
+    throw 'Existing unattended updater action differs; preserved without modification.'
+  }
+  Write-Host 'Existing unattended CBS auto-update task preserved.' -ForegroundColor Green
+  return
+}
 $PowerShell=(Get-Command powershell.exe -ErrorAction Stop).Source
 $Args='-NoProfile -NonInteractive -ExecutionPolicy Bypass -WindowStyle Hidden -File "'+$Updater+'"'
 $Action=New-ScheduledTaskAction -Execute $PowerShell -Argument $Args -WorkingDirectory $Repo
