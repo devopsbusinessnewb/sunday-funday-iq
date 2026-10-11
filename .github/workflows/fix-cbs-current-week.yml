@@ -1,12 +1,8 @@
 name: Fix CBS current week import
 
+# Historical one-time repair; do not rerun it automatically on newer source.
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'tools/patch-cbs-current-week.py'
-      - 'tests/cbs-current-week-regression.py'
-      - '.github/workflows/fix-cbs-current-week.yml'
+  workflow_dispatch:
 
 permissions:
   contents: write
