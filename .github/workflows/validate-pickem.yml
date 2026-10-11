@@ -70,3 +70,7 @@ jobs:
           node tests/cbs-history-regression.js
           node tests/cbs-pool-archive-regression.js
           python tests/cbs-market-parser-regression.py
+
+          python tests/cbs-current-week-regression.py
+          node tests/cbs-phone-refresh-regression.js
+          python tests/cbs-refresh-handshake.py
