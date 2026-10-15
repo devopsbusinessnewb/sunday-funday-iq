@@ -1,0 +1,51 @@
+name: Patch CBS Model Lab live context
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/patch-cbs-model-lab-live-context.py'
+      - '.github/workflows/patch-cbs-model-lab-live-context.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Align Model Lab to Home simulation context
+        run: python tools/patch-cbs-model-lab-live-context.py
+      - name: Validate
+        run: |
+          git diff --check
+          python - <<'PY'
+          from pathlib import Path
+          app=Path('apps/pickem/index.html').read_text(encoding='utf-8')
+          home=Path('index.html').read_text(encoding='utf-8')
+          assert 'Live Model Lab' in app
+          assert "source:'saved-live-simulation'" in app
+          assert 'simulationCurrentCard(games)' in app
+          assert 'seed:20260908,fieldModel:state.fieldModel||null' in app
+          assert 'Model Lab · Live Context' in home
+          Path('/tmp/pickem.js').write_text(app.split('<script>',1)[1].rsplit('</script>',1)[0],encoding='utf-8')
+          Path('/tmp/home.js').write_text(home.split('<script>',1)[1].rsplit('</script>',1)[0],encoding='utf-8')
+          PY
+          node --check /tmp/pickem.js
+          node --check /tmp/home.js
+          node tests/pickem-regression.js
+          node tests/pickem-home-regression.js
+          node tests/pickem-strategy-regression.js
+          node tests/cbs-phone-refresh-regression.js
+          python tests/cbs-market-parser-regression.py
+      - name: Publish patch
+        run: |
+          if git diff --quiet -- index.html apps/pickem/index.html tests/pickem-regression.js; then exit 0; fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html apps/pickem/index.html tests/pickem-regression.js
+          git commit -m 'Align Model Lab with Home simulation context'
+          git push origin main
