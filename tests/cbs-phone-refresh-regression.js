@@ -5,7 +5,7 @@ const path=require('path');
 const root=path.resolve(__dirname,'..');
 const html=fs.readFileSync(path.join(root,'apps/pickem/index.html'),'utf8');
 const js=html.split('<script>',2)[1].split('</script>',1)[0];
-const ctx={console,globalThis:null,setTimeout,clearTimeout,fetch:async()=>({ok:false})};
+const ctx={console,globalThis:null,setTimeout,clearTimeout,AbortController,fetch:async()=>({ok:false})};
 ctx.globalThis=ctx;ctx.__SFIQ_TESTING__=true;
 vm.createContext(ctx);vm.runInContext(js,ctx,{filename:'pickem-index.js'});
 const handshake=ctx.SFIQ_TEST?.miniPcRefreshHandshake;
@@ -54,8 +54,15 @@ async function testTokenBridge(){
   if(statusPoll<3)throw new Error('token path did not wait for the requested run to complete');
 }
 
+function testFailFastPatchPresent(){
+  if(!html.includes('async function fetchWithTimeout('))throw new Error('phone refresh fetch timeout helper missing');
+  if(!html.includes("fetchWithTimeout(fetchFn,baseUrl+'/status'"))throw new Error('capability/status probe is still unbounded');
+  if(!html.includes('maxWaitMs=60000'))throw new Error('refresh polling window was not reduced');
+}
+
 (async()=>{
+  testFailFastPatchPresent();
   await testLegacyBridgeCompatibility();
   await testTokenBridge();
-  console.log('CBS phone refresh regression passed: legacy bridge compatibility + tokenized handoff');
+  console.log('CBS phone refresh regression passed: fail-fast transport + legacy compatibility + tokenized handoff');
 })().catch(err=>{console.error(err);process.exit(1)});
