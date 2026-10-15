@@ -1746,19 +1746,26 @@ async function runSimulation(){
 function applyRecommended(){if(!state.recommendedCard)return;if(!state.originalCard)state.originalCard=snapshotCard();const before=snapshotCard();applyCardToGames(state.games,state.recommendedCard);state.games.forEach((g,i)=>{if(isLocked(g)){g.pick=teamFor(g,before.choices[i]);g.weight=before.weights[i]}});state.applied=true;state.confidenceStatus='model_applied';state.confidenceSource=`IQ ${state.optimization?.selectedStrategy||'balanced'} strategy`;if(state.optimization)state.optimization.appliedEval=state.optimization.recommendedEval;recordDecision('applied_recommendation',{current:before,recommended:snapshotCard(),metrics:state.optimization?.diagnostics||null});save();render();show('Recommended card applied inside Sunday Funday IQ only. CBS was not changed.')}
 function revertOriginal(){if(!state.originalCard)return;applyCardToGames(state.games,state.originalCard);state.applied=false;state.confidenceStatus=state.originalConfidenceStatus||'submitted';state.confidenceSource=state.confidenceStatus==='placeholder'?'Synthetic import placeholder':'CBS import';if(state.optimization)delete state.optimization.appliedEval;save();render();show('Reverted to the original CBS card stored in IQ.')}
 const waitFor=ms=>new Promise(resolve=>setTimeout(resolve,ms));
-async function miniPcRefreshHandshake({fetchFn=fetch,importFn=importScan,waitFn=waitFor,notify=show,baseUrl=CBS_AUTOMATION_URL,maxWaitMs=150000}={}){
+async function fetchWithTimeout(fetchFn,url,options={},timeoutMs=8000){
+  const controller=typeof AbortController!=='undefined'?new AbortController():null;
+  const timer=controller?setTimeout(()=>controller.abort(),timeoutMs):null;
+  try{return await fetchFn(url,{...options,...(controller?{signal:controller.signal}:{})})}
+  catch(error){if(error?.name==='AbortError')throw new Error('Mini-PC did not respond within '+Math.round(timeoutMs/1000)+' seconds. Check Tailscale/bridge health.');throw error}
+  finally{if(timer)clearTimeout(timer)}
+}
+async function miniPcRefreshHandshake({fetchFn=fetch,importFn=importScan,waitFn=waitFor,notify=show,baseUrl=CBS_AUTOMATION_URL,maxWaitMs=60000}={}){
   // Capability probe first. This lets a freshly deployed app work with both the
   // current 1.16.5 mini-PC bridge and the upgraded run-token bridge.
   let capability=null;
   try{
-    const capabilityResponse=await fetchFn(baseUrl+'/status',{cache:'no-store'});
+    const capabilityResponse=await fetchWithTimeout(fetchFn,baseUrl+'/status',{cache:'no-store'},8000);
     if(capabilityResponse.ok)capability=await capabilityResponse.json();
   }catch(_){}
 
   if(!capability||!Object.prototype.hasOwnProperty.call(capability,'currentRunId')){
     notify('Refreshing CBS and market data on the mini-PC…');
     let legacyResponse;
-    try{legacyResponse=await fetchFn(baseUrl+'/refresh-sync',{method:'POST',cache:'no-store'})}
+    try{legacyResponse=await fetchWithTimeout(fetchFn,baseUrl+'/refresh-sync',{method:'POST',cache:'no-store'},45000)}
     catch(e){throw new Error('Could not reach the mini-PC. Make sure Tailscale is connected, then try again.')}
     let legacy=null;
     try{legacy=await legacyResponse.json()}catch(_){}
@@ -1771,7 +1778,7 @@ async function miniPcRefreshHandshake({fetchFn=fetch,importFn=importScan,waitFn=
 
   notify('Starting CBS refresh on the mini-PC…');
   let startResponse;
-  try{startResponse=await fetchFn(baseUrl+'/refresh',{method:'POST',cache:'no-store'})}
+  try{startResponse=await fetchWithTimeout(fetchFn,baseUrl+'/refresh',{method:'POST',cache:'no-store'},10000)}
   catch(e){throw new Error('Could not reach the mini-PC. Make sure Tailscale is connected, then try again.')}
   let started=null;
   try{started=await startResponse.json()}catch(_){}
@@ -1784,7 +1791,7 @@ async function miniPcRefreshHandshake({fetchFn=fetch,importFn=importScan,waitFn=
   while(Date.now()<deadline){
     await waitFn(1600);
     let statusResponse;
-    try{statusResponse=await fetchFn(baseUrl+'/status',{cache:'no-store'})}
+    try{statusResponse=await fetchWithTimeout(fetchFn,baseUrl+'/status',{cache:'no-store'},7000)}
     catch(e){lastError='Could not read mini-PC refresh status.';continue}
     if(!statusResponse.ok){lastError='Mini-PC status returned HTTP '+statusResponse.status;continue}
     let status=null;
@@ -1794,7 +1801,7 @@ async function miniPcRefreshHandshake({fetchFn=fetch,importFn=importScan,waitFn=
       if(status.lastRefreshOk!==true)throw new Error(status.lastRefreshError||'Mini-PC CBS refresh failed.');
       notify('CBS refreshed. Loading the sanitized data…');
       let liveResponse;
-      try{liveResponse=await fetchFn(baseUrl+'/live',{cache:'no-store'})}
+      try{liveResponse=await fetchWithTimeout(fetchFn,baseUrl+'/live',{cache:'no-store'},10000)}
       catch(e){throw new Error('CBS refreshed, but the phone could not retrieve the sanitized payload from the mini-PC.')}
       let live=null;
       try{live=await liveResponse.json()}catch(_){}
