@@ -10,11 +10,13 @@ if(!html.includes('CURRENT CARD STILL LEADS THIS SEARCH')||!html.includes('Safet
 if(!html.includes("state.originalConfidenceStatus==='placeholder'"))throw new Error('Placeholder confidence must not be presented as a meaningful baseline');
 if(!html.includes("sfiqPickemV04")) throw new Error('Clean standings storage migration missing');
 if(!html.includes('fieldModelComplete(state)')) throw new Error('Partial field must remain provisional');
-if(!html.includes('href="?lab=1">Model Lab</a>')||!html.includes('Full-Slate Model Lab'))throw new Error('Full-slate Model Lab UI missing');
+if(!html.includes('href="?lab=1">Model Lab</a>')||!html.includes('Live Model Lab'))throw new Error('Live-context Model Lab UI missing');
 if(html.includes('View 0 changes and full card')||html.includes('winner flip')&&html.includes('Top-2 vs Safest'))throw new Error('Model Lab leaked cross-card comparison language into individual strategy cards');
 if(!html.includes('<summary>View all ${games.length} picks</summary>'))throw new Error('Model Lab cards do not expose a dynamic full-card action');
 if(!html.includes('Compare strategies')||!html.includes('Scenario Lab'))throw new Error('Strategy comparison or Scenario Lab UI missing');
 if(!html.includes('Tradeoff vs Safest')||!html.includes('Avg score'))throw new Error('Model Lab does not frame average score as a strategy tradeoff');
+if(!html.includes("source:'saved-live-simulation'")||!html.includes('simulationCurrentCard(games)')||!html.includes('seed:20260908,fieldModel:state.fieldModel||null'))throw new Error('Model Lab is not aligned to the Home live simulation context');
+if(html.includes('temporarily treated as open for model testing'))throw new Error('Model Lab still advertises an alternate unlocked simulation context');
 if(!html.includes('Results update automatically')||!html.includes('scenario-livebar'))throw new Error('Scenario Lab lacks live recompute UX');
 if(html.includes('id="scenarioRun"'))throw new Error('Scenario Lab still requires scrolling to a Run button');
 
