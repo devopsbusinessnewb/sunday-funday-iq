@@ -1,3 +1,4 @@
+# One-time production repair: keep Model Lab on the same live simulation context as Home.
 from pathlib import Path
 import re
 
