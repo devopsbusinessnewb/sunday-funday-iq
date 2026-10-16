@@ -1,0 +1,54 @@
+name: Patch CBS refresh resilience v3
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/patch-cbs-refresh-resilience-v3.py'
+      - '.github/workflows/patch-cbs-refresh-resilience-v3.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Apply patch
+        run: python tools/patch-cbs-refresh-resilience-v3.py
+      - name: Validate
+        run: |
+          git diff --check
+          python - <<'PY'
+          from pathlib import Path
+          app=Path('apps/pickem/index.html').read_text(encoding='utf-8')
+          home=Path('index.html').read_text(encoding='utf-8')
+          test=Path('tests/pickem-regression.js').read_text(encoding='utf-8')
+          assert "MODEL_BUILD='1.16.11'" in app and "MODEL_BUILD='1.16.11'" in home
+          assert 'function friendlyRefreshError(' in app
+          assert 'Building provisional strategy cards from the latest published CBS data plus fresh market odds' in app
+          assert 'sfiqCbsEntryName' in app
+          assert app.count('Current slate mismatch</h2>')==1
+          assert 'Recommended tiebreaker' in home and 'function tiebreakerRecommendation(' in home
+          assert 'Recommended tiebreaker:' in app
+          assert "live.confidenceStatus==='submitted'" in test
+          Path('/tmp/pickem.js').write_text(app.split('<script>',1)[1].rsplit('</script>',1)[0],encoding='utf-8')
+          Path('/tmp/home.js').write_text(home.split('<script>',1)[1].rsplit('</script>',1)[0],encoding='utf-8')
+          PY
+          node --check /tmp/pickem.js
+          node --check /tmp/home.js
+          node tests/pickem-regression.js
+          node tests/pickem-home-regression.js
+          node tests/pickem-strategy-regression.js
+          node tests/cbs-phone-refresh-regression.js
+          python tests/cbs-market-parser-regression.py
+      - name: Publish patch
+        run: |
+          if git diff --quiet; then exit 0; fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add apps/pickem/index.html index.html tests/pickem-regression.js
+          git commit -m 'Harden CBS refresh flow and add tiebreaker guidance'
+          git pull --rebase origin main
+          git push origin main
