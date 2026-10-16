@@ -185,9 +185,14 @@ def sanitize_raw(raw):
         teams=[p for p,_ in pairs]; weights=[w for _,w in pairs]
         if sorted(weights)==list(range(1,len(schedule)+1)) and all(team in schedule[i] for i,team in enumerate(teams)):
             my_card={'picks':teams,'weights':weights}; status='submitted'
-    if picked==total and status!='submitted': raise ValueError('CBS shows a complete card but the sanitizer could not reconstruct it. Set SFIQ_CBS_ENTRY_NAME on the mini-PC.')
+    if picked==total and status!='submitted':
+        # Do not fail the entire refresh just because the private standings entry
+        # cannot be identified. Fresh market/ownership data is still valid and
+        # materially useful. Mark the card as partial so the app will not present
+        # a generated baseline as the user's submitted CBS card.
+        status='partial'
     locked=parse_revealed_field(st,schedule,pool_size); exported=str(raw.get('exportedAt') or iso_now())
-    payload={'product':"CBS Pick'em IQ Bridge — sanitized live input",'version':'2.1.1','season':season,'week':week,'poolSize':pool_size,'exportedAt':exported,'source':'Automated local CBS browser capture','privacy':'Raw CBS session/page data sanitized locally; pool/account identifiers and participant names not published.','confidenceStatus':status,'confidenceSource':'Automated CBS Weekly Standings row' if my_card else 'CBS Picks status','marketCapturedAt':odds.get('ts') or exported,'marketSource':f'CBS Sports odds — Week {week}','market':market,'fieldModel':{'source':'Sanitized CBS revealed-pool observations','capturedAt':standings.get('ts') or exported,'observedEntries':max([g['totalObserved'] for g in locked],default=0),'locked':locked},'snapshots':[{'title':'NFL Football Tourney | Picks','url':f'sanitized://cbs-pickem/week-{week}','ts':picks.get('ts') or exported,'text':ownership_text(schedule,own)},{'title':'NFL Football Tourney | Weekly Standings','url':f'sanitized://cbs-pickem/week-{week}/standings/weekly','ts':standings.get('ts') or exported,'text':standings_text(schedule,locked)}]}
+    payload={'product':"CBS Pick'em IQ Bridge — sanitized live input",'version':'2.1.1','season':season,'week':week,'poolSize':pool_size,'exportedAt':exported,'source':'Automated local CBS browser capture','privacy':'Raw CBS session/page data sanitized locally; pool/account identifiers and participant names not published.','confidenceStatus':status,'confidenceSource':'Automated CBS Weekly Standings row' if my_card else ('CBS complete card detected; private entry row unavailable' if picked==total else 'CBS Picks status'),'marketCapturedAt':odds.get('ts') or exported,'marketSource':f'CBS Sports odds — Week {week}','market':market,'fieldModel':{'source':'Sanitized CBS revealed-pool observations','capturedAt':standings.get('ts') or exported,'observedEntries':max([g['totalObserved'] for g in locked],default=0),'locked':locked},'snapshots':[{'title':'NFL Football Tourney | Picks','url':f'sanitized://cbs-pickem/week-{week}','ts':picks.get('ts') or exported,'text':ownership_text(schedule,own)},{'title':'NFL Football Tourney | Weekly Standings','url':f'sanitized://cbs-pickem/week-{week}/standings/weekly','ts':standings.get('ts') or exported,'text':standings_text(schedule,locked)}]}
     if my_card: payload['myCard']=my_card
     return payload
 
