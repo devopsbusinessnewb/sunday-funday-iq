@@ -121,14 +121,14 @@ const liveExpected=Array.isArray(live.market)&&live.market.length?live.market.le
 if(liveExpected<1||liveMatchups.length!==liveExpected)throw new Error(`published live CBS: expected ${liveExpected} matchups, got ${liveMatchups.length}`);
 const liveGames=liveMatchups.map((g,i)=>({id:'g'+(i+1),...g,pick:null,weight:null,locked:false,completed:false,winner:null}));
 const liveCard=t.extractStructuredCard(live,liveGames);
-if(live.confidenceStatus==='unsubmitted'){
-  if(liveCard.pickCount!==0||liveCard.weightCount!==0)throw new Error(`published live CBS blank slate unexpectedly contains picks/confidence: ${liveCard.pickCount}/${liveCard.weightCount}`);
-  const generated=t.simulationCurrentCard(liveGames);
-  if(generated.source!=='generated_baseline'||!t.validConfidence(generated.card.weights,liveExpected))throw new Error('published blank CBS slate cannot generate a valid Week baseline');
+if(live.confidenceStatus==='submitted'){
+  if(liveCard.pickCount!==liveExpected||liveCard.weightCount!==liveExpected)throw new Error(`published submitted CBS: ${liveCard.pickCount}/${liveCard.weightCount}`);
+  if(new Set(liveCard.weights).size!==liveExpected||liveCard.weights.some(x=>x<1||x>liveExpected))throw new Error(`published submitted CBS: confidence values must be unique 1–${liveExpected}`);
+  if(liveCard.picks.some((pick,i)=>pick!==liveGames[i].away&&pick!==liveGames[i].home))throw new Error('published submitted CBS: invalid matchup pick');
 }else{
-  if(liveCard.pickCount!==liveExpected||liveCard.weightCount!==liveExpected)throw new Error(`published live CBS: ${liveCard.pickCount}/${liveCard.weightCount}`);
-  if(new Set(liveCard.weights).size!==liveExpected||liveCard.weights.some(x=>x<1||x>liveExpected))throw new Error(`published live CBS: confidence values must be unique 1–${liveExpected}`);
-  if(liveCard.picks.some((pick,i)=>pick!==liveGames[i].away&&pick!==liveGames[i].home))throw new Error('published live CBS: invalid matchup pick');
+  if(liveCard.pickCount===liveExpected&&liveCard.weightCount===liveExpected)throw new Error('published non-submitted CBS payload unexpectedly reconstructs a complete card');
+  const generated=t.simulationCurrentCard(liveGames);
+  if(generated.source!=='generated_baseline'||!t.validConfidence(generated.card.weights,liveExpected))throw new Error('published incomplete CBS slate cannot generate a valid Week baseline');
 }
 // A version upgrade must retire old model odds without losing submitted cards
 // or the decision history used for postgame analysis.

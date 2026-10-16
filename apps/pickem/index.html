@@ -145,7 +145,7 @@ const POOL_HISTORY_URL='../../data/analysis/cbs-pool-history-report.json';
 const SEARCH_ITERS=700;
 const FINAL_ITERS=3000;
 const VALIDATION_SEEDS=3;
-const MODEL_BUILD='1.16.10';
+const MODEL_BUILD='1.16.11';
 const CONFIDENCE_TIE_BAND=.025;
 const MIN_OPTIONAL_FLIP_PROB=.40;
 const MIN_OPTIONAL_MARKET_PROB=.38;
@@ -995,39 +995,29 @@ function resolveConfidence(item,n){
 }
 
 function extractMyCardFromStandingsRow(obj,games){
+  let entryName='';
+  try{entryName=String(localStorage.getItem('sfiqCbsEntryName')||'').trim()}catch{}
+  if(!entryName)return null;
   const snaps=(obj?.snapshots||[]).filter(s=>/weekly standings/i.test(String(s?.title||''))||/\/standings\/weekly/i.test(String(s?.url||'')));
-  const n=games.length;
+  const n=games.length,escaped=entryName.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
   for(const s of snaps){
-    const text=String(s?.text||'');
-    const starts=[];
-    const nameRx=/(?:^|\n)Tony Eickhoff\n/g;
-    let nm; while((nm=nameRx.exec(text))!==null)starts.push(nm.index+(text[nm.index]==='\n'?1:0));
-    // The first occurrences are page chrome; the standings row is the occurrence
-    // followed by score columns and team(confidence) pairs. Test every occurrence.
+    const text=String(s?.text||''),starts=[];
+    const nameRx=new RegExp('(?:^|\\n)'+escaped+'\\n','g');
+    let nm;while((nm=nameRx.exec(text))!==null)starts.push(nm.index+(text[nm.index]==='\n'?1:0));
     for(const pos of starts){
       const chunk=text.slice(pos,Math.min(text.length,pos+5000));
       const pairs=[...chunk.matchAll(/(?:^|\n)\s*([A-Z]{2,3})\s*\n\s*\((\d{1,2})\)/g)];
       if(!pairs.length)continue;
-      const picks=new Array(n).fill(null),weights=new Array(n).fill(null);
-      const usedGames=new Set();
+      const picks=new Array(n).fill(null),weights=new Array(n).fill(null),usedGames=new Set();
       for(const m of pairs){
         const team=normalizeTeam(m[1]),w=Number(m[2]);
         const i=games.findIndex((g,idx)=>!usedGames.has(idx)&&(g.away===team||g.home===team));
         if(i<0||!Number.isInteger(w)||w<1||w>n)continue;
-        picks[i]=team;weights[i]=w;usedGames.add(i);
-        if(usedGames.size===n)break;
+        picks[i]=team;weights[i]=w;usedGames.add(i);if(usedGames.size===n)break;
       }
-      // If CBS omits completed games from the row, preserve already-known locked values.
-      for(let i=0;i<n;i++){
-        if(picks[i])continue;
-        const g=games[i];
-        if(isLocked(g)&&sideOf(g)!=null&&Number.isInteger(Number(g.weight))){
-          picks[i]=g.pick;weights[i]=Number(g.weight);
-        }
-      }
+      for(let i=0;i<n;i++)if(!picks[i]){const g=games[i];if(isLocked(g)&&sideOf(g)!=null&&Number.isInteger(Number(g.weight))){picks[i]=g.pick;weights[i]=Number(g.weight)}}
       const pc=picks.filter(Boolean).length,wc=weights.filter(v=>v!=null).length;
-      if(pc===n&&validConfidence(weights,n))
-        return {picks,weights,pickCount:pc,weightCount:wc,source:'my CBS Weekly Standings row'};
+      if(pc===n&&validConfidence(weights,n))return{picks,weights,pickCount:pc,weightCount:wc,source:'my CBS Weekly Standings row'};
     }
   }
   return null;
@@ -1496,6 +1486,15 @@ function selectStrategy(key){
   state.recommendedCard=clone(p.card);state.applied=false;save();render();show(`${p.label} strategy selected. Review its upside and bust risk before applying.`);
 }
 function htmlEscape(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function friendlyRefreshError(error){
+  const raw=String(error?.message||error||'').replace(/\r/g,'');
+  if(/complete card|private entry row|SFIQ_CBS_ENTRY_NAME/i.test(raw))return 'CBS has a completed card, but IQ could not identify your private standings row. Fresh pool and market data can still be used; your submitted card comparison is temporarily unavailable.';
+  if(/login\/session appears expired|session.*expired|re-run with --login/i.test(raw))return 'The dedicated CBS session on the mini-PC has expired and needs one re-login.';
+  if(/did not respond|timed out|timeout|AbortError/i.test(raw))return 'The mini-PC CBS service did not respond in time. IQ will use the latest published Week data when possible.';
+  if(/receiver rejected capture|HTTP Error 400|400: Bad Request/i.test(raw))return 'The mini-PC reached CBS, but the local sanitizer rejected that capture. IQ will use the latest published Week data when possible.';
+  const first=raw.split('\n').map(x=>x.trim()).find(x=>x&&!/^Traceback/i.test(x)&&!/^File "[A-Z]:\\/i.test(x));
+  return (first||'CBS refresh could not finish.').slice(0,220);
+}
 function fullSlateLabGames(games){
   return clone(games).map(g=>({...g,locked:false,completed:false,winner:null,statusText:'',protectedConfidence:false}));
 }
@@ -1513,6 +1512,7 @@ function renderModelLabResult(result,games){
   const keys=['safest','balanced','aggressive','maxUpside'],labels={safest:'Safest',balanced:'Balanced',aggressive:'Aggressive',maxUpside:'Max Upside'};
   const mandates={safest:'Protect expected score',balanced:'Risk-adjusted Top 2',aggressive:'Push Top-2 / win upside',maxUpside:'Highest rational ceiling'};
   const safe=result.strategies.safest;
+  const tbGame=games[games.length-1],tbTotal=Number(tbGame?.total),tbScore=Number.isFinite(tbTotal)?Math.round(tbTotal):null;
   const cards=keys.map(key=>{
     const p=result.strategies[key];
     const rows=strategyCardRows(games,p.card,p.card);
@@ -1522,7 +1522,7 @@ function renderModelLabResult(result,games){
       : `<div class="lab-diff"><b>Tradeoff vs Safest</b><br><span class="good">+${top2Lift.toFixed(1)} pts Top-2</span> · <span class="good">+${winLift.toFixed(1)} pts Win</span><br>${avgCost>=0?'+':''}${avgCost.toFixed(1)} avg points · ${riskLift>=0?'+':''}${riskLift.toFixed(0)} pts bottom-half risk</div>`;
     return `<div class="lab-card"><h3>${labels[key]}</h3><div class="mandate">${mandates[key]}</div><div class="lab-metrics"><div class="lab-metric"><b>${pct(p.eval.top2)}</b><span>Top 2</span></div><div class="lab-metric"><b>${pct(p.eval.win)}</b><span>Win</span></div><div class="lab-metric"><b>${Number(p.eval.avg).toFixed(1)}</b><span>Avg score</span></div></div>${tradeoff}<details><summary>View all ${games.length} picks</summary><div class="lab-picks">${rows.map(r=>`${r.confidence} — <b>${htmlEscape(r.team)}</b> <span>(${htmlEscape(r.game.away)} @ ${htmlEscape(r.game.home)})</span>`).join('<br>')}</div></details><div class="actions"><a class="btn" href="?scenario=${encodeURIComponent(key)}">Open live Scenario Lab</a></div></div>`;
   }).join('');
-  return `<a class="btn" href="../../">← Back to CBS Home</a><h2>Live Model Lab</h2><p class="meta">Week ${state.week||'—'} · same live slate, locks, field model, and optimizer context used by Home. The headline probabilities should match Home until the underlying inputs change.</p><div class="callout" style="margin-top:12px"><b>What this tests</b><div class="note">Safest, Balanced, Aggressive, and Max Upside are evaluated against the same live simulated field used by Home. Strategy objectives may produce different cards, but the same card must carry the same probabilities everywhere. Cross-strategy pick comparisons belong in the comparison view.</div></div><div class="lab-grid">${cards}</div><div class="actions"><a class="btn primary" href="?lab=1&rerun=1">Rerun Model Lab</a><a class="btn" href="?compare=1">Compare strategies</a><a class="btn" href="../../">CBS Home</a></div>`;
+  return `<a class="btn" href="../../">← Back to CBS Home</a><h2>Live Model Lab</h2><p class="meta">Week ${state.week||'—'} · same live slate, locks, field model, and optimizer context used by Home. The headline probabilities should match Home until the underlying inputs change.</p>${tbScore!=null?`<div class="callout"><b>Recommended tiebreaker: ${tbScore} points</b><div class="note">${htmlEscape(tbGame.away)} @ ${htmlEscape(tbGame.home)} · market total ${tbTotal}. This is one shared tiebreaker recommendation for all four strategies.</div></div>`:''}<div class="callout" style="margin-top:12px"><b>What this tests</b><div class="note">Safest, Balanced, Aggressive, and Max Upside are evaluated against the same live simulated field used by Home. Strategy objectives may produce different cards, but the same card must carry the same probabilities everywhere. Cross-strategy pick comparisons belong in the comparison view.</div></div><div class="lab-grid">${cards}</div><div class="actions"><a class="btn primary" href="?lab=1&rerun=1">Rerun Model Lab</a><a class="btn" href="?compare=1">Compare strategies</a><a class="btn" href="../../">CBS Home</a></div>`;
 }
 async function buildFullSlateLabResult(){
   const games=clone(state.games);
@@ -1642,8 +1642,6 @@ function renderFullCard(){
   const o=state.optimization,p=o?.strategies?.[key];
   if(!p||!o||o.modelBuild!==MODEL_BUILD){view.innerHTML='<h2>Run a current-week simulation</h2><p class="meta">This browser has no saved complete card for this strategy. Refresh CBS and market data to generate one.</p><div class="actions"><a class="btn primary" href="?action=refresh-simulate">Refresh &amp; simulate</a><a class="btn" href="../../">Back to strategies</a></div>';return}
   const rows=strategyCardRows(state.games,p.card,o.current),runAt=Date.parse(o.ranAt||''),changed=Number.isFinite(runAt)&&(Date.parse(state.cbsUpdatedAt||'')>runAt||Date.parse(state.marketUpdatedAt||'')>runAt),f=dataFreshness(state),old=changed||!Number.isFinite(runAt)||Date.now()-runAt>12*3600e3||!f.cbs.current||!f.market.current;
-  if(!rows.length||rows.length!==state.games.length){view.innerHTML='<h2>Current slate mismatch</h2><p class="meta">The saved strategy does not match this week’s '+state.games.length+'-game slate. Refresh once to rebuild the four cards from the current CBS schedule.</p><div class="actions"><a class="btn primary" href="?action=refresh-simulate">Refresh &amp; rebuild</a><a class="btn" href="../../">Back to strategies</a></div>';return}
-  if(!rows.length||rows.length!==state.games.length){view.innerHTML='<h2>Current slate mismatch</h2><p class="meta">The saved strategy does not match this week’s '+state.games.length+'-game slate. Refresh once to rebuild the four cards from the current CBS schedule.</p><div class="actions"><a class="btn primary" href="?action=refresh-simulate">Refresh &amp; rebuild</a><a class="btn" href="../../">Back to strategies</a></div>';return}
   if(!rows.length||rows.length!==state.games.length){view.innerHTML='<h2>Current slate mismatch</h2><p class="meta">The saved strategy does not match this week’s '+state.games.length+'-game slate. Refresh once to rebuild the four cards from the current CBS schedule.</p><div class="actions"><a class="btn primary" href="?action=refresh-simulate">Refresh &amp; rebuild</a><a class="btn" href="../../">Back to strategies</a></div>';return}
   const currentEval=o.currentControl?.eval||o.currentEval,delta=currentEval?p.eval.top2-currentEval.top2:null,equivalent=p.equivalentTo?` This produced the same complete card as ${htmlEscape(o.strategies?.[p.equivalentTo]?.label||p.equivalentTo)}.`:'';
   view.innerHTML=`<a class="btn" href="../../">← All strategies</a><h2>${htmlEscape(p.label||key)} card</h2><div class="meta">Week ${state.week||1} · ${rows.length} picks. ${old?'<b class="warn">The simulation should be rerun before using these picks.</b>':''} ${o.provisional?'Future pool choices are estimated from CBS-wide data.':''}<br>Simulated ${Number.isFinite(runAt)?new Date(runAt).toLocaleString():'time unknown'}. IQ does not submit picks to CBS.</div><div class="numbers"><div><strong>${pct(p.eval.top2)}</strong><span>Top 2</span></div><div><strong>${pct(p.eval.win)}</strong><span>Win</span></div><div><strong>${pct(p.eval.bottomHalf,0)}</strong><span>Bottom half</span></div></div><div class="meta">Average score ${Number(p.eval.avg).toFixed(1)} confidence points${delta!==null?` · ${delta>=0?'+':''}${(delta*100).toFixed(1)} percentage points Top-2 versus your current card`:''}.${equivalent} Tap any game for its probability and rationale. Enter each pick and point value directly in CBS.</div><div class="actions"><a class="btn primary" href="?action=refresh-simulate">Rerun strategy search</a><a class="btn" href="?strategy=${encodeURIComponent(key)}&amp;details=1">Data &amp; model details</a></div><h2 style="font-size:15px;margin-top:22px">Picks by confidence</h2>${rows.map(row=>{
@@ -1837,7 +1835,7 @@ async function loadPoolHistory(){
 }
 async function boot(){
   if($('buildLabel'))$('buildLabel').textContent=MODEL_BUILD;
-  $('refreshBtn').onclick=async()=>{const btn=$('refreshBtn'),label=btn.textContent;btn.disabled=true;btn.textContent='Refreshing CBS…';try{await triggerMiniPcCbsRefresh()}catch(e){console.error(e);show('CBS refresh failed: '+e.message,'red')}finally{btn.disabled=false;btn.textContent=label}};
+  $('refreshBtn').onclick=async()=>{const btn=$('refreshBtn'),label=btn.textContent;btn.disabled=true;btn.textContent='Refreshing CBS…';try{await triggerMiniPcCbsRefresh()}catch(e){console.error(e);show(friendlyRefreshError(e),'red')}finally{btn.disabled=false;btn.textContent=label}};
   $('marketBtn').onclick=()=>refreshMarket(false);$('optBtn').onclick=runSimulation;$('saveBtn').onclick=()=>{state.confidenceStatus='user_final';state.confidenceSource='User-saved final card';recordDecision('saved_card',{current:snapshotCard(),recommended:state.recommendedCard,note:'User saved the current IQ card locally.'});save();render();show('Saved locally in this browser and added to this week’s decision history.')};$('applyBtn').onclick=applyRecommended;$('revertBtn').onclick=revertOriginal;
   render();
   await Promise.all([loadPublishedCbs({silent:true,onlyIfNewer:true}),loadPoolHistory()]);
@@ -1847,7 +1845,17 @@ async function boot(){
   if(routeParams.get('lab')==='1'){await runModelLab();return}
   if(routeParams.get('action')==='refresh-simulate'){
     renderRunProgress('cbs','Refreshing CBS and market data on the mini-PC…');
-    try{await triggerMiniPcCbsRefresh()}catch(e){const message='CBS refresh failed: '+e.message;show(message,'red');renderRunProgress('cbs',message,true);return}
+    try{await triggerMiniPcCbsRefresh()}catch(e){
+      console.error(e);
+      const warning=friendlyRefreshError(e);
+      renderRunProgress('market',warning+' Falling back to the latest published Week data and refreshing market odds…');
+      try{await loadPublishedCbs({silent:true,onlyIfNewer:false})}catch{}
+      const marketFallback=await refreshMarket(true).catch(()=>false);
+      if(!marketFallback){show(warning,'red');renderRunProgress('cbs',warning,true);return}
+      renderRunProgress('simulation',warning+' Building provisional strategy cards from the latest published CBS data plus fresh market odds…');
+      await runSimulation();
+      return;
+    }
     renderRunProgress('market','CBS and market data refreshed. Verifying current inputs…');
     if(!dataFreshness(state).market.current){const message='Fresh market odds were not available after the mini-PC refresh. IQ did not simulate with old odds.';show(message,'red');renderRunProgress('market',message,true);return}
     renderRunProgress('simulation','Inputs are current. Building and stress-testing all four cards…');
