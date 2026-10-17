@@ -12,6 +12,7 @@ RAW_POOL_URL=os.environ.get('SFIQ_CBS_POOL_URL','').strip().rstrip('/')
 _POOL_MATCH=re.match(r'^(https://picks\.cbssports\.com/football/pickem/pools/[^/?#]+)',RAW_POOL_URL,re.I)
 POOL_URL=_POOL_MATCH.group(1) if _POOL_MATCH else RAW_POOL_URL
 AUTH_SELF_MARKER='__SFIQ_AUTHENTICATED_SELF__'
+LEGACY_ENTRY_LABEL=os.environ.get('SFIQ_CBS_ENTRY_NAME','').strip()
 LOCAL_APPDATA=os.environ.get('LOCALAPPDATA')
 DEFAULT_PROFILE=Path(LOCAL_APPDATA)/'SundayFundayIQ'/'cbs-profile' if LOCAL_APPDATA else Path.home()/'.sfiq'/'cbs-profile'
 PROFILE_DIR=Path(os.environ.get('SFIQ_CBS_PROFILE_DIR',str(DEFAULT_PROFILE))).expanduser()
@@ -40,9 +41,10 @@ def authenticated_self_block(text):
     """Recover the signed-in user's confidence card from the authenticated Picks page.
 
     Identity comes from the persistent authenticated browser session, not from a
-    participant-name lookup. A reserved local-only marker lets the localhost
-    sanitizer distinguish this card from public Weekly Standings rows without
-    publishing any account or participant identifier.
+    participant-name lookup. The reserved marker is the durable local contract.
+    While the sanitizer is being migrated to that contract, an already-configured
+    legacy entry label is emitted only as a local transport alias; it is never
+    used to discover or select the card and is never published.
     """
     pm=re.search(r'\b(\d+)\s*/\s*(\d+)\s+Picks\b',str(text or ''),re.I)
     if not pm or int(pm.group(1))!=int(pm.group(2)): return ''
@@ -53,6 +55,7 @@ def authenticated_self_block(text):
         window=pairs[start:start+n]
         if len(window)==n and sorted(w for _,w in window)==list(range(1,n+1)):
             lines=['',AUTH_SELF_MARKER]
+            if LEGACY_ENTRY_LABEL: lines.append(LEGACY_ENTRY_LABEL)
             for team,w in window: lines.extend([team,f'({w})'])
             return '\n'.join(lines)
     return ''
@@ -92,7 +95,7 @@ def collect(debug_odds=False):
             if debug_odds:
                 print(f'ODDS_URL={odds_url}')
                 print('\n'.join(odds.get('text','').splitlines()[:220]))
-            capture={'product':'CBS Pick’em IQ automated local capture','version':'1.0.5','exportedAt':iso_now(),'privacy':'Raw browser text remains local and is sent only to the localhost sanitizer.','snapshots':[picks,standings,odds]}
+            capture={'product':'CBS Pick’em IQ automated local capture','version':'1.0.6','exportedAt':iso_now(),'privacy':'Raw browser text remains local and is sent only to the localhost sanitizer.','snapshots':[picks,standings,odds]}
             result=post_capture(capture)
             if not result.get('ok'): raise RuntimeError(result.get('error') or 'CBS receiver rejected capture')
             print(json.dumps(result))
