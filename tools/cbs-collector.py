@@ -38,19 +38,36 @@ def parse_week(*texts):
     if not m: raise RuntimeError('Could not determine current CBS week before loading odds.')
     return int(m.group(1))
 def authenticated_self_block(text):
-    """Recover the signed-in user's confidence card from the authenticated Picks page.
+    """Recover the signed-in user's complete confidence card from Picks.
 
-    Identity comes from the persistent authenticated browser session, not from a
-    participant-name lookup. The reserved marker is the durable local contract.
-    While the sanitizer is being migrated to that contract, an already-configured
-    legacy entry label is emitted only as a local transport alias; it is never
-    used to discover or select the card and is never published.
+    CBS has rendered confidence weights in multiple text forms over time, notably
+    ``(14)`` and the current ``14 Pts``. Identity comes from the persistent
+    authenticated browser session, never from participant-name matching.
     """
-    pm=re.search(r'\b(\d+)\s*/\s*(\d+)\s+Picks\b',str(text or ''),re.I)
+    raw=str(text or '')
+    pm=re.search(r'\b(\d+)\s*/\s*(\d+)\s+Picks\b',raw,re.I)
     if not pm or int(pm.group(1))!=int(pm.group(2)): return ''
     n=int(pm.group(2)); pairs=[]
-    for team,w in re.findall(r'\n([A-Z]{2,3})\n\((\d{1,2})\)',str(text or '')):
-        pairs.append((team.upper(),int(w)))
+    # Current CBS text: selected team content is followed by a confidence pill
+    # such as "14 Pts". Keep the older parenthesized form as a compatibility
+    # fallback. Limit the gap so ownership percentages from the opponent do not
+    # get mistaken for confidence weights.
+    pair_re=re.compile(r'\n([A-Z]{2,3})(?=\b)[^\n]{0,40}(?:\n[^\n]{0,80}){0,3}?\n\s*(?:\((\d{1,2})\)|(\d{1,2})\s+Pts?\b)',re.I)
+    for m in pair_re.finditer(raw):
+        weight=int(m.group(2) or m.group(3)); pairs.append((m.group(1).upper(),weight))
+    # Some CBS layouts put the Pts pill before/after additional labels. If the
+    # strict row matcher did not reconstruct a full card, use line adjacency:
+    # a team abbreviation nearest before each unique confidence pill.
+    if len(pairs)<n:
+        lines=[x.strip() for x in raw.splitlines()]
+        alt=[]
+        for i,line in enumerate(lines):
+            wm=re.fullmatch(r'(\d{1,2})\s+Pts?',line,re.I)
+            if not wm: continue
+            for j in range(i-1,max(-1,i-7),-1):
+                if re.fullmatch(r'[A-Z]{2,3}',lines[j]):
+                    alt.append((lines[j].upper(),int(wm.group(1)))); break
+        if len(alt)>=n: pairs=alt
     for start in range(max(0,len(pairs)-n+1)):
         window=pairs[start:start+n]
         if len(window)==n and sorted(w for _,w in window)==list(range(1,n+1)):
@@ -95,7 +112,7 @@ def collect(debug_odds=False):
             if debug_odds:
                 print(f'ODDS_URL={odds_url}')
                 print('\n'.join(odds.get('text','').splitlines()[:220]))
-            capture={'product':'CBS Pick’em IQ automated local capture','version':'1.0.6','exportedAt':iso_now(),'privacy':'Raw browser text remains local and is sent only to the localhost sanitizer.','snapshots':[picks,standings,odds]}
+            capture={'product':'CBS Pick’em IQ automated local capture','version':'1.0.7','exportedAt':iso_now(),'privacy':'Raw browser text remains local and is sent only to the localhost sanitizer.','snapshots':[picks,standings,odds]}
             result=post_capture(capture)
             if not result.get('ok'): raise RuntimeError(result.get('error') or 'CBS receiver rejected capture')
             print(json.dumps(result))
