@@ -11,6 +11,7 @@ except ImportError:
 RAW_POOL_URL=os.environ.get('SFIQ_CBS_POOL_URL','').strip().rstrip('/')
 _POOL_MATCH=re.match(r'^(https://picks\.cbssports\.com/football/pickem/pools/[^/?#]+)',RAW_POOL_URL,re.I)
 POOL_URL=_POOL_MATCH.group(1) if _POOL_MATCH else RAW_POOL_URL
+ENTRY_NAME=os.environ.get('SFIQ_CBS_ENTRY_NAME','').strip()
 LOCAL_APPDATA=os.environ.get('LOCALAPPDATA')
 DEFAULT_PROFILE=Path(LOCAL_APPDATA)/'SundayFundayIQ'/'cbs-profile' if LOCAL_APPDATA else Path.home()/'.sfiq'/'cbs-profile'
 PROFILE_DIR=Path(os.environ.get('SFIQ_CBS_PROFILE_DIR',str(DEFAULT_PROFILE))).expanduser()
@@ -35,6 +36,29 @@ def parse_week(*texts):
     m=re.search(r'\bWeek\s+(\d{1,2})\b',joined,re.I)
     if not m: raise RuntimeError('Could not determine current CBS week before loading odds.')
     return int(m.group(1))
+def authenticated_self_block(text):
+    """Recover the signed-in user's own confidence card from the Picks page.
+
+    The Picks page belongs to the authenticated browser identity, so a complete
+    1..N confidence sequence found there is stronger identity evidence than
+    trying to locate a participant-name row in Weekly Standings. The bridge
+    still performs schedule/order validation before publishing myCard.
+    """
+    if not ENTRY_NAME: return ''
+    pm=re.search(r'\b(\d+)\s*/\s*(\d+)\s+Picks\b',str(text or ''),re.I)
+    if not pm or int(pm.group(1))!=int(pm.group(2)): return ''
+    n=int(pm.group(2)); pairs=[]
+    for team,w in re.findall(r'\n([A-Z]{2,3})\n\((\d{1,2})\)',str(text or '')):
+        pairs.append((team.upper(),int(w)))
+    # Find a contiguous N-pair window with exactly one of every confidence 1..N.
+    # This avoids treating unrelated page fragments as the user's card.
+    for start in range(max(0,len(pairs)-n+1)):
+        window=pairs[start:start+n]
+        if len(window)==n and sorted(w for _,w in window)==list(range(1,n+1)):
+            lines=['',ENTRY_NAME]
+            for team,w in window: lines.extend([team,f'({w})'])
+            return '\n'.join(lines)
+    return ''
 def post_capture(capture):
     req=urllib.request.Request(RECEIVER,data=json.dumps(capture).encode(),method='POST',headers={'Content-Type':'application/json'})
     try:
@@ -59,6 +83,8 @@ def collect(debug_odds=False):
             page=ctx.pages[0] if ctx.pages else ctx.new_page()
             picks=visit(page,POOL_URL); assert_logged_in(picks)
             standings=visit(page,POOL_URL+'/standings/weekly',4000)
+            self_block=authenticated_self_block(picks.get('text',''))
+            if self_block: standings['text']=str(standings.get('text',''))+self_block
             week=parse_week(picks.get('text'),standings.get('text'))
             season=datetime.now().year
             odds_url=f'https://www.cbssports.com/nfl/odds/{season}/regular/week-{week}/'
@@ -69,7 +95,7 @@ def collect(debug_odds=False):
             if debug_odds:
                 print(f'ODDS_URL={odds_url}')
                 print('\n'.join(odds.get('text','').splitlines()[:220]))
-            capture={'product':'CBS Pick’em IQ automated local capture','version':'1.0.3','exportedAt':iso_now(),'privacy':'Raw browser text remains local and is sent only to the localhost sanitizer.','snapshots':[picks,standings,odds]}
+            capture={'product':'CBS Pick’em IQ automated local capture','version':'1.0.4','exportedAt':iso_now(),'privacy':'Raw browser text remains local and is sent only to the localhost sanitizer.','snapshots':[picks,standings,odds]}
             result=post_capture(capture)
             if not result.get('ok'): raise RuntimeError(result.get('error') or 'CBS receiver rejected capture')
             print(json.dumps(result))
