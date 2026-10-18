@@ -10,13 +10,14 @@ function Get-MaxAgeMinutes {
   param([datetime]$When)
   $day=[int]$When.DayOfWeek
   $hour=$When.Hour
-  # During NFL game windows, a 30-minute ceiling means the 15-minute updater
-  # normally refreshes on the next cycle after the snapshot crosses 30 minutes.
+  # During NFL decision/game windows, a 30-minute ceiling means the 15-minute
+  # updater normally refreshes on the next cycle after the snapshot crosses it.
   if($day -eq 4 -and $hour -ge 16){ return 30 } # Thursday evening
+  if($day -eq 6 -and $hour -ge 16){ return 30 } # Saturday decision window
   if($day -eq 0 -and $hour -ge 6){ return 30 }  # Sunday
   if($day -eq 1 -and $hour -ge 16){ return 30 } # Monday evening
   if($day -eq 2){ return 720 }                  # Tuesday: low-change day
-  return 120                                    # Wed/Thu daytime/Fri/Sat/Mon daytime
+  return 120                                    # Other lower-change windows
 }
 
 function Get-PublishedAgeMinutes {
