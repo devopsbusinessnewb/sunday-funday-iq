@@ -4,18 +4,19 @@ $Live=Join-Path $Repo 'data\live\cbs-pickem.json'
 $Now=Get-Date
 
 # The existing silent updater runs every 15 minutes. This watch turns that
-# already-installed task into a conservative CBS freshness keeper without
-# creating another Windows task or requiring the phone to be open.
+# already-installed task into a CBS freshness keeper without creating another
+# Windows task or requiring the phone to be open.
 function Get-MaxAgeMinutes {
   param([datetime]$When)
   $day=[int]$When.DayOfWeek
   $hour=$When.Hour
-  # Game windows: keep the published CBS snapshot reasonably fresh.
-  if($day -eq 4 -and $hour -ge 16){ return 90 } # Thursday evening
-  if($day -eq 0 -and $hour -ge 6){ return 90 }  # Sunday
-  if($day -eq 1 -and $hour -ge 16){ return 90 } # Monday evening
+  # During NFL game windows, a 30-minute ceiling means the 15-minute updater
+  # normally refreshes on the next cycle after the snapshot crosses 30 minutes.
+  if($day -eq 4 -and $hour -ge 16){ return 30 } # Thursday evening
+  if($day -eq 0 -and $hour -ge 6){ return 30 }  # Sunday
+  if($day -eq 1 -and $hour -ge 16){ return 30 } # Monday evening
   if($day -eq 2){ return 720 }                  # Tuesday: low-change day
-  return 240                                    # Wed/Thu daytime/Fri/Sat/Mon daytime
+  return 120                                    # Wed/Thu daytime/Fri/Sat/Mon daytime
 }
 
 function Get-PublishedAgeMinutes {
