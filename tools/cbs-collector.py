@@ -37,7 +37,7 @@ def parse_week(*texts):
     m=re.search(r'\bWeek\s+(\d{1,2})\b',joined,re.I)
     if not m: raise RuntimeError('Could not determine current CBS week before loading odds.')
     return int(m.group(1))
-TEAM_ALIASES={'49ERS':'SF','BEARS':'CHI','BENGALS':'CIN','BILLS':'BUF','BRONCOS':'DEN','BROWNS':'CLE','BUCCANEERS':'TB','CARDINALS':'ARI','CHARGERS':'LAC','CHIEFS':'KC','COLTS':'IND','COMMANDERS':'WAS','COWBOYS':'DAL','DOLPHINS':'MIA','EAGLES':'PHI','FALCONS':'ATL','GIANTS':'NYG','JAGUARS':'JAX','JETS':'NYJ','LIONS':'DET','PACKERS':'GB','PANTHERS':'CAR','PATRIOTS':'NE','RAIDERS':'LV','RAMS':'LAR','RAVENS':'BAL','SAINTS':'NO','SEAHAWKS':'SEA','STEELERS':'PIT','TEXANS':'HOU','TITANS':'TEN','VIKINGS':'MIN'}
+TEAM_ALIASES={'49ERS':'SF','BEARS':'CHI','BENGALS':'CIN','BILLS':'BUF','BRONCOS':'DEN','BROWNS':'CLE','BUCCANEERS':'TB','CARDINALS':'ARI','CHARGERS':'LAC','CHIEFS':'KC','COLTS':'IND','COMMANDERS':'WAS','COWBOYS':'DAL','DOLPHINS':'MIA','EAGLES':'PHI','FALCONS':'ATL','GIANTS':'NYG','JAGUARS':'JAX','JAC':'JAX','JETS':'NYJ','LIONS':'DET','PACKERS':'GB','PANTHERS':'CAR','PATRIOTS':'NE','RAIDERS':'LV','RAMS':'LAR','RAVENS':'BAL','SAINTS':'NO','SEAHAWKS':'SEA','STEELERS':'PIT','TEXANS':'HOU','TITANS':'TEN','VIKINGS':'MIN'}
 def team_token(line):
     first=str(line or '').strip().upper().split(' ')[0]
     if first in TEAM_ALIASES: return TEAM_ALIASES[first]
@@ -73,6 +73,30 @@ def authenticated_self_block(text):
             for team,w in window: out.extend([team,f'({w})'])
             return '\n'.join(out)
     return ''
+def fetch_week_slate(season,week):
+    """Get the complete NFL week so finished games cannot disappear from IQ."""
+    url=f'https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates={season}&seasontype=2&week={week}'
+    req=urllib.request.Request(url,headers={'User-Agent':'SundayFundayIQ/1.0'})
+    try:
+        with urllib.request.urlopen(req,timeout=20) as r: data=json.loads(r.read().decode())
+    except Exception: return []
+    slate=[]
+    for ev in data.get('events',[]):
+        comp=(ev.get('competitions') or [{}])[0]; teams=comp.get('competitors') or []
+        away=next((x for x in teams if x.get('homeAway')=='away'),None); home=next((x for x in teams if x.get('homeAway')=='home'),None)
+        if not away or not home: continue
+        a=team_token((away.get('team') or {}).get('abbreviation')); h=team_token((home.get('team') or {}).get('abbreviation'))
+        if not a or not h: continue
+        st=(comp.get('status') or {}).get('type') or (ev.get('status') or {}).get('type') or {}; completed=bool(st.get('completed')); winner=None
+        if completed:
+            if away.get('winner') is True: winner=a
+            elif home.get('winner') is True: winner=h
+            else:
+                try:
+                    av=float(away.get('score')); hv=float(home.get('score')); winner=a if av>hv else h if hv>av else None
+                except Exception: pass
+        slate.append({'away':a,'home':h,'completed':completed,'winner':winner,'statusText':st.get('shortDetail') or st.get('detail') or st.get('description') or ''})
+    return slate
 def post_capture(capture):
     req=urllib.request.Request(RECEIVER,data=json.dumps(capture).encode(),method='POST',headers={'Content-Type':'application/json'})
     try:
@@ -97,10 +121,10 @@ def collect(debug_odds=False):
             page=ctx.pages[0] if ctx.pages else ctx.new_page(); picks=visit(page,POOL_URL); assert_logged_in(picks); standings=visit(page,POOL_URL+'/standings/weekly',4000)
             self_block=authenticated_self_block(picks.get('text',''))
             if self_block: standings['text']=str(standings.get('text',''))+self_block
-            week=parse_week(picks.get('text'),standings.get('text')); season=datetime.now().year; odds_url=f'https://www.cbssports.com/nfl/odds/{season}/regular/week-{week}/'; odds=visit(page,odds_url,4500)
+            week=parse_week(picks.get('text'),standings.get('text')); season=datetime.now().year; slate=fetch_week_slate(season,week); odds_url=f'https://www.cbssports.com/nfl/odds/{season}/regular/week-{week}/'; odds=visit(page,odds_url,4500)
             picks['title']='NFL Football Tourney | Picks'; standings['title']='NFL Football Tourney | Weekly Standings'; odds['title']=f'CBS NFL Odds | Week {week}'
             if debug_odds: print(f'ODDS_URL={odds_url}'); print('\n'.join(odds.get('text','').splitlines()[:220]))
-            capture={'product':'CBS Pick’em IQ automated local capture','version':'1.0.8','exportedAt':iso_now(),'privacy':'Raw browser text remains local and is sent only to the localhost sanitizer.','snapshots':[picks,standings,odds]}
+            capture={'product':'CBS Pick’em IQ automated local capture','version':'1.0.9','exportedAt':iso_now(),'privacy':'Raw browser text remains local and is sent only to the localhost sanitizer.','slate':slate,'snapshots':[picks,standings,odds]}
             result=post_capture(capture)
             if not result.get('ok'): raise RuntimeError(result.get('error') or 'CBS receiver rejected capture')
             print(json.dumps(result))
