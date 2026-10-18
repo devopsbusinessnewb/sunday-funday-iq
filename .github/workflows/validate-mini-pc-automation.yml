@@ -6,6 +6,7 @@ on:
     paths:
       - 'tools/cbs-bridge-server.py'
       - 'tools/cbs-collector.py'
+      - 'tools/cbs-freshness-watch.ps1'
       - 'tools/enable-cbs-production.ps1'
       - 'tools/sfiq-auto-update.ps1'
       - 'tools/enable-sfiq-auto-update.ps1'
@@ -26,6 +27,7 @@ jobs:
         shell: pwsh
         run: |
           $files=@(
+            'tools/cbs-freshness-watch.ps1',
             'tools/enable-cbs-production.ps1',
             'tools/sfiq-auto-update.ps1',
             'tools/enable-sfiq-auto-update.ps1'
