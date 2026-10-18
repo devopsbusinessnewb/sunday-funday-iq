@@ -16,6 +16,15 @@ assert 1 <= n <= 16
 market=[(x['away'],x['home']) for x in live['market']]
 assert len(set(market))==n
 
+# Week 6 is the production incident that exposed two independent ways the slate
+# could shrink: completed Thursday games disappearing and ESPN's WSH alias
+# causing Monday WAS @ SF to be dropped. Keep the exact known-good contract
+# pinned while Week 6 is the live payload so either regression fails CI.
+if live['season']==2026 and live['week']==6:
+    assert n==14, f'2026 Week 6 must contain all 14 games, got {n}'
+    assert ('SEA','DEN') in market, 'completed Thursday SEA @ DEN disappeared from Week 6'
+    assert ('WAS','SF') in market, 'Monday WAS @ SF disappeared from Week 6'
+
 # Payload v2.2+ makes the complete weekly slate an explicit contract. This
 # prevents a finished Thursday game from silently shrinking Sunday projections.
 version=tuple(int(x) for x in str(live.get('version','0.0.0')).split('.')[:3])
@@ -28,6 +37,10 @@ if version >= (2,2,0):
     for g in game_state:
         if g.get('completed'):
             assert g.get('winner') in (g.get('away'),g.get('home')), 'completed game must have a valid winner'
+    if live['season']==2026 and live['week']==6:
+        thursday=next(g for g in game_state if (g.get('away'),g.get('home'))==('SEA','DEN'))
+        assert thursday.get('completed') is True, 'Week 6 Thursday game must remain completed'
+        assert thursday.get('winner')=='DEN', 'Week 6 Thursday winner must remain DEN'
 
 status=live.get('confidenceStatus')
 card=live.get('myCard')
