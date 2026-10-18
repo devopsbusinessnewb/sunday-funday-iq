@@ -4,6 +4,7 @@ $LogDir=[Environment]::GetEnvironmentVariable('SFIQ_LOG_DIR','User')
 if([string]::IsNullOrWhiteSpace($LogDir)){ $LogDir='C:\Server\Logs' }
 New-Item -ItemType Directory -Force -Path $LogDir | Out-Null
 $Log=Join-Path $LogDir 'sfiq-auto-update.log'
+$FreshnessWatch=Join-Path $Repo 'tools\cbs-freshness-watch.ps1'
 function Write-Log([string]$Message){
   Add-Content -Path $Log -Value ((Get-Date).ToString('s')+' '+$Message)
 }
@@ -81,11 +82,14 @@ try{
     Restart-CbsBridge 'CBS service code changed' | Out-Null
   } elseif(-not $after.Healthy){
     Restart-CbsBridge 'bridge health check failed' | Out-Null
-  } elseif($local -eq $remote){
-    # Healthy and current: nothing to do.
-    exit 0
-  } else {
+  } elseif($local -ne $remote){
     Write-Log 'Repository updated; no CBS service restart required.'
+  }
+
+  # The same already-installed 15-minute updater now also keeps the sanitized
+  # CBS snapshot fresh. No new task, phone action, or manual file handling.
+  if(Test-Path $FreshnessWatch){
+    try { & $FreshnessWatch } catch { Write-Log ('CBS freshness watch error: '+$_.Exception.Message) }
   }
 }catch{
   Write-Log ('Update error: '+$_.Exception.Message)
