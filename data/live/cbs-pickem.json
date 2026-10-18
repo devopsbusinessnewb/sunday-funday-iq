@@ -4,32 +4,32 @@
   "season": 2026,
   "week": 6,
   "poolSize": 94,
-  "exportedAt": "2026-10-18T00:49:15.912453Z",
+  "exportedAt": "2026-10-18T02:42:55.780222Z",
   "source": "Automated local CBS browser capture",
   "privacy": "Raw CBS session/page data sanitized locally; pool/account identifiers and participant names not published.",
   "confidenceStatus": "partial",
   "confidenceSource": "CBS complete card detected; private entry row unavailable",
-  "marketCapturedAt": "2026-10-18T00:49:15.912427Z",
+  "marketCapturedAt": "2026-10-18T02:42:55.780194Z",
   "marketSource": "CBS Sports odds \u2014 Week 6",
   "market": [
     {
       "away": "HOU",
       "home": "JAX",
       "awayML": 128,
-      "homeML": -143,
-      "total": 42.5
+      "homeML": -142,
+      "total": 42.0
     },
     {
       "away": "CHI",
       "home": "ATL",
       "awayML": -114,
       "homeML": 100,
-      "total": 52.5
+      "total": 52.8
     },
     {
       "away": "BAL",
       "home": "CLE",
-      "awayML": -175,
+      "awayML": -166,
       "homeML": 150,
       "total": 39.5
     },
@@ -37,28 +37,28 @@
       "away": "TEN",
       "home": "IND",
       "awayML": 270,
-      "homeML": -330,
+      "homeML": -323,
       "total": 44.5
     },
     {
       "away": "NYJ",
       "home": "NE",
-      "awayML": 290,
+      "awayML": 295,
       "homeML": -355,
       "total": 43.5
     },
     {
       "away": "NO",
       "home": "NYG",
-      "awayML": -110,
-      "homeML": -105,
+      "awayML": -108,
+      "homeML": -106,
       "total": 46.0
     },
     {
       "away": "CAR",
       "home": "PHI",
       "awayML": -166,
-      "homeML": 148,
+      "homeML": 146,
       "total": 39.0
     },
     {
@@ -92,9 +92,9 @@
     {
       "away": "DAL",
       "home": "GB",
-      "awayML": 100,
+      "awayML": 105,
       "homeML": -115,
-      "total": 53.2
+      "total": 53.5
     },
     {
       "away": "WAS",
@@ -106,7 +106,7 @@
   ],
   "fieldModel": {
     "source": "Sanitized CBS revealed-pool observations",
-    "capturedAt": "2026-10-18T00:49:09.307720Z",
+    "capturedAt": "2026-10-18T02:42:49.232401Z",
     "observedEntries": 0,
     "locked": []
   },
@@ -114,13 +114,13 @@
     {
       "title": "NFL Football Tourney | Picks",
       "url": "sanitized://cbs-pickem/week-6",
-      "ts": "2026-10-18T00:49:03.676866Z",
+      "ts": "2026-10-18T02:42:43.946599Z",
       "text": "CBS Pickem sanitized ownership\n0-0\nHOU\n10%\n0-0\nJAX\n90%\n0-0\nCHI\n62%\n0-0\nATL\n38%\n0-0\nBAL\n88%\n0-0\nCLE\n12%\n0-0\nTEN\n4%\n0-0\nIND\n96%\n0-0\nNYJ\n4%\n0-0\nNE\n96%\n0-0\nNO\n22%\n0-0\nNYG\n78%\n0-0\nCAR\n51%\n0-0\nPHI\n49%\n0-0\nPIT\n85%\n0-0\nTB\n15%\n0-0\nARI\n2%\n0-0\nLAR\n98%\n0-0\nLAC\n3%\n0-0\nKC\n97%\n0-0\nBUF\n93%\n0-0\nLV\n7%\n0-0\nDAL\n22%\n0-0\nGB\n78%\n0-0\nWAS\n2%\n0-0\nSF\n98%"
     },
     {
       "title": "NFL Football Tourney | Weekly Standings",
       "url": "sanitized://cbs-pickem/week-6/standings/weekly",
-      "ts": "2026-10-18T00:49:09.307720Z",
+      "ts": "2026-10-18T02:42:49.232401Z",
       "text": "Weekly Standings\nSanitized observations\nSUN\nHOU\nJAX\nSUN\nCHI\nATL\nSUN\nBAL\nCLE\nSUN\nTEN\nIND\nSUN\nNYJ\nNE\nSUN\nNO\nNYG\nSUN\nCAR\nPHI\nSUN\nPIT\nTB\nSUN\nARI\nLAR\nSUN\nLAC\nKC\nSUN\nBUF\nLV\nSUN\nDAL\nGB\nSUN\nWAS\nSF"
     }
   ]
