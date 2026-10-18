@@ -6,7 +6,7 @@ The service sanitizes it in memory, writes data/live/cbs-pickem.json, and may
 commit/push when SFIQ_AUTO_PUSH=1.
 """
 import importlib.util
-import json, os, re, subprocess, sys, threading, uuid, uuid
+import json, os, re, subprocess, sys, threading, uuid
 from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -18,6 +18,7 @@ OUTPUT=ROOT/'data'/'live'/'cbs-pickem.json'
 COLLECTOR=ROOT/'tools'/'cbs-collector.py'
 AUTO_PUSH=os.environ.get('SFIQ_AUTO_PUSH','0')=='1'
 ENTRY_NAME=os.environ.get('SFIQ_CBS_ENTRY_NAME','').strip()
+AUTH_SELF_MARKER='__SFIQ_AUTHENTICATED_SELF__'
 MAX_BODY=8_000_000
 FORBIDDEN_KEYS=('cookie','authorization','csrf','token','jwt','session','secret','poolid','graphqlsummary','captures')
 FORBIDDEN_URL_BITS=('picks.cbssports.com/football/pickem/pools/','/graphql?')
@@ -44,13 +45,15 @@ def validate_sanitized(p):
     if not isinstance(p.get('season'),int) or not isinstance(p.get('week'),int): raise ValueError('Missing season/week')
     if not isinstance(p.get('poolSize'),int) or p['poolSize']<1: raise ValueError('Missing pool size')
     if p.get('confidenceStatus') not in ('submitted','unsubmitted','partial'): raise ValueError('Invalid confidenceStatus')
+    slate_size=p.get('slateSize')
+    if not isinstance(slate_size,int) or not 1<=slate_size<=16: raise ValueError('Missing full-week slate size')
+    if len(p.get('market') or [])!=slate_size: raise ValueError('Published market must retain every game in the weekly slate')
     card=p.get('myCard')
     if p.get('confidenceStatus')=='submitted':
         if not isinstance(card,dict): raise ValueError('Submitted payload requires myCard')
         picks,weights=card.get('picks'),card.get('weights')
-        if not isinstance(picks,list) or not isinstance(weights,list) or len(picks)!=len(weights): raise ValueError('Invalid myCard arrays')
-        n=len(picks)
-        if sorted(weights)!=list(range(1,n+1)): raise ValueError('Submitted confidence weights must be unique 1..N')
+        if not isinstance(picks,list) or not isinstance(weights,list) or len(picks)!=slate_size or len(weights)!=slate_size: raise ValueError('Invalid myCard arrays')
+        if sorted(weights)!=list(range(1,slate_size+1)): raise ValueError('Submitted confidence weights must be unique 1..N')
 
 def latest_snapshot(raw,pattern):
     hits=[s for s in raw.get('snapshots',[]) if re.search(pattern,str(s.get('title',''))+' '+str(s.get('url','')),re.I)]
@@ -61,6 +64,17 @@ def parse_schedule(text):
     pat=re.compile(r'(?:FINAL|(?:\d+(?:ST|ND|RD|TH)\s+\d+:\d+)|(?:SUN|MON|THU)\s+[^\n]+)\n([A-Z]{2,3})\n([A-Z]{2,3})')
     return [(norm_team(a),norm_team(h)) for a,h in pat.findall(head)]
 
+def sanitize_slate(raw_slate):
+    out=[]; seen=set()
+    for g in raw_slate if isinstance(raw_slate,list) else []:
+        if not isinstance(g,dict): continue
+        a,h=norm_team(g.get('away')),norm_team(g.get('home'))
+        if a not in ABBR or h not in ABBR or a==h or (a,h) in seen: continue
+        seen.add((a,h)); completed=bool(g.get('completed')); winner=norm_team(g.get('winner')) if g.get('winner') else None
+        if winner not in (a,h): winner=None
+        out.append({'away':a,'home':h,'completed':completed,'winner':winner,'statusText':str(g.get('statusText') or '')[:120]})
+    return out
+
 def parse_ownership(text):
     record=r'\d+-\d+(?:-\d+)?'; rx=re.compile(record+r'\s*\n([A-Z0-9 ]+?)\s*\n(\d+)%[\s\S]{0,120}?'+record+r'\s*\n([A-Z0-9 ]+?)\s*\n(\d+)%')
     out={}
@@ -70,10 +84,17 @@ def parse_ownership(text):
     return out
 
 def parse_entry_card(text,name,n):
-    if not name: return None
-    starts=[m.start() for m in re.finditer(re.escape(name),text,re.I)]
-    if not starts: return None
-    seg=text[starts[-1]:]; nxt=re.search(r'\n\n\n\d+(?:st|nd|rd|th)\n',seg,re.I)
+    # The collector places this marker only after reconstructing a complete card
+    # from the authenticated Picks page. It is more authoritative than a mutable
+    # participant display name and is removed before publication.
+    labels=[AUTH_SELF_MARKER]
+    if name: labels.append(name)
+    start=-1
+    for label in labels:
+        hits=[m.start() for m in re.finditer(re.escape(label),text,re.I)]
+        if hits: start=max(start,hits[-1])
+    if start<0: return None
+    seg=text[start:]; nxt=re.search(r'\n\n\n\d+(?:st|nd|rd|th)\n',seg,re.I)
     if nxt: seg=seg[:nxt.start()]
     pairs=[]
     for team,w in re.findall(r'\n([A-Z]{2,3})\n\((\d{1,2})\)',seg):
@@ -95,16 +116,7 @@ def parse_revealed_field(text,schedule,pool_size):
     return locked
 
 def parse_market(text,schedule):
-    """Parse CBS odds from the stable seven-value team rows in page innerText.
-
-    CBS does not render an Expert Picks separator after every game, so using that
-    marker as the game boundary can swallow the following matchup. Each team row
-    itself is stable: team name, open total/spread price, current spread/price,
-    moneyline, and current total/price. We therefore parse each scheduled team
-    independently and use fixed local row boundaries instead of page separators.
-    """
-    lines=[x.strip() for x in str(text or '').splitlines() if x.strip()]
-    low=[x.lower() for x in lines]
+    lines=[x.strip() for x in str(text or '').splitlines() if x.strip()]; low=[x.lower() for x in lines]
     def idx_after(name,start=0):
         needle=name.lower()
         for i in range(start,len(low)):
@@ -113,8 +125,7 @@ def parse_market(text,schedule):
     def team_values(team_index):
         block=lines[team_index+1:team_index+8]
         if len(block)<7: return None
-        ml=block[4]
-        total=block[5]
+        ml=block[4]; total=block[5]
         if not re.fullmatch(r'[+-]\d{3,4}',ml): return None
         tm=re.fullmatch(r'[ou](\d+(?:\.\d+)?)',total,re.I)
         if not tm: return None
@@ -133,8 +144,18 @@ def parse_market(text,schedule):
         aml,atotal=av; hml,htotal=hv
         if abs(atotal-htotal)>1.0: continue
         total=atotal if abs(atotal-htotal)<0.01 else round((atotal+htotal)/2,1)
-        out.append({'away':a,'home':h,'awayML':aml,'homeML':hml,'total':total})
-        cursor=hi+8
+        out.append({'away':a,'home':h,'awayML':aml,'homeML':hml,'total':total}); cursor=hi+8
+    return out
+
+def fill_locked_ownership(ownership,locked):
+    out=dict(ownership)
+    for g in locked:
+        key=f"{g['away']}|{g['home']}"
+        if key in out: continue
+        obs=g.get('observations') or []
+        if not obs: continue
+        ac=sum(1 for o in obs if o.get('pick')==g['away']); hp=len(obs)-ac
+        ap=round(ac*100/len(obs)); out[key]={'away':g['away'],'home':g['home'],'awayPct':ap,'homePct':100-ap}
     return out
 
 def ownership_text(schedule,ownership):
@@ -159,40 +180,41 @@ def sanitize_raw(raw):
     if not isinstance(raw,dict) or not isinstance(raw.get('snapshots'),list): raise ValueError('Invalid raw CBS capture')
     picks=latest_snapshot(raw,r'\|\s*Picks\b'); standings=latest_snapshot(raw,r'Weekly Standings|/standings/weekly'); odds=latest_snapshot(raw,r'CBS NFL Odds|cbssports\.com/nfl/odds')
     if not picks or not standings or not odds: raise ValueError('CBS capture must include Picks, Weekly Standings, and Odds')
-    pt,st,ot=str(picks.get('text','')),str(standings.get('text','')),str(odds.get('text','')); schedule=parse_schedule(st)
-    if len(schedule)<2: raise ValueError('Could not reconstruct CBS weekly schedule')
+    pt,st,ot=str(picks.get('text','')),str(standings.get('text','')),str(odds.get('text','')); slate=sanitize_slate(raw.get('slate'))
+    parsed_schedule=parse_schedule(st); schedule=[(g['away'],g['home']) for g in slate] if len(slate)>=len(parsed_schedule) and len(slate)>=2 else parsed_schedule
+    if len(schedule)<2: raise ValueError('Could not reconstruct full CBS weekly schedule')
     prev=load_previous(); wm=re.search(r'\bWeek\s+(\d{1,2})\b',pt+'\n'+st,re.I); week=int(wm.group(1)) if wm else int(prev.get('week') or 0)
     if week<1: raise ValueError('Could not determine CBS week')
     season=int(prev.get('season') or datetime.now().year); pool_size=int(prev.get('poolSize') or 94); own=parse_ownership(pt)
-    if len(own)<max(2,len(schedule)//2): raise ValueError('Could not parse enough CBS ownership rows')
-    current_market=parse_market(ot,schedule)
-    current_by_key={(m['away'],m['home']):m for m in current_market}
-    prev_by_key={(m.get('away'),m.get('home')):m for m in prev.get('market',[]) if isinstance(m,dict)}
-    final_games={(norm_team(a),norm_team(h)) for a,h in re.findall(r'(?:^|\n)FINAL\s*\n([A-Z]{2,3})\n([A-Z]{2,3})(?:\n|$)',st,re.I)}
+    if len(own)<max(2,(len(schedule)-1)//2): raise ValueError('Could not parse enough CBS ownership rows')
+    current_market=parse_market(ot,schedule); current_by_key={(m['away'],m['home']):m for m in current_market}; prev_by_key={(m.get('away'),m.get('home')):m for m in prev.get('market',[]) if isinstance(m,dict)}
+    slate_by_key={(g['away'],g['home']):g for g in slate}; final_games={k for k,g in slate_by_key.items() if g.get('completed')}
+    if not final_games: final_games={(norm_team(a),norm_team(h)) for a,h in re.findall(r'(?:^|\n)FINAL\s*\n([A-Z]{2,3})\n([A-Z]{2,3})(?:\n|$)',st,re.I)}
     market=[]; missing=[]
     for game in schedule:
         fresh=current_by_key.get(game)
-        if fresh:
-            market.append(fresh); continue
-        if game in final_games and game in prev_by_key:
-            market.append(prev_by_key[game]); continue
+        if fresh: market.append(fresh); continue
+        if game in final_games:
+            prior=prev_by_key.get(game)
+            market.append(prior if prior else {'away':game[0],'home':game[1],'awayML':None,'homeML':None,'total':None}); continue
         missing.append(game)
-    if missing:
-        raise ValueError(f'Could not parse current CBS odds for {len(missing)} unplayed Week {week} game(s): '+', '.join(f'{a}-{h}' for a,h in missing))
+    if missing: raise ValueError(f'Could not parse current CBS odds for {len(missing)} unplayed Week {week} game(s): '+', '.join(f'{a}-{h}' for a,h in missing))
     pairs=parse_entry_card(st,ENTRY_NAME,len(schedule)); pm=re.search(r'\b(\d+)\s*/\s*(\d+)\s+Picks\b',pt,re.I); picked=int(pm.group(1)) if pm else (len(pairs) if pairs else 0); total=int(pm.group(2)) if pm else len(schedule)
     my_card=None; status='unsubmitted' if picked==0 else 'partial'
     if pairs and len(pairs)==len(schedule):
-        teams=[p for p,_ in pairs]; weights=[w for _,w in pairs]
-        if sorted(weights)==list(range(1,len(schedule)+1)) and all(team in schedule[i] for i,team in enumerate(teams)):
+        pair_by_team={team:w for team,w in pairs}; teams=[]; weights=[]
+        for a,h in schedule:
+            candidates=[(t,pair_by_team[t]) for t in (a,h) if t in pair_by_team]
+            if len(candidates)!=1: break
+            teams.append(candidates[0][0]); weights.append(candidates[0][1])
+        if len(teams)==len(schedule) and sorted(weights)==list(range(1,len(schedule)+1)):
             my_card={'picks':teams,'weights':weights}; status='submitted'
-    if picked==total and status!='submitted':
-        # Do not fail the entire refresh just because the private standings entry
-        # cannot be identified. Fresh market/ownership data is still valid and
-        # materially useful. Mark the card as partial so the app will not present
-        # a generated baseline as the user's submitted CBS card.
-        status='partial'
-    locked=parse_revealed_field(st,schedule,pool_size); exported=str(raw.get('exportedAt') or iso_now())
-    payload={'product':"CBS Pick'em IQ Bridge — sanitized live input",'version':'2.1.1','season':season,'week':week,'poolSize':pool_size,'exportedAt':exported,'source':'Automated local CBS browser capture','privacy':'Raw CBS session/page data sanitized locally; pool/account identifiers and participant names not published.','confidenceStatus':status,'confidenceSource':'Automated CBS Weekly Standings row' if my_card else ('CBS complete card detected; private entry row unavailable' if picked==total else 'CBS Picks status'),'marketCapturedAt':odds.get('ts') or exported,'marketSource':f'CBS Sports odds — Week {week}','market':market,'fieldModel':{'source':'Sanitized CBS revealed-pool observations','capturedAt':standings.get('ts') or exported,'observedEntries':max([g['totalObserved'] for g in locked],default=0),'locked':locked},'snapshots':[{'title':'NFL Football Tourney | Picks','url':f'sanitized://cbs-pickem/week-{week}','ts':picks.get('ts') or exported,'text':ownership_text(schedule,own)},{'title':'NFL Football Tourney | Weekly Standings','url':f'sanitized://cbs-pickem/week-{week}/standings/weekly','ts':standings.get('ts') or exported,'text':standings_text(schedule,locked)}]}
+    if picked==total and status!='submitted': status='partial'
+    locked=parse_revealed_field(st,schedule,pool_size); own=fill_locked_ownership(own,locked); exported=str(raw.get('exportedAt') or iso_now())
+    game_state=[]
+    for a,h in schedule:
+        g=slate_by_key.get((a,h),{}); game_state.append({'away':a,'home':h,'completed':bool(g.get('completed')),'winner':g.get('winner'),'statusText':g.get('statusText','')})
+    payload={'product':"CBS Pick'em IQ Bridge — sanitized live input",'version':'2.2.0','season':season,'week':week,'slateSize':len(schedule),'poolSize':pool_size,'exportedAt':exported,'source':'Automated local CBS browser capture','privacy':'Raw CBS session/page data sanitized locally; pool/account identifiers and participant names not published.','confidenceStatus':status,'confidenceSource':'Authenticated CBS Picks card' if my_card else ('CBS complete card detected; private card unavailable' if picked==total else 'CBS Picks status'),'marketCapturedAt':odds.get('ts') or exported,'marketSource':f'CBS Sports odds — Week {week}','market':market,'gameState':game_state,'fieldModel':{'source':'Sanitized CBS revealed-pool observations','capturedAt':standings.get('ts') or exported,'observedEntries':max([g['totalObserved'] for g in locked],default=0),'locked':locked},'snapshots':[{'title':'NFL Football Tourney | Picks','url':f'sanitized://cbs-pickem/week-{week}','ts':picks.get('ts') or exported,'text':ownership_text(schedule,own)},{'title':'NFL Football Tourney | Weekly Standings','url':f'sanitized://cbs-pickem/week-{week}/standings/weekly','ts':standings.get('ts') or exported,'text':standings_text(schedule,locked)}]}
     if my_card: payload['myCard']=my_card
     return payload
 
@@ -218,20 +240,11 @@ def publish(payload):
 
 def snapshot_status():
     with LOCK: status=dict(SERVICE)
-    collector=runtime.read_status()
-    bridge_run_id=str(collector.get('bridgeRunId') or '').strip().lower()
-    valid_id=len(bridge_run_id)==32 and all(char in '0123456789abcdef' for char in bridge_run_id)
+    collector=runtime.read_status(); bridge_run_id=str(collector.get('bridgeRunId') or '').strip().lower(); valid_id=len(bridge_run_id)==32 and all(char in '0123456789abcdef' for char in bridge_run_id)
     if valid_id and not status.get('refreshing') and status.get('lastCompletedRunId')!=bridge_run_id:
         outcome=collector.get('outcome')
-        if outcome=='running':
-            status.update(refreshing=True,currentRunId=bridge_run_id,
-                          lastRefreshStarted=collector.get('startedAt'),
-                          lastRefreshFinished=None,lastRefreshOk=None,lastRefreshError=None)
-        elif outcome in ('succeeded','failed') and collector.get('finishedAt'):
-            status.update(refreshing=False,currentRunId=None,lastCompletedRunId=bridge_run_id,
-                          lastRefreshStarted=collector.get('startedAt'),
-                          lastRefreshFinished=collector.get('finishedAt'),
-                          lastRefreshOk=(outcome=='succeeded'),lastRefreshError=None)
+        if outcome=='running': status.update(refreshing=True,currentRunId=bridge_run_id,lastRefreshStarted=collector.get('startedAt'),lastRefreshFinished=None,lastRefreshOk=None,lastRefreshError=None)
+        elif outcome in ('succeeded','failed') and collector.get('finishedAt'): status.update(refreshing=False,currentRunId=None,lastCompletedRunId=bridge_run_id,lastRefreshStarted=collector.get('startedAt'),lastRefreshFinished=collector.get('finishedAt'),lastRefreshOk=(outcome=='succeeded'),lastRefreshError=None)
     return status,collector
 
 def claim_refresh(run_id=None):
@@ -257,11 +270,7 @@ def run_collector(run_id=None,claimed=False):
         with LOCK: SERVICE['lastRefreshOk']=False; SERVICE['lastRefreshError']=str(exc)
         return False
     finally:
-        with LOCK:
-            SERVICE['refreshing']=False
-            SERVICE['currentRunId']=None
-            SERVICE['lastCompletedRunId']=rid
-            SERVICE['lastRefreshFinished']=iso_now()
+        with LOCK: SERVICE['refreshing']=False; SERVICE['currentRunId']=None; SERVICE['lastCompletedRunId']=rid; SERVICE['lastRefreshFinished']=iso_now()
 
 class Handler(BaseHTTPRequestHandler):
     def _cors(self): self.send_header('Access-Control-Allow-Origin','*'); self.send_header('Access-Control-Allow-Headers','Content-Type'); self.send_header('Access-Control-Allow-Methods','GET,POST,OPTIONS')
@@ -269,26 +278,22 @@ class Handler(BaseHTTPRequestHandler):
         body=json.dumps(value).encode(); self.send_response(code); self._cors(); self.send_header('Content-Type','application/json'); self.send_header('Cache-Control','no-store'); self.end_headers(); self.wfile.write(body)
     def do_OPTIONS(self): self.send_response(204); self._cors(); self.end_headers()
     def do_GET(self):
-        if self.path=='/health': return self._json(200,{'ok':True,'service':'CBS IQ automation','autoPush':AUTO_PUSH,'stateRecoveryVersion':1})
+        if self.path=='/health': return self._json(200,{'ok':True,'service':'CBS IQ automation','autoPush':AUTO_PUSH,'stateRecoveryVersion':2})
         if self.path=='/status':
-            status,collector=snapshot_status()
-            return self._json(200,{'ok':True,'autoPush':AUTO_PUSH,**status,'collector':collector})
+            status,collector=snapshot_status(); return self._json(200,{'ok':True,'autoPush':AUTO_PUSH,**status,'collector':collector})
         if self.path=='/live':
             try: payload=json.loads(OUTPUT.read_text(encoding='utf-8'))
             except Exception as exc: return self._json(404,{'ok':False,'error':'Sanitized CBS payload is unavailable: '+str(exc)})
-            status,_=snapshot_status()
-            return self._json(200,{'ok':True,'payload':payload,'lastCompletedRunId':status.get('lastCompletedRunId'),'lastCommit':status.get('lastCommit'),'publishedAt':status.get('lastPublishedAt')})
+            status,_=snapshot_status(); return self._json(200,{'ok':True,'payload':payload,'lastCompletedRunId':status.get('lastCompletedRunId'),'lastCommit':status.get('lastCommit'),'publishedAt':status.get('lastPublishedAt')})
         self._json(404,{'ok':False,'error':'Not found'})
     def do_POST(self):
         try:
             if self.path=='/refresh-sync':
                 with LOCK: busy=SERVICE['refreshing']
                 if busy: return self._json(409,{'ok':False,'error':'CBS refresh is already running. Try again in a moment.'})
-                run_collector()
-                status,_=snapshot_status()
+                run_collector(); status,_=snapshot_status()
                 if not status.get('lastRefreshOk'):
-                    detail=str(status.get('lastRefreshError') or 'CBS refresh failed').strip().splitlines()[-1]
-                    return self._json(400,{'ok':False,'error':detail})
+                    detail=str(status.get('lastRefreshError') or 'CBS refresh failed').strip().splitlines()[-1]; return self._json(400,{'ok':False,'error':detail})
                 try: payload=json.loads(OUTPUT.read_text(encoding='utf-8'))
                 except Exception as exc: return self._json(500,{'ok':False,'error':'CBS refreshed but the sanitized payload could not be loaded: '+str(exc)})
                 return self._json(200,{'ok':True,'payload':payload,'lastCommit':status.get('lastCommit'),'publishedAt':status.get('lastPublishedAt')})
