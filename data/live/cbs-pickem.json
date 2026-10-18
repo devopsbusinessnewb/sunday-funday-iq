@@ -5,14 +5,56 @@
   "week": 6,
   "slateSize": 14,
   "poolSize": 94,
-  "exportedAt": "2026-10-18T16:54:04.614839Z",
+  "exportedAt": "2026-10-18T20:30:18.965792Z",
   "source": "Automated local CBS browser capture",
   "privacy": "Raw CBS session/page data sanitized locally; pool/account identifiers and participant names not published.",
   "confidenceStatus": "submitted",
   "confidenceSource": "Authenticated CBS Picks card",
-  "marketCapturedAt": "2026-10-18T16:54:04.614800Z",
+  "marketCapturedAt": "2026-10-18T20:30:18.965766Z",
   "marketSource": "CBS Sports odds \u2014 Week 6",
   "market": [
+    {
+      "away": "NO",
+      "home": "NYG",
+      "awayML": -108,
+      "homeML": -102,
+      "total": 46.0
+    },
+    {
+      "away": "CAR",
+      "home": "PHI",
+      "awayML": -155,
+      "homeML": 136,
+      "total": 39.0
+    },
+    {
+      "away": "PIT",
+      "home": "TB",
+      "awayML": -135,
+      "homeML": 118,
+      "total": 38.0
+    },
+    {
+      "away": "ARI",
+      "home": "LAR",
+      "awayML": 600,
+      "homeML": -833,
+      "total": 51.5
+    },
+    {
+      "away": "LAC",
+      "home": "KC",
+      "awayML": 333,
+      "homeML": -391,
+      "total": 41.5
+    },
+    {
+      "away": "BUF",
+      "home": "LV",
+      "awayML": -244,
+      "homeML": 205,
+      "total": 54.0
+    },
     {
       "away": "HOU",
       "home": "JAX",
@@ -49,48 +91,6 @@
       "total": 43.0
     },
     {
-      "away": "NO",
-      "home": "NYG",
-      "awayML": -108,
-      "homeML": -102,
-      "total": 46.0
-    },
-    {
-      "away": "CAR",
-      "home": "PHI",
-      "awayML": -155,
-      "homeML": 136,
-      "total": 39.0
-    },
-    {
-      "away": "PIT",
-      "home": "TB",
-      "awayML": -136,
-      "homeML": 120,
-      "total": 38.0
-    },
-    {
-      "away": "ARI",
-      "home": "LAR",
-      "awayML": 600,
-      "homeML": -800,
-      "total": 51.5
-    },
-    {
-      "away": "LAC",
-      "home": "KC",
-      "awayML": 333,
-      "homeML": -391,
-      "total": 41.5
-    },
-    {
-      "away": "BUF",
-      "home": "LV",
-      "awayML": -238,
-      "homeML": 200,
-      "total": 53.5
-    },
-    {
       "away": "DAL",
       "home": "GB",
       "awayML": -105,
@@ -114,6 +114,48 @@
   ],
   "gameState": [
     {
+      "away": "NO",
+      "home": "NYG",
+      "completed": true,
+      "winner": "NO",
+      "statusText": "Final"
+    },
+    {
+      "away": "CAR",
+      "home": "PHI",
+      "completed": true,
+      "winner": "CAR",
+      "statusText": "Final"
+    },
+    {
+      "away": "PIT",
+      "home": "TB",
+      "completed": false,
+      "winner": null,
+      "statusText": "4:47 - OT"
+    },
+    {
+      "away": "ARI",
+      "home": "LAR",
+      "completed": false,
+      "winner": null,
+      "statusText": "4:09 - 1st"
+    },
+    {
+      "away": "LAC",
+      "home": "KC",
+      "completed": false,
+      "winner": null,
+      "statusText": "12:14 - 1st"
+    },
+    {
+      "away": "BUF",
+      "home": "LV",
+      "completed": false,
+      "winner": null,
+      "statusText": "12:48 - 1st"
+    },
+    {
       "away": "HOU",
       "home": "JAX",
       "completed": true,
@@ -123,72 +165,30 @@
     {
       "away": "CHI",
       "home": "ATL",
-      "completed": false,
-      "winner": null,
-      "statusText": "10/18 - 1:00 PM EDT"
+      "completed": true,
+      "winner": "CHI",
+      "statusText": "Final"
     },
     {
       "away": "BAL",
       "home": "CLE",
-      "completed": false,
-      "winner": null,
-      "statusText": "10/18 - 1:00 PM EDT"
+      "completed": true,
+      "winner": "CLE",
+      "statusText": "Final"
     },
     {
       "away": "TEN",
       "home": "IND",
-      "completed": false,
-      "winner": null,
-      "statusText": "10/18 - 1:00 PM EDT"
+      "completed": true,
+      "winner": "TEN",
+      "statusText": "Final"
     },
     {
       "away": "NYJ",
       "home": "NE",
-      "completed": false,
-      "winner": null,
-      "statusText": "10/18 - 1:00 PM EDT"
-    },
-    {
-      "away": "NO",
-      "home": "NYG",
-      "completed": false,
-      "winner": null,
-      "statusText": "10/18 - 1:00 PM EDT"
-    },
-    {
-      "away": "CAR",
-      "home": "PHI",
-      "completed": false,
-      "winner": null,
-      "statusText": "10/18 - 1:00 PM EDT"
-    },
-    {
-      "away": "PIT",
-      "home": "TB",
-      "completed": false,
-      "winner": null,
-      "statusText": "10/18 - 1:00 PM EDT"
-    },
-    {
-      "away": "ARI",
-      "home": "LAR",
-      "completed": false,
-      "winner": null,
-      "statusText": "10/18 - 4:05 PM EDT"
-    },
-    {
-      "away": "LAC",
-      "home": "KC",
-      "completed": false,
-      "winner": null,
-      "statusText": "10/18 - 4:25 PM EDT"
-    },
-    {
-      "away": "BUF",
-      "home": "LV",
-      "completed": false,
-      "winner": null,
-      "statusText": "10/18 - 4:25 PM EDT"
+      "completed": true,
+      "winner": "NE",
+      "statusText": "Final"
     },
     {
       "away": "DAL",
@@ -214,9 +214,2259 @@
   ],
   "fieldModel": {
     "source": "Sanitized CBS revealed-pool observations",
-    "capturedAt": "2026-10-18T16:53:58.628311Z",
-    "observedEntries": 87,
+    "capturedAt": "2026-10-18T20:30:13.002042Z",
+    "observedEntries": 92,
     "locked": [
+      {
+        "key": "NO|NYG",
+        "gameId": "NO-NYG",
+        "away": "NO",
+        "home": "NYG",
+        "observations": [
+          {
+            "pick": "NO",
+            "weight": 11
+          },
+          {
+            "pick": "NO",
+            "weight": 9
+          },
+          {
+            "pick": "NO",
+            "weight": 7
+          },
+          {
+            "pick": "NO",
+            "weight": 7
+          },
+          {
+            "pick": "NO",
+            "weight": 9
+          },
+          {
+            "pick": "NO",
+            "weight": 6
+          },
+          {
+            "pick": "NYG",
+            "weight": 7
+          },
+          {
+            "pick": "NYG",
+            "weight": 8
+          },
+          {
+            "pick": "NYG",
+            "weight": 8
+          },
+          {
+            "pick": "NYG",
+            "weight": 2
+          },
+          {
+            "pick": "NYG",
+            "weight": 9
+          },
+          {
+            "pick": "NO",
+            "weight": 5
+          },
+          {
+            "pick": "NYG",
+            "weight": 10
+          },
+          {
+            "pick": "NYG",
+            "weight": 6
+          },
+          {
+            "pick": "NYG",
+            "weight": 4
+          },
+          {
+            "pick": "NYG",
+            "weight": 5
+          },
+          {
+            "pick": "NO",
+            "weight": 3
+          },
+          {
+            "pick": "NYG",
+            "weight": 10
+          },
+          {
+            "pick": "NO",
+            "weight": 6
+          },
+          {
+            "pick": "NO",
+            "weight": 4
+          },
+          {
+            "pick": "NO",
+            "weight": 4
+          },
+          {
+            "pick": "NYG",
+            "weight": 13
+          },
+          {
+            "pick": "NO",
+            "weight": 9
+          },
+          {
+            "pick": "NO",
+            "weight": 6
+          },
+          {
+            "pick": "NO",
+            "weight": 4
+          },
+          {
+            "pick": "NYG",
+            "weight": 6
+          },
+          {
+            "pick": "NYG",
+            "weight": 10
+          },
+          {
+            "pick": "NO",
+            "weight": 2
+          },
+          {
+            "pick": "NYG",
+            "weight": 6
+          },
+          {
+            "pick": "NO",
+            "weight": 6
+          },
+          {
+            "pick": "NYG",
+            "weight": 10
+          },
+          {
+            "pick": "NYG",
+            "weight": 4
+          },
+          {
+            "pick": "NYG",
+            "weight": 6
+          },
+          {
+            "pick": "NYG",
+            "weight": 2
+          },
+          {
+            "pick": "NO",
+            "weight": 1
+          },
+          {
+            "pick": "NYG",
+            "weight": 9
+          },
+          {
+            "pick": "NO",
+            "weight": 4
+          },
+          {
+            "pick": "NYG",
+            "weight": 8
+          },
+          {
+            "pick": "NYG",
+            "weight": 1
+          },
+          {
+            "pick": "NO",
+            "weight": 3
+          },
+          {
+            "pick": "NYG",
+            "weight": 9
+          },
+          {
+            "pick": "NYG",
+            "weight": 8
+          },
+          {
+            "pick": "NYG",
+            "weight": 2
+          },
+          {
+            "pick": "NO",
+            "weight": 1
+          },
+          {
+            "pick": "NYG",
+            "weight": 3
+          },
+          {
+            "pick": "NYG",
+            "weight": 7
+          },
+          {
+            "pick": "NYG",
+            "weight": 4
+          },
+          {
+            "pick": "NYG",
+            "weight": 2
+          },
+          {
+            "pick": "NYG",
+            "weight": 7
+          },
+          {
+            "pick": "NYG",
+            "weight": 10
+          },
+          {
+            "pick": "NYG",
+            "weight": 2
+          },
+          {
+            "pick": "NYG",
+            "weight": 7
+          },
+          {
+            "pick": "NYG",
+            "weight": 6
+          },
+          {
+            "pick": "NO",
+            "weight": 1
+          },
+          {
+            "pick": "NO",
+            "weight": 3
+          },
+          {
+            "pick": "NYG",
+            "weight": 10
+          },
+          {
+            "pick": "NO",
+            "weight": 5
+          },
+          {
+            "pick": "NYG",
+            "weight": 4
+          },
+          {
+            "pick": "NO",
+            "weight": 1
+          },
+          {
+            "pick": "NYG",
+            "weight": 12
+          },
+          {
+            "pick": "NYG",
+            "weight": 6
+          },
+          {
+            "pick": "NO",
+            "weight": 4
+          },
+          {
+            "pick": "NYG",
+            "weight": 3
+          },
+          {
+            "pick": "NO",
+            "weight": 1
+          },
+          {
+            "pick": "NYG",
+            "weight": 7
+          },
+          {
+            "pick": "NYG",
+            "weight": 2
+          },
+          {
+            "pick": "NYG",
+            "weight": 5
+          },
+          {
+            "pick": "NYG",
+            "weight": 5
+          },
+          {
+            "pick": "NYG",
+            "weight": 8
+          },
+          {
+            "pick": "NYG",
+            "weight": 6
+          },
+          {
+            "pick": "NYG",
+            "weight": 7
+          },
+          {
+            "pick": "NO",
+            "weight": 3
+          },
+          {
+            "pick": "NYG",
+            "weight": 5
+          },
+          {
+            "pick": "NO",
+            "weight": 1
+          },
+          {
+            "pick": "NYG",
+            "weight": 6
+          },
+          {
+            "pick": "NYG",
+            "weight": 5
+          },
+          {
+            "pick": "NYG",
+            "weight": 6
+          },
+          {
+            "pick": "NYG",
+            "weight": 6
+          },
+          {
+            "pick": "NYG",
+            "weight": 6
+          },
+          {
+            "pick": "NYG",
+            "weight": 5
+          },
+          {
+            "pick": "NYG",
+            "weight": 6
+          },
+          {
+            "pick": "NYG",
+            "weight": 10
+          },
+          {
+            "pick": "NYG",
+            "weight": 4
+          },
+          {
+            "pick": "NYG",
+            "weight": 9
+          },
+          {
+            "pick": "NYG",
+            "weight": 8
+          },
+          {
+            "pick": "NYG",
+            "weight": 2
+          },
+          {
+            "pick": "NYG",
+            "weight": 6
+          },
+          {
+            "pick": "NYG",
+            "weight": 6
+          },
+          {
+            "pick": "NYG",
+            "weight": 7
+          },
+          {
+            "pick": "NYG",
+            "weight": 6
+          },
+          {
+            "pick": "NO",
+            "weight": 7
+          }
+        ],
+        "totalObserved": 91
+      },
+      {
+        "key": "CAR|PHI",
+        "gameId": "CAR-PHI",
+        "away": "CAR",
+        "home": "PHI",
+        "observations": [
+          {
+            "pick": "CAR",
+            "weight": 12
+          },
+          {
+            "pick": "CAR",
+            "weight": 8
+          },
+          {
+            "pick": "CAR",
+            "weight": 10
+          },
+          {
+            "pick": "CAR",
+            "weight": 10
+          },
+          {
+            "pick": "CAR",
+            "weight": 8
+          },
+          {
+            "pick": "CAR",
+            "weight": 7
+          },
+          {
+            "pick": "CAR",
+            "weight": 10
+          },
+          {
+            "pick": "PHI",
+            "weight": 7
+          },
+          {
+            "pick": "PHI",
+            "weight": 7
+          },
+          {
+            "pick": "CAR",
+            "weight": 4
+          },
+          {
+            "pick": "CAR",
+            "weight": 8
+          },
+          {
+            "pick": "CAR",
+            "weight": 7
+          },
+          {
+            "pick": "CAR",
+            "weight": 7
+          },
+          {
+            "pick": "PHI",
+            "weight": 5
+          },
+          {
+            "pick": "CAR",
+            "weight": 9
+          },
+          {
+            "pick": "PHI",
+            "weight": 4
+          },
+          {
+            "pick": "CAR",
+            "weight": 4
+          },
+          {
+            "pick": "CAR",
+            "weight": 2
+          },
+          {
+            "pick": "CAR",
+            "weight": 7
+          },
+          {
+            "pick": "CAR",
+            "weight": 3
+          },
+          {
+            "pick": "CAR",
+            "weight": 6
+          },
+          {
+            "pick": "CAR",
+            "weight": 5
+          },
+          {
+            "pick": "PHI",
+            "weight": 8
+          },
+          {
+            "pick": "PHI",
+            "weight": 8
+          },
+          {
+            "pick": "CAR",
+            "weight": 6
+          },
+          {
+            "pick": "CAR",
+            "weight": 5
+          },
+          {
+            "pick": "PHI",
+            "weight": 9
+          },
+          {
+            "pick": "PHI",
+            "weight": 9
+          },
+          {
+            "pick": "CAR",
+            "weight": 5
+          },
+          {
+            "pick": "PHI",
+            "weight": 5
+          },
+          {
+            "pick": "CAR",
+            "weight": 4
+          },
+          {
+            "pick": "CAR",
+            "weight": 6
+          },
+          {
+            "pick": "CAR",
+            "weight": 3
+          },
+          {
+            "pick": "CAR",
+            "weight": 11
+          },
+          {
+            "pick": "CAR",
+            "weight": 6
+          },
+          {
+            "pick": "PHI",
+            "weight": 8
+          },
+          {
+            "pick": "CAR",
+            "weight": 2
+          },
+          {
+            "pick": "PHI",
+            "weight": 7
+          },
+          {
+            "pick": "CAR",
+            "weight": 8
+          },
+          {
+            "pick": "CAR",
+            "weight": 1
+          },
+          {
+            "pick": "CAR",
+            "weight": 1
+          },
+          {
+            "pick": "PHI",
+            "weight": 7
+          },
+          {
+            "pick": "CAR",
+            "weight": 6
+          },
+          {
+            "pick": "PHI",
+            "weight": 3
+          },
+          {
+            "pick": "PHI",
+            "weight": 7
+          },
+          {
+            "pick": "CAR",
+            "weight": 3
+          },
+          {
+            "pick": "PHI",
+            "weight": 3
+          },
+          {
+            "pick": "CAR",
+            "weight": 1
+          },
+          {
+            "pick": "PHI",
+            "weight": 3
+          },
+          {
+            "pick": "CAR",
+            "weight": 3
+          },
+          {
+            "pick": "CAR",
+            "weight": 6
+          },
+          {
+            "pick": "CAR",
+            "weight": 4
+          },
+          {
+            "pick": "PHI",
+            "weight": 4
+          },
+          {
+            "pick": "CAR",
+            "weight": 6
+          },
+          {
+            "pick": "PHI",
+            "weight": 2
+          },
+          {
+            "pick": "PHI",
+            "weight": 2
+          },
+          {
+            "pick": "CAR",
+            "weight": 4
+          },
+          {
+            "pick": "CAR",
+            "weight": 3
+          },
+          {
+            "pick": "CAR",
+            "weight": 2
+          },
+          {
+            "pick": "CAR",
+            "weight": 4
+          },
+          {
+            "pick": "PHI",
+            "weight": 5
+          },
+          {
+            "pick": "CAR",
+            "weight": 2
+          },
+          {
+            "pick": "PHI",
+            "weight": 5
+          },
+          {
+            "pick": "CAR",
+            "weight": 2
+          },
+          {
+            "pick": "CAR",
+            "weight": 4
+          },
+          {
+            "pick": "CAR",
+            "weight": 4
+          },
+          {
+            "pick": "PHI",
+            "weight": 4
+          },
+          {
+            "pick": "CAR",
+            "weight": 6
+          },
+          {
+            "pick": "CAR",
+            "weight": 7
+          },
+          {
+            "pick": "PHI",
+            "weight": 5
+          },
+          {
+            "pick": "CAR",
+            "weight": 2
+          },
+          {
+            "pick": "CAR",
+            "weight": 5
+          },
+          {
+            "pick": "CAR",
+            "weight": 4
+          },
+          {
+            "pick": "PHI",
+            "weight": 5
+          },
+          {
+            "pick": "CAR",
+            "weight": 3
+          },
+          {
+            "pick": "CAR",
+            "weight": 1
+          },
+          {
+            "pick": "PHI",
+            "weight": 2
+          },
+          {
+            "pick": "PHI",
+            "weight": 5
+          },
+          {
+            "pick": "PHI",
+            "weight": 4
+          },
+          {
+            "pick": "CAR",
+            "weight": 6
+          },
+          {
+            "pick": "PHI",
+            "weight": 2
+          },
+          {
+            "pick": "PHI",
+            "weight": 3
+          },
+          {
+            "pick": "CAR",
+            "weight": 2
+          },
+          {
+            "pick": "CAR",
+            "weight": 2
+          },
+          {
+            "pick": "PHI",
+            "weight": 7
+          },
+          {
+            "pick": "CAR",
+            "weight": 1
+          },
+          {
+            "pick": "PHI",
+            "weight": 5
+          },
+          {
+            "pick": "CAR",
+            "weight": 1
+          },
+          {
+            "pick": "PHI",
+            "weight": 5
+          },
+          {
+            "pick": "PHI",
+            "weight": 2
+          },
+          {
+            "pick": "CAR",
+            "weight": 10
+          }
+        ],
+        "totalObserved": 91
+      },
+      {
+        "key": "PIT|TB",
+        "gameId": "PIT-TB",
+        "away": "PIT",
+        "home": "TB",
+        "observations": [
+          {
+            "pick": "PIT",
+            "weight": 7
+          },
+          {
+            "pick": "TB",
+            "weight": 6
+          },
+          {
+            "pick": "TB",
+            "weight": 2
+          },
+          {
+            "pick": "TB",
+            "weight": 3
+          },
+          {
+            "pick": "PIT",
+            "weight": 7
+          },
+          {
+            "pick": "TB",
+            "weight": 5
+          },
+          {
+            "pick": "PIT",
+            "weight": 4
+          },
+          {
+            "pick": "PIT",
+            "weight": 6
+          },
+          {
+            "pick": "PIT",
+            "weight": 6
+          },
+          {
+            "pick": "PIT",
+            "weight": 3
+          },
+          {
+            "pick": "PIT",
+            "weight": 7
+          },
+          {
+            "pick": "PIT",
+            "weight": 4
+          },
+          {
+            "pick": "TB",
+            "weight": 9
+          },
+          {
+            "pick": "PIT",
+            "weight": 4
+          },
+          {
+            "pick": "TB",
+            "weight": 1
+          },
+          {
+            "pick": "PIT",
+            "weight": 2
+          },
+          {
+            "pick": "TB",
+            "weight": 1
+          },
+          {
+            "pick": "PIT",
+            "weight": 8
+          },
+          {
+            "pick": "PIT",
+            "weight": 4
+          },
+          {
+            "pick": "TB",
+            "weight": 2
+          },
+          {
+            "pick": "PIT",
+            "weight": 3
+          },
+          {
+            "pick": "TB",
+            "weight": 4
+          },
+          {
+            "pick": "TB",
+            "weight": 4
+          },
+          {
+            "pick": "TB",
+            "weight": 2
+          },
+          {
+            "pick": "PIT",
+            "weight": 12
+          },
+          {
+            "pick": "PIT",
+            "weight": 4
+          },
+          {
+            "pick": "PIT",
+            "weight": 8
+          },
+          {
+            "pick": "PIT",
+            "weight": 8
+          },
+          {
+            "pick": "TB",
+            "weight": 1
+          },
+          {
+            "pick": "PIT",
+            "weight": 9
+          },
+          {
+            "pick": "PIT",
+            "weight": 7
+          },
+          {
+            "pick": "PIT",
+            "weight": 7
+          },
+          {
+            "pick": "PIT",
+            "weight": 4
+          },
+          {
+            "pick": "PIT",
+            "weight": 4
+          },
+          {
+            "pick": "PIT",
+            "weight": 4
+          },
+          {
+            "pick": "TB",
+            "weight": 7
+          },
+          {
+            "pick": "PIT",
+            "weight": 1
+          },
+          {
+            "pick": "TB",
+            "weight": 6
+          },
+          {
+            "pick": "PIT",
+            "weight": 4
+          },
+          {
+            "pick": "PIT",
+            "weight": 5
+          },
+          {
+            "pick": "PIT",
+            "weight": 8
+          },
+          {
+            "pick": "PIT",
+            "weight": 6
+          },
+          {
+            "pick": "PIT",
+            "weight": 8
+          },
+          {
+            "pick": "PIT",
+            "weight": 4
+          },
+          {
+            "pick": "PIT",
+            "weight": 5
+          },
+          {
+            "pick": "PIT",
+            "weight": 2
+          },
+          {
+            "pick": "PIT",
+            "weight": 2
+          },
+          {
+            "pick": "TB",
+            "weight": 5
+          },
+          {
+            "pick": "PIT",
+            "weight": 4
+          },
+          {
+            "pick": "PIT",
+            "weight": 6
+          },
+          {
+            "pick": "TB",
+            "weight": 1
+          },
+          {
+            "pick": "PIT",
+            "weight": 6
+          },
+          {
+            "pick": "PIT",
+            "weight": 3
+          },
+          {
+            "pick": "PIT",
+            "weight": 5
+          },
+          {
+            "pick": "PIT",
+            "weight": 4
+          },
+          {
+            "pick": "PIT",
+            "weight": 5
+          },
+          {
+            "pick": "PIT",
+            "weight": 9
+          },
+          {
+            "pick": "PIT",
+            "weight": 2
+          },
+          {
+            "pick": "PIT",
+            "weight": 6
+          },
+          {
+            "pick": "PIT",
+            "weight": 9
+          },
+          {
+            "pick": "TB",
+            "weight": 1
+          },
+          {
+            "pick": "PIT",
+            "weight": 6
+          },
+          {
+            "pick": "PIT",
+            "weight": 7
+          },
+          {
+            "pick": "PIT",
+            "weight": 6
+          },
+          {
+            "pick": "TB",
+            "weight": 6
+          },
+          {
+            "pick": "PIT",
+            "weight": 7
+          },
+          {
+            "pick": "PIT",
+            "weight": 3
+          },
+          {
+            "pick": "PIT",
+            "weight": 4
+          },
+          {
+            "pick": "PIT",
+            "weight": 6
+          },
+          {
+            "pick": "TB",
+            "weight": 4
+          },
+          {
+            "pick": "PIT",
+            "weight": 1
+          },
+          {
+            "pick": "TB",
+            "weight": 2
+          },
+          {
+            "pick": "PIT",
+            "weight": 3
+          },
+          {
+            "pick": "TB",
+            "weight": 3
+          },
+          {
+            "pick": "PIT",
+            "weight": 2
+          },
+          {
+            "pick": "PIT",
+            "weight": 6
+          },
+          {
+            "pick": "PIT",
+            "weight": 5
+          },
+          {
+            "pick": "PIT",
+            "weight": 9
+          },
+          {
+            "pick": "PIT",
+            "weight": 2
+          },
+          {
+            "pick": "PIT",
+            "weight": 3
+          },
+          {
+            "pick": "PIT",
+            "weight": 4
+          },
+          {
+            "pick": "PIT",
+            "weight": 8
+          },
+          {
+            "pick": "PIT",
+            "weight": 5
+          },
+          {
+            "pick": "PIT",
+            "weight": 10
+          },
+          {
+            "pick": "PIT",
+            "weight": 6
+          },
+          {
+            "pick": "PIT",
+            "weight": 6
+          },
+          {
+            "pick": "PIT",
+            "weight": 4
+          },
+          {
+            "pick": "PIT",
+            "weight": 5
+          },
+          {
+            "pick": "PIT",
+            "weight": 3
+          },
+          {
+            "pick": "TB",
+            "weight": 3
+          },
+          {
+            "pick": "PIT",
+            "weight": 3
+          }
+        ],
+        "totalObserved": 91
+      },
+      {
+        "key": "ARI|LAR",
+        "gameId": "ARI-LAR",
+        "away": "ARI",
+        "home": "LAR",
+        "observations": [
+          {
+            "pick": "LAR",
+            "weight": 1
+          },
+          {
+            "pick": "LAR",
+            "weight": 13
+          },
+          {
+            "pick": "LAR",
+            "weight": 14
+          },
+          {
+            "pick": "LAR",
+            "weight": 14
+          },
+          {
+            "pick": "LAR",
+            "weight": 6
+          },
+          {
+            "pick": "LAR",
+            "weight": 14
+          },
+          {
+            "pick": "LAR",
+            "weight": 14
+          },
+          {
+            "pick": "LAR",
+            "weight": 5
+          },
+          {
+            "pick": "LAR",
+            "weight": 5
+          },
+          {
+            "pick": "LAR",
+            "weight": 14
+          },
+          {
+            "pick": "LAR",
+            "weight": 6
+          },
+          {
+            "pick": "LAR",
+            "weight": 14
+          },
+          {
+            "pick": "LAR",
+            "weight": 14
+          },
+          {
+            "pick": "LAR",
+            "weight": 3
+          },
+          {
+            "pick": "LAR",
+            "weight": 14
+          },
+          {
+            "pick": "LAR",
+            "weight": 10
+          },
+          {
+            "pick": "LAR",
+            "weight": 11
+          },
+          {
+            "pick": "LAR",
+            "weight": 14
+          },
+          {
+            "pick": "LAR",
+            "weight": 14
+          },
+          {
+            "pick": "LAR",
+            "weight": 13
+          },
+          {
+            "pick": "LAR",
+            "weight": 13
+          },
+          {
+            "pick": "LAR",
+            "weight": 3
+          },
+          {
+            "pick": "LAR",
+            "weight": 13
+          },
+          {
+            "pick": "LAR",
+            "weight": 14
+          },
+          {
+            "pick": "LAR",
+            "weight": 14
+          },
+          {
+            "pick": "LAR",
+            "weight": 14
+          },
+          {
+            "pick": "LAR",
+            "weight": 7
+          },
+          {
+            "pick": "LAR",
+            "weight": 5
+          },
+          {
+            "pick": "LAR",
+            "weight": 11
+          },
+          {
+            "pick": "LAR",
+            "weight": 4
+          },
+          {
+            "pick": "LAR",
+            "weight": 14
+          },
+          {
+            "pick": "LAR",
+            "weight": 13
+          },
+          {
+            "pick": "LAR",
+            "weight": 14
+          },
+          {
+            "pick": "LAR",
+            "weight": 13
+          },
+          {
+            "pick": "LAR",
+            "weight": 12
+          },
+          {
+            "pick": "LAR",
+            "weight": 6
+          },
+          {
+            "pick": "LAR",
+            "weight": 12
+          },
+          {
+            "pick": "LAR",
+            "weight": 5
+          },
+          {
+            "pick": "LAR",
+            "weight": 13
+          },
+          {
+            "pick": "LAR",
+            "weight": 6
+          },
+          {
+            "pick": "LAR",
+            "weight": 7
+          },
+          {
+            "pick": "LAR",
+            "weight": 5
+          },
+          {
+            "pick": "LAR",
+            "weight": 12
+          },
+          {
+            "pick": "LAR",
+            "weight": 14
+          },
+          {
+            "pick": "LAR",
+            "weight": 9
+          },
+          {
+            "pick": "LAR",
+            "weight": 13
+          },
+          {
+            "pick": "LAR",
+            "weight": 12
+          },
+          {
+            "pick": "LAR",
+            "weight": 4
+          },
+          {
+            "pick": "LAR",
+            "weight": 13
+          },
+          {
+            "pick": "LAR",
+            "weight": 7
+          },
+          {
+            "pick": "LAR",
+            "weight": 13
+          },
+          {
+            "pick": "LAR",
+            "weight": 13
+          },
+          {
+            "pick": "LAR",
+            "weight": 10
+          },
+          {
+            "pick": "LAR",
+            "weight": 13
+          },
+          {
+            "pick": "LAR",
+            "weight": 14
+          },
+          {
+            "pick": "LAR",
+            "weight": 8
+          },
+          {
+            "pick": "LAR",
+            "weight": 14
+          },
+          {
+            "pick": "LAR",
+            "weight": 11
+          },
+          {
+            "pick": "LAR",
+            "weight": 13
+          },
+          {
+            "pick": "LAR",
+            "weight": 3
+          },
+          {
+            "pick": "LAR",
+            "weight": 12
+          },
+          {
+            "pick": "LAR",
+            "weight": 14
+          },
+          {
+            "pick": "LAR",
+            "weight": 13
+          },
+          {
+            "pick": "LAR",
+            "weight": 14
+          },
+          {
+            "pick": "LAR",
+            "weight": 13
+          },
+          {
+            "pick": "LAR",
+            "weight": 14
+          },
+          {
+            "pick": "LAR",
+            "weight": 11
+          },
+          {
+            "pick": "LAR",
+            "weight": 10
+          },
+          {
+            "pick": "LAR",
+            "weight": 5
+          },
+          {
+            "pick": "LAR",
+            "weight": 11
+          },
+          {
+            "pick": "LAR",
+            "weight": 13
+          },
+          {
+            "pick": "LAR",
+            "weight": 10
+          },
+          {
+            "pick": "LAR",
+            "weight": 8
+          },
+          {
+            "pick": "LAR",
+            "weight": 14
+          },
+          {
+            "pick": "LAR",
+            "weight": 14
+          },
+          {
+            "pick": "LAR",
+            "weight": 14
+          },
+          {
+            "pick": "LAR",
+            "weight": 14
+          },
+          {
+            "pick": "LAR",
+            "weight": 14
+          },
+          {
+            "pick": "LAR",
+            "weight": 8
+          },
+          {
+            "pick": "LAR",
+            "weight": 12
+          },
+          {
+            "pick": "LAR",
+            "weight": 13
+          },
+          {
+            "pick": "LAR",
+            "weight": 9
+          },
+          {
+            "pick": "LAR",
+            "weight": 13
+          },
+          {
+            "pick": "LAR",
+            "weight": 6
+          },
+          {
+            "pick": "LAR",
+            "weight": 5
+          },
+          {
+            "pick": "LAR",
+            "weight": 14
+          },
+          {
+            "pick": "LAR",
+            "weight": 10
+          },
+          {
+            "pick": "LAR",
+            "weight": 4
+          },
+          {
+            "pick": "LAR",
+            "weight": 12
+          },
+          {
+            "pick": "LAR",
+            "weight": 13
+          },
+          {
+            "pick": "LAR",
+            "weight": 14
+          },
+          {
+            "pick": "ARI",
+            "weight": 14
+          }
+        ],
+        "totalObserved": 92
+      },
+      {
+        "key": "LAC|KC",
+        "gameId": "LAC-KC",
+        "away": "LAC",
+        "home": "KC",
+        "observations": [
+          {
+            "pick": "KC",
+            "weight": 4
+          },
+          {
+            "pick": "KC",
+            "weight": 3
+          },
+          {
+            "pick": "KC",
+            "weight": 12
+          },
+          {
+            "pick": "KC",
+            "weight": 12
+          },
+          {
+            "pick": "KC",
+            "weight": 4
+          },
+          {
+            "pick": "KC",
+            "weight": 4
+          },
+          {
+            "pick": "KC",
+            "weight": 9
+          },
+          {
+            "pick": "KC",
+            "weight": 4
+          },
+          {
+            "pick": "KC",
+            "weight": 4
+          },
+          {
+            "pick": "KC",
+            "weight": 13
+          },
+          {
+            "pick": "KC",
+            "weight": 5
+          },
+          {
+            "pick": "KC",
+            "weight": 12
+          },
+          {
+            "pick": "KC",
+            "weight": 13
+          },
+          {
+            "pick": "KC",
+            "weight": 9
+          },
+          {
+            "pick": "LAC",
+            "weight": 3
+          },
+          {
+            "pick": "KC",
+            "weight": 7
+          },
+          {
+            "pick": "KC",
+            "weight": 13
+          },
+          {
+            "pick": "KC",
+            "weight": 7
+          },
+          {
+            "pick": "KC",
+            "weight": 13
+          },
+          {
+            "pick": "KC",
+            "weight": 12
+          },
+          {
+            "pick": "KC",
+            "weight": 9
+          },
+          {
+            "pick": "KC",
+            "weight": 14
+          },
+          {
+            "pick": "KC",
+            "weight": 10
+          },
+          {
+            "pick": "KC",
+            "weight": 9
+          },
+          {
+            "pick": "KC",
+            "weight": 3
+          },
+          {
+            "pick": "KC",
+            "weight": 12
+          },
+          {
+            "pick": "KC",
+            "weight": 6
+          },
+          {
+            "pick": "KC",
+            "weight": 12
+          },
+          {
+            "pick": "KC",
+            "weight": 4
+          },
+          {
+            "pick": "KC",
+            "weight": 3
+          },
+          {
+            "pick": "KC",
+            "weight": 12
+          },
+          {
+            "pick": "KC",
+            "weight": 10
+          },
+          {
+            "pick": "KC",
+            "weight": 11
+          },
+          {
+            "pick": "KC",
+            "weight": 12
+          },
+          {
+            "pick": "KC",
+            "weight": 14
+          },
+          {
+            "pick": "KC",
+            "weight": 5
+          },
+          {
+            "pick": "KC",
+            "weight": 13
+          },
+          {
+            "pick": "KC",
+            "weight": 4
+          },
+          {
+            "pick": "KC",
+            "weight": 14
+          },
+          {
+            "pick": "KC",
+            "weight": 10
+          },
+          {
+            "pick": "KC",
+            "weight": 14
+          },
+          {
+            "pick": "KC",
+            "weight": 4
+          },
+          {
+            "pick": "KC",
+            "weight": 10
+          },
+          {
+            "pick": "KC",
+            "weight": 13
+          },
+          {
+            "pick": "KC",
+            "weight": 13
+          },
+          {
+            "pick": "KC",
+            "weight": 14
+          },
+          {
+            "pick": "KC",
+            "weight": 14
+          },
+          {
+            "pick": "KC",
+            "weight": 11
+          },
+          {
+            "pick": "KC",
+            "weight": 11
+          },
+          {
+            "pick": "KC",
+            "weight": 12
+          },
+          {
+            "pick": "KC",
+            "weight": 12
+          },
+          {
+            "pick": "KC",
+            "weight": 2
+          },
+          {
+            "pick": "KC",
+            "weight": 13
+          },
+          {
+            "pick": "KC",
+            "weight": 12
+          },
+          {
+            "pick": "KC",
+            "weight": 12
+          },
+          {
+            "pick": "KC",
+            "weight": 6
+          },
+          {
+            "pick": "KC",
+            "weight": 12
+          },
+          {
+            "pick": "KC",
+            "weight": 12
+          },
+          {
+            "pick": "KC",
+            "weight": 14
+          },
+          {
+            "pick": "KC",
+            "weight": 2
+          },
+          {
+            "pick": "KC",
+            "weight": 14
+          },
+          {
+            "pick": "KC",
+            "weight": 12
+          },
+          {
+            "pick": "KC",
+            "weight": 12
+          },
+          {
+            "pick": "KC",
+            "weight": 13
+          },
+          {
+            "pick": "KC",
+            "weight": 10
+          },
+          {
+            "pick": "KC",
+            "weight": 11
+          },
+          {
+            "pick": "KC",
+            "weight": 12
+          },
+          {
+            "pick": "KC",
+            "weight": 12
+          },
+          {
+            "pick": "KC",
+            "weight": 4
+          },
+          {
+            "pick": "KC",
+            "weight": 3
+          },
+          {
+            "pick": "KC",
+            "weight": 6
+          },
+          {
+            "pick": "KC",
+            "weight": 11
+          },
+          {
+            "pick": "KC",
+            "weight": 14
+          },
+          {
+            "pick": "KC",
+            "weight": 13
+          },
+          {
+            "pick": "KC",
+            "weight": 12
+          },
+          {
+            "pick": "KC",
+            "weight": 12
+          },
+          {
+            "pick": "KC",
+            "weight": 8
+          },
+          {
+            "pick": "KC",
+            "weight": 11
+          },
+          {
+            "pick": "KC",
+            "weight": 7
+          },
+          {
+            "pick": "KC",
+            "weight": 13
+          },
+          {
+            "pick": "KC",
+            "weight": 12
+          },
+          {
+            "pick": "KC",
+            "weight": 14
+          },
+          {
+            "pick": "KC",
+            "weight": 12
+          },
+          {
+            "pick": "KC",
+            "weight": 14
+          },
+          {
+            "pick": "KC",
+            "weight": 4
+          },
+          {
+            "pick": "KC",
+            "weight": 13
+          },
+          {
+            "pick": "KC",
+            "weight": 14
+          },
+          {
+            "pick": "KC",
+            "weight": 13
+          },
+          {
+            "pick": "KC",
+            "weight": 13
+          },
+          {
+            "pick": "KC",
+            "weight": 5
+          },
+          {
+            "pick": "KC",
+            "weight": 13
+          },
+          {
+            "pick": "LAC",
+            "weight": 12
+          }
+        ],
+        "totalObserved": 92
+      },
+      {
+        "key": "BUF|LV",
+        "gameId": "BUF-LV",
+        "away": "BUF",
+        "home": "LV",
+        "observations": [
+          {
+            "pick": "BUF",
+            "weight": 6
+          },
+          {
+            "pick": "LV",
+            "weight": 2
+          },
+          {
+            "pick": "BUF",
+            "weight": 11
+          },
+          {
+            "pick": "BUF",
+            "weight": 6
+          },
+          {
+            "pick": "LV",
+            "weight": 3
+          },
+          {
+            "pick": "BUF",
+            "weight": 3
+          },
+          {
+            "pick": "BUF",
+            "weight": 8
+          },
+          {
+            "pick": "BUF",
+            "weight": 3
+          },
+          {
+            "pick": "LV",
+            "weight": 3
+          },
+          {
+            "pick": "LV",
+            "weight": 7
+          },
+          {
+            "pick": "BUF",
+            "weight": 3
+          },
+          {
+            "pick": "BUF",
+            "weight": 13
+          },
+          {
+            "pick": "LV",
+            "weight": 8
+          },
+          {
+            "pick": "BUF",
+            "weight": 2
+          },
+          {
+            "pick": "BUF",
+            "weight": 7
+          },
+          {
+            "pick": "LV",
+            "weight": 3
+          },
+          {
+            "pick": "BUF",
+            "weight": 10
+          },
+          {
+            "pick": "BUF",
+            "weight": 3
+          },
+          {
+            "pick": "BUF",
+            "weight": 10
+          },
+          {
+            "pick": "BUF",
+            "weight": 10
+          },
+          {
+            "pick": "BUF",
+            "weight": 2
+          },
+          {
+            "pick": "BUF",
+            "weight": 2
+          },
+          {
+            "pick": "BUF",
+            "weight": 5
+          },
+          {
+            "pick": "BUF",
+            "weight": 7
+          },
+          {
+            "pick": "BUF",
+            "weight": 8
+          },
+          {
+            "pick": "BUF",
+            "weight": 11
+          },
+          {
+            "pick": "BUF",
+            "weight": 5
+          },
+          {
+            "pick": "BUF",
+            "weight": 3
+          },
+          {
+            "pick": "BUF",
+            "weight": 3
+          },
+          {
+            "pick": "BUF",
+            "weight": 11
+          },
+          {
+            "pick": "BUF",
+            "weight": 6
+          },
+          {
+            "pick": "BUF",
+            "weight": 12
+          },
+          {
+            "pick": "BUF",
+            "weight": 10
+          },
+          {
+            "pick": "BUF",
+            "weight": 9
+          },
+          {
+            "pick": "BUF",
+            "weight": 13
+          },
+          {
+            "pick": "LV",
+            "weight": 3
+          },
+          {
+            "pick": "BUF",
+            "weight": 14
+          },
+          {
+            "pick": "BUF",
+            "weight": 3
+          },
+          {
+            "pick": "BUF",
+            "weight": 9
+          },
+          {
+            "pick": "BUF",
+            "weight": 4
+          },
+          {
+            "pick": "BUF",
+            "weight": 3
+          },
+          {
+            "pick": "BUF",
+            "weight": 3
+          },
+          {
+            "pick": "BUF",
+            "weight": 11
+          },
+          {
+            "pick": "BUF",
+            "weight": 9
+          },
+          {
+            "pick": "BUF",
+            "weight": 12
+          },
+          {
+            "pick": "BUF",
+            "weight": 9
+          },
+          {
+            "pick": "BUF",
+            "weight": 7
+          },
+          {
+            "pick": "BUF",
+            "weight": 13
+          },
+          {
+            "pick": "BUF",
+            "weight": 10
+          },
+          {
+            "pick": "LV",
+            "weight": 1
+          },
+          {
+            "pick": "BUF",
+            "weight": 9
+          },
+          {
+            "pick": "BUF",
+            "weight": 12
+          },
+          {
+            "pick": "BUF",
+            "weight": 8
+          },
+          {
+            "pick": "BUF",
+            "weight": 11
+          },
+          {
+            "pick": "BUF",
+            "weight": 9
+          },
+          {
+            "pick": "BUF",
+            "weight": 4
+          },
+          {
+            "pick": "BUF",
+            "weight": 8
+          },
+          {
+            "pick": "BUF",
+            "weight": 13
+          },
+          {
+            "pick": "BUF",
+            "weight": 9
+          },
+          {
+            "pick": "BUF",
+            "weight": 10
+          },
+          {
+            "pick": "BUF",
+            "weight": 9
+          },
+          {
+            "pick": "BUF",
+            "weight": 9
+          },
+          {
+            "pick": "BUF",
+            "weight": 11
+          },
+          {
+            "pick": "BUF",
+            "weight": 9
+          },
+          {
+            "pick": "BUF",
+            "weight": 3
+          },
+          {
+            "pick": "BUF",
+            "weight": 8
+          },
+          {
+            "pick": "BUF",
+            "weight": 2
+          },
+          {
+            "pick": "BUF",
+            "weight": 11
+          },
+          {
+            "pick": "BUF",
+            "weight": 3
+          },
+          {
+            "pick": "LV",
+            "weight": 2
+          },
+          {
+            "pick": "BUF",
+            "weight": 9
+          },
+          {
+            "pick": "BUF",
+            "weight": 6
+          },
+          {
+            "pick": "BUF",
+            "weight": 1
+          },
+          {
+            "pick": "BUF",
+            "weight": 9
+          },
+          {
+            "pick": "BUF",
+            "weight": 9
+          },
+          {
+            "pick": "BUF",
+            "weight": 9
+          },
+          {
+            "pick": "BUF",
+            "weight": 10
+          },
+          {
+            "pick": "LV",
+            "weight": 2
+          },
+          {
+            "pick": "BUF",
+            "weight": 5
+          },
+          {
+            "pick": "BUF",
+            "weight": 10
+          },
+          {
+            "pick": "BUF",
+            "weight": 9
+          },
+          {
+            "pick": "BUF",
+            "weight": 5
+          },
+          {
+            "pick": "BUF",
+            "weight": 10
+          },
+          {
+            "pick": "BUF",
+            "weight": 4
+          },
+          {
+            "pick": "BUF",
+            "weight": 3
+          },
+          {
+            "pick": "BUF",
+            "weight": 11
+          },
+          {
+            "pick": "BUF",
+            "weight": 3
+          },
+          {
+            "pick": "LV",
+            "weight": 3
+          },
+          {
+            "pick": "BUF",
+            "weight": 4
+          },
+          {
+            "pick": "BUF",
+            "weight": 9
+          },
+          {
+            "pick": "BUF",
+            "weight": 12
+          },
+          {
+            "pick": "BUF",
+            "weight": 6
+          }
+        ],
+        "totalObserved": 92
+      },
       {
         "key": "HOU|JAX",
         "gameId": "HOU-JAX",
@@ -228,20 +2478,32 @@
             "weight": 13
           },
           {
-            "pick": "HOU",
-            "weight": 13
-          },
-          {
-            "pick": "HOU",
-            "weight": 11
-          },
-          {
             "pick": "JAX",
-            "weight": 5
+            "weight": 12
+          },
+          {
+            "pick": "HOU",
+            "weight": 4
           },
           {
             "pick": "HOU",
             "weight": 2
+          },
+          {
+            "pick": "JAX",
+            "weight": 14
+          },
+          {
+            "pick": "JAX",
+            "weight": 12
+          },
+          {
+            "pick": "HOU",
+            "weight": 5
+          },
+          {
+            "pick": "JAX",
+            "weight": 13
           },
           {
             "pick": "HOU",
@@ -249,35 +2511,59 @@
           },
           {
             "pick": "JAX",
-            "weight": 7
+            "weight": 14
           },
           {
             "pick": "JAX",
+            "weight": 3
+          },
+          {
+            "pick": "HOU",
+            "weight": 6
+          },
+          {
+            "pick": "JAX",
+            "weight": 12
+          },
+          {
+            "pick": "JAX",
+            "weight": 10
+          },
+          {
+            "pick": "HOU",
             "weight": 13
           },
           {
             "pick": "HOU",
-            "weight": 6
+            "weight": 2
           },
           {
-            "pick": "HOU",
-            "weight": 6
-          },
-          {
-            "pick": "HOU",
+            "pick": "JAX",
             "weight": 5
           },
           {
-            "pick": "HOU",
-            "weight": 5
+            "pick": "JAX",
+            "weight": 3
+          },
+          {
+            "pick": "JAX",
+            "weight": 8
+          },
+          {
+            "pick": "JAX",
+            "weight": 7
+          },
+          {
+            "pick": "JAX",
+            "weight": 9
+          },
+          {
+            "pick": "JAX",
+            "weight": 12
           },
           {
             "pick": "HOU",
-            "weight": 4
-          },
-          {
-            "pick": "HOU",
-            "weight": 4
+            "weight": 3
           },
           {
             "pick": "HOU",
@@ -285,59 +2571,83 @@
           },
           {
             "pick": "JAX",
-            "weight": 13
-          },
-          {
-            "pick": "JAX",
-            "weight": 11
-          },
-          {
-            "pick": "JAX",
             "weight": 2
           },
           {
             "pick": "JAX",
-            "weight": 10
-          },
-          {
-            "pick": "HOU",
-            "weight": 3
-          },
-          {
-            "pick": "HOU",
-            "weight": 3
+            "weight": 6
           },
           {
             "pick": "JAX",
-            "weight": 10
-          },
-          {
-            "pick": "HOU",
-            "weight": 2
-          },
-          {
-            "pick": "HOU",
-            "weight": 2
-          },
-          {
-            "pick": "HOU",
-            "weight": 2
-          },
-          {
-            "pick": "HOU",
-            "weight": 2
+            "weight": 8
           },
           {
             "pick": "JAX",
-            "weight": 11
+            "weight": 12
           },
           {
             "pick": "HOU",
             "weight": 1
           },
           {
+            "pick": "HOU",
+            "weight": 5
+          },
+          {
+            "pick": "JAX",
+            "weight": 7
+          },
+          {
             "pick": "JAX",
             "weight": 5
+          },
+          {
+            "pick": "JAX",
+            "weight": 10
+          },
+          {
+            "pick": "JAX",
+            "weight": 14
+          },
+          {
+            "pick": "JAX",
+            "weight": 9
+          },
+          {
+            "pick": "JAX",
+            "weight": 13
+          },
+          {
+            "pick": "JAX",
+            "weight": 5
+          },
+          {
+            "pick": "JAX",
+            "weight": 12
+          },
+          {
+            "pick": "JAX",
+            "weight": 13
+          },
+          {
+            "pick": "JAX",
+            "weight": 14
+          },
+          {
+            "pick": "HOU",
+            "weight": 4
+          },
+          {
+            "pick": "JAX",
+            "weight": 7
+          },
+          {
+            "pick": "JAX",
+            "weight": 11
+          },
+          {
+            "pick": "HOU",
+            "weight": 6
           },
           {
             "pick": "JAX",
@@ -345,15 +2655,19 @@
           },
           {
             "pick": "JAX",
-            "weight": 8
+            "weight": 12
+          },
+          {
+            "pick": "HOU",
+            "weight": 2
           },
           {
             "pick": "JAX",
-            "weight": 8
+            "weight": 11
           },
           {
-            "pick": "JAX",
-            "weight": 13
+            "pick": "HOU",
+            "weight": 3
           },
           {
             "pick": "JAX",
@@ -365,59 +2679,7 @@
           },
           {
             "pick": "JAX",
-            "weight": 7
-          },
-          {
-            "pick": "JAX",
             "weight": 4
-          },
-          {
-            "pick": "JAX",
-            "weight": 12
-          },
-          {
-            "pick": "JAX",
-            "weight": 8
-          },
-          {
-            "pick": "JAX",
-            "weight": 14
-          },
-          {
-            "pick": "JAX",
-            "weight": 8
-          },
-          {
-            "pick": "JAX",
-            "weight": 13
-          },
-          {
-            "pick": "JAX",
-            "weight": 10
-          },
-          {
-            "pick": "JAX",
-            "weight": 13
-          },
-          {
-            "pick": "JAX",
-            "weight": 7
-          },
-          {
-            "pick": "JAX",
-            "weight": 11
-          },
-          {
-            "pick": "JAX",
-            "weight": 5
-          },
-          {
-            "pick": "JAX",
-            "weight": 4
-          },
-          {
-            "pick": "JAX",
-            "weight": 12
           },
           {
             "pick": "JAX",
@@ -425,87 +2687,11 @@
           },
           {
             "pick": "JAX",
-            "weight": 11
-          },
-          {
-            "pick": "JAX",
-            "weight": 3
-          },
-          {
-            "pick": "JAX",
-            "weight": 12
-          },
-          {
-            "pick": "JAX",
-            "weight": 3
-          },
-          {
-            "pick": "JAX",
-            "weight": 8
-          },
-          {
-            "pick": "JAX",
             "weight": 14
           },
           {
-            "pick": "JAX",
-            "weight": 8
-          },
-          {
-            "pick": "JAX",
-            "weight": 7
-          },
-          {
-            "pick": "JAX",
-            "weight": 9
-          },
-          {
-            "pick": "JAX",
-            "weight": 7
-          },
-          {
-            "pick": "JAX",
-            "weight": 9
-          },
-          {
-            "pick": "JAX",
-            "weight": 12
-          },
-          {
-            "pick": "JAX",
-            "weight": 12
-          },
-          {
-            "pick": "JAX",
-            "weight": 12
-          },
-          {
-            "pick": "JAX",
-            "weight": 10
-          },
-          {
-            "pick": "JAX",
-            "weight": 9
-          },
-          {
-            "pick": "JAX",
-            "weight": 12
-          },
-          {
-            "pick": "JAX",
-            "weight": 7
-          },
-          {
-            "pick": "JAX",
-            "weight": 14
-          },
-          {
-            "pick": "JAX",
-            "weight": 13
-          },
-          {
-            "pick": "JAX",
-            "weight": 12
+            "pick": "HOU",
+            "weight": 2
           },
           {
             "pick": "JAX",
@@ -517,11 +2703,23 @@
           },
           {
             "pick": "JAX",
-            "weight": 14
+            "weight": 13
           },
           {
             "pick": "JAX",
-            "weight": 11
+            "weight": 10
+          },
+          {
+            "pick": "JAX",
+            "weight": 8
+          },
+          {
+            "pick": "JAX",
+            "weight": 8
+          },
+          {
+            "pick": "JAX",
+            "weight": 7
           },
           {
             "pick": "JAX",
@@ -529,7 +2727,55 @@
           },
           {
             "pick": "JAX",
+            "weight": 10
+          },
+          {
+            "pick": "HOU",
+            "weight": 2
+          },
+          {
+            "pick": "JAX",
+            "weight": 13
+          },
+          {
+            "pick": "JAX",
+            "weight": 11
+          },
+          {
+            "pick": "JAX",
             "weight": 12
+          },
+          {
+            "pick": "HOU",
+            "weight": 11
+          },
+          {
+            "pick": "JAX",
+            "weight": 4
+          },
+          {
+            "pick": "JAX",
+            "weight": 8
+          },
+          {
+            "pick": "JAX",
+            "weight": 8
+          },
+          {
+            "pick": "JAX",
+            "weight": 7
+          },
+          {
+            "pick": "JAX",
+            "weight": 7
+          },
+          {
+            "pick": "JAX",
+            "weight": 13
+          },
+          {
+            "pick": "JAX",
+            "weight": 9
           },
           {
             "pick": "JAX",
@@ -541,23 +2787,11 @@
           },
           {
             "pick": "JAX",
-            "weight": 9
-          },
-          {
-            "pick": "JAX",
             "weight": 11
           },
           {
             "pick": "JAX",
-            "weight": 14
-          },
-          {
-            "pick": "JAX",
             "weight": 11
-          },
-          {
-            "pick": "JAX",
-            "weight": 9
           },
           {
             "pick": "JAX",
@@ -565,7 +2799,23 @@
           },
           {
             "pick": "JAX",
-            "weight": 6
+            "weight": 9
+          },
+          {
+            "pick": "JAX",
+            "weight": 12
+          },
+          {
+            "pick": "JAX",
+            "weight": 11
+          },
+          {
+            "pick": "JAX",
+            "weight": 9
+          },
+          {
+            "pick": "JAX",
+            "weight": 11
           },
           {
             "pick": "HOU",
@@ -573,6 +2823,1498 @@
           }
         ],
         "totalObserved": 87
+      },
+      {
+        "key": "CHI|ATL",
+        "gameId": "CHI-ATL",
+        "away": "CHI",
+        "home": "ATL",
+        "observations": [
+          {
+            "pick": "CHI",
+            "weight": 10
+          },
+          {
+            "pick": "CHI",
+            "weight": 11
+          },
+          {
+            "pick": "CHI",
+            "weight": 3
+          },
+          {
+            "pick": "CHI",
+            "weight": 4
+          },
+          {
+            "pick": "CHI",
+            "weight": 13
+          },
+          {
+            "pick": "CHI",
+            "weight": 9
+          },
+          {
+            "pick": "CHI",
+            "weight": 3
+          },
+          {
+            "pick": "CHI",
+            "weight": 12
+          },
+          {
+            "pick": "CHI",
+            "weight": 12
+          },
+          {
+            "pick": "ATL",
+            "weight": 1
+          },
+          {
+            "pick": "CHI",
+            "weight": 13
+          },
+          {
+            "pick": "CHI",
+            "weight": 6
+          },
+          {
+            "pick": "ATL",
+            "weight": 12
+          },
+          {
+            "pick": "CHI",
+            "weight": 11
+          },
+          {
+            "pick": "CHI",
+            "weight": 8
+          },
+          {
+            "pick": "ATL",
+            "weight": 8
+          },
+          {
+            "pick": "CHI",
+            "weight": 5
+          },
+          {
+            "pick": "CHI",
+            "weight": 4
+          },
+          {
+            "pick": "CHI",
+            "weight": 2
+          },
+          {
+            "pick": "ATL",
+            "weight": 6
+          },
+          {
+            "pick": "CHI",
+            "weight": 5
+          },
+          {
+            "pick": "CHI",
+            "weight": 7
+          },
+          {
+            "pick": "ATL",
+            "weight": 2
+          },
+          {
+            "pick": "ATL",
+            "weight": 10
+          },
+          {
+            "pick": "CHI",
+            "weight": 5
+          },
+          {
+            "pick": "CHI",
+            "weight": 8
+          },
+          {
+            "pick": "CHI",
+            "weight": 14
+          },
+          {
+            "pick": "CHI",
+            "weight": 13
+          },
+          {
+            "pick": "CHI",
+            "weight": 12
+          },
+          {
+            "pick": "CHI",
+            "weight": 10
+          },
+          {
+            "pick": "ATL",
+            "weight": 8
+          },
+          {
+            "pick": "ATL",
+            "weight": 2
+          },
+          {
+            "pick": "ATL",
+            "weight": 5
+          },
+          {
+            "pick": "ATL",
+            "weight": 3
+          },
+          {
+            "pick": "CHI",
+            "weight": 5
+          },
+          {
+            "pick": "ATL",
+            "weight": 13
+          },
+          {
+            "pick": "ATL",
+            "weight": 5
+          },
+          {
+            "pick": "CHI",
+            "weight": 12
+          },
+          {
+            "pick": "CHI",
+            "weight": 2
+          },
+          {
+            "pick": "CHI",
+            "weight": 8
+          },
+          {
+            "pick": "CHI",
+            "weight": 5
+          },
+          {
+            "pick": "CHI",
+            "weight": 11
+          },
+          {
+            "pick": "CHI",
+            "weight": 3
+          },
+          {
+            "pick": "CHI",
+            "weight": 6
+          },
+          {
+            "pick": "CHI",
+            "weight": 8
+          },
+          {
+            "pick": "CHI",
+            "weight": 10
+          },
+          {
+            "pick": "CHI",
+            "weight": 10
+          },
+          {
+            "pick": "CHI",
+            "weight": 10
+          },
+          {
+            "pick": "CHI",
+            "weight": 5
+          },
+          {
+            "pick": "CHI",
+            "weight": 9
+          },
+          {
+            "pick": "ATL",
+            "weight": 7
+          },
+          {
+            "pick": "CHI",
+            "weight": 5
+          },
+          {
+            "pick": "CHI",
+            "weight": 7
+          },
+          {
+            "pick": "CHI",
+            "weight": 2
+          },
+          {
+            "pick": "CHI",
+            "weight": 5
+          },
+          {
+            "pick": "CHI",
+            "weight": 7
+          },
+          {
+            "pick": "ATL",
+            "weight": 6
+          },
+          {
+            "pick": "CHI",
+            "weight": 6
+          },
+          {
+            "pick": "CHI",
+            "weight": 3
+          },
+          {
+            "pick": "ATL",
+            "weight": 7
+          },
+          {
+            "pick": "CHI",
+            "weight": 4
+          },
+          {
+            "pick": "CHI",
+            "weight": 1
+          },
+          {
+            "pick": "CHI",
+            "weight": 6
+          },
+          {
+            "pick": "CHI",
+            "weight": 3
+          },
+          {
+            "pick": "CHI",
+            "weight": 1
+          },
+          {
+            "pick": "CHI",
+            "weight": 1
+          },
+          {
+            "pick": "CHI",
+            "weight": 9
+          },
+          {
+            "pick": "ATL",
+            "weight": 3
+          },
+          {
+            "pick": "ATL",
+            "weight": 12
+          },
+          {
+            "pick": "ATL",
+            "weight": 12
+          },
+          {
+            "pick": "ATL",
+            "weight": 5
+          },
+          {
+            "pick": "ATL",
+            "weight": 4
+          },
+          {
+            "pick": "ATL",
+            "weight": 10
+          },
+          {
+            "pick": "CHI",
+            "weight": 2
+          },
+          {
+            "pick": "ATL",
+            "weight": 1
+          },
+          {
+            "pick": "CHI",
+            "weight": 2
+          },
+          {
+            "pick": "ATL",
+            "weight": 1
+          },
+          {
+            "pick": "ATL",
+            "weight": 3
+          },
+          {
+            "pick": "CHI",
+            "weight": 3
+          },
+          {
+            "pick": "CHI",
+            "weight": 4
+          },
+          {
+            "pick": "ATL",
+            "weight": 1
+          },
+          {
+            "pick": "ATL",
+            "weight": 1
+          },
+          {
+            "pick": "ATL",
+            "weight": 1
+          },
+          {
+            "pick": "ATL",
+            "weight": 3
+          },
+          {
+            "pick": "ATL",
+            "weight": 12
+          },
+          {
+            "pick": "ATL",
+            "weight": 7
+          },
+          {
+            "pick": "CHI",
+            "weight": 1
+          },
+          {
+            "pick": "ATL",
+            "weight": 10
+          },
+          {
+            "pick": "ATL",
+            "weight": 6
+          },
+          {
+            "pick": "ATL",
+            "weight": 8
+          },
+          {
+            "pick": "CHI",
+            "weight": 4
+          }
+        ],
+        "totalObserved": 91
+      },
+      {
+        "key": "BAL|CLE",
+        "gameId": "BAL-CLE",
+        "away": "BAL",
+        "home": "CLE",
+        "observations": [
+          {
+            "pick": "BAL",
+            "weight": 8
+          },
+          {
+            "pick": "CLE",
+            "weight": 4
+          },
+          {
+            "pick": "CLE",
+            "weight": 8
+          },
+          {
+            "pick": "CLE",
+            "weight": 5
+          },
+          {
+            "pick": "BAL",
+            "weight": 12
+          },
+          {
+            "pick": "BAL",
+            "weight": 10
+          },
+          {
+            "pick": "CLE",
+            "weight": 2
+          },
+          {
+            "pick": "CLE",
+            "weight": 11
+          },
+          {
+            "pick": "CLE",
+            "weight": 11
+          },
+          {
+            "pick": "CLE",
+            "weight": 6
+          },
+          {
+            "pick": "BAL",
+            "weight": 12
+          },
+          {
+            "pick": "CLE",
+            "weight": 1
+          },
+          {
+            "pick": "CLE",
+            "weight": 11
+          },
+          {
+            "pick": "CLE",
+            "weight": 10
+          },
+          {
+            "pick": "BAL",
+            "weight": 6
+          },
+          {
+            "pick": "BAL",
+            "weight": 12
+          },
+          {
+            "pick": "BAL",
+            "weight": 8
+          },
+          {
+            "pick": "BAL",
+            "weight": 11
+          },
+          {
+            "pick": "BAL",
+            "weight": 8
+          },
+          {
+            "pick": "CLE",
+            "weight": 5
+          },
+          {
+            "pick": "BAL",
+            "weight": 10
+          },
+          {
+            "pick": "CLE",
+            "weight": 8
+          },
+          {
+            "pick": "CLE",
+            "weight": 3
+          },
+          {
+            "pick": "CLE",
+            "weight": 4
+          },
+          {
+            "pick": "BAL",
+            "weight": 13
+          },
+          {
+            "pick": "BAL",
+            "weight": 7
+          },
+          {
+            "pick": "BAL",
+            "weight": 13
+          },
+          {
+            "pick": "BAL",
+            "weight": 11
+          },
+          {
+            "pick": "BAL",
+            "weight": 9
+          },
+          {
+            "pick": "BAL",
+            "weight": 8
+          },
+          {
+            "pick": "CLE",
+            "weight": 2
+          },
+          {
+            "pick": "BAL",
+            "weight": 9
+          },
+          {
+            "pick": "CLE",
+            "weight": 2
+          },
+          {
+            "pick": "BAL",
+            "weight": 8
+          },
+          {
+            "pick": "BAL",
+            "weight": 8
+          },
+          {
+            "pick": "CLE",
+            "weight": 12
+          },
+          {
+            "pick": "CLE",
+            "weight": 6
+          },
+          {
+            "pick": "BAL",
+            "weight": 11
+          },
+          {
+            "pick": "BAL",
+            "weight": 7
+          },
+          {
+            "pick": "BAL",
+            "weight": 11
+          },
+          {
+            "pick": "BAL",
+            "weight": 6
+          },
+          {
+            "pick": "BAL",
+            "weight": 13
+          },
+          {
+            "pick": "BAL",
+            "weight": 9
+          },
+          {
+            "pick": "BAL",
+            "weight": 8
+          },
+          {
+            "pick": "BAL",
+            "weight": 6
+          },
+          {
+            "pick": "BAL",
+            "weight": 8
+          },
+          {
+            "pick": "BAL",
+            "weight": 6
+          },
+          {
+            "pick": "BAL",
+            "weight": 9
+          },
+          {
+            "pick": "BAL",
+            "weight": 9
+          },
+          {
+            "pick": "CLE",
+            "weight": 2
+          },
+          {
+            "pick": "BAL",
+            "weight": 8
+          },
+          {
+            "pick": "BAL",
+            "weight": 8
+          },
+          {
+            "pick": "BAL",
+            "weight": 12
+          },
+          {
+            "pick": "BAL",
+            "weight": 7
+          },
+          {
+            "pick": "BAL",
+            "weight": 8
+          },
+          {
+            "pick": "BAL",
+            "weight": 13
+          },
+          {
+            "pick": "BAL",
+            "weight": 11
+          },
+          {
+            "pick": "BAL",
+            "weight": 8
+          },
+          {
+            "pick": "BAL",
+            "weight": 8
+          },
+          {
+            "pick": "CLE",
+            "weight": 6
+          },
+          {
+            "pick": "BAL",
+            "weight": 8
+          },
+          {
+            "pick": "BAL",
+            "weight": 7
+          },
+          {
+            "pick": "CLE",
+            "weight": 1
+          },
+          {
+            "pick": "BAL",
+            "weight": 8
+          },
+          {
+            "pick": "BAL",
+            "weight": 9
+          },
+          {
+            "pick": "BAL",
+            "weight": 5
+          },
+          {
+            "pick": "BAL",
+            "weight": 1
+          },
+          {
+            "pick": "BAL",
+            "weight": 7
+          },
+          {
+            "pick": "BAL",
+            "weight": 11
+          },
+          {
+            "pick": "CLE",
+            "weight": 8
+          },
+          {
+            "pick": "BAL",
+            "weight": 12
+          },
+          {
+            "pick": "BAL",
+            "weight": 9
+          },
+          {
+            "pick": "BAL",
+            "weight": 9
+          },
+          {
+            "pick": "BAL",
+            "weight": 8
+          },
+          {
+            "pick": "BAL",
+            "weight": 7
+          },
+          {
+            "pick": "BAL",
+            "weight": 7
+          },
+          {
+            "pick": "BAL",
+            "weight": 9
+          },
+          {
+            "pick": "CLE",
+            "weight": 1
+          },
+          {
+            "pick": "BAL",
+            "weight": 11
+          },
+          {
+            "pick": "BAL",
+            "weight": 1
+          },
+          {
+            "pick": "BAL",
+            "weight": 7
+          },
+          {
+            "pick": "BAL",
+            "weight": 4
+          },
+          {
+            "pick": "BAL",
+            "weight": 8
+          },
+          {
+            "pick": "BAL",
+            "weight": 5
+          },
+          {
+            "pick": "BAL",
+            "weight": 11
+          },
+          {
+            "pick": "BAL",
+            "weight": 5
+          },
+          {
+            "pick": "BAL",
+            "weight": 8
+          },
+          {
+            "pick": "BAL",
+            "weight": 9
+          },
+          {
+            "pick": "BAL",
+            "weight": 10
+          },
+          {
+            "pick": "BAL",
+            "weight": 7
+          },
+          {
+            "pick": "BAL",
+            "weight": 5
+          }
+        ],
+        "totalObserved": 91
+      },
+      {
+        "key": "TEN|IND",
+        "gameId": "TEN-IND",
+        "away": "TEN",
+        "home": "IND",
+        "observations": [
+          {
+            "pick": "IND",
+            "weight": 3
+          },
+          {
+            "pick": "TEN",
+            "weight": 5
+          },
+          {
+            "pick": "IND",
+            "weight": 5
+          },
+          {
+            "pick": "TEN",
+            "weight": 1
+          },
+          {
+            "pick": "IND",
+            "weight": 11
+          },
+          {
+            "pick": "IND",
+            "weight": 11
+          },
+          {
+            "pick": "IND",
+            "weight": 12
+          },
+          {
+            "pick": "IND",
+            "weight": 10
+          },
+          {
+            "pick": "IND",
+            "weight": 10
+          },
+          {
+            "pick": "IND",
+            "weight": 11
+          },
+          {
+            "pick": "IND",
+            "weight": 11
+          },
+          {
+            "pick": "IND",
+            "weight": 8
+          },
+          {
+            "pick": "TEN",
+            "weight": 5
+          },
+          {
+            "pick": "IND",
+            "weight": 8
+          },
+          {
+            "pick": "IND",
+            "weight": 5
+          },
+          {
+            "pick": "IND",
+            "weight": 11
+          },
+          {
+            "pick": "IND",
+            "weight": 7
+          },
+          {
+            "pick": "IND",
+            "weight": 13
+          },
+          {
+            "pick": "IND",
+            "weight": 9
+          },
+          {
+            "pick": "IND",
+            "weight": 11
+          },
+          {
+            "pick": "IND",
+            "weight": 12
+          },
+          {
+            "pick": "IND",
+            "weight": 10
+          },
+          {
+            "pick": "IND",
+            "weight": 11
+          },
+          {
+            "pick": "IND",
+            "weight": 12
+          },
+          {
+            "pick": "IND",
+            "weight": 10
+          },
+          {
+            "pick": "IND",
+            "weight": 10
+          },
+          {
+            "pick": "IND",
+            "weight": 12
+          },
+          {
+            "pick": "IND",
+            "weight": 1
+          },
+          {
+            "pick": "IND",
+            "weight": 10
+          },
+          {
+            "pick": "IND",
+            "weight": 14
+          },
+          {
+            "pick": "IND",
+            "weight": 9
+          },
+          {
+            "pick": "IND",
+            "weight": 3
+          },
+          {
+            "pick": "IND",
+            "weight": 12
+          },
+          {
+            "pick": "IND",
+            "weight": 7
+          },
+          {
+            "pick": "IND",
+            "weight": 9
+          },
+          {
+            "pick": "IND",
+            "weight": 11
+          },
+          {
+            "pick": "IND",
+            "weight": 7
+          },
+          {
+            "pick": "IND",
+            "weight": 10
+          },
+          {
+            "pick": "IND",
+            "weight": 10
+          },
+          {
+            "pick": "IND",
+            "weight": 7
+          },
+          {
+            "pick": "IND",
+            "weight": 10
+          },
+          {
+            "pick": "IND",
+            "weight": 10
+          },
+          {
+            "pick": "IND",
+            "weight": 13
+          },
+          {
+            "pick": "IND",
+            "weight": 10
+          },
+          {
+            "pick": "IND",
+            "weight": 4
+          },
+          {
+            "pick": "IND",
+            "weight": 5
+          },
+          {
+            "pick": "IND",
+            "weight": 5
+          },
+          {
+            "pick": "IND",
+            "weight": 7
+          },
+          {
+            "pick": "IND",
+            "weight": 8
+          },
+          {
+            "pick": "IND",
+            "weight": 8
+          },
+          {
+            "pick": "IND",
+            "weight": 11
+          },
+          {
+            "pick": "IND",
+            "weight": 10
+          },
+          {
+            "pick": "IND",
+            "weight": 9
+          },
+          {
+            "pick": "IND",
+            "weight": 14
+          },
+          {
+            "pick": "IND",
+            "weight": 11
+          },
+          {
+            "pick": "IND",
+            "weight": 12
+          },
+          {
+            "pick": "IND",
+            "weight": 10
+          },
+          {
+            "pick": "IND",
+            "weight": 5
+          },
+          {
+            "pick": "IND",
+            "weight": 10
+          },
+          {
+            "pick": "IND",
+            "weight": 14
+          },
+          {
+            "pick": "IND",
+            "weight": 7
+          },
+          {
+            "pick": "IND",
+            "weight": 11
+          },
+          {
+            "pick": "IND",
+            "weight": 9
+          },
+          {
+            "pick": "IND",
+            "weight": 10
+          },
+          {
+            "pick": "IND",
+            "weight": 8
+          },
+          {
+            "pick": "IND",
+            "weight": 10
+          },
+          {
+            "pick": "IND",
+            "weight": 6
+          },
+          {
+            "pick": "IND",
+            "weight": 9
+          },
+          {
+            "pick": "IND",
+            "weight": 10
+          },
+          {
+            "pick": "IND",
+            "weight": 9
+          },
+          {
+            "pick": "IND",
+            "weight": 4
+          },
+          {
+            "pick": "IND",
+            "weight": 8
+          },
+          {
+            "pick": "IND",
+            "weight": 7
+          },
+          {
+            "pick": "IND",
+            "weight": 10
+          },
+          {
+            "pick": "IND",
+            "weight": 10
+          },
+          {
+            "pick": "IND",
+            "weight": 11
+          },
+          {
+            "pick": "IND",
+            "weight": 11
+          },
+          {
+            "pick": "IND",
+            "weight": 10
+          },
+          {
+            "pick": "IND",
+            "weight": 10
+          },
+          {
+            "pick": "IND",
+            "weight": 8
+          },
+          {
+            "pick": "IND",
+            "weight": 10
+          },
+          {
+            "pick": "IND",
+            "weight": 6
+          },
+          {
+            "pick": "IND",
+            "weight": 7
+          },
+          {
+            "pick": "IND",
+            "weight": 12
+          },
+          {
+            "pick": "IND",
+            "weight": 10
+          },
+          {
+            "pick": "IND",
+            "weight": 3
+          },
+          {
+            "pick": "IND",
+            "weight": 9
+          },
+          {
+            "pick": "IND",
+            "weight": 8
+          },
+          {
+            "pick": "IND",
+            "weight": 11
+          },
+          {
+            "pick": "IND",
+            "weight": 12
+          },
+          {
+            "pick": "TEN",
+            "weight": 1
+          }
+        ],
+        "totalObserved": 91
+      },
+      {
+        "key": "NYJ|NE",
+        "gameId": "NYJ-NE",
+        "away": "NYJ",
+        "home": "NE",
+        "observations": [
+          {
+            "pick": "NE",
+            "weight": 5
+          },
+          {
+            "pick": "NE",
+            "weight": 10
+          },
+          {
+            "pick": "NE",
+            "weight": 13
+          },
+          {
+            "pick": "NE",
+            "weight": 11
+          },
+          {
+            "pick": "NE",
+            "weight": 10
+          },
+          {
+            "pick": "NE",
+            "weight": 13
+          },
+          {
+            "pick": "NE",
+            "weight": 13
+          },
+          {
+            "pick": "NE",
+            "weight": 9
+          },
+          {
+            "pick": "NE",
+            "weight": 9
+          },
+          {
+            "pick": "NE",
+            "weight": 12
+          },
+          {
+            "pick": "NE",
+            "weight": 10
+          },
+          {
+            "pick": "NE",
+            "weight": 11
+          },
+          {
+            "pick": "NYJ",
+            "weight": 4
+          },
+          {
+            "pick": "NE",
+            "weight": 7
+          },
+          {
+            "pick": "NE",
+            "weight": 11
+          },
+          {
+            "pick": "NE",
+            "weight": 6
+          },
+          {
+            "pick": "NE",
+            "weight": 14
+          },
+          {
+            "pick": "NE",
+            "weight": 12
+          },
+          {
+            "pick": "NE",
+            "weight": 11
+          },
+          {
+            "pick": "NE",
+            "weight": 14
+          },
+          {
+            "pick": "NE",
+            "weight": 11
+          },
+          {
+            "pick": "NE",
+            "weight": 6
+          },
+          {
+            "pick": "NE",
+            "weight": 14
+          },
+          {
+            "pick": "NE",
+            "weight": 13
+          },
+          {
+            "pick": "NE",
+            "weight": 9
+          },
+          {
+            "pick": "NE",
+            "weight": 9
+          },
+          {
+            "pick": "NE",
+            "weight": 11
+          },
+          {
+            "pick": "NE",
+            "weight": 10
+          },
+          {
+            "pick": "NE",
+            "weight": 7
+          },
+          {
+            "pick": "NE",
+            "weight": 7
+          },
+          {
+            "pick": "NE",
+            "weight": 13
+          },
+          {
+            "pick": "NE",
+            "weight": 11
+          },
+          {
+            "pick": "NE",
+            "weight": 9
+          },
+          {
+            "pick": "NE",
+            "weight": 10
+          },
+          {
+            "pick": "NE",
+            "weight": 7
+          },
+          {
+            "pick": "NE",
+            "weight": 10
+          },
+          {
+            "pick": "NE",
+            "weight": 10
+          },
+          {
+            "pick": "NE",
+            "weight": 9
+          },
+          {
+            "pick": "NE",
+            "weight": 11
+          },
+          {
+            "pick": "NE",
+            "weight": 9
+          },
+          {
+            "pick": "NE",
+            "weight": 11
+          },
+          {
+            "pick": "NE",
+            "weight": 9
+          },
+          {
+            "pick": "NE",
+            "weight": 7
+          },
+          {
+            "pick": "NE",
+            "weight": 12
+          },
+          {
+            "pick": "NE",
+            "weight": 10
+          },
+          {
+            "pick": "NYJ",
+            "weight": 4
+          },
+          {
+            "pick": "NE",
+            "weight": 9
+          },
+          {
+            "pick": "NE",
+            "weight": 8
+          },
+          {
+            "pick": "NE",
+            "weight": 12
+          },
+          {
+            "pick": "NE",
+            "weight": 5
+          },
+          {
+            "pick": "NE",
+            "weight": 10
+          },
+          {
+            "pick": "NE",
+            "weight": 9
+          },
+          {
+            "pick": "NE",
+            "weight": 11
+          },
+          {
+            "pick": "NE",
+            "weight": 9
+          },
+          {
+            "pick": "NE",
+            "weight": 10
+          },
+          {
+            "pick": "NE",
+            "weight": 11
+          },
+          {
+            "pick": "NYJ",
+            "weight": 1
+          },
+          {
+            "pick": "NE",
+            "weight": 9
+          },
+          {
+            "pick": "NE",
+            "weight": 12
+          },
+          {
+            "pick": "NYJ",
+            "weight": 5
+          },
+          {
+            "pick": "NE",
+            "weight": 11
+          },
+          {
+            "pick": "NE",
+            "weight": 10
+          },
+          {
+            "pick": "NE",
+            "weight": 10
+          },
+          {
+            "pick": "NE",
+            "weight": 11
+          },
+          {
+            "pick": "NE",
+            "weight": 12
+          },
+          {
+            "pick": "NE",
+            "weight": 12
+          },
+          {
+            "pick": "NE",
+            "weight": 7
+          },
+          {
+            "pick": "NE",
+            "weight": 8
+          },
+          {
+            "pick": "NE",
+            "weight": 9
+          },
+          {
+            "pick": "NE",
+            "weight": 7
+          },
+          {
+            "pick": "NE",
+            "weight": 10
+          },
+          {
+            "pick": "NE",
+            "weight": 7
+          },
+          {
+            "pick": "NYJ",
+            "weight": 6
+          },
+          {
+            "pick": "NE",
+            "weight": 11
+          },
+          {
+            "pick": "NE",
+            "weight": 11
+          },
+          {
+            "pick": "NE",
+            "weight": 10
+          },
+          {
+            "pick": "NE",
+            "weight": 13
+          },
+          {
+            "pick": "NE",
+            "weight": 12
+          },
+          {
+            "pick": "NE",
+            "weight": 9
+          },
+          {
+            "pick": "NE",
+            "weight": 2
+          },
+          {
+            "pick": "NE",
+            "weight": 11
+          },
+          {
+            "pick": "NE",
+            "weight": 11
+          },
+          {
+            "pick": "NE",
+            "weight": 9
+          },
+          {
+            "pick": "NE",
+            "weight": 8
+          },
+          {
+            "pick": "NE",
+            "weight": 9
+          },
+          {
+            "pick": "NE",
+            "weight": 8
+          },
+          {
+            "pick": "NE",
+            "weight": 7
+          },
+          {
+            "pick": "NE",
+            "weight": 7
+          },
+          {
+            "pick": "NE",
+            "weight": 8
+          },
+          {
+            "pick": "NYJ",
+            "weight": 1
+          },
+          {
+            "pick": "NYJ",
+            "weight": 11
+          }
+        ],
+        "totalObserved": 91
       },
       {
         "key": "SEA|DEN",
@@ -585,128 +4327,16 @@
             "weight": 14
           },
           {
-            "pick": "DEN",
-            "weight": 9
-          },
-          {
-            "pick": "SEA",
-            "weight": 12
-          },
-          {
-            "pick": "DEN",
-            "weight": 9
-          },
-          {
-            "pick": "DEN",
-            "weight": 7
-          },
-          {
-            "pick": "SEA",
-            "weight": 8
-          },
-          {
-            "pick": "DEN",
-            "weight": 8
-          },
-          {
-            "pick": "DEN",
-            "weight": 8
-          },
-          {
-            "pick": "SEA",
-            "weight": 11
-          },
-          {
-            "pick": "SEA",
-            "weight": 2
-          },
-          {
-            "pick": "SEA",
-            "weight": 8
-          },
-          {
-            "pick": "DEN",
-            "weight": 1
-          },
-          {
-            "pick": "SEA",
-            "weight": 5
-          },
-          {
-            "pick": "DEN",
-            "weight": 3
-          },
-          {
-            "pick": "DEN",
-            "weight": 4
-          },
-          {
-            "pick": "DEN",
-            "weight": 3
-          },
-          {
-            "pick": "DEN",
-            "weight": 3
-          },
-          {
-            "pick": "DEN",
-            "weight": 3
-          },
-          {
-            "pick": "SEA",
-            "weight": 5
-          },
-          {
-            "pick": "DEN",
-            "weight": 2
-          },
-          {
-            "pick": "SEA",
-            "weight": 8
-          },
-          {
-            "pick": "SEA",
-            "weight": 1
-          },
-          {
-            "pick": "SEA",
-            "weight": 1
-          },
-          {
-            "pick": "SEA",
-            "weight": 9
-          },
-          {
-            "pick": "DEN",
-            "weight": 1
-          },
-          {
-            "pick": "SEA",
-            "weight": 7
-          },
-          {
-            "pick": "DEN",
-            "weight": 1
-          },
-          {
-            "pick": "SEA",
-            "weight": 7
-          },
-          {
-            "pick": "SEA",
-            "weight": 3
-          },
-          {
-            "pick": "SEA",
-            "weight": 3
-          },
-          {
             "pick": "SEA",
             "weight": 14
           },
           {
+            "pick": "DEN",
+            "weight": 1
+          },
+          {
             "pick": "SEA",
-            "weight": 5
+            "weight": 8
           },
           {
             "pick": "SEA",
@@ -714,23 +4344,11 @@
           },
           {
             "pick": "SEA",
-            "weight": 7
+            "weight": 8
           },
           {
             "pick": "SEA",
-            "weight": 13
-          },
-          {
-            "pick": "SEA",
-            "weight": 4
-          },
-          {
-            "pick": "SEA",
-            "weight": 12
-          },
-          {
-            "pick": "SEA",
-            "weight": 4
+            "weight": 14
           },
           {
             "pick": "SEA",
@@ -742,39 +4360,7 @@
           },
           {
             "pick": "SEA",
-            "weight": 7
-          },
-          {
-            "pick": "SEA",
-            "weight": 5
-          },
-          {
-            "pick": "SEA",
-            "weight": 10
-          },
-          {
-            "pick": "SEA",
-            "weight": 8
-          },
-          {
-            "pick": "SEA",
-            "weight": 6
-          },
-          {
-            "pick": "SEA",
-            "weight": 3
-          },
-          {
-            "pick": "SEA",
-            "weight": 2
-          },
-          {
-            "pick": "SEA",
-            "weight": 7
-          },
-          {
-            "pick": "SEA",
-            "weight": 6
+            "weight": 4
           },
           {
             "pick": "SEA",
@@ -782,7 +4368,27 @@
           },
           {
             "pick": "SEA",
+            "weight": 2
+          },
+          {
+            "pick": "SEA",
             "weight": 13
+          },
+          {
+            "pick": "SEA",
+            "weight": 12
+          },
+          {
+            "pick": "DEN",
+            "weight": 9
+          },
+          {
+            "pick": "SEA",
+            "weight": 9
+          },
+          {
+            "pick": "DEN",
+            "weight": 9
           },
           {
             "pick": "SEA",
@@ -791,26 +4397,6 @@
           {
             "pick": "SEA",
             "weight": 7
-          },
-          {
-            "pick": "SEA",
-            "weight": 1
-          },
-          {
-            "pick": "SEA",
-            "weight": 4
-          },
-          {
-            "pick": "SEA",
-            "weight": 3
-          },
-          {
-            "pick": "SEA",
-            "weight": 5
-          },
-          {
-            "pick": "SEA",
-            "weight": 6
           },
           {
             "pick": "SEA",
@@ -822,7 +4408,19 @@
           },
           {
             "pick": "SEA",
-            "weight": 6
+            "weight": 7
+          },
+          {
+            "pick": "SEA",
+            "weight": 7
+          },
+          {
+            "pick": "DEN",
+            "weight": 3
+          },
+          {
+            "pick": "SEA",
+            "weight": 14
           },
           {
             "pick": "SEA",
@@ -830,39 +4428,51 @@
           },
           {
             "pick": "SEA",
-            "weight": 14
+            "weight": 13
           },
           {
-            "pick": "SEA",
-            "weight": 7
-          },
-          {
-            "pick": "SEA",
-            "weight": 11
-          },
-          {
-            "pick": "SEA",
-            "weight": 14
-          },
-          {
-            "pick": "SEA",
-            "weight": 7
-          },
-          {
-            "pick": "SEA",
-            "weight": 4
-          },
-          {
-            "pick": "SEA",
-            "weight": 4
-          },
-          {
-            "pick": "SEA",
-            "weight": 14
+            "pick": "DEN",
+            "weight": 3
           },
           {
             "pick": "SEA",
             "weight": 8
+          },
+          {
+            "pick": "DEN",
+            "weight": 8
+          },
+          {
+            "pick": "DEN",
+            "weight": 1
+          },
+          {
+            "pick": "DEN",
+            "weight": 3
+          },
+          {
+            "pick": "SEA",
+            "weight": 4
+          },
+          {
+            "pick": "SEA",
+            "weight": 8
+          },
+          {
+            "pick": "SEA",
+            "weight": 14
+          },
+          {
+            "pick": "SEA",
+            "weight": 6
+          },
+          {
+            "pick": "SEA",
+            "weight": 14
+          },
+          {
+            "pick": "DEN",
+            "weight": 4
           },
           {
             "pick": "SEA",
@@ -870,7 +4480,35 @@
           },
           {
             "pick": "SEA",
+            "weight": 5
+          },
+          {
+            "pick": "SEA",
+            "weight": 5
+          },
+          {
+            "pick": "DEN",
+            "weight": 1
+          },
+          {
+            "pick": "SEA",
+            "weight": 11
+          },
+          {
+            "pick": "SEA",
             "weight": 8
+          },
+          {
+            "pick": "SEA",
+            "weight": 6
+          },
+          {
+            "pick": "SEA",
+            "weight": 1
+          },
+          {
+            "pick": "SEA",
+            "weight": 14
           },
           {
             "pick": "SEA",
@@ -878,7 +4516,59 @@
           },
           {
             "pick": "SEA",
-            "weight": 14
+            "weight": 5
+          },
+          {
+            "pick": "SEA",
+            "weight": 3
+          },
+          {
+            "pick": "SEA",
+            "weight": 7
+          },
+          {
+            "pick": "SEA",
+            "weight": 1
+          },
+          {
+            "pick": "DEN",
+            "weight": 7
+          },
+          {
+            "pick": "SEA",
+            "weight": 7
+          },
+          {
+            "pick": "SEA",
+            "weight": 4
+          },
+          {
+            "pick": "DEN",
+            "weight": 8
+          },
+          {
+            "pick": "DEN",
+            "weight": 2
+          },
+          {
+            "pick": "SEA",
+            "weight": 3
+          },
+          {
+            "pick": "SEA",
+            "weight": 4
+          },
+          {
+            "pick": "SEA",
+            "weight": 5
+          },
+          {
+            "pick": "SEA",
+            "weight": 5
+          },
+          {
+            "pick": "SEA",
+            "weight": 6
           },
           {
             "pick": "SEA",
@@ -886,11 +4576,7 @@
           },
           {
             "pick": "SEA",
-            "weight": 14
-          },
-          {
-            "pick": "SEA",
-            "weight": 13
+            "weight": 1
           },
           {
             "pick": "SEA",
@@ -901,12 +4587,64 @@
             "weight": 10
           },
           {
+            "pick": "DEN",
+            "weight": 3
+          },
+          {
+            "pick": "SEA",
+            "weight": 13
+          },
+          {
             "pick": "SEA",
             "weight": 12
           },
           {
             "pick": "SEA",
+            "weight": 7
+          },
+          {
+            "pick": "SEA",
             "weight": 4
+          },
+          {
+            "pick": "SEA",
+            "weight": 4
+          },
+          {
+            "pick": "SEA",
+            "weight": 3
+          },
+          {
+            "pick": "SEA",
+            "weight": 8
+          },
+          {
+            "pick": "SEA",
+            "weight": 14
+          },
+          {
+            "pick": "SEA",
+            "weight": 11
+          },
+          {
+            "pick": "SEA",
+            "weight": 3
+          },
+          {
+            "pick": "SEA",
+            "weight": 7
+          },
+          {
+            "pick": "SEA",
+            "weight": 6
+          },
+          {
+            "pick": "SEA",
+            "weight": 7
+          },
+          {
+            "pick": "SEA",
+            "weight": 14
           },
           {
             "pick": "SEA",
@@ -918,11 +4656,15 @@
           },
           {
             "pick": "SEA",
-            "weight": 14
+            "weight": 12
           },
           {
             "pick": "SEA",
-            "weight": 14
+            "weight": 2
+          },
+          {
+            "pick": "SEA",
+            "weight": 10
           },
           {
             "pick": "SEA",
@@ -937,45 +4679,45 @@
     {
       "title": "NFL Football Tourney | Picks",
       "url": "sanitized://cbs-pickem/week-6",
-      "ts": "2026-10-18T16:53:52.955149Z",
-      "text": "CBS Pickem sanitized ownership\n0-0\nHOU\n11%\n0-0\nJAX\n89%\n0-0\nCHI\n62%\n0-0\nATL\n38%\n0-0\nBAL\n87%\n0-0\nCLE\n13%\n0-0\nTEN\n4%\n0-0\nIND\n96%\n0-0\nNYJ\n4%\n0-0\nNE\n96%\n0-0\nNO\n22%\n0-0\nNYG\n78%\n0-0\nCAR\n54%\n0-0\nPHI\n46%\n0-0\nPIT\n85%\n0-0\nTB\n15%\n0-0\nARI\n2%\n0-0\nLAR\n98%\n0-0\nLAC\n3%\n0-0\nKC\n97%\n0-0\nBUF\n93%\n0-0\nLV\n7%\n0-0\nDAL\n22%\n0-0\nGB\n78%\n0-0\nSEA\n72%\n0-0\nDEN\n28%\n0-0\nWAS\n2%\n0-0\nSF\n98%"
+      "ts": "2026-10-18T20:30:07.414008Z",
+      "text": "CBS Pickem sanitized ownership\n0-0\nNO\n22%\n0-0\nNYG\n78%\n0-0\nCAR\n54%\n0-0\nPHI\n46%\n0-0\nPIT\n85%\n0-0\nTB\n15%\n0-0\nARI\n2%\n0-0\nLAR\n98%\n0-0\nLAC\n3%\n0-0\nKC\n97%\n0-0\nBUF\n93%\n0-0\nLV\n7%\n0-0\nHOU\n11%\n0-0\nJAX\n89%\n0-0\nCHI\n62%\n0-0\nATL\n38%\n0-0\nBAL\n87%\n0-0\nCLE\n13%\n0-0\nTEN\n4%\n0-0\nIND\n96%\n0-0\nNYJ\n4%\n0-0\nNE\n96%\n0-0\nDAL\n22%\n0-0\nGB\n78%\n0-0\nSEA\n72%\n0-0\nDEN\n28%\n0-0\nWAS\n2%\n0-0\nSF\n98%"
     },
     {
       "title": "NFL Football Tourney | Weekly Standings",
       "url": "sanitized://cbs-pickem/week-6/standings/weekly",
-      "ts": "2026-10-18T16:53:58.628311Z",
-      "text": "Weekly Standings\nSanitized observations\nSUN\nHOU\nJAX\nSUN\nCHI\nATL\nSUN\nBAL\nCLE\nSUN\nTEN\nIND\nSUN\nNYJ\nNE\nSUN\nNO\nNYG\nSUN\nCAR\nPHI\nSUN\nPIT\nTB\nSUN\nARI\nLAR\nSUN\nLAC\nKC\nSUN\nBUF\nLV\nSUN\nDAL\nGB\nSUN\nSEA\nDEN\nSUN\nWAS\nSF\nHOU\n(13)\nHOU\n(13)\nHOU\n(11)\nJAX\n(5)\nHOU\n(2)\nHOU\n(9)\nJAX\n(7)\nJAX\n(13)\nHOU\n(6)\nHOU\n(6)\nHOU\n(5)\nHOU\n(5)\nHOU\n(4)\nHOU\n(4)\nHOU\n(1)\nJAX\n(13)\nJAX\n(11)\nJAX\n(2)\nJAX\n(10)\nHOU\n(3)\nHOU\n(3)\nJAX\n(10)\nHOU\n(2)\nHOU\n(2)\nHOU\n(2)\nHOU\n(2)\nJAX\n(11)\nHOU\n(1)\nJAX\n(5)\nJAX\n(11)\nJAX\n(8)\nJAX\n(8)\nJAX\n(13)\nJAX\n(11)\nJAX\n(2)\nJAX\n(7)\nJAX\n(4)\nJAX\n(12)\nJAX\n(8)\nJAX\n(14)\nJAX\n(8)\nJAX\n(13)\nJAX\n(10)\nJAX\n(13)\nJAX\n(7)\nJAX\n(11)\nJAX\n(5)\nJAX\n(4)\nJAX\n(12)\nJAX\n(6)\nJAX\n(11)\nJAX\n(3)\nJAX\n(12)\nJAX\n(3)\nJAX\n(8)\nJAX\n(14)\nJAX\n(8)\nJAX\n(7)\nJAX\n(9)\nJAX\n(7)\nJAX\n(9)\nJAX\n(12)\nJAX\n(12)\nJAX\n(12)\nJAX\n(10)\nJAX\n(9)\nJAX\n(12)\nJAX\n(7)\nJAX\n(14)\nJAX\n(13)\nJAX\n(12)\nJAX\n(10)\nJAX\n(7)\nJAX\n(14)\nJAX\n(11)\nJAX\n(9)\nJAX\n(12)\nJAX\n(8)\nJAX\n(13)\nJAX\n(9)\nJAX\n(11)\nJAX\n(14)\nJAX\n(11)\nJAX\n(9)\nJAX\n(13)\nJAX\n(6)\nHOU\n(2)\nDEN\n(14)\nDEN\n(9)\nSEA\n(12)\nDEN\n(9)\nDEN\n(7)\nSEA\n(8)\nDEN\n(8)\nDEN\n(8)\nSEA\n(11)\nSEA\n(2)\nSEA\n(8)\nDEN\n(1)\nSEA\n(5)\nDEN\n(3)\nDEN\n(4)\nDEN\n(3)\nDEN\n(3)\nDEN\n(3)\nSEA\n(5)\nDEN\n(2)\nSEA\n(8)\nSEA\n(1)\nSEA\n(1)\nSEA\n(9)\nDEN\n(1)\nSEA\n(7)\nDEN\n(1)\nSEA\n(7)\nSEA\n(3)\nSEA\n(3)\nSEA\n(14)\nSEA\n(5)\nSEA\n(5)\nSEA\n(7)\nSEA\n(13)\nSEA\n(4)\nSEA\n(12)\nSEA\n(4)\nSEA\n(14)\nSEA\n(8)\nSEA\n(7)\nSEA\n(5)\nSEA\n(10)\nSEA\n(8)\nSEA\n(6)\nSEA\n(3)\nSEA\n(2)\nSEA\n(7)\nSEA\n(6)\nSEA\n(9)\nSEA\n(13)\nSEA\n(5)\nSEA\n(7)\nSEA\n(1)\nSEA\n(4)\nSEA\n(3)\nSEA\n(5)\nSEA\n(6)\nSEA\n(8)\nSEA\n(11)\nSEA\n(6)\nSEA\n(13)\nSEA\n(14)\nSEA\n(7)\nSEA\n(11)\nSEA\n(14)\nSEA\n(7)\nSEA\n(4)\nSEA\n(4)\nSEA\n(14)\nSEA\n(8)\nSEA\n(12)\nSEA\n(8)\nSEA\n(5)\nSEA\n(14)\nSEA\n(8)\nSEA\n(14)\nSEA\n(13)\nSEA\n(14)\nSEA\n(10)\nSEA\n(12)\nSEA\n(4)\nSEA\n(10)\nSEA\n(2)\nSEA\n(14)\nSEA\n(14)\nSEA\n(8)"
+      "ts": "2026-10-18T20:30:13.002042Z",
+      "text": "Weekly Standings\nSanitized observations\nSUN\nNO\nNYG\nSUN\nCAR\nPHI\nSUN\nPIT\nTB\nSUN\nARI\nLAR\nSUN\nLAC\nKC\nSUN\nBUF\nLV\nSUN\nHOU\nJAX\nSUN\nCHI\nATL\nSUN\nBAL\nCLE\nSUN\nTEN\nIND\nSUN\nNYJ\nNE\nSUN\nDAL\nGB\nSUN\nSEA\nDEN\nSUN\nWAS\nSF\nNO\n(11)\nNO\n(9)\nNO\n(7)\nNO\n(7)\nNO\n(9)\nNO\n(6)\nNYG\n(7)\nNYG\n(8)\nNYG\n(8)\nNYG\n(2)\nNYG\n(9)\nNO\n(5)\nNYG\n(10)\nNYG\n(6)\nNYG\n(4)\nNYG\n(5)\nNO\n(3)\nNYG\n(10)\nNO\n(6)\nNO\n(4)\nNO\n(4)\nNYG\n(13)\nNO\n(9)\nNO\n(6)\nNO\n(4)\nNYG\n(6)\nNYG\n(10)\nNO\n(2)\nNYG\n(6)\nNO\n(6)\nNYG\n(10)\nNYG\n(4)\nNYG\n(6)\nNYG\n(2)\nNO\n(1)\nNYG\n(9)\nNO\n(4)\nNYG\n(8)\nNYG\n(1)\nNO\n(3)\nNYG\n(9)\nNYG\n(8)\nNYG\n(2)\nNO\n(1)\nNYG\n(3)\nNYG\n(7)\nNYG\n(4)\nNYG\n(2)\nNYG\n(7)\nNYG\n(10)\nNYG\n(2)\nNYG\n(7)\nNYG\n(6)\nNO\n(1)\nNO\n(3)\nNYG\n(10)\nNO\n(5)\nNYG\n(4)\nNO\n(1)\nNYG\n(12)\nNYG\n(6)\nNO\n(4)\nNYG\n(3)\nNO\n(1)\nNYG\n(7)\nNYG\n(2)\nNYG\n(5)\nNYG\n(5)\nNYG\n(8)\nNYG\n(6)\nNYG\n(7)\nNO\n(3)\nNYG\n(5)\nNO\n(1)\nNYG\n(6)\nNYG\n(5)\nNYG\n(6)\nNYG\n(6)\nNYG\n(6)\nNYG\n(5)\nNYG\n(6)\nNYG\n(10)\nNYG\n(4)\nNYG\n(9)\nNYG\n(8)\nNYG\n(2)\nNYG\n(6)\nNYG\n(6)\nNYG\n(7)\nNYG\n(6)\nNO\n(7)\nCAR\n(12)\nCAR\n(8)\nCAR\n(10)\nCAR\n(10)\nCAR\n(8)\nCAR\n(7)\nCAR\n(10)\nPHI\n(7)\nPHI\n(7)\nCAR\n(4)\nCAR\n(8)\nCAR\n(7)\nCAR\n(7)\nPHI\n(5)\nCAR\n(9)\nPHI\n(4)\nCAR\n(4)\nCAR\n(2)\nCAR\n(7)\nCAR\n(3)\nCAR\n(6)\nCAR\n(5)\nPHI\n(8)\nPHI\n(8)\nCAR\n(6)\nCAR\n(5)\nPHI\n(9)\nPHI\n(9)\nCAR\n(5)\nPHI\n(5)\nCAR\n(4)\nCAR\n(6)\nCAR\n(3)\nCAR\n(11)\nCAR\n(6)\nPHI\n(8)\nCAR\n(2)\nPHI\n(7)\nCAR\n(8)\nCAR\n(1)\nCAR\n(1)\nPHI\n(7)\nCAR\n(6)\nPHI\n(3)\nPHI\n(7)\nCAR\n(3)\nPHI\n(3)\nCAR\n(1)\nPHI\n(3)\nCAR\n(3)\nCAR\n(6)\nCAR\n(4)\nPHI\n(4)\nCAR\n(6)\nPHI\n(2)\nPHI\n(2)\nCAR\n(4)\nCAR\n(3)\nCAR\n(2)\nCAR\n(4)\nPHI\n(5)\nCAR\n(2)\nPHI\n(5)\nCAR\n(2)\nCAR\n(4)\nCAR\n(4)\nPHI\n(4)\nCAR\n(6)\nCAR\n(7)\nPHI\n(5)\nCAR\n(2)\nCAR\n(5)\nCAR\n(4)\nPHI\n(5)\nCAR\n(3)\nCAR\n(1)\nPHI\n(2)\nPHI\n(5)\nPHI\n(4)\nCAR\n(6)\nPHI\n(2)\nPHI\n(3)\nCAR\n(2)\nCAR\n(2)\nPHI\n(7)\nCAR\n(1)\nPHI\n(5)\nCAR\n(1)\nPHI\n(5)\nPHI\n(2)\nCAR\n(10)\nPIT\n(7)\nTB\n(6)\nTB\n(2)\nTB\n(3)\nPIT\n(7)\nTB\n(5)\nPIT\n(4)\nPIT\n(6)\nPIT\n(6)\nPIT\n(3)\nPIT\n(7)\nPIT\n(4)\nTB\n(9)\nPIT\n(4)\nTB\n(1)\nPIT\n(2)\nTB\n(1)\nPIT\n(8)\nPIT\n(4)\nTB\n(2)\nPIT\n(3)\nTB\n(4)\nTB\n(4)\nTB\n(2)\nPIT\n(12)\nPIT\n(4)\nPIT\n(8)\nPIT\n(8)\nTB\n(1)\nPIT\n(9)\nPIT\n(7)\nPIT\n(7)\nPIT\n(4)\nPIT\n(4)\nPIT\n(4)\nTB\n(7)\nPIT\n(1)\nTB\n(6)\nPIT\n(4)\nPIT\n(5)\nPIT\n(8)\nPIT\n(6)\nPIT\n(8)\nPIT\n(4)\nPIT\n(5)\nPIT\n(2)\nPIT\n(2)\nTB\n(5)\nPIT\n(4)\nPIT\n(6)\nTB\n(1)\nPIT\n(6)\nPIT\n(3)\nPIT\n(5)\nPIT\n(4)\nPIT\n(5)\nPIT\n(9)\nPIT\n(2)\nPIT\n(6)\nPIT\n(9)\nTB\n(1)\nPIT\n(6)\nPIT\n(7)\nPIT\n(6)\nTB\n(6)\nPIT\n(7)\nPIT\n(3)\nPIT\n(4)\nPIT\n(6)\nTB\n(4)\nPIT\n(1)\nTB\n(2)\nPIT\n(3)\nTB\n(3)\nPIT\n(2)\nPIT\n(6)\nPIT\n(5)\nPIT\n(9)\nPIT\n(2)\nPIT\n(3)\nPIT\n(4)\nPIT\n(8)\nPIT\n(5)\nPIT\n(10)\nPIT\n(6)\nPIT\n(6)\nPIT\n(4)\nPIT\n(5)\nPIT\n(3)\nTB\n(3)\nPIT\n(3)\nLAR\n(1)\nLAR\n(13)\nLAR\n(14)\nLAR\n(14)\nLAR\n(6)\nLAR\n(14)\nLAR\n(14)\nLAR\n(5)\nLAR\n(5)\nLAR\n(14)\nLAR\n(6)\nLAR\n(14)\nLAR\n(14)\nLAR\n(3)\nLAR\n(14)\nLAR\n(10)\nLAR\n(11)\nLAR\n(14)\nLAR\n(14)\nLAR\n(13)\nLAR\n(13)\nLAR\n(3)\nLAR\n(13)\nLAR\n(14)\nLAR\n(14)\nLAR\n(14)\nLAR\n(7)\nLAR\n(5)\nLAR\n(11)\nLAR\n(4)\nLAR\n(14)\nLAR\n(13)\nLAR\n(14)\nLAR\n(13)\nLAR\n(12)\nLAR\n(6)\nLAR\n(12)\nLAR\n(5)\nLAR\n(13)\nLAR\n(6)\nLAR\n(7)\nLAR\n(5)\nLAR\n(12)\nLAR\n(14)\nLAR\n(9)\nLAR\n(13)\nLAR\n(12)\nLAR\n(4)\nLAR\n(13)\nLAR\n(7)\nLAR\n(13)\nLAR\n(13)\nLAR\n(10)\nLAR\n(13)\nLAR\n(14)\nLAR\n(8)\nLAR\n(14)\nLAR\n(11)\nLAR\n(13)\nLAR\n(3)\nLAR\n(12)\nLAR\n(14)\nLAR\n(13)\nLAR\n(14)\nLAR\n(13)\nLAR\n(14)\nLAR\n(11)\nLAR\n(10)\nLAR\n(5)\nLAR\n(11)\nLAR\n(13)\nLAR\n(10)\nLAR\n(8)\nLAR\n(14)\nLAR\n(14)\nLAR\n(14)\nLAR\n(14)\nLAR\n(14)\nLAR\n(8)\nLAR\n(12)\nLAR\n(13)\nLAR\n(9)\nLAR\n(13)\nLAR\n(6)\nLAR\n(5)\nLAR\n(14)\nLAR\n(10)\nLAR\n(4)\nLAR\n(12)\nLAR\n(13)\nLAR\n(14)\nARI\n(14)\nKC\n(4)\nKC\n(3)\nKC\n(12)\nKC\n(12)\nKC\n(4)\nKC\n(4)\nKC\n(9)\nKC\n(4)\nKC\n(4)\nKC\n(13)\nKC\n(5)\nKC\n(12)\nKC\n(13)\nKC\n(9)\nLAC\n(3)\nKC\n(7)\nKC\n(13)\nKC\n(7)\nKC\n(13)\nKC\n(12)\nKC\n(9)\nKC\n(14)\nKC\n(10)\nKC\n(9)\nKC\n(3)\nKC\n(12)\nKC\n(6)\nKC\n(12)\nKC\n(4)\nKC\n(3)\nKC\n(12)\nKC\n(10)\nKC\n(11)\nKC\n(12)\nKC\n(14)\nKC\n(5)\nKC\n(13)\nKC\n(4)\nKC\n(14)\nKC\n(10)\nKC\n(14)\nKC\n(4)\nKC\n(10)\nKC\n(13)\nKC\n(13)\nKC\n(14)\nKC\n(14)\nKC\n(11)\nKC\n(11)\nKC\n(12)\nKC\n(12)\nKC\n(2)\nKC\n(13)\nKC\n(12)\nKC\n(12)\nKC\n(6)\nKC\n(12)\nKC\n(12)\nKC\n(14)\nKC\n(2)\nKC\n(14)\nKC\n(12)\nKC\n(12)\nKC\n(13)\nKC\n(10)\nKC\n(11)\nKC\n(12)\nKC\n(12)\nKC\n(4)\nKC\n(3)\nKC\n(6)\nKC\n(11)\nKC\n(14)\nKC\n(13)\nKC\n(12)\nKC\n(12)\nKC\n(8)\nKC\n(11)\nKC\n(7)\nKC\n(13)\nKC\n(12)\nKC\n(14)\nKC\n(12)\nKC\n(14)\nKC\n(4)\nKC\n(13)\nKC\n(14)\nKC\n(13)\nKC\n(13)\nKC\n(5)\nKC\n(13)\nLAC\n(12)\nBUF\n(6)\nLV\n(2)\nBUF\n(11)\nBUF\n(6)\nLV\n(3)\nBUF\n(3)\nBUF\n(8)\nBUF\n(3)\nLV\n(3)\nLV\n(7)\nBUF\n(3)\nBUF\n(13)\nLV\n(8)\nBUF\n(2)\nBUF\n(7)\nLV\n(3)\nBUF\n(10)\nBUF\n(3)\nBUF\n(10)\nBUF\n(10)\nBUF\n(2)\nBUF\n(2)\nBUF\n(5)\nBUF\n(7)\nBUF\n(8)\nBUF\n(11)\nBUF\n(5)\nBUF\n(3)\nBUF\n(3)\nBUF\n(11)\nBUF\n(6)\nBUF\n(12)\nBUF\n(10)\nBUF\n(9)\nBUF\n(13)\nLV\n(3)\nBUF\n(14)\nBUF\n(3)\nBUF\n(9)\nBUF\n(4)\nBUF\n(3)\nBUF\n(3)\nBUF\n(11)\nBUF\n(9)\nBUF\n(12)\nBUF\n(9)\nBUF\n(7)\nBUF\n(13)\nBUF\n(10)\nLV\n(1)\nBUF\n(9)\nBUF\n(12)\nBUF\n(8)\nBUF\n(11)\nBUF\n(9)\nBUF\n(4)\nBUF\n(8)\nBUF\n(13)\nBUF\n(9)\nBUF\n(10)\nBUF\n(9)\nBUF\n(9)\nBUF\n(11)\nBUF\n(9)\nBUF\n(3)\nBUF\n(8)\nBUF\n(2)\nBUF\n(11)\nBUF\n(3)\nLV\n(2)\nBUF\n(9)\nBUF\n(6)\nBUF\n(1)\nBUF\n(9)\nBUF\n(9)\nBUF\n(9)\nBUF\n(10)\nLV\n(2)\nBUF\n(5)\nBUF\n(10)\nBUF\n(9)\nBUF\n(5)\nBUF\n(10)\nBUF\n(4)\nBUF\n(3)\nBUF\n(11)\nBUF\n(3)\nLV\n(3)\nBUF\n(4)\nBUF\n(9)\nBUF\n(12)\nBUF\n(6)\nHOU\n(13)\nJAX\n(12)\nHOU\n(4)\nHOU\n(2)\nJAX\n(14)\nJAX\n(12)\nHOU\n(5)\nJAX\n(13)\nHOU\n(9)\nJAX\n(14)\nJAX\n(3)\nHOU\n(6)\nJAX\n(12)\nJAX\n(10)\nHOU\n(13)\nHOU\n(2)\nJAX\n(5)\nJAX\n(3)\nJAX\n(8)\nJAX\n(7)\nJAX\n(9)\nJAX\n(12)\nHOU\n(3)\nHOU\n(1)\nJAX\n(2)\nJAX\n(6)\nJAX\n(8)\nJAX\n(12)\nHOU\n(1)\nHOU\n(5)\nJAX\n(7)\nJAX\n(5)\nJAX\n(10)\nJAX\n(14)\nJAX\n(9)\nJAX\n(13)\nJAX\n(5)\nJAX\n(12)\nJAX\n(13)\nJAX\n(14)\nHOU\n(4)\nJAX\n(7)\nJAX\n(11)\nHOU\n(6)\nJAX\n(11)\nJAX\n(12)\nHOU\n(2)\nJAX\n(11)\nHOU\n(3)\nJAX\n(11)\nJAX\n(2)\nJAX\n(4)\nJAX\n(6)\nJAX\n(14)\nHOU\n(2)\nJAX\n(10)\nJAX\n(7)\nJAX\n(13)\nJAX\n(10)\nJAX\n(8)\nJAX\n(8)\nJAX\n(7)\nJAX\n(9)\nJAX\n(10)\nHOU\n(2)\nJAX\n(13)\nJAX\n(11)\nJAX\n(12)\nHOU\n(11)\nJAX\n(4)\nJAX\n(8)\nJAX\n(8)\nJAX\n(7)\nJAX\n(7)\nJAX\n(13)\nJAX\n(9)\nJAX\n(8)\nJAX\n(13)\nJAX\n(11)\nJAX\n(11)\nJAX\n(13)\nJAX\n(9)\nJAX\n(12)\nJAX\n(11)\nJAX\n(9)\nJAX\n(11)\nHOU\n(2)\nCHI\n(10)\nCHI\n(11)\nCHI\n(3)\nCHI\n(4)\nCHI\n(13)\nCHI\n(9)\nCHI\n(3)\nCHI\n(12)\nCHI\n(12)\nATL\n(1)\nCHI\n(13)\nCHI\n(6)\nATL\n(12)\nCHI\n(11)\nCHI\n(8)\nATL\n(8)\nCHI\n(5)\nCHI\n(4)\nCHI\n(2)\nATL\n(6)\nCHI\n(5)\nCHI\n(7)\nATL\n(2)\nATL\n(10)\nCHI\n(5)\nCHI\n(8)\nCHI\n(14)\nCHI\n(13)\nCHI\n(12)\nCHI\n(10)\nATL\n(8)\nATL\n(2)\nATL\n(5)\nATL\n(3)\nCHI\n(5)\nATL\n(13)\nATL\n(5)\nCHI\n(12)\nCHI\n(2)\nCHI\n(8)\nCHI\n(5)\nCHI\n(11)\nCHI\n(3)\nCHI\n(6)\nCHI\n(8)\nCHI\n(10)\nCHI\n(10)\nCHI\n(10)\nCHI\n(5)\nCHI\n(9)\nATL\n(7)\nCHI\n(5)\nCHI\n(7)\nCHI\n(2)\nCHI\n(5)\nCHI\n(7)\nATL\n(6)\nCHI\n(6)\nCHI\n(3)\nATL\n(7)\nCHI\n(4)\nCHI\n(1)\nCHI\n(6)\nCHI\n(3)\nCHI\n(1)\nCHI\n(1)\nCHI\n(9)\nATL\n(3)\nATL\n(12)\nATL\n(12)\nATL\n(5)\nATL\n(4)\nATL\n(10)\nCHI\n(2)\nATL\n(1)\nCHI\n(2)\nATL\n(1)\nATL\n(3)\nCHI\n(3)\nCHI\n(4)\nATL\n(1)\nATL\n(1)\nATL\n(1)\nATL\n(3)\nATL\n(12)\nATL\n(7)\nCHI\n(1)\nATL\n(10)\nATL\n(6)\nATL\n(8)\nCHI\n(4)\nBAL\n(8)\nCLE\n(4)\nCLE\n(8)\nCLE\n(5)\nBAL\n(12)\nBAL\n(10)\nCLE\n(2)\nCLE\n(11)\nCLE\n(11)\nCLE\n(6)\nBAL\n(12)\nCLE\n(1)\nCLE\n(11)\nCLE\n(10)\nBAL\n(6)\nBAL\n(12)\nBAL\n(8)\nBAL\n(11)\nBAL\n(8)\nCLE\n(5)\nBAL\n(10)\nCLE\n(8)\nCLE\n(3)\nCLE\n(4)\nBAL\n(13)\nBAL\n(7)\nBAL\n(13)\nBAL\n(11)\nBAL\n(9)\nBAL\n(8)\nCLE\n(2)\nBAL\n(9)\nCLE\n(2)\nBAL\n(8)\nBAL\n(8)\nCLE\n(12)\nCLE\n(6)\nBAL\n(11)\nBAL\n(7)\nBAL\n(11)\nBAL\n(6)\nBAL\n(13)\nBAL\n(9)\nBAL\n(8)\nBAL\n(6)\nBAL\n(8)\nBAL\n(6)\nBAL\n(9)\nBAL\n(9)\nCLE\n(2)\nBAL\n(8)\nBAL\n(8)\nBAL\n(12)\nBAL\n(7)\nBAL\n(8)\nBAL\n(13)\nBAL\n(11)\nBAL\n(8)\nBAL\n(8)\nCLE\n(6)\nBAL\n(8)\nBAL\n(7)\nCLE\n(1)\nBAL\n(8)\nBAL\n(9)\nBAL\n(5)\nBAL\n(1)\nBAL\n(7)\nBAL\n(11)\nCLE\n(8)\nBAL\n(12)\nBAL\n(9)\nBAL\n(9)\nBAL\n(8)\nBAL\n(7)\nBAL\n(7)\nBAL\n(9)\nCLE\n(1)\nBAL\n(11)\nBAL\n(1)\nBAL\n(7)\nBAL\n(4)\nBAL\n(8)\nBAL\n(5)\nBAL\n(11)\nBAL\n(5)\nBAL\n(8)\nBAL\n(9)\nBAL\n(10)\nBAL\n(7)\nBAL\n(5)\nIND\n(3)\nTEN\n(5)\nIND\n(5)\nTEN\n(1)\nIND\n(11)\nIND\n(11)\nIND\n(12)\nIND\n(10)\nIND\n(10)\nIND\n(11)\nIND\n(11)\nIND\n(8)\nTEN\n(5)\nIND\n(8)\nIND\n(5)\nIND\n(11)\nIND\n(7)\nIND\n(13)\nIND\n(9)\nIND\n(11)\nIND\n(12)\nIND\n(10)\nIND\n(11)\nIND\n(12)\nIND\n(10)\nIND\n(10)\nIND\n(12)\nIND\n(1)\nIND\n(10)\nIND\n(14)\nIND\n(9)\nIND\n(3)\nIND\n(12)\nIND\n(7)\nIND\n(9)\nIND\n(11)\nIND\n(7)\nIND\n(10)\nIND\n(10)\nIND\n(7)\nIND\n(10)\nIND\n(10)\nIND\n(13)\nIND\n(10)\nIND\n(4)\nIND\n(5)\nIND\n(5)\nIND\n(7)\nIND\n(8)\nIND\n(8)\nIND\n(11)\nIND\n(10)\nIND\n(9)\nIND\n(14)\nIND\n(11)\nIND\n(12)\nIND\n(10)\nIND\n(5)\nIND\n(10)\nIND\n(14)\nIND\n(7)\nIND\n(11)\nIND\n(9)\nIND\n(10)\nIND\n(8)\nIND\n(10)\nIND\n(6)\nIND\n(9)\nIND\n(10)\nIND\n(9)\nIND\n(4)\nIND\n(8)\nIND\n(7)\nIND\n(10)\nIND\n(10)\nIND\n(11)\nIND\n(11)\nIND\n(10)\nIND\n(10)\nIND\n(8)\nIND\n(10)\nIND\n(6)\nIND\n(7)\nIND\n(12)\nIND\n(10)\nIND\n(3)\nIND\n(9)\nIND\n(8)\nIND\n(11)\nIND\n(12)\nTEN\n(1)\nNE\n(5)\nNE\n(10)\nNE\n(13)\nNE\n(11)\nNE\n(10)\nNE\n(13)\nNE\n(13)\nNE\n(9)\nNE\n(9)\nNE\n(12)\nNE\n(10)\nNE\n(11)\nNYJ\n(4)\nNE\n(7)\nNE\n(11)\nNE\n(6)\nNE\n(14)\nNE\n(12)\nNE\n(11)\nNE\n(14)\nNE\n(11)\nNE\n(6)\nNE\n(14)\nNE\n(13)\nNE\n(9)\nNE\n(9)\nNE\n(11)\nNE\n(10)\nNE\n(7)\nNE\n(7)\nNE\n(13)\nNE\n(11)\nNE\n(9)\nNE\n(10)\nNE\n(7)\nNE\n(10)\nNE\n(10)\nNE\n(9)\nNE\n(11)\nNE\n(9)\nNE\n(11)\nNE\n(9)\nNE\n(7)\nNE\n(12)\nNE\n(10)\nNYJ\n(4)\nNE\n(9)\nNE\n(8)\nNE\n(12)\nNE\n(5)\nNE\n(10)\nNE\n(9)\nNE\n(11)\nNE\n(9)\nNE\n(10)\nNE\n(11)\nNYJ\n(1)\nNE\n(9)\nNE\n(12)\nNYJ\n(5)\nNE\n(11)\nNE\n(10)\nNE\n(10)\nNE\n(11)\nNE\n(12)\nNE\n(12)\nNE\n(7)\nNE\n(8)\nNE\n(9)\nNE\n(7)\nNE\n(10)\nNE\n(7)\nNYJ\n(6)\nNE\n(11)\nNE\n(11)\nNE\n(10)\nNE\n(13)\nNE\n(12)\nNE\n(9)\nNE\n(2)\nNE\n(11)\nNE\n(11)\nNE\n(9)\nNE\n(8)\nNE\n(9)\nNE\n(8)\nNE\n(7)\nNE\n(7)\nNE\n(8)\nNYJ\n(1)\nNYJ\n(11)\nDEN\n(14)\nSEA\n(14)\nDEN\n(1)\nSEA\n(8)\nSEA\n(5)\nSEA\n(8)\nSEA\n(14)\nSEA\n(14)\nSEA\n(8)\nSEA\n(4)\nSEA\n(9)\nSEA\n(2)\nSEA\n(13)\nSEA\n(12)\nDEN\n(9)\nSEA\n(9)\nDEN\n(9)\nSEA\n(5)\nSEA\n(7)\nSEA\n(8)\nSEA\n(11)\nSEA\n(7)\nSEA\n(7)\nDEN\n(3)\nSEA\n(14)\nSEA\n(13)\nSEA\n(13)\nDEN\n(3)\nSEA\n(8)\nDEN\n(8)\nDEN\n(1)\nDEN\n(3)\nSEA\n(4)\nSEA\n(8)\nSEA\n(14)\nSEA\n(6)\nSEA\n(14)\nDEN\n(4)\nSEA\n(12)\nSEA\n(5)\nSEA\n(5)\nDEN\n(1)\nSEA\n(11)\nSEA\n(8)\nSEA\n(6)\nSEA\n(1)\nSEA\n(14)\nSEA\n(5)\nSEA\n(5)\nSEA\n(3)\nSEA\n(7)\nSEA\n(1)\nDEN\n(7)\nSEA\n(7)\nSEA\n(4)\nDEN\n(8)\nDEN\n(2)\nSEA\n(3)\nSEA\n(4)\nSEA\n(5)\nSEA\n(5)\nSEA\n(6)\nSEA\n(8)\nSEA\n(1)\nSEA\n(14)\nSEA\n(10)\nDEN\n(3)\nSEA\n(13)\nSEA\n(12)\nSEA\n(7)\nSEA\n(4)\nSEA\n(4)\nSEA\n(3)\nSEA\n(8)\nSEA\n(14)\nSEA\n(11)\nSEA\n(3)\nSEA\n(7)\nSEA\n(6)\nSEA\n(7)\nSEA\n(14)\nSEA\n(10)\nSEA\n(2)\nSEA\n(12)\nSEA\n(2)\nSEA\n(10)\nSEA\n(8)"
     }
   ],
   "myCard": {
     "picks": [
-      "HOU",
-      "CHI",
-      "BAL",
-      "TEN",
-      "NYJ",
       "NO",
       "CAR",
       "PIT",
       "ARI",
       "LAC",
       "BUF",
+      "HOU",
+      "CHI",
+      "BAL",
+      "TEN",
+      "NYJ",
       "DAL",
       "SEA",
       "WAS"
     ],
     "weights": [
-      2,
-      4,
-      5,
-      1,
-      11,
       7,
       10,
       3,
       14,
       12,
       6,
+      2,
+      4,
+      5,
+      1,
+      11,
       9,
       8,
       13
