@@ -15,6 +15,20 @@ n=len(live['market'])
 assert 1 <= n <= 16
 market=[(x['away'],x['home']) for x in live['market']]
 assert len(set(market))==n
+
+# Payload v2.2+ makes the complete weekly slate an explicit contract. This
+# prevents a finished Thursday game from silently shrinking Sunday projections.
+version=tuple(int(x) for x in str(live.get('version','0.0.0')).split('.')[:3])
+if version >= (2,2,0):
+    assert live.get('slateSize')==n, f"slateSize {live.get('slateSize')} does not match {n} published games"
+    game_state=live.get('gameState')
+    assert isinstance(game_state,list) and len(game_state)==n, 'v2.2 payload must publish state for every weekly game'
+    state_matchups=[(x.get('away'),x.get('home')) for x in game_state]
+    assert state_matchups==market, 'gameState must align 1:1 with the full market slate'
+    for g in game_state:
+        if g.get('completed'):
+            assert g.get('winner') in (g.get('away'),g.get('home')), 'completed game must have a valid winner'
+
 status=live.get('confidenceStatus')
 card=live.get('myCard')
 assert status in ('partial','submitted'), f'unexpected confidenceStatus: {status!r}'
