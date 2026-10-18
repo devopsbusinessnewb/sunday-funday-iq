@@ -132,7 +132,7 @@ if(live.confidenceStatus==='submitted'){
 }
 // A version upgrade must retire old model odds without losing submitted cards
 // or the decision history used for postgame analysis.
-const saved={games:liveGames,optimization:{modelBuild:'1.9.1',recommended:{choices:[],weights:[]}},recommendedCard:{choices:[],weights:[]},sim:{top2:.053},originalCard:{choices:[0],weights:[11]},decisionHistory:[{type:'locked',at:'2026-09-24'}]};
+const saved={games:liveGames,optimization:{modelBuild:'1.16.11',recommended:{choices:[],weights:[]}},recommendedCard:{choices:[],weights:[]},sim:{top2:.053},originalCard:{choices:[0],weights:[11]},decisionHistory:[{type:'locked',at:'2026-09-24'}]};
 ctx.localStorage={getItem:()=>JSON.stringify(saved)};
 const migrated=vm.runInContext('loadState()',ctx);
 if(migrated.optimization||migrated.recommendedCard||migrated.sim)throw new Error('Old simulated recommendations survived model upgrade');
@@ -168,3 +168,60 @@ const learnedRun=t.runOptimizer(postGames,93,{...stableOpts,searchIters:100,fina
 if(!learnedRun.poolPrior||learnedRun.poolPrior.weeks!==2)throw new Error('Optimizer did not preserve historical-prior provenance');
 if(learnedRun.strategies.balanced.objective!=='risk-adjusted-top2'||learnedRun.strategies.aggressive.objective!=='top2-first'||learnedRun.strategies.maxUpside.objective!=='win-first')throw new Error('Strategy frontier did not preserve independent objectives');
 console.log('Pickem regression suite passed: imports valid, live card flexible, recommendations stable after application.');
+
+// Reproduce the bridge/app identity boundary with synthetic, anonymous entries.
+// Every synthetic ownership pick loses HOU-JAX; empirical picks all win it, so
+// a perfect field score proves buildWorlds consumed the revealed observations.
+const identityMatchups=[['HOU','JAX'],['SEA','DEN'],['CHI','ATL'],['BAL','CLE'],['TEN','IND'],['NYJ','NE'],['NO','NYG'],['CAR','PHI'],['PIT','TB'],['ARI','LAR'],['LAC','KC'],['BUF','LV'],['DAL','GB'],['WAS','SF']];
+const identityGames=identityMatchups.map(([away,home],i)=>({id:'g'+(i+1),away,home,awayPct:100,homePct:0,awayML:-110,homeML:-110,pick:i?away:home,weight:i+1,locked:true,completed:true,winner:i?0:1}));
+const identityRecord={key:'HOU|JAX',gameId:'HOU-JAX',away:'HOU',home:'JAX',totalObserved:87,observations:Array.from({length:87},(_,i)=>({pick:'JAX',weight:i%14+1}))};
+const identityField={primaryGameId:'HOU-JAX',observedEntries:87,locked:[identityRecord]};
+const identityCard={choices:identityGames.map((_,i)=>i?0:1),weights:identityGames.map((_,i)=>i+1)};
+if(ctx.resolveFieldGameIndex(identityGames,identityRecord)!==0)throw new Error('HOU-JAX observations do not resolve to g1');
+if(ctx.resolveFieldGameIndex(identityGames,{key:' hou | jac ',gameId:'g2'})!==0)throw new Error('Normalized matchup key must override a conflicting gameId');
+if(ctx.resolveFieldGameIndex(identityGames,{away:' hou ',home:'jac',gameId:'g2'})!==0)throw new Error('Normalized away/home must override a conflicting gameId');
+if(ctx.resolveFieldGameIndex(identityGames,{gameId:'g1'})!==0)throw new Error('Legacy ID-only field records no longer resolve');
+if(ctx.resolveFieldGameIndex(identityGames,{away:'JAX',home:'HOU',gameId:'g1'})!==-1)throw new Error('A conflicting matchup must not fall back to positional identity');
+const identityImpact=t.lockedFieldImpact(identityGames,identityField,identityCard);
+if(identityImpact?.gameId!=='g1'||identityImpact.totalObserved!==87||identityImpact.samePickShare!==1||identityImpact.classification!=='SHARED_WIN')throw new Error('Field-impact diagnostics did not consume all 87 HOU-JAX observations');
+const empiricalWorlds=t.buildWorlds(identityGames,94,12,4242,identityField);
+const syntheticWorlds=t.buildWorlds(identityGames,94,12,4242,null);
+if(empiricalWorlds.some(w=>w.proxyScore!==105||w.fieldHistogram[105]!==93))throw new Error('Simulation fell back to synthetic ownership instead of revealed HOU-JAX picks/weights');
+if(syntheticWorlds.some(w=>w.proxyScore===105||w.fieldHistogram[105]))throw new Error('Synthetic control unexpectedly matched empirical perfect scores');
+// Rekeying/reordering state.games must not change the resolved matchup.
+const reordered=identityGames.slice().reverse();
+if(ctx.resolveFieldGameIndex(reordered,identityRecord)!==13)throw new Error('Field identity depends on weekly order');
+console.log('Field identity regression passed: 87 HOU-JAX observations resolve to g1 and drive simulation/impact.');
+
+(async()=>{
+  // Exercise the real importer and refreshMarket, with only UI and result I/O
+  // stubbed. Both odds feeds omit completed SEA-DEN from the 14-game import.
+  const marketCtx={console,globalThis:null,setTimeout,clearTimeout,__SFIQ_TESTING__:true,fetch:async()=>({ok:false})};marketCtx.globalThis=marketCtx;
+  vm.createContext(marketCtx);vm.runInContext(js,marketCtx);
+  vm.runInContext('render=()=>{};show=()=>{};refreshResults=async()=>false;',marketCtx);
+  marketCtx.importFixture={season:2026,week:6,poolSize:94,market:identityMatchups.map(([away,home])=>({away,home,awayML:-110,homeML:-110,total:45})),confidenceStatus:'submitted',myCard:{picks:identityGames.map(g=>g.pick),weights:identityCard.weights},fieldModel:identityField};
+  await vm.runInContext('importScan(importFixture)',marketCtx);
+  vm.runInContext("Object.assign(state.games.find(g=>g.away==='SEA'&&g.home==='DEN'),{locked:true,completed:true,winner:1,pick:'DEN',weight:2});",marketCtx);
+  const imported=JSON.parse(vm.runInContext('JSON.stringify(state.games)',marketCtx));
+  if(imported.length!==14||imported[0].id!=='g1'||imported[0].away!=='HOU')throw new Error('Production-shaped import did not create HOU-JAX as g1');
+  const actualField=vm.runInContext('state.fieldModel',marketCtx);
+  const importedImpact=marketCtx.SFIQ_TEST.lockedFieldImpact(imported,actualField,identityCard);
+  if(importedImpact?.gameId!=='g1'||importedImpact.totalObserved!==87)throw new Error('Imported bridge field model did not resolve to app game');
+  const omitted=imported.filter(g=>!(g.away==='SEA'&&g.home==='DEN'));
+  const originalFinal=JSON.stringify(imported.find(g=>g.away==='SEA'&&g.home==='DEN'));
+  for(const source of ['primary','fallback']){
+    let fallbackCalled=false;
+    marketCtx.fetch=async url=>{
+      if(String(url).includes('1.ml'))return source==='primary'?{ok:true,json:async()=>omitted.map(g=>({away_team:g.away,home_team:g.home,away_ml:125,home_ml:-145,total:46}))}:{ok:false};
+      fallbackCalled=true;
+      return {ok:true,json:async()=>({events:omitted.map(g=>({competitions:[{competitors:[{homeAway:'away',team:{abbreviation:g.away}},{homeAway:'home',team:{abbreviation:g.home}}],odds:[{awayTeamOdds:{moneyLine:130},homeTeamOdds:{moneyLine:-150},overUnder:47}]}]}))})};
+    };
+    if(!await vm.runInContext('refreshMarket(true)',marketCtx))throw new Error(`${source} market refresh did not update`);
+    const after=JSON.parse(vm.runInContext('JSON.stringify(state.games)',marketCtx));
+    if(after.length!==14||after.map(g=>g.away+'|'+g.home).join()!==imported.map(g=>g.away+'|'+g.home).join())throw new Error(`${source} market refresh shrank/replaced the authoritative slate`);
+    if(JSON.stringify(after.find(g=>g.away==='SEA'&&g.home==='DEN'))!==originalFinal)throw new Error(`${source} market refresh changed the omitted completed game`);
+    if(after.find(g=>g.away==='HOU').awayML!==(source==='primary'?125:130))throw new Error(`${source} market refresh did not apply new odds`);
+    if(fallbackCalled!==(source==='fallback'))throw new Error('Market regression exercised the wrong odds-source path');
+  }
+  console.log('Market refresh regression passed: primary/fallback odds omit SEA-DEN; all 14 imported games and completed state survive.');
+})().catch(error=>{console.error(error);process.exitCode=1;});

@@ -145,7 +145,7 @@ const POOL_HISTORY_URL='../../data/analysis/cbs-pool-history-report.json';
 const SEARCH_ITERS=700;
 const FINAL_ITERS=3000;
 const VALIDATION_SEEDS=3;
-const MODEL_BUILD='1.16.11';
+const MODEL_BUILD='1.16.12';
 const CONFIDENCE_TIE_BAND=.025;
 const MIN_OPTIONAL_FLIP_PROB=.40;
 const MIN_OPTIONAL_MARKET_PROB=.38;
@@ -441,12 +441,21 @@ function cardChangeCost(base,card){
 }
 function cardObjective(x,games,card,base=card){return objective(x)-cardChangeCost(base,card).cost}
 function binaryCounts(sorted,score){let lo=0,hi=sorted.length;while(lo<hi){const m=(lo+hi)>>1;if(sorted[m]<score)lo=m+1;else hi=m}const first=lo;lo=0;hi=sorted.length;while(lo<hi){const m=(lo+hi)>>1;if(sorted[m]<=score)lo=m+1;else hi=m}return{less:first,equal:lo-first,greater:sorted.length-lo}}
+function resolveFieldGameIndex(games,record){
+  if(!record)return -1;
+  const key=String(record.key||'').split(/[|\-]/);
+  const away=normalizeTeam(record.away||key[0]),home=normalizeTeam(record.home||key[1]);
+  // Matchup identity survives imports that assign new positional game IDs.
+  // A supplied matchup must never attach to a conflicting legacy ID.
+  if(away&&home)return games.findIndex(g=>normalizeTeam(g.away)===away&&normalizeTeam(g.home)===home);
+  return record.gameId==null?-1:games.findIndex(g=>g.id===record.gameId);
+}
 function buildWorlds(games,poolSize,iters,seed=20260908,fieldModel=null,poolPrior=null){
   const rnd=mulberry32(seed),n=games.length,fieldN=Math.max(1,(poolSize||102)-1),worlds=new Array(iters);
   const probs=games.map(g=>[0,1].map(s=>({market:marketProb(g,s),iq:iqProb(g,s)})));
   const scheduleMap=new Map((fieldModel?.schedule||[]).map(x=>[x.away+'|'+x.home,x.defaultWeight]));
   const primary=(fieldModel?.locked||[]).find(x=>x.gameId===fieldModel?.primaryGameId)||fieldModel?.locked?.[0]||null;
-  const primaryIdx=primary?games.findIndex(g=>g.id===primary.gameId):-1;
+  const primaryIdx=resolveFieldGameIndex(games,primary);
   const empirical=primary?.observations||[];
   const openIdx=[...Array(n).keys()].filter(i=>i!==primaryIdx),allWeights=[...Array(n).keys()].map(i=>i+1);
   const defaultWeights=games.map(g=>scheduleMap.get(g.away+'|'+g.home));
@@ -567,7 +576,7 @@ function compareCards(base,candidate,worlds){
 function lockedFieldImpact(games,fieldModel,currentCard){
   const locked=fieldModel?.locked||[],primary=locked.find(x=>x.gameId===fieldModel?.primaryGameId)||locked.find(x=>Array.isArray(x.observations)&&x.observations.length);
   if(!primary)return null;
-  const gameIndex=games.findIndex(g=>g.id===primary.gameId),observations=primary.observations||[];
+  const gameIndex=resolveFieldGameIndex(games,primary),observations=primary.observations||[];
   if(gameIndex<0||!observations.length)return null;
   const game=games[gameIndex],userSide=currentCard.choices[gameIndex],userPick=teamFor(game,userSide),winnerSide=fixedWinner(game),winner=winnerSide===null?null:teamFor(game,winnerSide);
   const observationPick=o=>typeof o.pick==='number'?teamFor(game,o.pick):normalizeTeam(o.pick);
