@@ -37,44 +37,41 @@ def parse_week(*texts):
     m=re.search(r'\bWeek\s+(\d{1,2})\b',joined,re.I)
     if not m: raise RuntimeError('Could not determine current CBS week before loading odds.')
     return int(m.group(1))
+TEAM_ALIASES={'49ERS':'SF','BEARS':'CHI','BENGALS':'CIN','BILLS':'BUF','BRONCOS':'DEN','BROWNS':'CLE','BUCCANEERS':'TB','CARDINALS':'ARI','CHARGERS':'LAC','CHIEFS':'KC','COLTS':'IND','COMMANDERS':'WAS','COWBOYS':'DAL','DOLPHINS':'MIA','EAGLES':'PHI','FALCONS':'ATL','GIANTS':'NYG','JAGUARS':'JAX','JETS':'NYJ','LIONS':'DET','PACKERS':'GB','PANTHERS':'CAR','PATRIOTS':'NE','RAIDERS':'LV','RAMS':'LAR','RAVENS':'BAL','SAINTS':'NO','SEAHAWKS':'SEA','STEELERS':'PIT','TEXANS':'HOU','TITANS':'TEN','VIKINGS':'MIN'}
+def team_token(line):
+    first=str(line or '').strip().upper().split(' ')[0]
+    if first in TEAM_ALIASES: return TEAM_ALIASES[first]
+    return first if re.fullmatch(r'[A-Z]{2,3}',first) else ''
 def authenticated_self_block(text):
-    """Recover the signed-in user's complete confidence card from Picks.
-
-    CBS has rendered confidence weights in multiple text forms over time, notably
-    ``(14)`` and the current ``14 Pts``. Identity comes from the persistent
-    authenticated browser session, never from participant-name matching.
-    """
+    """Recover the signed-in user's complete confidence card from Picks."""
     raw=str(text or '')
     pm=re.search(r'\b(\d+)\s*/\s*(\d+)\s+Picks\b',raw,re.I)
     if not pm or int(pm.group(1))!=int(pm.group(2)): return ''
-    n=int(pm.group(2)); pairs=[]
-    # Current CBS text: selected team content is followed by a confidence pill
-    # such as "14 Pts". Keep the older parenthesized form as a compatibility
-    # fallback. Limit the gap so ownership percentages from the opponent do not
-    # get mistaken for confidence weights.
-    pair_re=re.compile(r'\n([A-Z]{2,3})(?=\b)[^\n]{0,40}(?:\n[^\n]{0,80}){0,3}?\n\s*(?:\((\d{1,2})\)|(\d{1,2})\s+Pts?\b)',re.I)
-    for m in pair_re.finditer(raw):
-        weight=int(m.group(2) or m.group(3)); pairs.append((m.group(1).upper(),weight))
-    # Some CBS layouts put the Pts pill before/after additional labels. If the
-    # strict row matcher did not reconstruct a full card, use line adjacency:
-    # a team abbreviation nearest before each unique confidence pill.
+    n=int(pm.group(2)); lines=[x.strip() for x in raw.splitlines()]; pairs=[]
+    for i,line in enumerate(lines):
+        wm=re.fullmatch(r'(\d{1,2})\s+Pts?',line,re.I)
+        if not wm: continue
+        for j in range(i-1,max(-1,i-12),-1):
+            team=team_token(lines[j])
+            if team:
+                pairs.append((team,int(wm.group(1)))); break
     if len(pairs)<n:
-        lines=[x.strip() for x in raw.splitlines()]
-        alt=[]
+        old=[]
         for i,line in enumerate(lines):
-            wm=re.fullmatch(r'(\d{1,2})\s+Pts?',line,re.I)
+            wm=re.fullmatch(r'\((\d{1,2})\)',line)
             if not wm: continue
-            for j in range(i-1,max(-1,i-7),-1):
-                if re.fullmatch(r'[A-Z]{2,3}',lines[j]):
-                    alt.append((lines[j].upper(),int(wm.group(1)))); break
-        if len(alt)>=n: pairs=alt
+            for j in range(i-1,max(-1,i-8),-1):
+                team=team_token(lines[j])
+                if team:
+                    old.append((team,int(wm.group(1)))); break
+        if len(old)>=n: pairs=old
     for start in range(max(0,len(pairs)-n+1)):
         window=pairs[start:start+n]
-        if len(window)==n and sorted(w for _,w in window)==list(range(1,n+1)):
-            lines=['',AUTH_SELF_MARKER]
-            if LEGACY_ENTRY_LABEL: lines.append(LEGACY_ENTRY_LABEL)
-            for team,w in window: lines.extend([team,f'({w})'])
-            return '\n'.join(lines)
+        if len(window)==n and len({t for t,_ in window})==n and sorted(w for _,w in window)==list(range(1,n+1)):
+            out=['',AUTH_SELF_MARKER]
+            if LEGACY_ENTRY_LABEL: out.append(LEGACY_ENTRY_LABEL)
+            for team,w in window: out.extend([team,f'({w})'])
+            return '\n'.join(out)
     return ''
 def post_capture(capture):
     req=urllib.request.Request(RECEIVER,data=json.dumps(capture).encode(),method='POST',headers={'Content-Type':'application/json'})
@@ -97,22 +94,13 @@ def collect(debug_odds=False):
     with sync_playwright() as p:
         ctx=open_context(p,HEADLESS)
         try:
-            page=ctx.pages[0] if ctx.pages else ctx.new_page()
-            picks=visit(page,POOL_URL); assert_logged_in(picks)
-            standings=visit(page,POOL_URL+'/standings/weekly',4000)
+            page=ctx.pages[0] if ctx.pages else ctx.new_page(); picks=visit(page,POOL_URL); assert_logged_in(picks); standings=visit(page,POOL_URL+'/standings/weekly',4000)
             self_block=authenticated_self_block(picks.get('text',''))
             if self_block: standings['text']=str(standings.get('text',''))+self_block
-            week=parse_week(picks.get('text'),standings.get('text'))
-            season=datetime.now().year
-            odds_url=f'https://www.cbssports.com/nfl/odds/{season}/regular/week-{week}/'
-            odds=visit(page,odds_url,4500)
-            picks['title']='NFL Football Tourney | Picks'
-            standings['title']='NFL Football Tourney | Weekly Standings'
-            odds['title']=f'CBS NFL Odds | Week {week}'
-            if debug_odds:
-                print(f'ODDS_URL={odds_url}')
-                print('\n'.join(odds.get('text','').splitlines()[:220]))
-            capture={'product':'CBS Pick’em IQ automated local capture','version':'1.0.7','exportedAt':iso_now(),'privacy':'Raw browser text remains local and is sent only to the localhost sanitizer.','snapshots':[picks,standings,odds]}
+            week=parse_week(picks.get('text'),standings.get('text')); season=datetime.now().year; odds_url=f'https://www.cbssports.com/nfl/odds/{season}/regular/week-{week}/'; odds=visit(page,odds_url,4500)
+            picks['title']='NFL Football Tourney | Picks'; standings['title']='NFL Football Tourney | Weekly Standings'; odds['title']=f'CBS NFL Odds | Week {week}'
+            if debug_odds: print(f'ODDS_URL={odds_url}'); print('\n'.join(odds.get('text','').splitlines()[:220]))
+            capture={'product':'CBS Pick’em IQ automated local capture','version':'1.0.8','exportedAt':iso_now(),'privacy':'Raw browser text remains local and is sent only to the localhost sanitizer.','snapshots':[picks,standings,odds]}
             result=post_capture(capture)
             if not result.get('ok'): raise RuntimeError(result.get('error') or 'CBS receiver rejected capture')
             print(json.dumps(result))
@@ -124,6 +112,5 @@ def main():
             if args.login: login_mode()
             else: runtime.run_recorded(lambda: collect(args.debug_odds))
     except runtime.CollectorBusy as exc:
-        print(str(exc),file=sys.stderr)
-        raise SystemExit(75)
+        print(str(exc),file=sys.stderr); raise SystemExit(75)
 if __name__=='__main__': main()
