@@ -43,11 +43,46 @@ week6=[
     {'away':'CAR','home':'PHI','completed':False}, {'away':'PIT','home':'TB','completed':False},
     {'away':'ARI','home':'LAR','completed':False}, {'away':'LAC','home':'KC','completed':False},
     {'away':'BUF','home':'LV','completed':False}, {'away':'DAL','home':'GB','completed':False},
-    {'away':'WAS','home':'SF','completed':False},
+    {'away':'WSH','home':'SF','completed':False},
 ]
 full=mod.sanitize_slate(week6)
 assert len(full)==14, f'completed game was dropped: expected 14, got {len(full)}'
 assert full[0]['away']=='SEA' and full[0]['home']=='DEN'
 assert full[0]['completed'] is True and full[0]['winner']=='DEN'
+assert full[-1]['away']=='WAS' and full[-1]['home']=='SF', 'ESPN WSH must normalize to WAS'
+
+# Exercise the complete sanitizer with a synthetic authenticated card, including
+# all fourteen unique weights. No browser, publication, or private data is used.
+picks=['Week 6', '14/14 Picks']
+standings=[mod.AUTH_SELF_MARKER]
+odds=[]
+for weight,game in enumerate(full,1):
+    away,home=game['away'],game['home']
+    picks.extend(['0-0',mod.CANON[away].upper(),'50%','0-0',mod.CANON[home].upper(),'50%'])
+    standings.extend([away,f'({weight})'])
+    for team in (away,home):
+        odds.extend([mod.CANON[team],'o45.5','-110','+3.5','-110','-110','o45.5','-110'])
+raw={'slate':week6,'snapshots':[
+    {'title':'NFL Football Tourney | Picks','text':'\n'.join(picks)},
+    {'title':'NFL Football Tourney | Weekly Standings','text':'\n'.join(standings)},
+    {'title':'CBS NFL Odds','text':'\n'.join(odds)},
+]}
+previous_loader=mod.load_previous
+previous_entry_name=mod.ENTRY_NAME
+try:
+    mod.load_previous=lambda: {'season':2026,'week':6,'poolSize':10}
+    mod.ENTRY_NAME=''
+    payload=mod.sanitize_raw(raw)
+finally:
+    mod.load_previous=previous_loader
+    mod.ENTRY_NAME=previous_entry_name
+mod.validate_sanitized(payload)
+assert payload['slateSize']==len(payload['market'])==len(payload['gameState'])==14
+assert payload['market'][-1]['away']=='WAS' and payload['market'][-1]['home']=='SF'
+assert payload['confidenceStatus']=='submitted'
+assert payload['confidenceSource']=='Authenticated CBS Picks card'
+assert len(payload['myCard']['picks'])==14
+assert payload['myCard']['picks']==[game['away'] for game in full]
+assert sorted(payload['myCard']['weights'])==list(range(1,15))
 
 print('CBS market/full-week regression passed')

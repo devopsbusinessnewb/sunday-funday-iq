@@ -30,7 +30,7 @@ LOCK=threading.Lock()
 
 def iso_now(): return datetime.now(timezone.utc).isoformat().replace('+00:00','Z')
 def norm_team(v):
-    x=str(v or '').upper().strip(); return TEAM_MAP.get(x,'JAX' if x=='JAC' else x)
+    x=str(v or '').upper().strip(); return TEAM_MAP.get(x,{'JAC':'JAX','WSH':'WAS'}.get(x,x))
 def run_git(*args,check=True): return subprocess.run(['git',*args],cwd=ROOT,check=check,text=True,capture_output=True)
 def lower_blob(v): return json.dumps(v,separators=(',',':')).lower()
 
