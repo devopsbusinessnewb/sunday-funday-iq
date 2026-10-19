@@ -21,17 +21,21 @@ function tiebreakerRecommendation(live){
   }
   return null;
 }"""
-if old_home not in home: raise SystemExit('home tiebreaker helper anchor not found')
-home=home.replace(old_home,new_home,1)
+if old_home in home:
+    home=home.replace(old_home,new_home,1)
+elif 'function scheduledRank(statusText)' not in home:
+    raise SystemExit('home tiebreaker helper anchor not found')
 home=home.replace('Based on the current market total for the final scheduled game.','Based on the current market total for the Monday Night Football game.',1)
-home=home.replace("globalThis.SFIQ_HOME_TEST={MODEL_BUILD,strategySnapshot,strategyRecommendation};","globalThis.SFIQ_HOME_TEST={MODEL_BUILD,strategySnapshot,strategyRecommendation,tiebreakerRecommendation};",1)
+if 'tiebreakerRecommendation};' not in home:
+    home=home.replace("globalThis.SFIQ_HOME_TEST={MODEL_BUILD,strategySnapshot,strategyRecommendation};","globalThis.SFIQ_HOME_TEST={MODEL_BUILD,strategySnapshot,strategyRecommendation,tiebreakerRecommendation};",1)
 
-# Model Lab previously assumed the last game in its internal array was the tiebreaker.
 old_app="const tbGame=games[games.length-1],tbTotal=Number(tbGame?.total),tbScore=Number.isFinite(tbTotal)?Math.round(tbTotal):null;"
 new_app="const tbGame=[...games].map(g=>({g,rank:(()=>{const m=String(g?.statusText||'').match(/(\\d{1,2})\\/(\\d{1,2})\\s*-\\s*(\\d{1,2}):(\\d{2})\\s*(AM|PM)/i);if(!m)return null;let h=Number(m[3])%12;if(String(m[5]).toUpperCase()==='PM')h+=12;return Number(m[1])*1e6+Number(m[2])*1e4+h*100+Number(m[4])})()})).filter(x=>Number.isFinite(x.rank)).sort((a,b)=>b.rank-a.rank)[0]?.g||null,tbTotal=Number(tbGame?.total),tbScore=Number.isFinite(tbTotal)?Math.round(tbTotal):null;"
-if old_app not in app: raise SystemExit('model lab tiebreaker anchor not found')
-app=app.replace(old_app,new_app,1)
+if old_app in app:
+    app=app.replace(old_app,new_app,1)
+elif 'const tbGame=[...games].map' not in app:
+    raise SystemExit('model lab tiebreaker anchor not found')
 
 HOME.write_text(home,encoding='utf-8')
 APP.write_text(app,encoding='utf-8')
-print('patched tiebreaker to use latest scheduled game (MNF), not market-array order')
+print('MNF tiebreaker patch applied or already present')
