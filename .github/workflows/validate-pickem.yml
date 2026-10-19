@@ -24,30 +24,9 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  apply-mnf-tiebreaker-fix:
-    if: github.event_name == 'push'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Apply MNF tiebreaker fix
-        run: python tools/patch-mnf-tiebreaker.py
-      - name: Publish fix if needed
-        run: |
-          if git diff --quiet; then
-            echo "MNF tiebreaker fix already present"
-            exit 0
-          fi
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add index.html apps/pickem/index.html
-          git commit -m "Fix tiebreaker to use Monday night game"
-          git push origin HEAD:main
-
   regression:
     runs-on: ubuntu-latest
     steps:
