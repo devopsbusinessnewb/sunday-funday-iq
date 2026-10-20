@@ -44,7 +44,7 @@ if version >= (2,2,0):
 
 status=live.get('confidenceStatus')
 card=live.get('myCard')
-assert status in ('partial','submitted'), f'unexpected confidenceStatus: {status!r}'
+assert status in ('unsubmitted','partial','submitted'), f'unexpected confidenceStatus: {status!r}'
 if status == 'submitted':
     assert isinstance(card,dict), 'submitted status requires myCard'
     assert len(card.get('picks',[]))==n
@@ -52,8 +52,12 @@ if status == 'submitted':
     assert sorted(card['weights'])==list(range(1,n+1))
     assert all(p in matchup for p,matchup in zip(card['picks'],market)), 'card picks must belong to their market matchup'
     card_state='complete current card'
-else:
+elif status == 'partial':
     assert not card, 'partial status must fail closed without publishing an unverified myCard'
     assert live.get('confidenceSource'), 'partial status requires a sanitized reason'
     card_state='fail-closed partial card'
+else:
+    assert not card, 'unsubmitted status must not publish myCard'
+    assert live.get('confidenceSource'), 'unsubmitted status requires a sanitized reason'
+    card_state='valid unsubmitted card'
 print(f"CBS current-week regression passed: Week {live['week']}, {n}-game slate, {card_state}")
