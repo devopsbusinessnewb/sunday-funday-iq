@@ -24,7 +24,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   regression:
@@ -38,6 +38,11 @@ jobs:
           git remote add origin "https://github.com/${GITHUB_REPOSITORY}.git"
           git fetch --depth 1 origin "${GITHUB_SHA}"
           git checkout --detach FETCH_HEAD
+      - name: Apply live week freshness patch
+        shell: bash
+        run: |
+          cd repo
+          python tools/patch-live-week-freshness.py
       - name: Check syntax
         shell: bash
         run: |
@@ -74,3 +79,17 @@ jobs:
           python tests/cbs-current-week-regression.py
           node tests/cbs-phone-refresh-regression.js
           python tests/cbs-refresh-handshake.py
+      - name: Publish freshness fix if needed
+        if: github.event_name == 'push'
+        shell: bash
+        run: |
+          cd repo
+          if git diff --quiet; then
+            echo "Live week freshness fix already present"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html tests/pickem-home-regression.js
+          git commit -m "Prefer freshest CBS week on Home"
+          git push origin HEAD:main
