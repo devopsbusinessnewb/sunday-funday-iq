@@ -58,6 +58,24 @@ function tiebreakerRecommendation(live){
   }
   return null;
 }
+function liveVersionKey(live){
+  const season=Number(live?.season||0),week=Number(live?.week||0),ts=Date.parse(live?.exportedAt||'')||0;
+  return[season,week,ts];
+}
+function chooseFreshLive(candidates){
+  return candidates.filter(x=>x&&Number(x.week)>0).sort((a,b)=>{const ak=liveVersionKey(a),bk=liveVersionKey(b);return bk[0]-ak[0]||bk[1]-ak[1]||bk[2]-ak[2]})[0]||null;
+}
+async function fetchFreshLive(){
+  const stamp=Date.now();
+  const urls=[
+    './data/live/cbs-pickem.json?t='+stamp,
+    'https://raw.githubusercontent.com/devopsbusinessnewb/sunday-funday-iq/main/data/live/cbs-pickem.json?t='+stamp
+  ];
+  const settled=await Promise.allSettled(urls.map(async url=>{const r=await fetch(url,{cache:'no-store'});if(!r.ok)throw Error('CBS data unavailable');return r.json()}));
+  const live=chooseFreshLive(settled.filter(x=>x.status==='fulfilled').map(x=>x.value));
+  if(!live)throw Error('CBS data unavailable');
+  return live;
+}
 function strategyRecommendation(snapshot){
   if(!snapshot?.currentEval||!snapshot.cards?.length)return null;
   const current={key:'current',label:'Current',eval:snapshot.currentEval};
@@ -72,7 +90,7 @@ function strategyRecommendation(snapshot){
 }
 async function bootHome(){
   let state=null;try{state=JSON.parse(localStorage.getItem('sfiqPickemV04')||'null')}catch{}
-  let live=null;try{const r=await fetch('./data/live/cbs-pickem.json?t='+Date.now(),{cache:'no-store'});if(!r.ok)throw Error('CBS data unavailable');live=await r.json()}catch{live={week:state?.week,season:state?.season,unavailable:true}}
+  let live=null;try{live=await fetchFreshLive()}catch{live={week:state?.week,season:state?.season,unavailable:true}}
   const snapshot=strategySnapshot(state,live),$=id=>document.getElementById(id);
   $('week').textContent='Week '+(snapshot.week||'—');
   const tb=tiebreakerRecommendation(live);if(tb){$('tiebreaker').classList.add('show');$('tiebreakerScore').textContent=tb.score+' points';$('tiebreakerDetail').textContent=`${tb.away} @ ${tb.home} · market total ${tb.total}. Same recommendation for all four strategy cards.`}
@@ -96,7 +114,7 @@ async function bootHome(){
   const safest=snapshot.cards.find(c=>c.key==='safest');
   $('strategies').innerHTML=snapshot.cards.map(c=>{const equivalent=c.equivalentTo?`Same card as ${STRATEGIES.find(x=>x[0]===c.equivalentTo)?.[1]||c.equivalentTo}`:null,trade=safest&&c.key!=='safest'?{top2:(c.eval.top2-safest.eval.top2)*100,win:(c.eval.win-safest.eval.win)*100,avg:c.eval.avg-safest.eval.avg,risk:(c.eval.bottomHalf-safest.eval.bottomHalf)*100}:null;return`<a class="strategy ${snapshot.status==='stale'?'stale':''}" href="${c.href}"><strong>${c.label}</strong>${snapshot.status==='stale'?'<span class="tag">OLD SIMULATION</span>':''}<div class="odds">${pct(c.eval.top2)} <span style="font-size:12px;font-weight:600;color:var(--muted)">Top 2</span></div><div class="secondary">Win ${pct(c.eval.win)} · Avg score ${Number(c.eval.avg).toFixed(1)}<br>Bottom-half risk ${pct(c.eval.bottomHalf,0)}${trade?`<br><b>vs Safest:</b> +${trade.top2.toFixed(1)} pts Top-2 · ${trade.avg>=0?'+':''}${trade.avg.toFixed(1)} avg pts`:''}${equivalent?`<br>${equivalent}`:''}</div><span class="foot">View complete card →</span></a>`}).join('');
 }
-globalThis.SFIQ_HOME_TEST={MODEL_BUILD,strategySnapshot,strategyRecommendation,tiebreakerRecommendation};
+globalThis.SFIQ_HOME_TEST={MODEL_BUILD,strategySnapshot,strategyRecommendation,tiebreakerRecommendation,chooseFreshLive,liveVersionKey};
 if(!TESTING)bootHome();
 </script>
 </body>

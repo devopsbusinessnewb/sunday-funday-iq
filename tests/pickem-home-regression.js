@@ -20,6 +20,8 @@ const result=home.strategySnapshot(state,{season:2026,week:3},Date.parse('2026-0
 if(result.status!=='ready'||result.cards.length!==4||result.cards[3].key!=='maxUpside')throw new Error('Current week four-strategy dashboard missing');
 if(!result.cards.every(x=>x.href.includes('strategy='+x.key)))throw new Error('Strategy tiles do not open corresponding full cards');
 if(home.strategySnapshot(state,{season:2026,week:4},Date.now()).status!=='missing')throw new Error('Old week projections appeared as current cards');
+if(home.chooseFreshLive([{season:2026,week:6,exportedAt:'2026-10-20T14:10:00Z'},{season:2026,week:7,exportedAt:'2026-10-20T14:09:00Z'}]).week!==7)throw new Error('Home did not prefer the newer CBS week over a later stale-week timestamp');
+if(home.chooseFreshLive([{season:2026,week:7,exportedAt:'2026-10-20T14:09:00Z'},{season:2026,week:7,exportedAt:'2026-10-20T14:11:00Z'}]).exportedAt!=='2026-10-20T14:11:00Z')throw new Error('Home did not prefer the newest publication within the same week');
 if(home.strategySnapshot({...state,marketUpdatedAt:'2026-09-27T12:05:00Z'},{season:2026,week:3},Date.parse('2026-09-27T12:30:00Z')).status!=='stale')throw new Error('New market inputs did not stale the saved simulation');
 if(home.strategySnapshot(state,{season:2026,week:3,exportedAt:'2026-09-27T12:10:00Z'},Date.parse('2026-09-27T12:30:00Z')).status!=='stale')throw new Error('New published CBS picks did not stale the saved simulation');
 if(home.strategySnapshot(state,{season:2026,week:3},Date.parse('2026-09-29T12:00:00Z')).status!=='stale')throw new Error('Old simulation was presented as current');
