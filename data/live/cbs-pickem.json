@@ -5,26 +5,26 @@
   "week": 7,
   "slateSize": 14,
   "poolSize": 94,
-  "exportedAt": "2026-10-22T17:22:38.096455Z",
+  "exportedAt": "2026-10-22T19:24:09.850404Z",
   "source": "Automated local CBS browser capture",
   "privacy": "Raw CBS session/page data sanitized locally; pool/account identifiers and participant names not published.",
   "confidenceStatus": "unsubmitted",
   "confidenceSource": "CBS Picks status",
-  "marketCapturedAt": "2026-10-22T17:22:38.096416Z",
+  "marketCapturedAt": "2026-10-22T19:24:09.850377Z",
   "marketSource": "CBS Sports odds \u2014 Week 7",
   "market": [
     {
       "away": "NE",
       "home": "CHI",
       "awayML": 134,
-      "homeML": -152,
+      "homeML": -155,
       "total": 50.5
     },
     {
       "away": "PIT",
       "home": "NO",
       "awayML": -172,
-      "homeML": 145,
+      "homeML": 154,
       "total": 44.5
     },
     {
@@ -37,7 +37,7 @@
     {
       "away": "CLE",
       "home": "TEN",
-      "awayML": -124,
+      "awayML": -126,
       "homeML": 110,
       "total": 37.5
     },
@@ -45,7 +45,7 @@
       "away": "IND",
       "home": "MIN",
       "awayML": 240,
-      "homeML": -278,
+      "homeML": -285,
       "total": 41.5
     },
     {
@@ -53,12 +53,12 @@
       "home": "NYJ",
       "awayML": 194,
       "homeML": -225,
-      "total": 39.5
+      "total": 39.2
     },
     {
       "away": "TB",
       "home": "CAR",
-      "awayML": 145,
+      "awayML": 140,
       "homeML": -158,
       "total": 44.5
     },
@@ -66,7 +66,7 @@
       "away": "CIN",
       "home": "BAL",
       "awayML": 102,
-      "homeML": -115,
+      "homeML": -118,
       "total": 48.8
     },
     {
@@ -79,7 +79,7 @@
     {
       "away": "DEN",
       "home": "ARI",
-      "awayML": -233,
+      "awayML": -210,
       "homeML": 195,
       "total": 43.5
     },
@@ -93,15 +93,15 @@
     {
       "away": "LAR",
       "home": "LV",
-      "awayML": -213,
+      "awayML": -200,
       "homeML": 180,
       "total": 48.5
     },
     {
       "away": "KC",
       "home": "SEA",
-      "awayML": 124,
-      "homeML": -143,
+      "awayML": 122,
+      "homeML": -142,
       "total": 42.5
     },
     {
@@ -214,7 +214,7 @@
   ],
   "fieldModel": {
     "source": "Sanitized CBS revealed-pool observations",
-    "capturedAt": "2026-10-22T17:22:30.912610Z",
+    "capturedAt": "2026-10-22T19:24:02.255515Z",
     "observedEntries": 0,
     "locked": []
   },
@@ -222,13 +222,13 @@
     {
       "title": "NFL Football Tourney | Picks",
       "url": "sanitized://cbs-pickem/week-7",
-      "ts": "2026-10-22T17:22:25.656694Z",
+      "ts": "2026-10-22T19:23:56.992300Z",
       "text": "CBS Pickem sanitized ownership\n0-0\nNE\n26%\n0-0\nCHI\n74%\n0-0\nPIT\n82%\n0-0\nNO\n18%\n0-0\nSF\n93%\n0-0\nATL\n7%\n0-0\nCLE\n91%\n0-0\nTEN\n9%\n0-0\nIND\n4%\n0-0\nMIN\n96%\n0-0\nMIA\n10%\n0-0\nNYJ\n90%\n0-0\nTB\n6%\n0-0\nCAR\n94%\n0-0\nCIN\n48%\n0-0\nBAL\n52%\n0-0\nNYG\n17%\n0-0\nHOU\n83%\n0-0\nDEN\n92%\n0-0\nARI\n8%\n0-0\nGB\n34%\n0-0\nDET\n66%\n0-0\nLAR\n61%\n0-0\nLV\n39%\n0-0\nKC\n64%\n0-0\nSEA\n36%\n0-0\nDAL\n82%\n0-0\nPHI\n18%"
     },
     {
       "title": "NFL Football Tourney | Weekly Standings",
       "url": "sanitized://cbs-pickem/week-7/standings/weekly",
-      "ts": "2026-10-22T17:22:30.912610Z",
+      "ts": "2026-10-22T19:24:02.255515Z",
       "text": "Weekly Standings\nSanitized observations\nSUN\nNE\nCHI\nSUN\nPIT\nNO\nSUN\nSF\nATL\nSUN\nCLE\nTEN\nSUN\nIND\nMIN\nSUN\nMIA\nNYJ\nSUN\nTB\nCAR\nSUN\nCIN\nBAL\nSUN\nNYG\nHOU\nSUN\nDEN\nARI\nSUN\nGB\nDET\nSUN\nLAR\nLV\nSUN\nKC\nSEA\nSUN\nDAL\nPHI"
     }
   ]
