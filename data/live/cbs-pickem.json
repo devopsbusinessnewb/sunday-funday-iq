@@ -5,12 +5,12 @@
   "week": 7,
   "slateSize": 14,
   "poolSize": 94,
-  "exportedAt": "2026-10-23T22:24:08.450850Z",
+  "exportedAt": "2026-10-24T00:39:10.366141Z",
   "source": "Automated local CBS browser capture",
   "privacy": "Raw CBS session/page data sanitized locally; pool/account identifiers and participant names not published.",
   "confidenceStatus": "submitted",
   "confidenceSource": "Authenticated CBS Picks card",
-  "marketCapturedAt": "2026-10-23T22:24:08.450818Z",
+  "marketCapturedAt": "2026-10-24T00:39:10.366115Z",
   "marketSource": "CBS Sports odds \u2014 Week 7",
   "market": [
     {
@@ -23,7 +23,7 @@
     {
       "away": "PIT",
       "home": "NO",
-      "awayML": -166,
+      "awayML": -162,
       "homeML": 142,
       "total": 44.5
     },
@@ -58,15 +58,15 @@
     {
       "away": "TB",
       "home": "CAR",
-      "awayML": 132,
-      "homeML": -152,
+      "awayML": 134,
+      "homeML": -154,
       "total": 44.5
     },
     {
       "away": "CIN",
       "home": "BAL",
-      "awayML": -108,
-      "homeML": -105,
+      "awayML": -112,
+      "homeML": -102,
       "total": 48.2
     },
     {
@@ -94,15 +94,15 @@
       "away": "LAR",
       "home": "LV",
       "awayML": -174,
-      "homeML": 146,
+      "homeML": 150,
       "total": 48.2
     },
     {
       "away": "KC",
       "home": "SEA",
-      "awayML": 122,
-      "homeML": -142,
-      "total": 42.2
+      "awayML": 125,
+      "homeML": -144,
+      "total": 42.5
     },
     {
       "away": "DAL",
@@ -214,7 +214,7 @@
   ],
   "fieldModel": {
     "source": "Sanitized CBS revealed-pool observations",
-    "capturedAt": "2026-10-23T22:24:01.220546Z",
+    "capturedAt": "2026-10-24T00:39:02.929824Z",
     "observedEntries": 86,
     "locked": [
       {
@@ -576,13 +576,13 @@
     {
       "title": "NFL Football Tourney | Picks",
       "url": "sanitized://cbs-pickem/week-7",
-      "ts": "2026-10-23T22:23:55.948121Z",
+      "ts": "2026-10-24T00:38:57.453678Z",
       "text": "CBS Pickem sanitized ownership\n0-0\nNE\n26%\n0-0\nCHI\n74%\n0-0\nPIT\n82%\n0-0\nNO\n18%\n0-0\nSF\n92%\n0-0\nATL\n8%\n0-0\nCLE\n91%\n0-0\nTEN\n9%\n0-0\nIND\n5%\n0-0\nMIN\n95%\n0-0\nMIA\n10%\n0-0\nNYJ\n90%\n0-0\nTB\n7%\n0-0\nCAR\n93%\n0-0\nCIN\n49%\n0-0\nBAL\n51%\n0-0\nNYG\n17%\n0-0\nHOU\n83%\n0-0\nDEN\n92%\n0-0\nARI\n8%\n0-0\nGB\n34%\n0-0\nDET\n66%\n0-0\nLAR\n62%\n0-0\nLV\n38%\n0-0\nKC\n63%\n0-0\nSEA\n37%\n0-0\nDAL\n82%\n0-0\nPHI\n18%"
     },
     {
       "title": "NFL Football Tourney | Weekly Standings",
       "url": "sanitized://cbs-pickem/week-7/standings/weekly",
-      "ts": "2026-10-23T22:24:01.220546Z",
+      "ts": "2026-10-24T00:39:02.929824Z",
       "text": "Weekly Standings\nSanitized observations\nSUN\nNE\nCHI\nSUN\nPIT\nNO\nSUN\nSF\nATL\nSUN\nCLE\nTEN\nSUN\nIND\nMIN\nSUN\nMIA\nNYJ\nSUN\nTB\nCAR\nSUN\nCIN\nBAL\nSUN\nNYG\nHOU\nSUN\nDEN\nARI\nSUN\nGB\nDET\nSUN\nLAR\nLV\nSUN\nKC\nSEA\nSUN\nDAL\nPHI\nCHI\n(14)\nCHI\n(14)\nCHI\n(14)\nCHI\n(14)\nCHI\n(14)\nCHI\n(14)\nCHI\n(14)\nCHI\n(14)\nCHI\n(14)\nCHI\n(13)\nCHI\n(13)\nCHI\n(13)\nCHI\n(13)\nCHI\n(12)\nCHI\n(12)\nCHI\n(12)\nCHI\n(12)\nCHI\n(11)\nCHI\n(11)\nCHI\n(11)\nCHI\n(11)\nCHI\n(10)\nCHI\n(10)\nCHI\n(10)\nCHI\n(10)\nCHI\n(9)\nCHI\n(9)\nCHI\n(8)\nCHI\n(8)\nCHI\n(8)\nCHI\n(8)\nCHI\n(8)\nCHI\n(8)\nCHI\n(7)\nCHI\n(6)\nCHI\n(6)\nCHI\n(6)\nCHI\n(6)\nCHI\n(5)\nCHI\n(5)\nCHI\n(5)\nCHI\n(5)\nCHI\n(5)\nCHI\n(5)\nCHI\n(5)\nCHI\n(5)\nCHI\n(5)\nCHI\n(4)\nCHI\n(4)\nCHI\n(4)\nCHI\n(4)\nCHI\n(4)\nCHI\n(3)\nCHI\n(3)\nCHI\n(3)\nCHI\n(2)\nCHI\n(2)\nCHI\n(2)\nCHI\n(1)\nCHI\n(1)\nCHI\n(1)\nCHI\n(1)\nCHI\n(1)\nNE\n(5)\nNE\n(3)\nNE\n(4)\nNE\n(1)\nNE\n(4)\nNE\n(5)\nNE\n(13)\nNE\n(1)\nNE\n(1)\nNE\n(7)\nNE\n(12)\nNE\n(1)\nNE\n(1)\nNE\n(4)\nNE\n(14)\nNE\n(3)\nNE\n(7)\nNE\n(3)\nNE\n(6)\nNE\n(9)\nNE\n(14)\nNE\n(14)\nNE\n(11)"
     }
   ],
