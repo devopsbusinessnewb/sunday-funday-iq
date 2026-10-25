@@ -51,19 +51,25 @@ def authenticated_self_block(text):
     for i,line in enumerate(lines):
         wm=re.fullmatch(r'(\d{1,2})\s+Pts?',line,re.I)
         if not wm: continue
+        candidates=[]
         for j in range(i-1,max(-1,i-12),-1):
+            if re.fullmatch(r'(\d{1,2})\s+Pts?',lines[j],re.I): break
             team=team_token(lines[j])
-            if team:
-                pairs.append((team,int(wm.group(1)))); break
+            if team and team not in candidates: candidates.append(team)
+        # Plain body text can contain both matchup teams around one confidence
+        # control. In that case the visual selection is lost, so guessing is unsafe.
+        if len(candidates)==1: pairs.append((candidates[0],int(wm.group(1))))
     if len(pairs)<n:
         old=[]
         for i,line in enumerate(lines):
             wm=re.fullmatch(r'\((\d{1,2})\)',line)
             if not wm: continue
+            candidates=[]
             for j in range(i-1,max(-1,i-8),-1):
+                if re.fullmatch(r'\((\d{1,2})\)',lines[j]): break
                 team=team_token(lines[j])
-                if team:
-                    old.append((team,int(wm.group(1)))); break
+                if team and team not in candidates: candidates.append(team)
+            if len(candidates)==1: old.append((candidates[0],int(wm.group(1))))
         if len(old)>=n: pairs=old
     for start in range(max(0,len(pairs)-n+1)):
         window=pairs[start:start+n]
