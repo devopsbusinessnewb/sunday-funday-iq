@@ -5,12 +5,12 @@
   "week": 7,
   "slateSize": 14,
   "poolSize": 94,
-  "exportedAt": "2026-10-25T16:09:03.465127Z",
+  "exportedAt": "2026-10-25T16:54:04.246966Z",
   "source": "Automated local CBS browser capture",
   "privacy": "Raw CBS session/page data sanitized locally; pool/account identifiers and participant names not published.",
   "confidenceStatus": "submitted",
   "confidenceSource": "Authenticated CBS Picks card",
-  "marketCapturedAt": "2026-10-25T16:09:03.465100Z",
+  "marketCapturedAt": "2026-10-25T16:54:04.246931Z",
   "marketSource": "CBS Sports odds \u2014 Week 7",
   "market": [
     {
@@ -23,29 +23,29 @@
     {
       "away": "SF",
       "home": "ATL",
-      "awayML": -142,
-      "homeML": 124,
-      "total": 50.0
+      "awayML": -147,
+      "homeML": 126,
+      "total": 49.8
     },
     {
       "away": "CLE",
       "home": "TEN",
-      "awayML": -134,
-      "homeML": 115,
-      "total": 37.0
+      "awayML": -126,
+      "homeML": 110,
+      "total": 36.8
     },
     {
       "away": "IND",
       "home": "MIN",
-      "awayML": 265,
+      "awayML": 275,
       "homeML": -325,
-      "total": 41.5
+      "total": 41.8
     },
     {
       "away": "MIA",
       "home": "NYJ",
       "awayML": 180,
-      "homeML": -200,
+      "homeML": -186,
       "total": 39.2
     },
     {
@@ -58,8 +58,8 @@
     {
       "away": "CIN",
       "home": "BAL",
-      "awayML": -148,
-      "homeML": 130,
+      "awayML": -162,
+      "homeML": 137,
       "total": 46.5
     },
     {
@@ -74,7 +74,7 @@
       "home": "ARI",
       "awayML": -225,
       "homeML": 195,
-      "total": 43.0
+      "total": 43.5
     },
     {
       "away": "GB",
@@ -93,8 +93,8 @@
     {
       "away": "KC",
       "home": "SEA",
-      "awayML": 126,
-      "homeML": -142,
+      "awayML": 130,
+      "homeML": -147,
       "total": 42.5
     },
     {
@@ -107,7 +107,7 @@
     {
       "away": "DAL",
       "home": "PHI",
-      "awayML": -205,
+      "awayML": -218,
       "homeML": 190,
       "total": 44.0
     }
@@ -116,9 +116,9 @@
     {
       "away": "PIT",
       "home": "NO",
-      "completed": false,
-      "winner": null,
-      "statusText": "7:04 - 4th"
+      "completed": true,
+      "winner": "PIT",
+      "statusText": "Final"
     },
     {
       "away": "SF",
@@ -214,7 +214,7 @@
   ],
   "fieldModel": {
     "source": "Sanitized CBS revealed-pool observations",
-    "capturedAt": "2026-10-25T16:08:57.141185Z",
+    "capturedAt": "2026-10-25T16:53:57.579272Z",
     "observedEntries": 87,
     "locked": [
       {
@@ -929,13 +929,13 @@
     {
       "title": "NFL Football Tourney | Picks",
       "url": "sanitized://cbs-pickem/week-7",
-      "ts": "2026-10-25T16:08:52.059864Z",
+      "ts": "2026-10-25T16:53:52.062097Z",
       "text": "CBS Pickem sanitized ownership\n0-0\nPIT\n82%\n0-0\nNO\n18%\n0-0\nSF\n91%\n0-0\nATL\n9%\n0-0\nCLE\n90%\n0-0\nTEN\n10%\n0-0\nIND\n5%\n0-0\nMIN\n95%\n0-0\nMIA\n10%\n0-0\nNYJ\n90%\n0-0\nTB\n7%\n0-0\nCAR\n93%\n0-0\nCIN\n53%\n0-0\nBAL\n47%\n0-0\nNYG\n16%\n0-0\nHOU\n84%\n0-0\nDEN\n92%\n0-0\nARI\n8%\n0-0\nGB\n33%\n0-0\nDET\n67%\n0-0\nLAR\n63%\n0-0\nLV\n37%\n0-0\nKC\n63%\n0-0\nSEA\n37%\n0-0\nNE\n26%\n0-0\nCHI\n74%\n0-0\nDAL\n82%\n0-0\nPHI\n18%"
     },
     {
       "title": "NFL Football Tourney | Weekly Standings",
       "url": "sanitized://cbs-pickem/week-7/standings/weekly",
-      "ts": "2026-10-25T16:08:57.141185Z",
+      "ts": "2026-10-25T16:53:57.579272Z",
       "text": "Weekly Standings\nSanitized observations\nSUN\nPIT\nNO\nSUN\nSF\nATL\nSUN\nCLE\nTEN\nSUN\nIND\nMIN\nSUN\nMIA\nNYJ\nSUN\nTB\nCAR\nSUN\nCIN\nBAL\nSUN\nNYG\nHOU\nSUN\nDEN\nARI\nSUN\nGB\nDET\nSUN\nLAR\nLV\nSUN\nKC\nSEA\nSUN\nNE\nCHI\nSUN\nDAL\nPHI\nPIT\n(13)\nPIT\n(13)\nPIT\n(13)\nPIT\n(13)\nPIT\n(13)\nPIT\n(12)\nPIT\n(13)\nPIT\n(12)\nPIT\n(9)\nPIT\n(9)\nPIT\n(8)\nPIT\n(10)\nPIT\n(8)\nPIT\n(13)\nPIT\n(10)\nPIT\n(12)\nPIT\n(8)\nPIT\n(12)\nPIT\n(6)\nPIT\n(11)\nPIT\n(11)\nPIT\n(5)\nPIT\n(8)\nPIT\n(7)\nPIT\n(13)\nPIT\n(14)\nPIT\n(8)\nPIT\n(9)\nNO\n(5)\nPIT\n(6)\nPIT\n(9)\nPIT\n(10)\nPIT\n(14)\nPIT\n(14)\nPIT\n(11)\nNO\n(4)\nPIT\n(14)\nPIT\n(14)\nNO\n(7)\nPIT\n(9)\nPIT\n(8)\nPIT\n(5)\nNO\n(2)\nPIT\n(13)\nPIT\n(13)\nNO\n(12)\nPIT\n(11)\nPIT\n(13)\nNO\n(8)\nPIT\n(11)\nNO\n(11)\nNO\n(10)\nPIT\n(12)\nNO\n(9)\nPIT\n(2)\nPIT\n(6)\nPIT\n(7)\nPIT\n(10)\nPIT\n(6)\nPIT\n(11)\nPIT\n(5)\nPIT\n(10)\nPIT\n(7)\nPIT\n(7)\nNO\n(11)\nPIT\n(10)\nPIT\n(10)\nPIT\n(9)\nNO\n(4)\nNO\n(3)\nPIT\n(3)\nPIT\n(7)\nPIT\n(5)\nPIT\n(5)\nPIT\n(4)\nNO\n(4)\nPIT\n(4)\nNO\n(1)\nPIT\n(2)\nNO\n(1)\nNO\n(14)\nNO\n(2)\nNO\n(3)\nNO\n(13)\nNO\n(3)\nNO\n(14)\nNO\n(13)\nCHI\n(14)\nCHI\n(14)\nCHI\n(14)\nCHI\n(14)\nCHI\n(14)\nCHI\n(14)\nCHI\n(11)\nCHI\n(11)\nCHI\n(13)\nCHI\n(13)\nCHI\n(11)\nCHI\n(9)\nCHI\n(10)\nCHI\n(5)\nCHI\n(8)\nCHI\n(6)\nCHI\n(9)\nCHI\n(5)\nCHI\n(11)\nCHI\n(5)\nCHI\n(4)\nCHI\n(10)\nCHI\n(7)\nCHI\n(8)\nCHI\n(2)\nCHI\n(1)\nCHI\n(6)\nCHI\n(5)\nCHI\n(14)\nCHI\n(8)\nCHI\n(5)\nCHI\n(4)\nNE\n(1)\nCHI\n(3)\nCHI\n(14)\nNE\n(1)\nNE\n(1)\nCHI\n(14)\nCHI\n(5)\nCHI\n(6)\nCHI\n(8)\nCHI\n(13)\nNE\n(14)\nNE\n(14)\nCHI\n(13)\nCHI\n(2)\nNE\n(14)\nCHI\n(12)\nCHI\n(1)\nCHI\n(12)\nCHI\n(12)\nNE\n(7)\nCHI\n(12)\nCHI\n(10)\nCHI\n(5)\nCHI\n(4)\nCHI\n(1)\nCHI\n(5)\nNE\n(1)\nCHI\n(6)\nNE\n(5)\nCHI\n(3)\nCHI\n(3)\nCHI\n(10)\nNE\n(3)\nNE\n(9)\nNE\n(3)\nCHI\n(8)\nCHI\n(8)\nCHI\n(4)\nNE\n(4)\nNE\n(4)\nCHI\n(1)\nCHI\n(5)\nNE\n(5)\nCHI\n(4)\nCHI\n(1)\nCHI\n(2)\nNE\n(3)\nNE\n(4)\nNE\n(13)\nNE\n(1)\nNE\n(12)\nNE\n(7)\nNE\n(6)"
     }
   ],
