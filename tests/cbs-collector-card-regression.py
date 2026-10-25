@@ -48,4 +48,11 @@ assert collector.authenticated_self_block(rendered_card(picked=13,total=14))==''
 bad=[14,13,12,11,10,9,8,7,6,5,4,3,2,2]
 assert collector.authenticated_self_block(rendered_card(weights=bad))=='', 'Duplicate/missing confidence weights must fail closed'
 
+# CBS can render both teams around a single confidence control. Plain body text
+# loses the visual selected state, so the parser must abstain instead of guessing.
+ambiguous=['14/14 Picks','PATRIOTS','BEARS','11 Pts']
+for team,weight in zip(teams[1:],range(13,0,-1)):
+    ambiguous.extend([team,'Some CBS row detail',f'{weight} Pts'])
+assert collector.authenticated_self_block('\n'.join(ambiguous))=='', 'Ambiguous two-team confidence row must fail closed'
+
 print('CBS collector card regression: PASS')
