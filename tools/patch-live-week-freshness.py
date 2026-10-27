@@ -53,14 +53,31 @@ if extra.strip() not in test:
     if marker not in test: raise SystemExit('home regression insertion anchor missing')
     test=test.replace(marker,marker+extra,1)
 
-old_run=".run-screen{min-height:70vh;display:flex;flex-direction:column;justify-content:center}.run-screen h2{font-size:26px}"
-new_run=".run-screen{min-height:70vh;min-height:70svh;display:flex;flex-direction:column;justify-content:flex-start;padding-top:clamp(72px,14svh,140px)}.run-screen h2{font-size:26px}.run-message{min-height:3em}"
-if old_run in app:
-    app=app.replace(old_run,new_run,1)
-elif 'padding-top:clamp(72px,14svh,140px)' not in app:
-    raise SystemExit('refresh layout anchor missing')
+# iPhone standalone mode should use an opaque status bar. The previous
+# translucent mode visually blended/blurred the top of the app into iOS chrome.
+home=home.replace('<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">','<meta name="apple-mobile-web-app-status-bar-style" content="black">')
+if '<meta name="apple-mobile-web-app-status-bar-style" content="black">' not in home:
+    raise SystemExit('home status-bar style anchor missing')
+
+app_head='<meta name="theme-color" content="#07111f">'
+app_status='''<meta name="theme-color" content="#07111f">\n<meta name="apple-mobile-web-app-capable" content="yes">\n<meta name="apple-mobile-web-app-status-bar-style" content="black">'''
+if '<meta name="apple-mobile-web-app-status-bar-style" content="black">' not in app:
+    if app_head not in app: raise SystemExit('app theme-color anchor missing')
+    app=app.replace(app_head,app_status,1)
+
+# Turn the refresh experience into a fixed full-screen layer. This keeps the
+# document underneath stable and prevents vertical jumping as stage text changes.
+old_fixed=".run-screen{min-height:70vh;min-height:70svh;display:flex;flex-direction:column;justify-content:flex-start;padding-top:clamp(72px,14svh,140px)}.run-screen h2{font-size:26px}.run-message{min-height:3em}"
+new_fixed=".run-screen{position:fixed;z-index:500;inset:0;overflow:auto;background:var(--bg);display:flex;flex-direction:column;justify-content:flex-start;padding:calc(env(safe-area-inset-top) + 72px) max(18px,env(safe-area-inset-right)) calc(env(safe-area-inset-bottom) + 36px) max(18px,env(safe-area-inset-left))}.run-screen>*{width:min(720px,100%);margin-left:auto;margin-right:auto}.run-screen h2{font-size:26px}.run-message{min-height:3.4em}"
+old_center=".run-screen{min-height:70vh;display:flex;flex-direction:column;justify-content:center}.run-screen h2{font-size:26px}"
+if old_fixed in app:
+    app=app.replace(old_fixed,new_fixed,1)
+elif old_center in app:
+    app=app.replace(old_center,new_fixed,1)
+elif 'position:fixed;z-index:500;inset:0' not in app:
+    raise SystemExit('refresh overlay anchor missing')
 
 HOME.write_text(home,encoding='utf-8')
 APP.write_text(app,encoding='utf-8')
 TEST.write_text(test,encoding='utf-8')
-print('patched Home freshness and stabilized Pickem refresh progress layout')
+print('patched Home freshness, iPhone safe area, and fixed Pickem refresh overlay')
