@@ -9,6 +9,7 @@ on:
       - 'data/analysis/cbs-**'
       - 'extensions/cbs-pickem-bridge/**'
       - 'tools/cbs-**'
+      - 'tools/patch-live-week-freshness.py'
       - 'tests/**'
       - '.github/workflows/validate-pickem.yml'
   pull_request:
@@ -19,6 +20,7 @@ on:
       - 'data/analysis/cbs-**'
       - 'extensions/cbs-pickem-bridge/**'
       - 'tools/cbs-**'
+      - 'tools/patch-live-week-freshness.py'
       - 'tests/**'
       - '.github/workflows/validate-pickem.yml'
   workflow_dispatch:
@@ -40,7 +42,7 @@ jobs:
           git remote add origin "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
           git fetch --depth 1 origin "${GITHUB_SHA}"
           git checkout --detach FETCH_HEAD
-      - name: Apply live week freshness patch
+      - name: Apply current Pickem UI patches
         shell: bash
         run: |
           cd repo
@@ -81,17 +83,17 @@ jobs:
           python tests/cbs-current-week-regression.py
           node tests/cbs-phone-refresh-regression.js
           python tests/cbs-refresh-handshake.py
-      - name: Publish freshness fix if needed
+      - name: Publish validated UI patch if needed
         if: github.event_name == 'push'
         shell: bash
         run: |
           cd repo
           if git diff --quiet; then
-            echo "Live week freshness fix already present"
+            echo "Current Pickem UI patches already present"
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add index.html tests/pickem-home-regression.js
-          git commit -m "Prefer freshest CBS week on Home"
+          git add index.html apps/pickem/index.html tests/pickem-home-regression.js
+          git commit -m "Stabilize Pickem refresh progress layout"
           git push origin HEAD:main
