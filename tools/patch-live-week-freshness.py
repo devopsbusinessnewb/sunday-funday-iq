@@ -1,8 +1,10 @@
 from pathlib import Path
 
 HOME=Path('index.html')
+APP=Path('apps/pickem/index.html')
 TEST=Path('tests/pickem-home-regression.js')
 home=HOME.read_text(encoding='utf-8')
+app=APP.read_text(encoding='utf-8')
 test=TEST.read_text(encoding='utf-8')
 
 if 'function chooseFreshLive(' not in home:
@@ -51,6 +53,14 @@ if extra.strip() not in test:
     if marker not in test: raise SystemExit('home regression insertion anchor missing')
     test=test.replace(marker,marker+extra,1)
 
+old_run=".run-screen{min-height:70vh;display:flex;flex-direction:column;justify-content:center}.run-screen h2{font-size:26px}"
+new_run=".run-screen{min-height:70vh;min-height:70svh;display:flex;flex-direction:column;justify-content:flex-start;padding-top:clamp(72px,14svh,140px)}.run-screen h2{font-size:26px}.run-message{min-height:3em}"
+if old_run in app:
+    app=app.replace(old_run,new_run,1)
+elif 'padding-top:clamp(72px,14svh,140px)' not in app:
+    raise SystemExit('refresh layout anchor missing')
+
 HOME.write_text(home,encoding='utf-8')
+APP.write_text(app,encoding='utf-8')
 TEST.write_text(test,encoding='utf-8')
-print('patched Home to choose the freshest current-week CBS feed across Pages and raw main')
+print('patched Home freshness and stabilized Pickem refresh progress layout')
