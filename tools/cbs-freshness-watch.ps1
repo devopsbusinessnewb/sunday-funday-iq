@@ -16,7 +16,12 @@ function Get-MaxAgeMinutes {
   if($day -eq 6 -and $hour -ge 16){ return 30 } # Saturday decision window
   if($day -eq 0 -and $hour -ge 6){ return 30 }  # Sunday
   if($day -eq 1 -and $hour -ge 16){ return 30 } # Monday evening
-  if($day -eq 2){ return 720 }                  # Tuesday: low-change day
+  # Tuesday morning is the CBS week-rollover window. Refresh at least hourly
+  # from 6:00-9:59 AM local time so a late CBS rollover is picked up without
+  # requiring the phone to trigger it. The existing 15-minute updater supplies
+  # the scheduler; this only changes when a CBS collection is considered due.
+  if($day -eq 2 -and $hour -ge 6 -and $hour -lt 10){ return 60 }
+  if($day -eq 2){ return 720 }                  # Tuesday after rollover window
   return 120                                    # Other lower-change windows
 }
 
