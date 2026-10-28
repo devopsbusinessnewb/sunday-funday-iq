@@ -5,12 +5,12 @@
   "week": 8,
   "slateSize": 14,
   "poolSize": 94,
-  "exportedAt": "2026-10-28T11:54:03.541362Z",
+  "exportedAt": "2026-10-28T14:09:08.968217Z",
   "source": "Automated local CBS browser capture",
   "privacy": "Raw CBS session/page data sanitized locally; pool/account identifiers and participant names not published.",
   "confidenceStatus": "unsubmitted",
   "confidenceSource": "CBS Picks status",
-  "marketCapturedAt": "2026-10-28T11:54:03.541337Z",
+  "marketCapturedAt": "2026-10-28T14:09:08.968180Z",
   "marketSource": "CBS Sports odds \u2014 Week 8",
   "market": [
     {
@@ -23,8 +23,8 @@
     {
       "away": "BAL",
       "home": "BUF",
-      "awayML": 146,
-      "homeML": -174,
+      "awayML": 155,
+      "homeML": -175,
       "total": 54.2
     },
     {
@@ -37,14 +37,14 @@
     {
       "away": "ARI",
       "home": "DAL",
-      "awayML": 270,
-      "homeML": -323,
+      "awayML": 280,
+      "homeML": -333,
       "total": 54.5
     },
     {
       "away": "MIN",
       "home": "DET",
-      "awayML": 155,
+      "awayML": 145,
       "homeML": -170,
       "total": 46.2
     },
@@ -93,8 +93,8 @@
     {
       "away": "NE",
       "home": "MIA",
-      "awayML": -325,
-      "homeML": 275,
+      "awayML": -310,
+      "homeML": 260,
       "total": 44.0
     },
     {
@@ -214,7 +214,7 @@
   ],
   "fieldModel": {
     "source": "Sanitized CBS revealed-pool observations",
-    "capturedAt": "2026-10-28T11:53:57.075186Z",
+    "capturedAt": "2026-10-28T14:09:02.778584Z",
     "observedEntries": 0,
     "locked": []
   },
@@ -222,13 +222,13 @@
     {
       "title": "NFL Football Tourney | Picks",
       "url": "sanitized://cbs-pickem/week-8",
-      "ts": "2026-10-28T11:53:52.372027Z",
+      "ts": "2026-10-28T14:08:57.602040Z",
       "text": "CBS Pickem sanitized ownership\n0-0\nCAR\n9%\n0-0\nGB\n91%\n0-0\nBAL\n5%\n0-0\nBUF\n95%\n0-0\nTEN\n1%\n0-0\nCIN\n99%\n0-0\nARI\n10%\n0-0\nDAL\n90%\n0-0\nMIN\n34%\n0-0\nDET\n66%\n0-0\nLV\n73%\n0-0\nNYJ\n27%\n0-0\nCLE\n24%\n0-0\nPIT\n76%\n0-0\nATL\n47%\n0-0\nTB\n53%\n0-0\nIND\n3%\n0-0\nJAX\n97%\n0-0\nLAC\n4%\n0-0\nLAR\n96%\n0-0\nKC\n52%\n0-0\nDEN\n48%\n0-0\nNE\n97%\n0-0\nMIA\n3%\n0-0\nPHI\n26%\n0-0\nWAS\n74%\n0-0\nCHI\n30%\n0-0\nSEA\n70%"
     },
     {
       "title": "NFL Football Tourney | Weekly Standings",
       "url": "sanitized://cbs-pickem/week-8/standings/weekly",
-      "ts": "2026-10-28T11:53:57.075186Z",
+      "ts": "2026-10-28T14:09:02.778584Z",
       "text": "Weekly Standings\nSanitized observations\nSUN\nCAR\nGB\nSUN\nBAL\nBUF\nSUN\nTEN\nCIN\nSUN\nARI\nDAL\nSUN\nMIN\nDET\nSUN\nLV\nNYJ\nSUN\nCLE\nPIT\nSUN\nATL\nTB\nSUN\nIND\nJAX\nSUN\nLAC\nLAR\nSUN\nKC\nDEN\nSUN\nNE\nMIA\nSUN\nPHI\nWAS\nSUN\nCHI\nSEA"
     }
   ]
