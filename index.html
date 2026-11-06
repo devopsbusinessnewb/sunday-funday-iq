@@ -24,7 +24,7 @@
 <main class="app">
   <header class="bar"><div><div class="eyebrow">SUNDAY FUNDAY IQ</div><h1>CBS Pick'em</h1><p class="subtitle">Choose the card you want to take into CBS.</p></div><span class="week" id="week">Week —</span></header>
   <section class="panel" aria-label="Data and simulation"><h2>Get the latest card</h2><div class="status" id="status">Checking CBS data and your last simulation…</div><div class="actions"><a class="btn primary" href="./apps/pickem/?action=refresh-simulate">Refresh data &amp; simulate</a><a class="btn" href="./apps/pickem/?details=1">Data &amp; model details</a><a class="btn" href="./apps/pickem/?lab=1">Model Lab · Live Context</a></div></section>
-  <section class="panel decision" id="decision" aria-label="Current card and IQ recommendation"><h2>What the model says now</h2><div class="decision-grid"><div class="decision-box"><span>Your current card</span><strong id="currentOdds">—</strong><small id="currentDetail">Top-2 outlook</small></div><div class="decision-box"><span>Best tradeoff</span><strong id="bestStrategy">—</strong><small id="bestOdds">Waiting for simulation</small></div></div><div class="read" id="modelRead"></div></section>
+  <section class="panel decision" id="decision" aria-label="IQ recommendation"><h2>What the model says now</h2><div class="decision-grid"><div class="decision-box"><span id="leftDecisionLabel">Your current card</span><strong id="currentOdds">—</strong><small id="currentDetail">Top-2 outlook</small></div><div class="decision-box"><span id="rightDecisionLabel">Best tradeoff</span><strong id="bestStrategy">—</strong><small id="bestOdds">Waiting for simulation</small></div></div><div class="read" id="modelRead"></div></section>
   <section class="panel tiebreaker" id="tiebreaker" aria-label="Tiebreaker recommendation"><h2>Recommended tiebreaker</h2><strong id="tiebreakerScore">—</strong><div class="status" id="tiebreakerDetail">Based on the current market total for the Monday Night Football game.</div></section>
   <div class="section-head"><h2>Choose your strategy</h2><p>Each option opens every pick and its final confidence points, highest first.</p></div>
   <section class="strategies" id="strategies" aria-label="CBS strategy cards"><div class="empty">Loading your strategy cards…</div></section>
@@ -76,6 +76,21 @@ async function fetchFreshLive(){
   if(!live)throw Error('CBS data unavailable');
   return live;
 }
+function dualGoalRecommendation(snapshot){
+  const cards=Array.isArray(snapshot?.cards)?snapshot.cards:[];
+  if(!cards.length)return null;
+  const safest=cards.find(c=>c.key==='safest')||cards.reduce((a,b)=>(b.eval?.avg||0)>(a.eval?.avg||0)?b:a);
+  const max=cards.reduce((a,b)=>(b.eval?.top2||0)>(a.eval?.top2||0)?b:a);
+  const seasonFloor=(safest.eval?.avg||0)-2.0;
+  const riskCeiling=(safest.eval?.bottomHalf||0)+0.05;
+  const eligible=cards.filter(c=>(c.eval?.avg||0)>=seasonFloor&&(c.eval?.bottomHalf||0)<=riskCeiling);
+  const choice=(eligible.length?eligible:cards).reduce((a,b)=>(b.eval?.top2||0)>(a.eval?.top2||0)?b:a);
+  const pointsCost=(safest.eval?.avg||0)-(choice.eval?.avg||0);
+  const weeklyGap=(max.eval?.top2||0)-(choice.eval?.top2||0);
+  const riskGap=(max.eval?.bottomHalf||0)-(choice.eval?.bottomHalf||0);
+  const reason=`${choice.label} best balances the two goals right now: preserve season points while keeping a real weekly Top-2 path. It gives up ${Math.max(0,pointsCost).toFixed(1)} expected points versus Safest${choice.key!==max.key?` while Max Upside adds only ${(weeklyGap*100).toFixed(1)} points of Top-2 probability at ${(riskGap*100).toFixed(0)} points more bottom-half risk`:''}.`;
+  return{choice,max,safest,reason};
+}
 function strategyRecommendation(snapshot){
   if(!snapshot?.currentEval||!snapshot.cards?.length)return null;
   const current={key:'current',label:'Current',eval:snapshot.currentEval};
@@ -102,19 +117,32 @@ async function bootHome(){
   const time=new Date(snapshot.ranAt).toLocaleString();
   const impact=snapshot.fieldImpact,impactText=impact?.classification==='WIDELY_SHARED_LOSS'?` · ${pct(impact.samePickShare,0)} of observed entries shared the locked loss`:'';
   $('status').textContent=(snapshot.status==='stale'?'Previous run · rerun before using these cards. ':'Last run: ')+time+(snapshot.provisional?' · Future pool picks are estimated.':'')+impactText;
-  const recommendation=strategyRecommendation(snapshot);
+  const noSubmittedCard=snapshot.currentSource==='generated_baseline';
+  const recommendation=noSubmittedCard?dualGoalRecommendation(snapshot):strategyRecommendation(snapshot);
   if(recommendation){
     $('decision').classList.add('show');
-    $('currentOdds').textContent=pct(snapshot.currentEval.top2);
-    $('currentDetail').textContent=`${snapshot.currentSource==='generated_baseline'?'Pregame baseline · ':''}Win ${pct(snapshot.currentEval.win)} · Avg score ${Number(snapshot.currentEval.avg).toFixed(1)}`;
-    $('bestStrategy').textContent=recommendation.choice.label;
-    $('bestOdds').textContent=`${pct(recommendation.choice.eval.top2)} Top 2 · Win ${pct(recommendation.choice.eval.win)}`;
-    $('modelRead').innerHTML=`<b>${esc(recommendation.choice.key==='current'?'Keep the current card.':`Use ${recommendation.choice.label}.`)}</b> ${esc(recommendation.reason)}`;
+    if(noSubmittedCard){
+      $('leftDecisionLabel').textContent='Recommended approach';
+      $('rightDecisionLabel').textContent='Weekly ceiling';
+      $('currentOdds').textContent=recommendation.choice.label;
+      $('currentDetail').textContent=`Avg ${Number(recommendation.choice.eval.avg).toFixed(1)} · Bottom-half risk ${pct(recommendation.choice.eval.bottomHalf,0)}`;
+      $('bestStrategy').textContent=recommendation.max.label;
+      $('bestOdds').textContent=`${pct(recommendation.max.eval.top2)} Top 2 · Win ${pct(recommendation.max.eval.win)}`;
+      $('modelRead').innerHTML=`<b>${esc(`Use ${recommendation.choice.label} as the season + weekly-money posture.`)}</b> ${esc(recommendation.reason)}`;
+    }else{
+      $('leftDecisionLabel').textContent='Your current card';
+      $('rightDecisionLabel').textContent='Best tradeoff';
+      $('currentOdds').textContent=pct(snapshot.currentEval.top2);
+      $('currentDetail').textContent=`Win ${pct(snapshot.currentEval.win)} · Avg score ${Number(snapshot.currentEval.avg).toFixed(1)}`;
+      $('bestStrategy').textContent=recommendation.choice.label;
+      $('bestOdds').textContent=`${pct(recommendation.choice.eval.top2)} Top 2 · Win ${pct(recommendation.choice.eval.win)}`;
+      $('modelRead').innerHTML=`<b>${esc(recommendation.choice.key==='current'?'Keep the current card.':`Use ${recommendation.choice.label}.`)}</b> ${esc(recommendation.reason)}`;
+    }
   }
   const safest=snapshot.cards.find(c=>c.key==='safest');
   $('strategies').innerHTML=snapshot.cards.map(c=>{const equivalent=c.equivalentTo?`Same card as ${STRATEGIES.find(x=>x[0]===c.equivalentTo)?.[1]||c.equivalentTo}`:null,trade=safest&&c.key!=='safest'?{top2:(c.eval.top2-safest.eval.top2)*100,win:(c.eval.win-safest.eval.win)*100,avg:c.eval.avg-safest.eval.avg,risk:(c.eval.bottomHalf-safest.eval.bottomHalf)*100}:null;return`<a class="strategy ${snapshot.status==='stale'?'stale':''}" href="${c.href}"><strong>${c.label}</strong>${snapshot.status==='stale'?'<span class="tag">OLD SIMULATION</span>':''}<div class="odds">${pct(c.eval.top2)} <span style="font-size:12px;font-weight:600;color:var(--muted)">Top 2</span></div><div class="secondary">Win ${pct(c.eval.win)} · Avg score ${Number(c.eval.avg).toFixed(1)}<br>Bottom-half risk ${pct(c.eval.bottomHalf,0)}${trade?`<br><b>vs Safest:</b> +${trade.top2.toFixed(1)} pts Top-2 · ${trade.avg>=0?'+':''}${trade.avg.toFixed(1)} avg pts`:''}${equivalent?`<br>${equivalent}`:''}</div><span class="foot">View complete card →</span></a>`}).join('');
 }
-globalThis.SFIQ_HOME_TEST={MODEL_BUILD,strategySnapshot,strategyRecommendation,tiebreakerRecommendation,chooseFreshLive,liveVersionKey};
+globalThis.SFIQ_HOME_TEST={MODEL_BUILD,strategySnapshot,strategyRecommendation,dualGoalRecommendation,tiebreakerRecommendation,chooseFreshLive,liveVersionKey};
 if(!TESTING)bootHome();
 </script>
 </body>
