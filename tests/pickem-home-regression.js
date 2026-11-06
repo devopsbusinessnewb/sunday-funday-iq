@@ -30,7 +30,14 @@ const tradeoff=home.strategyRecommendation({currentEval:{top2:.091,win:.055,bott
   {key:'maxUpside',label:'Max Upside',eval:{top2:.096,win:.061,bottomHalf:.47,avg:101.3}}
 ]});
 if(tradeoff?.choice?.key!=='aggressive'||!tradeoff.reason.includes('only 0.1 more'))throw new Error('Home did not identify the materially better risk/upside tradeoff');
-const nodes=Object.fromEntries(['week','status','strategies','currentOdds','currentDetail','bestStrategy','bestOdds','modelRead'].map(id=>[id,{textContent:'',innerHTML:''}]));
+const dual=home.dualGoalRecommendation({cards:[
+  {key:'safest',label:'Safest',eval:{top2:.03,win:.01,bottomHalf:.30,avg:90}},
+  {key:'balanced',label:'Balanced',eval:{top2:.08,win:.04,bottomHalf:.33,avg:89}},
+  {key:'aggressive',label:'Aggressive',eval:{top2:.12,win:.07,bottomHalf:.38,avg:87}},
+  {key:'maxUpside',label:'Max Upside',eval:{top2:.14,win:.09,bottomHalf:.45,avg:82}}
+]});
+if(dual?.choice?.key!=='balanced'||dual?.max?.key!=='maxUpside')throw new Error('Home did not choose the season + weekly-money posture from the strategy frontier');
+const nodes=Object.fromEntries(['week','status','strategies','leftDecisionLabel','rightDecisionLabel','currentOdds','currentDetail','bestStrategy','bestOdds','modelRead'].map(id=>[id,{textContent:'',innerHTML:''}]));
 nodes.decision={classList:{add:x=>nodes.decision.shown=x==='show'}};
 context.localStorage={getItem:()=>JSON.stringify(state)};
 context.fetch=async()=>({ok:true,json:async()=>({season:2026,week:3})});
