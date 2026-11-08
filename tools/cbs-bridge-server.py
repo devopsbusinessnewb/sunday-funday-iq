@@ -112,11 +112,11 @@ def parse_season_context(snapshot,entry_name,pool_size):
     parsed=[]
     for row in rows:
         text=' '.join(str(row or '').split())
-        nums=[int(x.replace(',','')) for x in re.findall(r'(?<![\\w.])(\\d{1,4}(?:,\\d{3})?)(?![\\w.%])',text)]
+        nums=[int(x.replace(',','')) for x in re.findall(r'(?<![\w.])(\d{1,4}(?:,\d{3})?)(?![\w.%])',text)]
         rank=next((n for n in nums if 1<=n<=max(1,pool_size)),None)
         score=max([n for n in nums if n>=20],default=None)
         if rank is None or score is None: continue
-        is_self=(label and label in text.casefold()) or bool(re.search(r'\\b(?:you|my entry|my picks)\\b',text,re.I))
+        is_self=(label and label in text.casefold()) or bool(re.search(r'\b(?:you|my entry|my picks)\b',text,re.I))
         parsed.append({'rank':rank,'points':score,'self':is_self})
     by_rank={}
     for row in parsed:
