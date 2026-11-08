@@ -251,6 +251,13 @@ def load_previous():
     try: return json.loads(OUTPUT.read_text(encoding='utf-8')) if OUTPUT.exists() else {}
     except Exception: return {}
 
+def card_intent_confirmed(picks_text,slate):
+    """Before kickoff, complete CBS controls are not proof the user intentionally made a card."""
+    text=str(picks_text or '')
+    explicit=bool(re.search(r'\b(?:picks?\s+(?:are\s+)?saved|saved\s+picks?|picks?\s+submitted|submitted\s+picks?|your\s+picks?\s+have\s+been\s+saved)\b',text,re.I))
+    locked=any(bool(g.get('completed')) or re.search(r'\b(?:Q[1-4]|HALF|FINAL|OT|IN PROGRESS)\b',str(g.get('statusText') or ''),re.I) for g in (slate or []))
+    return explicit or locked
+
 def sanitize_raw(raw):
     if not isinstance(raw,dict) or not isinstance(raw.get('snapshots'),list): raise ValueError('Invalid raw CBS capture')
     picks=latest_snapshot(raw,r'\|\s*Picks\b'); standings=latest_snapshot(raw,r'Weekly Standings|/standings/weekly'); overall=latest_snapshot(raw,r'Overall Standings|/standings/overall'); odds=latest_snapshot(raw,r'CBS NFL Odds|cbssports\.com/nfl/odds')
@@ -276,6 +283,8 @@ def sanitize_raw(raw):
     if missing: raise ValueError(f'Could not parse current CBS odds for {len(missing)} unplayed Week {week} game(s): '+', '.join(f'{a}-{h}' for a,h in missing))
     pairs=parse_entry_card(st,ENTRY_NAME,len(schedule)); pm=re.search(r'\b(\d+)\s*/\s*(\d+)\s+Picks\b',pt,re.I); picked=int(pm.group(1)) if pm else (len(pairs) if pairs else 0); total=int(pm.group(2)) if pm else len(schedule)
     my_card=None; status='unsubmitted' if picked==0 else 'partial'
+    intent_confirmed=card_intent_confirmed(pt,slate)
+    detected_card=None
     if pairs and len(pairs)==len(schedule):
         pair_by_team={team:w for team,w in pairs}; teams=[]; weights=[]
         for a,h in schedule:
@@ -283,13 +292,17 @@ def sanitize_raw(raw):
             if len(candidates)!=1: break
             teams.append(candidates[0][0]); weights.append(candidates[0][1])
         if len(teams)==len(schedule) and sorted(weights)==list(range(1,len(schedule)+1)):
-            my_card={'picks':teams,'weights':weights}; status='submitted'
-    if picked==total and status!='submitted': status='partial'
+            detected_card={'picks':teams,'weights':weights}
+            if intent_confirmed:
+                my_card=detected_card; status='submitted'
+            else:
+                status='unsubmitted'
+    if picked==total and status not in ('submitted','unsubmitted'): status='partial'
     locked=parse_revealed_field(st,schedule,pool_size); own=fill_locked_ownership(own,locked); exported=str(raw.get('exportedAt') or iso_now())
     game_state=[]
     for a,h in schedule:
         g=slate_by_key.get((a,h),{}); game_state.append({'away':a,'home':h,'completed':bool(g.get('completed')),'winner':g.get('winner'),'statusText':g.get('statusText','')})
-    payload={'product':"CBS Pick'em IQ Bridge — sanitized live input",'version':'2.3.0','season':season,'week':week,'slateSize':len(schedule),'poolSize':pool_size,'exportedAt':exported,'source':'Automated local CBS browser capture','privacy':'Raw CBS session/page data sanitized locally; pool/account identifiers and participant names not published.','confidenceStatus':status,'confidenceSource':'Authenticated CBS Picks card' if my_card else ('CBS complete card detected; private card unavailable' if picked==total else 'CBS Picks status'),'marketCapturedAt':odds.get('ts') or exported,'marketSource':f'CBS Sports odds — Week {week}','market':market,'gameState':game_state,'fieldModel':{'source':'Sanitized CBS revealed-pool observations','capturedAt':standings.get('ts') or exported,'observedEntries':max([g['totalObserved'] for g in locked],default=0),'locked':locked},'snapshots':[{'title':'NFL Football Tourney | Picks','url':f'sanitized://cbs-pickem/week-{week}','ts':picks.get('ts') or exported,'text':ownership_text(schedule,own)},{'title':'NFL Football Tourney | Weekly Standings','url':f'sanitized://cbs-pickem/week-{week}/standings/weekly','ts':standings.get('ts') or exported,'text':standings_text(schedule,locked)}]}
+    payload={'product':"CBS Pick'em IQ Bridge — sanitized live input",'version':'2.3.0','season':season,'week':week,'slateSize':len(schedule),'poolSize':pool_size,'exportedAt':exported,'source':'Automated local CBS browser capture','privacy':'Raw CBS session/page data sanitized locally; pool/account identifiers and participant names not published.','confidenceStatus':status,'confidenceSource':'Authenticated CBS Picks card' if my_card else ('Complete CBS controls detected but no intentional save/submission confirmed' if detected_card else 'CBS Picks status'),'marketCapturedAt':odds.get('ts') or exported,'marketSource':f'CBS Sports odds — Week {week}','market':market,'gameState':game_state,'fieldModel':{'source':'Sanitized CBS revealed-pool observations','capturedAt':standings.get('ts') or exported,'observedEntries':max([g['totalObserved'] for g in locked],default=0),'locked':locked},'snapshots':[{'title':'NFL Football Tourney | Picks','url':f'sanitized://cbs-pickem/week-{week}','ts':picks.get('ts') or exported,'text':ownership_text(schedule,own)},{'title':'NFL Football Tourney | Weekly Standings','url':f'sanitized://cbs-pickem/week-{week}/standings/weekly','ts':standings.get('ts') or exported,'text':standings_text(schedule,locked)}]}
     season_context=parse_season_context(overall,ENTRY_NAME,pool_size)
     if season_context: payload['seasonContext']=season_context
     if my_card: payload['myCard']=my_card
