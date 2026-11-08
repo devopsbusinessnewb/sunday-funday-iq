@@ -250,3 +250,10 @@ console.log('Field identity regression passed: 87 HOU-JAX observations resolve t
   }
   console.log('Market refresh regression passed: primary/fallback odds omit SEA-DEN; all 14 imported games and completed state survive.');
 })().catch(error=>{console.error(error);process.exitCode=1;});
+
+const lockedBlank=[{away:'JAX',home:'BAL',pick:'JAX',weight:12,locked:true,completed:true},{away:'CIN',home:'ATL',pick:null,weight:null,locked:false}];
+if(t.partialCardBlocksSimulation(lockedBlank,'unsubmitted'))throw Error('Locked Thursday history blocked blank-slate simulation');
+if(!t.partialCardBlocksSimulation(lockedBlank,'partial'))throw Error('Unverified partial submission bypassed guard');
+const partialOpen=clone(lockedBlank);partialOpen[1].pick='CIN';
+if(!t.partialCardBlocksSimulation(partialOpen,'unsubmitted'))throw Error('Incomplete open-game edit bypassed partial-card guard');
+console.log('Locked-history blank-slate simulation guard passed.');
