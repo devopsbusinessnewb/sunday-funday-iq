@@ -835,7 +835,29 @@ function buildStrategyFrontier(games,current,worlds,extraCards=[],poolSize=102,p
     poolPrior:poolPrior?{weeks:poolPrior.weeks,participantWeeks:poolPrior.participantWeeks,reliability:poolPrior.reliability,averageContrarianPicks:poolPrior.averageContrarianPicks,top2AverageContrarianPicks:poolPrior.top2AverageContrarianPicks}:null
   };
 }
+function chooseBlankSlateStrategy(frontier,seasonContext,week=0){
+  const cards=['safest','balanced','aggressive','maxUpside'].map(k=>frontier?.[k]).filter(Boolean);
+  if(!cards.length)return null;
+  const safest=frontier.safest||cards.reduce((a,b)=>b.eval.avg>a.eval.avg?b:a);
+  const max=cards.reduce((a,b)=>b.eval.top2>a.eval.top2?b:a);
+  const rank=Number(seasonContext?.rank),behind=Number(seasonContext?.pointsBehindLeader),cushion=Number(seasonContext?.pointsAheadOfNext);
+  let evDrop=2,riskAdd=.06,posture='Balanced season + weekly-money';
+  if(Number.isFinite(rank)){
+    if(rank===1){evDrop=1.5;riskAdd=.04;posture='Protect the lead while preserving weekly upside'}
+    else if(rank<=3){evDrop=2.75;riskAdd=.08;posture='Controlled attack on the season leaders'}
+    else{evDrop=3.5;riskAdd=.10;posture='Climb with controlled leverage'}
+    if(Number.isFinite(behind)&&behind>15){evDrop+=.75;riskAdd+=.015}
+    if(Number.isFinite(behind)&&behind>30){evDrop+=.75;riskAdd+=.015}
+    if(Number.isFinite(cushion)&&cushion<6){evDrop-=.75;riskAdd-=.02}
+    if(Number(week)>=13&&rank>1&&Number.isFinite(behind)&&behind>0){evDrop+=.5;riskAdd+=.01}
+  }
+  evDrop=Math.max(1,Math.min(5,evDrop));riskAdd=Math.max(.03,Math.min(.13,riskAdd));
+  const eligible=cards.filter(x=>x.eval.avg>=safest.eval.avg-evDrop&&x.eval.bottomHalf<=safest.eval.bottomHalf+riskAdd);
+  const choice=(eligible.length?eligible:cards).reduce((a,b)=>b.eval.top2>a.eval.top2?b:a);
+  return{choice,max,safest,posture,seasonAware:Number.isFinite(rank),seasonContext:seasonContext||null};
+}
 function runOptimizer(games,poolSize,opts={}){
+  const blankSlate=!!opts.blankSlate;
   const current=ensureValidCard(opts.currentCard||cardFromGames(games),games.length);
   const searchWorlds=buildWorldEnsemble(games,poolSize,opts.searchIters||SEARCH_ITERS,opts.seed||20260908,opts.fieldModel||null,opts.poolPrior||null);
   const finalWorlds=buildWorldEnsemble(games,poolSize,opts.finalIters||FINAL_ITERS,(opts.seed||20260908)+991,opts.fieldModel||null,opts.poolPrior||null);
@@ -853,12 +875,17 @@ function runOptimizer(games,poolSize,opts={}){
   }
   const frontier=buildStrategyFrontier(games,current,finalWorlds,search.candidates.map(x=>x.card),poolSize,opts.poolPrior||null,searchWorlds);
   frontier.searchEvaluationCount=(search.testedCount||0)+(frontier.confidenceSearchEvaluations||0);
-  // Balanced is the default decision view. The user can explicitly choose a
-  // safer or more aggressive point on the same tested frontier.
-  const selected=frontier.balanced||{card:best.card,eval:best.eval,comparison:best.comparison};
-  const changes=cardChangeCost(current,selected.card),diagnostics={...selected.comparison,...changes,material:cardKey(current)!==cardKey(selected.card),neutralTop2:neutralTop2(poolSize),edge:selected.eval.top2-neutralTop2(poolSize)};
+  const blankDecision=blankSlate?chooseBlankSlateStrategy(frontier,opts.seasonContext||null,opts.week||0):null;
+  // Blank-slate mode chooses among independently optimized complete cards.
+  // Submitted-card mode retains the existing compare/change workflow.
+  const selected=blankDecision?.choice||frontier.balanced||{card:best.card,eval:best.eval,comparison:best.comparison};
+  const selectedKey=blankDecision?.choice?.key||'balanced';
+  const changes=blankSlate?{flips:0,confidenceMoves:0,confidenceDistance:0,cost:0}:cardChangeCost(current,selected.card);
+  const diagnostics=blankSlate
+    ?{...changes,material:true,neutralTop2:neutralTop2(poolSize),edge:selected.eval.top2-neutralTop2(poolSize)}
+    :{...selected.comparison,...changes,material:cardKey(current)!==cardKey(selected.card),neutralTop2:neutralTop2(poolSize),edge:selected.eval.top2-neutralTop2(poolSize)};
   const fieldCalibration=evaluateProxyField(finalWorlds),fieldCalibrationError=fieldCalibration.top2-neutralTop2(poolSize);
-  return{current,currentEval,currentControl:{card:current,eval:currentEval,fieldImpact},recommended:selected.card,recommendedEval:selected.eval,finalWorlds,diagnostics,strategies:frontier,selectedStrategy:'balanced',neutralTop2:neutralTop2(poolSize),neutralWin:neutralWin(poolSize),fieldCalibration,fieldCalibrationError,poolPrior:frontier.poolPrior};
+  return{blankSlate,blankDecision,current,currentEval,currentControl:{card:current,eval:currentEval,fieldImpact},recommended:selected.card,recommendedEval:selected.eval,finalWorlds,diagnostics,strategies:frontier,selectedStrategy:selectedKey,neutralTop2:neutralTop2(poolSize),neutralWin:neutralWin(poolSize),fieldCalibration,fieldCalibrationError,poolPrior:frontier.poolPrior};
 }
 function cardActions(games,current,recommended,worlds){
   const actions=[];
