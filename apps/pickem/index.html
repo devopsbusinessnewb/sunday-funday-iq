@@ -1243,6 +1243,15 @@ function simulationCurrentCard(games){
   if(completeCard(games))return{card:cardFromGames(games),source:'submitted'};
   const n=games.length;
   const seed={choices:games.map(g=>expectedWinnerSide(g)),weights:games.map((_,i)=>i+1)};
+  for(let i=0;i<n;i++){
+    if(!isLocked(games[i]))continue;
+    const side=sideOf(games[i]),weight=Number(games[i].weight);
+    if(side!=null)seed.choices[i]=side;
+    if(Number.isInteger(weight)&&weight>=1&&weight<=n){
+      const other=seed.weights.indexOf(weight);
+      [seed.weights[i],seed.weights[other]]=[seed.weights[other],seed.weights[i]];
+    }
+  }
   return{card:safestExpectedCard(games,ensureValidCard(seed,n)),source:'generated_baseline'};
 }
 function partialCardBlocksSimulation(games,status){
