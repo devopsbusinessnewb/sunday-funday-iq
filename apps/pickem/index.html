@@ -1389,6 +1389,10 @@ async function importScan(obj){
   }
   const structured=extractStructuredCard(obj,state.games);
   applyStructuredCard(state.games,structured);
+  if(obj?.confidenceStatus==='unsubmitted'&&!obj?.myCard){
+    state.games.forEach(g=>{if(!isLocked(g)){g.pick=null;g.weight=null}});
+    state.originalCard=null;state.originalConfidenceStatus='unsubmitted';state.recommendedCard=null;state.optimization=null;state.applied=false;state.sim=null;
+  }
   const fixedPicks=new Set((obj?.constraints?.fixedPicks||[]).map(normalizeTeam));
   const fixedConfidence=obj?.constraints?.fixedConfidence||[];
   state.games.forEach(g=>{
