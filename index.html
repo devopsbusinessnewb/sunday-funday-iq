@@ -91,6 +91,16 @@ function dualGoalRecommendation(snapshot){
   const reason=`${choice.label} best balances the two goals right now: preserve season points while keeping a real weekly Top-2 path. It gives up ${Math.max(0,pointsCost).toFixed(1)} expected points versus Safest${choice.key!==max.key?` while Max Upside adds only ${(weeklyGap*100).toFixed(1)} points of Top-2 probability at ${(riskGap*100).toFixed(0)} points more bottom-half risk`:''}.`;
   return{choice,max,safest,reason};
 }
+function validSeasonContext(x){
+  if(!x||!Number.isFinite(Number(x.rank))||Number(x.rank)<1)return false;
+  const rank=Number(x.rank),points=Number(x.points),leader=Number(x.leaderPoints);
+  if(!Number.isFinite(points)||!Number.isFinite(leader))return false;
+  if(rank===1&&leader!==points)return false;
+  if(rank>1&&leader<points)return false;
+  const behind=Number(x.pointsBehindLeader);
+  if(Number.isFinite(behind)&&Math.abs(behind-Math.max(0,leader-points))>.01)return false;
+  return true;
+}
 function seasonAwareRecommendation(snapshot,seasonContext,week=0){
   const fallback=dualGoalRecommendation(snapshot);
   if(!fallback||!seasonContext||!Number.isFinite(Number(seasonContext.rank)))return fallback?{...fallback,seasonAware:false,posture:'Balanced season + weekly money'}:null;
@@ -141,7 +151,7 @@ async function bootHome(){
   const impact=snapshot.fieldImpact,impactText=impact?.classification==='WIDELY_SHARED_LOSS'?` · ${pct(impact.samePickShare,0)} of observed entries shared the locked loss`:'';
   $('status').textContent=(snapshot.status==='stale'?'Previous run · rerun before using these cards. ':'Last run: ')+time+(snapshot.provisional?' · Future pool picks are estimated.':'')+impactText;
   const noSubmittedCard=snapshot.currentSource==='generated_baseline';
-  const recommendation=noSubmittedCard?seasonAwareRecommendation(snapshot,live?.seasonContext,snapshot.week):strategyRecommendation(snapshot);
+  const recommendation=noSubmittedCard?seasonAwareRecommendation(snapshot,validSeasonContext(live?.seasonContext)?live.seasonContext:null,snapshot.week):strategyRecommendation(snapshot);
   if(recommendation){
     $('decision').classList.add('show');
     if(noSubmittedCard){
@@ -165,7 +175,7 @@ async function bootHome(){
   const safest=snapshot.cards.find(c=>c.key==='safest');
   $('strategies').innerHTML=snapshot.cards.map(c=>{const equivalent=c.equivalentTo?`Same card as ${STRATEGIES.find(x=>x[0]===c.equivalentTo)?.[1]||c.equivalentTo}`:null,trade=safest&&c.key!=='safest'?{top2:(c.eval.top2-safest.eval.top2)*100,win:(c.eval.win-safest.eval.win)*100,avg:c.eval.avg-safest.eval.avg,risk:(c.eval.bottomHalf-safest.eval.bottomHalf)*100}:null;return`<a class="strategy ${snapshot.status==='stale'?'stale':''}" href="${c.href}"><strong>${c.label}</strong>${snapshot.status==='stale'?'<span class="tag">OLD SIMULATION</span>':''}<div class="odds">${pct(c.eval.top2)} <span style="font-size:12px;font-weight:600;color:var(--muted)">Top 2</span></div><div class="secondary">Win ${pct(c.eval.win)} · Avg score ${Number(c.eval.avg).toFixed(1)}<br>Bottom-half risk ${pct(c.eval.bottomHalf,0)}${trade?`<br><b>vs Safest:</b> +${trade.top2.toFixed(1)} pts Top-2 · ${trade.avg>=0?'+':''}${trade.avg.toFixed(1)} avg pts`:''}${equivalent?`<br>${equivalent}`:''}</div><span class="foot">View complete card →</span></a>`}).join('');
 }
-globalThis.SFIQ_HOME_TEST={MODEL_BUILD,strategySnapshot,strategyRecommendation,dualGoalRecommendation,seasonAwareRecommendation,tiebreakerRecommendation,chooseFreshLive,liveVersionKey};
+globalThis.SFIQ_HOME_TEST={MODEL_BUILD,strategySnapshot,strategyRecommendation,dualGoalRecommendation,validSeasonContext,seasonAwareRecommendation,tiebreakerRecommendation,chooseFreshLive,liveVersionKey};
 if(!TESTING)bootHome();
 </script>
 </body>
