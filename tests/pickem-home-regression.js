@@ -50,7 +50,7 @@ context.localStorage={getItem:()=>JSON.stringify(state)};
 context.fetch=async()=>({ok:true,json:async()=>({season:2026,week:3})});
 context.document={getElementById:id=>nodes[id]};
 vm.runInContext('bootHome()',context).then(()=>{
-  if(nodes.week.textContent!=='Week 3'||(nodes.strategies.innerHTML.match(/View complete card/g)||[]).length!==4)throw new Error('Home does not present four usable complete-card links');
+  if(nodes.week.textContent!=='Week 3'||(nodes.strategies.innerHTML.match(/View picks/g)||[]).length!==4)throw new Error('Home does not present four usable complete-card links');
   if(!nodes.decision.shown||!nodes.currentOdds.textContent||nodes.currentOdds.textContent.includes('%')||!nodes.bestStrategy.textContent)throw new Error('Home does not show model-based season/weekly recommendation');
   if(!html.includes('href="./apps/pickem/?action=refresh-simulate"')||!html.includes('href="./legacy-home.html"')||!html.includes('href="./apps/pickem/?details=1"'))throw new Error('Home lost simulation action, focused data details, or paused fantasy access');
   console.log('CBS home regression passed: four strategies, deep links, week and input freshness.');
@@ -64,3 +64,5 @@ const screenshotAdvice=home.strategyAdvice({cards:[
 ]});
 if(screenshotAdvice.choice.key!=='balanced')throw Error('Screenshot tradeoff should recommend Balanced');
 if(!screenshotAdvice.paragraphs.join(' ').includes('1.3 fewer expected points')||!screenshotAdvice.paragraphs.join(' ').includes('no better Top-2 probability'))throw Error('Missing quantified season/weekly tradeoff');
+
+if(!html.includes('<details class="panel drilldown">')||html.includes('<h2>Get the latest card</h2>'))throw Error('Home must keep analysis collapsed and refresh compact');
