@@ -147,7 +147,7 @@ const POOL_HISTORY_URL='../../data/analysis/cbs-pool-history-report.json';
 const SEARCH_ITERS=700;
 const FINAL_ITERS=3000;
 const VALIDATION_SEEDS=3;
-const MODEL_BUILD='1.16.12';
+const MODEL_BUILD='1.16.13';
 const CONFIDENCE_TIE_BAND=.025;
 const MIN_OPTIONAL_FLIP_PROB=.40;
 const MIN_OPTIONAL_MARKET_PROB=.38;
@@ -1360,6 +1360,7 @@ async function importScan(obj){
   repairLockedConfidenceCollision();
   const stand=newest(snaps.filter(s=>/Weekly Standings/i.test(s.title||'')));if(stand){const names=[...stand.text.matchAll(/\n\n\n(?:\d+(?:st|nd|rd|th))\n([^\n\t]{2,60})\n\t-?\d+\t-?\d+\t/g)].map(x=>x[1]);if(names.length>20)state.poolSize=new Set(names).size}
   if(Number.isInteger(Number(obj.poolSize))&&Number(obj.poolSize)>1)state.poolSize=Number(obj.poolSize);
+  state.seasonContext=(obj?.seasonContext&&Number.isFinite(Number(obj.seasonContext.rank)))?clone(obj.seasonContext):null;
   state.importedAt=obj.exportedAt||pickSnap?.ts||nowIso();state.cbsUpdatedAt=pickSnap?.ts||obj.exportedAt||nowIso();state.cbsSource='scan';
   const importedStatus=cardImportStatus();
   state.confidenceStatus=obj?.confidenceStatus||(importedStatus.picks===0?'unsubmitted':'submitted');state.confidenceSource=obj?.confidenceSource||(importedStatus.picks===0?'CBS slate — no picks submitted':'CBS import');state.originalConfidenceStatus=state.confidenceStatus;
