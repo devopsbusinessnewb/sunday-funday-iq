@@ -1227,6 +1227,18 @@ function extractStructuredCard(obj,games){
   }
   return best;
 }
+function validSeasonContext(x){
+  if(!x||!Number.isFinite(Number(x.rank))||Number(x.rank)<1)return false;
+  const rank=Number(x.rank),points=Number(x.points),leader=Number(x.leaderPoints);
+  if(!Number.isFinite(points)||!Number.isFinite(leader))return false;
+  if(rank===1&&leader!==points)return false;
+  if(rank>1&&leader<points)return false;
+  const behind=Number(x.pointsBehindLeader);
+  if(Number.isFinite(behind)&&Math.abs(behind-Math.max(0,leader-points))>.01)return false;
+  if(Number.isFinite(Number(x.pointsBehindNext))&&Number(x.pointsBehindNext)<0)return false;
+  if(Number.isFinite(Number(x.pointsAheadOfNext))&&Number(x.pointsAheadOfNext)<0)return false;
+  return true;
+}
 function simulationCurrentCard(games){
   if(completeCard(games))return{card:cardFromGames(games),source:'submitted'};
   const n=games.length;
@@ -1387,7 +1399,7 @@ async function importScan(obj){
   repairLockedConfidenceCollision();
   const stand=newest(snaps.filter(s=>/Weekly Standings/i.test(s.title||'')));if(stand){const names=[...stand.text.matchAll(/\n\n\n(?:\d+(?:st|nd|rd|th))\n([^\n\t]{2,60})\n\t-?\d+\t-?\d+\t/g)].map(x=>x[1]);if(names.length>20)state.poolSize=new Set(names).size}
   if(Number.isInteger(Number(obj.poolSize))&&Number(obj.poolSize)>1)state.poolSize=Number(obj.poolSize);
-  state.seasonContext=(obj?.seasonContext&&Number.isFinite(Number(obj.seasonContext.rank)))?clone(obj.seasonContext):null;
+  state.seasonContext=validSeasonContext(obj?.seasonContext)?clone(obj.seasonContext):null;
   state.importedAt=obj.exportedAt||pickSnap?.ts||nowIso();state.cbsUpdatedAt=pickSnap?.ts||obj.exportedAt||nowIso();state.cbsSource='scan';
   const importedStatus=cardImportStatus();
   state.confidenceStatus=obj?.confidenceStatus||(importedStatus.picks===0?'unsubmitted':'submitted');state.confidenceSource=obj?.confidenceSource||(importedStatus.picks===0?'CBS slate — no picks submitted':'CBS import');state.originalConfidenceStatus=state.confidenceStatus;
@@ -1902,7 +1914,7 @@ async function boot(){
     await runSimulation();
   }
 }
-globalThis.SFIQ_TEST={scenarioGameLocked,buildLiveScenarioResult,miniPcRefreshHandshake,MODEL_BUILD,simulationCurrentCard,fullSlateLabGames,labCardDiff,renderModelLabResult,renderStrategyComparison,scenarioSwapConfidence,scenarioMetrics,strategyCardRows,validConfidence,ensureValidCard,completeCard,cardImportIssues,dataFreshness,buildWorlds,buildWorldEnsemble,evaluateCard,evaluateProxyField,compareCards,lockedFieldImpact,robustMetrics,optimizeConfidence,optimizeTournamentConfidence,seedStability,searchCandidates,runOptimizer,chooseBlankSlateStrategy,buildStrategyFrontier,strategyObjective,strategyEquivalent,strategyFlipEvidence,strategyLaneConfig,cardStrategyDistance,chooseLaneCard,confidenceStrategyConfig,confidenceStrategyScore,safestExpectedCard,neutralTop2,neutralWin,cardActions,marketProb,iqProb,formProb,iqFormWeight,scenarioProbability,probabilityProfile,confidenceSafetyProb,confidenceCeilingFromProbability,confidenceCeiling,confidenceRiskPenalty,allocateConfidence,seedRiskCalibratedConfidence,expectedWinnerSide,strategicPickEvidence,upsidePickEvidence,cardChangeCost,ownProb,clone,refreshResults,refreshIqModel,isLocked,fixedWinner,parsePicks,extractStructuredCard,extractFieldModel,applyStructuredCard,normalizePoolHistory,poolConfidenceSignal,drawFieldPicks,SEED,normalizeTeam};
+globalThis.SFIQ_TEST={scenarioGameLocked,buildLiveScenarioResult,miniPcRefreshHandshake,MODEL_BUILD,simulationCurrentCard,validSeasonContext,fullSlateLabGames,labCardDiff,renderModelLabResult,renderStrategyComparison,scenarioSwapConfidence,scenarioMetrics,strategyCardRows,validConfidence,ensureValidCard,completeCard,cardImportIssues,dataFreshness,buildWorlds,buildWorldEnsemble,evaluateCard,evaluateProxyField,compareCards,lockedFieldImpact,robustMetrics,optimizeConfidence,optimizeTournamentConfidence,seedStability,searchCandidates,runOptimizer,chooseBlankSlateStrategy,buildStrategyFrontier,strategyObjective,strategyEquivalent,strategyFlipEvidence,strategyLaneConfig,cardStrategyDistance,chooseLaneCard,confidenceStrategyConfig,confidenceStrategyScore,safestExpectedCard,neutralTop2,neutralWin,cardActions,marketProb,iqProb,formProb,iqFormWeight,scenarioProbability,probabilityProfile,confidenceSafetyProb,confidenceCeilingFromProbability,confidenceCeiling,confidenceRiskPenalty,allocateConfidence,seedRiskCalibratedConfidence,expectedWinnerSide,strategicPickEvidence,upsidePickEvidence,cardChangeCost,ownProb,clone,refreshResults,refreshIqModel,isLocked,fixedWinner,parsePicks,extractStructuredCard,extractFieldModel,applyStructuredCard,normalizePoolHistory,poolConfidenceSignal,drawFieldPicks,SEED,normalizeTeam};
 if(!TESTING)boot();
 </script>
 </body></html>
