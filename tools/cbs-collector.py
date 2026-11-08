@@ -30,6 +30,16 @@ def page_text(page):
     except Exception: return ''
 def visit(page,url,wait_ms=3500):
     page.goto(url,wait_until='domcontentloaded',timeout=60000); page.wait_for_timeout(wait_ms); return {'text':page_text(page)[:1_500_000],'title':page.title(),'ts':iso_now(),'url':page.url}
+def table_rows(page):
+    """Capture row text locally so the sanitizer can identify the signed-in entry without publishing names."""
+    try:
+        rows=page.locator('tr,[role="row"]').all_inner_texts()
+        out=[]
+        for row in rows:
+            text=' '.join(str(row or '').split())
+            if text and text not in out: out.append(text[:1000])
+        return out[:300]
+    except Exception: return []
 def assert_logged_in(snap):
     if 'picks.cbssports.com' not in snap.get('url','') or '/football/pickem/' not in snap.get('url','') or 'Week ' not in snap.get('text',''): raise RuntimeError('CBS login/session appears expired. Re-run with --login.')
 def parse_week(*texts):
@@ -125,12 +135,17 @@ def collect(debug_odds=False):
         ctx=open_context(p,HEADLESS)
         try:
             page=ctx.pages[0] if ctx.pages else ctx.new_page(); picks=visit(page,POOL_URL); assert_logged_in(picks); standings=visit(page,POOL_URL+'/standings/weekly',4000)
+            overall=None
+            try:
+                overall=visit(page,POOL_URL+'/standings/overall',4000); overall['rows']=table_rows(page); overall['title']='NFL Football Tourney | Overall Standings'
+            except Exception:
+                overall=None
             self_block=authenticated_self_block(picks.get('text',''))
             if self_block: standings['text']=str(standings.get('text',''))+self_block
             week=parse_week(picks.get('text'),standings.get('text')); season=datetime.now().year; slate=fetch_week_slate(season,week); odds_url=f'https://www.cbssports.com/nfl/odds/{season}/regular/week-{week}/'; odds=visit(page,odds_url,4500)
             picks['title']='NFL Football Tourney | Picks'; standings['title']='NFL Football Tourney | Weekly Standings'; odds['title']=f'CBS NFL Odds | Week {week}'
             if debug_odds: print(f'ODDS_URL={odds_url}'); print('\n'.join(odds.get('text','').splitlines()[:220]))
-            capture={'product':'CBS Pick’em IQ automated local capture','version':'1.0.9','exportedAt':iso_now(),'privacy':'Raw browser text remains local and is sent only to the localhost sanitizer.','slate':slate,'snapshots':[picks,standings,odds]}
+            capture={'product':'CBS Pick’em IQ automated local capture','version':'1.0.10','exportedAt':iso_now(),'privacy':'Raw browser text remains local and is sent only to the localhost sanitizer.','slate':slate,'snapshots':[picks,standings,odds]+([overall] if overall else [])}
             result=post_capture(capture)
             if not result.get('ok'): raise RuntimeError(result.get('error') or 'CBS receiver rejected capture')
             print(json.dumps(result))
