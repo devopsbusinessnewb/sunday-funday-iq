@@ -102,6 +102,37 @@ def parse_entry_card(text,name,n):
         if team in ABBR: pairs.append((team,int(w)))
     return pairs[:n] if pairs else None
 
+def parse_season_context(snapshot,entry_name,pool_size):
+    """Return anonymized season position; raw participant names never leave localhost."""
+    if not snapshot: return None
+    rows=snapshot.get('rows') if isinstance(snapshot.get('rows'),list) else []
+    if not rows:
+        rows=[x.strip() for x in str(snapshot.get('text') or '').splitlines() if x.strip()]
+    label=str(entry_name or '').strip().casefold()
+    parsed=[]
+    for row in rows:
+        text=' '.join(str(row or '').split())
+        nums=[int(x.replace(',','')) for x in re.findall(r'(?<![\\w.])(\\d{1,4}(?:,\\d{3})?)(?![\\w.%])',text)]
+        rank=next((n for n in nums if 1<=n<=max(1,pool_size)),None)
+        score=max([n for n in nums if n>=20],default=None)
+        if rank is None or score is None: continue
+        is_self=(label and label in text.casefold()) or bool(re.search(r'\\b(?:you|my entry|my picks)\\b',text,re.I))
+        parsed.append({'rank':rank,'points':score,'self':is_self})
+    by_rank={}
+    for row in parsed:
+        old=by_rank.get(row['rank'])
+        if old is None or row['points']>old['points'] or row['self']: by_rank[row['rank']]=row
+    mine=next((r for r in by_rank.values() if r['self']),None)
+    if not mine: return None
+    leader=by_rank.get(1)
+    above=by_rank.get(mine['rank']-1)
+    below=by_rank.get(mine['rank']+1)
+    out={'source':'Authenticated CBS overall standings','capturedAt':snapshot.get('ts') or iso_now(),'rank':mine['rank'],'points':mine['points']}
+    if leader: out['leaderPoints']=leader['points']; out['pointsBehindLeader']=max(0,leader['points']-mine['points'])
+    if above: out['pointsBehindNext']=max(0,above['points']-mine['points'])
+    if below: out['pointsAheadOfNext']=max(0,mine['points']-below['points'])
+    return out
+
 def parse_revealed_field(text,schedule,pool_size):
     team_to_game={}
     for i,(a,h) in enumerate(schedule): team_to_game[a]=i; team_to_game[h]=i
@@ -178,7 +209,7 @@ def load_previous():
 
 def sanitize_raw(raw):
     if not isinstance(raw,dict) or not isinstance(raw.get('snapshots'),list): raise ValueError('Invalid raw CBS capture')
-    picks=latest_snapshot(raw,r'\|\s*Picks\b'); standings=latest_snapshot(raw,r'Weekly Standings|/standings/weekly'); odds=latest_snapshot(raw,r'CBS NFL Odds|cbssports\.com/nfl/odds')
+    picks=latest_snapshot(raw,r'\|\s*Picks\b'); standings=latest_snapshot(raw,r'Weekly Standings|/standings/weekly'); overall=latest_snapshot(raw,r'Overall Standings|/standings/overall'); odds=latest_snapshot(raw,r'CBS NFL Odds|cbssports\.com/nfl/odds')
     if not picks or not standings or not odds: raise ValueError('CBS capture must include Picks, Weekly Standings, and Odds')
     pt,st,ot=str(picks.get('text','')),str(standings.get('text','')),str(odds.get('text','')); slate=sanitize_slate(raw.get('slate'))
     parsed_schedule=parse_schedule(st); schedule=[(g['away'],g['home']) for g in slate] if len(slate)>=len(parsed_schedule) and len(slate)>=2 else parsed_schedule
@@ -214,7 +245,9 @@ def sanitize_raw(raw):
     game_state=[]
     for a,h in schedule:
         g=slate_by_key.get((a,h),{}); game_state.append({'away':a,'home':h,'completed':bool(g.get('completed')),'winner':g.get('winner'),'statusText':g.get('statusText','')})
-    payload={'product':"CBS Pick'em IQ Bridge — sanitized live input",'version':'2.2.0','season':season,'week':week,'slateSize':len(schedule),'poolSize':pool_size,'exportedAt':exported,'source':'Automated local CBS browser capture','privacy':'Raw CBS session/page data sanitized locally; pool/account identifiers and participant names not published.','confidenceStatus':status,'confidenceSource':'Authenticated CBS Picks card' if my_card else ('CBS complete card detected; private card unavailable' if picked==total else 'CBS Picks status'),'marketCapturedAt':odds.get('ts') or exported,'marketSource':f'CBS Sports odds — Week {week}','market':market,'gameState':game_state,'fieldModel':{'source':'Sanitized CBS revealed-pool observations','capturedAt':standings.get('ts') or exported,'observedEntries':max([g['totalObserved'] for g in locked],default=0),'locked':locked},'snapshots':[{'title':'NFL Football Tourney | Picks','url':f'sanitized://cbs-pickem/week-{week}','ts':picks.get('ts') or exported,'text':ownership_text(schedule,own)},{'title':'NFL Football Tourney | Weekly Standings','url':f'sanitized://cbs-pickem/week-{week}/standings/weekly','ts':standings.get('ts') or exported,'text':standings_text(schedule,locked)}]}
+    payload={'product':"CBS Pick'em IQ Bridge — sanitized live input",'version':'2.3.0','season':season,'week':week,'slateSize':len(schedule),'poolSize':pool_size,'exportedAt':exported,'source':'Automated local CBS browser capture','privacy':'Raw CBS session/page data sanitized locally; pool/account identifiers and participant names not published.','confidenceStatus':status,'confidenceSource':'Authenticated CBS Picks card' if my_card else ('CBS complete card detected; private card unavailable' if picked==total else 'CBS Picks status'),'marketCapturedAt':odds.get('ts') or exported,'marketSource':f'CBS Sports odds — Week {week}','market':market,'gameState':game_state,'fieldModel':{'source':'Sanitized CBS revealed-pool observations','capturedAt':standings.get('ts') or exported,'observedEntries':max([g['totalObserved'] for g in locked],default=0),'locked':locked},'snapshots':[{'title':'NFL Football Tourney | Picks','url':f'sanitized://cbs-pickem/week-{week}','ts':picks.get('ts') or exported,'text':ownership_text(schedule,own)},{'title':'NFL Football Tourney | Weekly Standings','url':f'sanitized://cbs-pickem/week-{week}/standings/weekly','ts':standings.get('ts') or exported,'text':standings_text(schedule,locked)}]}
+    season_context=parse_season_context(overall,ENTRY_NAME,pool_size)
+    if season_context: payload['seasonContext']=season_context
     if my_card: payload['myCard']=my_card
     return payload
 
