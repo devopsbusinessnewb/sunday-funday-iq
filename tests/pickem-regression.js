@@ -167,6 +167,8 @@ if(!poolPrior||poolPrior.weeks!==2||Math.abs(poolPrior.reliability-.2)>1e-12)thr
 const learnedRun=t.runOptimizer(postGames,93,{...stableOpts,searchIters:100,finalIters:240,poolPrior});
 if(!learnedRun.poolPrior||learnedRun.poolPrior.weeks!==2)throw new Error('Optimizer did not preserve historical-prior provenance');
 if(learnedRun.strategies.balanced.objective!=='risk-adjusted-top2'||learnedRun.strategies.aggressive.objective!=='top2-first'||learnedRun.strategies.maxUpside.objective!=='win-first')throw new Error('Strategy frontier did not preserve independent objectives');
+if(t.validSeasonContext({rank:12,points:687,leaderPoints:660,pointsBehindLeader:0}))throw new Error('Impossible season context was accepted');
+if(!t.validSeasonContext({rank:3,points:640,leaderPoints:652,pointsBehindLeader:12,pointsBehindNext:4,pointsAheadOfNext:7}))throw new Error('Valid season context was rejected');
 const blankFrontier={
   safest:{key:'safest',label:'Safest',eval:{avg:90,bottomHalf:.30,top2:.03,win:.01}},
   balanced:{key:'balanced',label:'Balanced',eval:{avg:89,bottomHalf:.33,top2:.08,win:.04}},
