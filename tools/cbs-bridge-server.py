@@ -113,24 +113,68 @@ def parse_season_context(snapshot,entry_name,pool_size):
     for row in rows:
         text=' '.join(str(row or '').split())
         nums=[int(x.replace(',','')) for x in re.findall(r'(?<![\w.])(\d{1,4}(?:,\d{3})?)(?![\w.%])',text)]
+        if not nums: continue
         rank=next((n for n in nums if 1<=n<=max(1,pool_size)),None)
-        score=max([n for n in nums if n>=20],default=None)
-        if rank is None or score is None: continue
+        if rank is None: continue
+        try: rank_pos=nums.index(rank)
+        except ValueError: continue
+        values=nums[rank_pos+1:]
         is_self=text.startswith('__SFIQ_SELF__ ') or (label and label in text.casefold()) or bool(re.search(r'\b(?:you|my entry|my picks)\b',text,re.I))
-        parsed.append({'rank':rank,'points':score,'self':bool(is_self)})
+        parsed.append({'rank':rank,'values':values,'self':bool(is_self)})
+
     by_rank={}
     for row in parsed:
         old=by_rank.get(row['rank'])
-        if old is None or row['points']>old['points'] or row['self']: by_rank[row['rank']]=row
+        if old is None or row['self']: by_rank[row['rank']]=row
     mine=next((r for r in by_rank.values() if r['self']),None)
-    if not mine: return None
     leader=by_rank.get(1)
+    if not mine or not leader: return None
+
+    # CBS standings rows can contain several numeric columns. Infer the season-
+    # points column by finding the post-rank column that is most consistently
+    # non-increasing as rank worsens, instead of guessing with max(row).
+    ranked=[by_rank[k] for k in sorted(by_rank)]
+    max_cols=max([len(r['values']) for r in ranked],default=0)
+    best=None
+    for col in range(max_cols):
+        vals=[(r['rank'],r['values'][col]) for r in ranked if len(r['values'])>col]
+        if len(vals)<max(5,min(10,len(ranked)//3)): continue
+        # Season confidence totals should be substantial and leader >= self.
+        leader_val=leader['values'][col] if len(leader['values'])>col else None
+        self_val=mine['values'][col] if len(mine['values'])>col else None
+        if leader_val is None or self_val is None or max(leader_val,self_val)<100: continue
+        if mine['rank']>1 and leader_val<self_val: continue
+        agree=0; comparisons=0
+        prev=None
+        for rank,val in vals:
+            if prev is not None:
+                comparisons+=1
+                if prev>=val: agree+=1
+            prev=val
+        monotonic=(agree/comparisons) if comparisons else 0
+        coverage=len(vals)/max(1,len(ranked))
+        spread=max(v for _,v in vals)-min(v for _,v in vals)
+        score=monotonic*2+coverage+(0.2 if spread>0 else 0)
+        if best is None or score>best[0]: best=(score,col)
+
+    if best is None: return None
+    col=best[1]
+    points=mine['values'][col]
+    leader_points=leader['values'][col]
     above=by_rank.get(mine['rank']-1)
     below=by_rank.get(mine['rank']+1)
-    out={'source':'Authenticated CBS overall standings','capturedAt':snapshot.get('ts') or iso_now(),'rank':mine['rank'],'points':mine['points']}
-    if leader: out['leaderPoints']=leader['points']; out['pointsBehindLeader']=max(0,leader['points']-mine['points'])
-    if above: out['pointsBehindNext']=max(0,above['points']-mine['points'])
-    if below: out['pointsAheadOfNext']=max(0,mine['points']-below['points'])
+    above_points=above['values'][col] if above and len(above['values'])>col else None
+    below_points=below['values'][col] if below and len(below['values'])>col else None
+
+    # Final fail-closed sanity checks. Bad standings data must never steer picks.
+    if mine['rank']>1 and leader_points<points: return None
+    if above_points is not None and above_points<points: return None
+    if below_points is not None and below_points>points: return None
+
+    out={'source':'Authenticated CBS overall standings','capturedAt':snapshot.get('ts') or iso_now(),'rank':mine['rank'],'points':points,'leaderPoints':leader_points}
+    out['pointsBehindLeader']=max(0,leader_points-points)
+    if above_points is not None: out['pointsBehindNext']=max(0,above_points-points)
+    if below_points is not None: out['pointsAheadOfNext']=max(0,points-below_points)
     return out
 
 def parse_revealed_field(text,schedule,pool_size):
