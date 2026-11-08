@@ -147,7 +147,7 @@ const POOL_HISTORY_URL='../../data/analysis/cbs-pool-history-report.json';
 const SEARCH_ITERS=700;
 const FINAL_ITERS=3000;
 const VALIDATION_SEEDS=3;
-const MODEL_BUILD='1.16.13';
+const MODEL_BUILD='1.16.14';
 const CONFIDENCE_TIE_BAND=.025;
 const MIN_OPTIONAL_FLIP_PROB=.40;
 const MIN_OPTIONAL_MARKET_PROB=.38;
@@ -1341,8 +1341,7 @@ async function pasteCbsPhoneSync(){
 }
 
 async function importScan(obj){
-  const incomingLocked=Array.isArray(obj?.gameState)&&obj.gameState.some(g=>g?.completed||/\b(?:Q[1-4]|HALF|FINAL|OT|IN PROGRESS)\b/i.test(String(g?.statusText||'')));
-  const confirmedSubmitted=obj?.confidenceStatus==='submitted'&&(obj?.cardIntentConfirmed===true||incomingLocked);
+  const confirmedSubmitted=obj?.confidenceStatus==='submitted'&&obj?.cardIntentConfirmed===true&&obj?.cardIntentSource==='explicit-save-confirmation';
   if(obj?.confidenceStatus==='submitted'&&!confirmedSubmitted){
     obj=clone(obj);obj.confidenceStatus='unsubmitted';delete obj.myCard;
   }
