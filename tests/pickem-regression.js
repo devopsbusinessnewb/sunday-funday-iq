@@ -167,6 +167,16 @@ if(!poolPrior||poolPrior.weeks!==2||Math.abs(poolPrior.reliability-.2)>1e-12)thr
 const learnedRun=t.runOptimizer(postGames,93,{...stableOpts,searchIters:100,finalIters:240,poolPrior});
 if(!learnedRun.poolPrior||learnedRun.poolPrior.weeks!==2)throw new Error('Optimizer did not preserve historical-prior provenance');
 if(learnedRun.strategies.balanced.objective!=='risk-adjusted-top2'||learnedRun.strategies.aggressive.objective!=='top2-first'||learnedRun.strategies.maxUpside.objective!=='win-first')throw new Error('Strategy frontier did not preserve independent objectives');
+const blankFrontier={
+  safest:{key:'safest',label:'Safest',eval:{avg:90,bottomHalf:.30,top2:.03,win:.01}},
+  balanced:{key:'balanced',label:'Balanced',eval:{avg:89,bottomHalf:.33,top2:.08,win:.04}},
+  aggressive:{key:'aggressive',label:'Aggressive',eval:{avg:87.7,bottomHalf:.37,top2:.12,win:.07}},
+  maxUpside:{key:'maxUpside',label:'Max Upside',eval:{avg:82,bottomHalf:.46,top2:.14,win:.09}}
+};
+const seasonChoice=t.chooseBlankSlateStrategy(blankFrontier,{rank:3,pointsBehindLeader:12,pointsAheadOfNext:8},9);
+if(!seasonChoice?.seasonAware||seasonChoice.choice.key!=='aggressive')throw new Error('Blank-slate selector did not use season position plus weekly upside');
+const noSeasonChoice=t.chooseBlankSlateStrategy(blankFrontier,null,9);
+if(noSeasonChoice?.seasonAware||noSeasonChoice.choice.key!=='balanced')throw new Error('Blank-slate fallback should use balanced weekly/season posture without live standings');
 console.log('Pickem regression suite passed: imports valid, live card flexible, recommendations stable after application.');
 
 // Reproduce the bridge/app identity boundary with synthetic, anonymous entries.
