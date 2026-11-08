@@ -116,8 +116,8 @@ def parse_season_context(snapshot,entry_name,pool_size):
         rank=next((n for n in nums if 1<=n<=max(1,pool_size)),None)
         score=max([n for n in nums if n>=20],default=None)
         if rank is None or score is None: continue
-        is_self=(label and label in text.casefold()) or bool(re.search(r'\b(?:you|my entry|my picks)\b',text,re.I))
-        parsed.append({'rank':rank,'points':score,'self':is_self})
+        is_self=text.startswith('__SFIQ_SELF__ ') or (label and label in text.casefold()) or bool(re.search(r'\b(?:you|my entry|my picks)\b',text,re.I))
+        parsed.append({'rank':rank,'points':score,'self':bool(is_self)})
     by_rank={}
     for row in parsed:
         old=by_rank.get(row['rank'])
