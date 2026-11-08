@@ -91,6 +91,29 @@ function dualGoalRecommendation(snapshot){
   const reason=`${choice.label} best balances the two goals right now: preserve season points while keeping a real weekly Top-2 path. It gives up ${Math.max(0,pointsCost).toFixed(1)} expected points versus Safest${choice.key!==max.key?` while Max Upside adds only ${(weeklyGap*100).toFixed(1)} points of Top-2 probability at ${(riskGap*100).toFixed(0)} points more bottom-half risk`:''}.`;
   return{choice,max,safest,reason};
 }
+function seasonAwareRecommendation(snapshot,seasonContext,week=0){
+  const fallback=dualGoalRecommendation(snapshot);
+  if(!fallback||!seasonContext||!Number.isFinite(Number(seasonContext.rank)))return fallback?{...fallback,seasonAware:false,posture:'Balanced season + weekly money'}:null;
+  const cards=snapshot.cards,safest=fallback.safest,max=fallback.max;
+  const rank=Number(seasonContext.rank),behind=Number(seasonContext.pointsBehindLeader),cushion=Number(seasonContext.pointsAheadOfNext);
+  let pointsBudget=rank===1?1.5:rank<=3?2.5:3.0;
+  let riskBudget=rank===1?.04:rank<=3?.07:.09;
+  if(Number.isFinite(behind)&&behind>10)pointsBudget+=.5;
+  if(Number.isFinite(behind)&&behind>25){pointsBudget+=1;riskBudget+=.02}
+  if(Number.isFinite(cushion)&&cushion<6){pointsBudget-=.75;riskBudget-=.02}
+  if(Number(week)>=13&&rank>1&&Number.isFinite(behind)&&behind>0){pointsBudget+=.5;riskBudget+=.01}
+  pointsBudget=Math.max(1,Math.min(5,pointsBudget));riskBudget=Math.max(.03,Math.min(.12,riskBudget));
+  const floor=(safest.eval?.avg||0)-pointsBudget,ceiling=(safest.eval?.bottomHalf||0)+riskBudget;
+  const eligible=cards.filter(c=>(c.eval?.avg||0)>=floor&&(c.eval?.bottomHalf||0)<=ceiling);
+  const choice=(eligible.length?eligible:cards).reduce((a,b)=>(b.eval?.top2||0)>(a.eval?.top2||0)?b:a);
+  const pointsCost=(safest.eval?.avg||0)-(choice.eval?.avg||0),weeklyGap=(max.eval?.top2||0)-(choice.eval?.top2||0),riskGap=(max.eval?.bottomHalf||0)-(choice.eval?.bottomHalf||0);
+  let posture=rank===1?'Protect the season lead':rank<=3?(Number.isFinite(behind)&&behind>15?'Pressure the leader':'Controlled attack'):'Climb with controlled leverage';
+  let position=`Overall #${rank}`;
+  if(Number.isFinite(behind)&&rank>1)position+=` · ${behind} pts behind 1st`;
+  if(Number.isFinite(cushion))position+=` · ${cushion} pts ahead of the next entry`;
+  const reason=`${position}. ${choice.label} fits the current season position while preserving weekly-money upside. It costs ${Math.max(0,pointsCost).toFixed(1)} expected points versus Safest${choice.key!==max.key?` and leaves ${(weeklyGap*100).toFixed(1)} points of Top-2 ceiling on the table to avoid ${Math.max(0,riskGap*100).toFixed(0)} additional points of bottom-half risk`:''}.`;
+  return{choice,max,safest,reason,seasonAware:true,posture,seasonContext};
+}
 function strategyRecommendation(snapshot){
   if(!snapshot?.currentEval||!snapshot.cards?.length)return null;
   const current={key:'current',label:'Current',eval:snapshot.currentEval};
@@ -118,17 +141,17 @@ async function bootHome(){
   const impact=snapshot.fieldImpact,impactText=impact?.classification==='WIDELY_SHARED_LOSS'?` · ${pct(impact.samePickShare,0)} of observed entries shared the locked loss`:'';
   $('status').textContent=(snapshot.status==='stale'?'Previous run · rerun before using these cards. ':'Last run: ')+time+(snapshot.provisional?' · Future pool picks are estimated.':'')+impactText;
   const noSubmittedCard=snapshot.currentSource==='generated_baseline';
-  const recommendation=noSubmittedCard?dualGoalRecommendation(snapshot):strategyRecommendation(snapshot);
+  const recommendation=noSubmittedCard?seasonAwareRecommendation(snapshot,live?.seasonContext,snapshot.week):strategyRecommendation(snapshot);
   if(recommendation){
     $('decision').classList.add('show');
     if(noSubmittedCard){
-      $('leftDecisionLabel').textContent='Recommended approach';
+      $('leftDecisionLabel').textContent=recommendation.seasonAware?'Season-aware approach':'Recommended approach';
       $('rightDecisionLabel').textContent='Weekly ceiling';
       $('currentOdds').textContent=recommendation.choice.label;
-      $('currentDetail').textContent=`Avg ${Number(recommendation.choice.eval.avg).toFixed(1)} · Bottom-half risk ${pct(recommendation.choice.eval.bottomHalf,0)}`;
+      $('currentDetail').textContent=(recommendation.seasonAware?`Overall #${recommendation.seasonContext.rank} · `:'')+`Avg ${Number(recommendation.choice.eval.avg).toFixed(1)} · Bottom-half risk ${pct(recommendation.choice.eval.bottomHalf,0)}`;
       $('bestStrategy').textContent=recommendation.max.label;
       $('bestOdds').textContent=`${pct(recommendation.max.eval.top2)} Top 2 · Win ${pct(recommendation.max.eval.win)}`;
-      $('modelRead').innerHTML=`<b>${esc(`Use ${recommendation.choice.label} as the season + weekly-money posture.`)}</b> ${esc(recommendation.reason)}`;
+      $('modelRead').innerHTML=`<b>${esc(recommendation.seasonAware?`${recommendation.posture}: use ${recommendation.choice.label}.`:`Use ${recommendation.choice.label} as the season + weekly-money posture.`)}</b> ${esc(recommendation.reason)}${recommendation.seasonAware?'':` ${esc('Live overall standings are not available yet, so this is still a points/downside proxy.')}`}`;
     }else{
       $('leftDecisionLabel').textContent='Your current card';
       $('rightDecisionLabel').textContent='Best tradeoff';
@@ -142,7 +165,7 @@ async function bootHome(){
   const safest=snapshot.cards.find(c=>c.key==='safest');
   $('strategies').innerHTML=snapshot.cards.map(c=>{const equivalent=c.equivalentTo?`Same card as ${STRATEGIES.find(x=>x[0]===c.equivalentTo)?.[1]||c.equivalentTo}`:null,trade=safest&&c.key!=='safest'?{top2:(c.eval.top2-safest.eval.top2)*100,win:(c.eval.win-safest.eval.win)*100,avg:c.eval.avg-safest.eval.avg,risk:(c.eval.bottomHalf-safest.eval.bottomHalf)*100}:null;return`<a class="strategy ${snapshot.status==='stale'?'stale':''}" href="${c.href}"><strong>${c.label}</strong>${snapshot.status==='stale'?'<span class="tag">OLD SIMULATION</span>':''}<div class="odds">${pct(c.eval.top2)} <span style="font-size:12px;font-weight:600;color:var(--muted)">Top 2</span></div><div class="secondary">Win ${pct(c.eval.win)} · Avg score ${Number(c.eval.avg).toFixed(1)}<br>Bottom-half risk ${pct(c.eval.bottomHalf,0)}${trade?`<br><b>vs Safest:</b> +${trade.top2.toFixed(1)} pts Top-2 · ${trade.avg>=0?'+':''}${trade.avg.toFixed(1)} avg pts`:''}${equivalent?`<br>${equivalent}`:''}</div><span class="foot">View complete card →</span></a>`}).join('');
 }
-globalThis.SFIQ_HOME_TEST={MODEL_BUILD,strategySnapshot,strategyRecommendation,dualGoalRecommendation,tiebreakerRecommendation,chooseFreshLive,liveVersionKey};
+globalThis.SFIQ_HOME_TEST={MODEL_BUILD,strategySnapshot,strategyRecommendation,dualGoalRecommendation,seasonAwareRecommendation,tiebreakerRecommendation,chooseFreshLive,liveVersionKey};
 if(!TESTING)bootHome();
 </script>
 </body>
