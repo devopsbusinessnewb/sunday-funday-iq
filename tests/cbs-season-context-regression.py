@@ -9,12 +9,12 @@ snap={
     'rows':[
         '1 Leader Entry 812',
         '2 Second Entry 799',
-        '3 Tony Eickhoff 794',
+        '__SFIQ_SELF__ 3 Hidden Entry 794',
         '4 Fourth Entry 788',
         '5 Fifth Entry 770'
     ]
 }
-ctx=bridge.parse_season_context(snap,'Tony Eickhoff',94)
+ctx=bridge.parse_season_context(snap,'',94)
 assert ctx is not None
 assert ctx['rank']==3
 assert ctx['points']==794
