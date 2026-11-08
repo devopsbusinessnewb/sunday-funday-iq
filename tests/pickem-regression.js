@@ -25,6 +25,7 @@ if(html.includes('EMBEDDED_CBS_SCAN')) throw new Error('CBS live scan must not b
 if(!html.includes("LIVE_CBS_URL='../../data/live/cbs-pickem.json'")) throw new Error('Live CBS data URL missing');
 if(html.includes('id="phoneSyncBtn"')||html.includes("$('phoneSyncBtn').onclick=pasteCbsPhoneSync"))throw new Error('Unused iPhone shortcut control must stay removed');
 if(html.includes('id="scanFile"')||html.includes("$('scanFile').click()"))throw new Error('Refresh CBS Data must never open a local file picker');
+if(!html.includes('onlyIfNewer&&state.cardIntentValidation===1'))throw new Error('Cached pre-fix capture skips card-intent revalidation');
 if(!html.includes('week=${encodeURIComponent(state.week||1)}'))throw new Error('CBS market/results refresh is not week-aware');
 if(!html.includes('body::before')||!html.includes('env(safe-area-inset-top)'))throw new Error('iPhone safe-area protection missing');
 const js=html.split('<script>',2)[1].split('</script>',1)[0];

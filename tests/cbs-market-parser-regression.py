@@ -53,7 +53,7 @@ assert full[-1]['away']=='WAS' and full[-1]['home']=='SF', 'ESPN WSH must normal
 
 # Exercise the complete sanitizer with a synthetic authenticated card, including
 # all fourteen unique weights. No browser, publication, or private data is used.
-picks=['Week 6', '14/14 Picks']
+picks=['Week 6', '14/14 Picks', 'Your picks have been saved']
 standings=[mod.AUTH_SELF_MARKER]
 odds=[]
 for weight,game in enumerate(full,1):
