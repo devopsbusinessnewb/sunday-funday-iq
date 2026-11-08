@@ -51,7 +51,16 @@ context.fetch=async()=>({ok:true,json:async()=>({season:2026,week:3})});
 context.document={getElementById:id=>nodes[id]};
 vm.runInContext('bootHome()',context).then(()=>{
   if(nodes.week.textContent!=='Week 3'||(nodes.strategies.innerHTML.match(/View complete card/g)||[]).length!==4)throw new Error('Home does not present four usable complete-card links');
-  if(!nodes.decision.shown||nodes.currentOdds.textContent!=='4.1%'||!nodes.bestStrategy.textContent)throw new Error('Home does not show the current-card benchmark and best tradeoff');
+  if(!nodes.decision.shown||!nodes.currentOdds.textContent||nodes.currentOdds.textContent.includes('%')||!nodes.bestStrategy.textContent)throw new Error('Home does not show model-based season/weekly recommendation');
   if(!html.includes('href="./apps/pickem/?action=refresh-simulate"')||!html.includes('href="./legacy-home.html"')||!html.includes('href="./apps/pickem/?details=1"'))throw new Error('Home lost simulation action, focused data details, or paused fantasy access');
   console.log('CBS home regression passed: four strategies, deep links, week and input freshness.');
 }).catch(e=>{console.error(e);process.exitCode=1});
+
+const screenshotAdvice=home.strategyAdvice({cards:[
+{key:'safest',label:'Safest',eval:{top2:.044,win:.016,avg:89,bottomHalf:.27}},
+{key:'balanced',label:'Balanced',eval:{top2:.103,win:.054,avg:88.8,bottomHalf:.35}},
+{key:'aggressive',label:'Aggressive',eval:{top2:.133,win:.085,avg:87.5,bottomHalf:.43}},
+{key:'maxUpside',label:'Max Upside',eval:{top2:.132,win:.095,avg:83.7,bottomHalf:.55}}
+]});
+if(screenshotAdvice.choice.key!=='balanced')throw Error('Screenshot tradeoff should recommend Balanced');
+if(!screenshotAdvice.paragraphs.join(' ').includes('1.3 fewer expected points')||!screenshotAdvice.paragraphs.join(' ').includes('no better Top-2 probability'))throw Error('Missing quantified season/weekly tradeoff');
