@@ -66,6 +66,26 @@ else:
 
 assert bridge.card_intent_confirmed('15 / 15 Picks',[]) is False
 assert bridge.card_intent_confirmed('15 / 15 Picks\nYour picks have been saved',[]) is True
-assert bridge.card_intent_confirmed('15 / 15 Picks',[{'completed':True,'statusText':'FINAL'}]) is True
+assert bridge.card_intent_confirmed('15 / 15 Picks',[{'completed':True,'statusText':'FINAL'}]) is False
+
+assert bridge.card_intent_confirmed('15 / 15 Picks',[{'completed':False,'statusText':'Q2'}]) is False
+assert bridge.card_intent_confirmed('Your picks have been saved',[{'completed':True}]) is True
 
 print(f"CBS current-week regression passed: Week {live['week']}, {n}-game slate, {card_state}")
+
+# Exercise the publisher with the actual weekly slate, including finished Thursday.
+# Stub only text decoding; the production intent/status/publication path runs intact.
+bridge.load_previous=lambda: live
+bridge.parse_entry_card=lambda *args: list(zip(live['myCard']['picks'],live['myCard']['weights'])) if live.get('myCard') else [(g['away'],i+1) for i,g in enumerate(live['market'])]
+bridge.parse_market=lambda *args: live['market']
+raw={'slate':live['gameState'],'snapshots':[
+    {'title':'NFL Football Tourney | Picks','text':live['snapshots'][0]['text']+'\nWeek '+str(live['week'])+'\n15 / 15 Picks'},
+    {'title':'Weekly Standings','text':''},
+    {'title':'CBS NFL Odds','text':''}
+]}
+clean=bridge.sanitize_raw(raw)
+assert clean['confidenceStatus']=='unsubmitted' and not clean['cardIntentConfirmed'] and 'myCard' not in clean
+raw['snapshots'][0]['text']+='\nYour picks have been saved'
+saved=bridge.sanitize_raw(raw)
+assert saved['confidenceStatus']=='submitted' and saved['cardIntentSource']=='explicit-save-confirmation' and saved['myCard']
+print('CBS publisher intent regression passed: finished game cannot confirm editable card; explicit save can.')

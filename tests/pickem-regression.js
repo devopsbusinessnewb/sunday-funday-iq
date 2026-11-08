@@ -25,6 +25,7 @@ if(html.includes('EMBEDDED_CBS_SCAN')) throw new Error('CBS live scan must not b
 if(!html.includes("LIVE_CBS_URL='../../data/live/cbs-pickem.json'")) throw new Error('Live CBS data URL missing');
 if(html.includes('id="phoneSyncBtn"')||html.includes("$('phoneSyncBtn').onclick=pasteCbsPhoneSync"))throw new Error('Unused iPhone shortcut control must stay removed');
 if(html.includes('id="scanFile"')||html.includes("$('scanFile').click()"))throw new Error('Refresh CBS Data must never open a local file picker');
+if(!html.includes('onlyIfNewer&&state.cardIntentValidation===1'))throw new Error('Cached pre-fix capture skips card-intent revalidation');
 if(!html.includes('week=${encodeURIComponent(state.week||1)}'))throw new Error('CBS market/results refresh is not week-aware');
 if(!html.includes('body::before')||!html.includes('env(safe-area-inset-top)'))throw new Error('iPhone safe-area protection missing');
 const js=html.split('<script>',2)[1].split('</script>',1)[0];
@@ -211,12 +212,18 @@ console.log('Field identity regression passed: 87 HOU-JAX observations resolve t
   const marketCtx={console,globalThis:null,setTimeout,clearTimeout,__SFIQ_TESTING__:true,fetch:async()=>({ok:false})};marketCtx.globalThis=marketCtx;
   vm.createContext(marketCtx);vm.runInContext(js,marketCtx);
   vm.runInContext('render=()=>{};show=()=>{};refreshResults=async()=>false;',marketCtx);
-  marketCtx.importFixture={season:2026,week:6,poolSize:94,market:identityMatchups.map(([away,home])=>({away,home,awayML:-110,homeML:-110,total:45})),confidenceStatus:'submitted',cardIntentConfirmed:true,myCard:{picks:identityGames.map(g=>g.pick),weights:identityCard.weights},fieldModel:identityField};
+  marketCtx.importFixture={season:2026,week:6,poolSize:94,market:identityMatchups.map(([away,home])=>({away,home,awayML:-110,homeML:-110,total:45})),confidenceStatus:'submitted',cardIntentConfirmed:true,cardIntentSource:'explicit-save-confirmation',myCard:{picks:identityGames.map(g=>g.pick),weights:identityCard.weights},fieldModel:identityField};
   const legacyFixture={season:2026,week:6,poolSize:94,market:identityMatchups.map(([away,home])=>({away,home,awayML:-110,homeML:-110,total:45})),gameState:identityMatchups.map(([away,home])=>({away,home,completed:false,statusText:'SUN 12:00 PM'})),confidenceStatus:'submitted',myCard:{picks:identityGames.map(g=>g.pick),weights:identityCard.weights},fieldModel:identityField};
   marketCtx.legacyFixture=legacyFixture;
   await vm.runInContext('importScan(legacyFixture)',marketCtx);
   const legacyState=JSON.parse(vm.runInContext('JSON.stringify({status:state.confidenceStatus,picks:state.games.map(g=>g.pick),weights:state.games.map(g=>g.weight)})',marketCtx));
   if(legacyState.status!=='unsubmitted'||legacyState.picks.some(Boolean)||legacyState.weights.some(v=>v!=null))throw new Error('Legacy pregame complete card must be treated as blank slate without intent confirmation');
+  // Bridge 2.4.0 incorrectly promoted a completed Thursday game into full-card intent.
+  legacyFixture.version='2.4.0';legacyFixture.cardIntentConfirmed=true;
+  legacyFixture.gameState[0].completed=true;legacyFixture.gameState[0].statusText='FINAL';
+  await vm.runInContext('importScan(legacyFixture)',marketCtx);
+  const staleIntent=JSON.parse(vm.runInContext('JSON.stringify({status:state.confidenceStatus,picks:state.games.map(g=>g.pick)})',marketCtx));
+  if(staleIntent.status!=='unsubmitted'||staleIntent.picks.some(Boolean))throw new Error('Finished Thursday game legitimized an unverified Sunday card');
   marketCtx.importFixture.cardIntentConfirmed=true;
   await vm.runInContext('importScan(importFixture)',marketCtx);
   vm.runInContext("Object.assign(state.games.find(g=>g.away==='SEA'&&g.home==='DEN'),{locked:true,completed:true,winner:1,pick:'DEN',weight:2});",marketCtx);

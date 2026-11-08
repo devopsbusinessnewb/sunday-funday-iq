@@ -147,7 +147,7 @@ const POOL_HISTORY_URL='../../data/analysis/cbs-pool-history-report.json';
 const SEARCH_ITERS=700;
 const FINAL_ITERS=3000;
 const VALIDATION_SEEDS=3;
-const MODEL_BUILD='1.16.13';
+const MODEL_BUILD='1.16.14';
 const CONFIDENCE_TIE_BAND=.025;
 const MIN_OPTIONAL_FLIP_PROB=.40;
 const MIN_OPTIONAL_MARKET_PROB=.38;
@@ -1341,8 +1341,7 @@ async function pasteCbsPhoneSync(){
 }
 
 async function importScan(obj){
-  const incomingLocked=Array.isArray(obj?.gameState)&&obj.gameState.some(g=>g?.completed||/\b(?:Q[1-4]|HALF|FINAL|OT|IN PROGRESS)\b/i.test(String(g?.statusText||'')));
-  const confirmedSubmitted=obj?.confidenceStatus==='submitted'&&(obj?.cardIntentConfirmed===true||incomingLocked);
+  const confirmedSubmitted=obj?.confidenceStatus==='submitted'&&obj?.cardIntentConfirmed===true&&obj?.cardIntentSource==='explicit-save-confirmation';
   if(obj?.confidenceStatus==='submitted'&&!confirmedSubmitted){
     obj=clone(obj);obj.confidenceStatus='unsubmitted';delete obj.myCard;
   }
@@ -1409,6 +1408,7 @@ async function importScan(obj){
   const stand=newest(snaps.filter(s=>/Weekly Standings/i.test(s.title||'')));if(stand){const names=[...stand.text.matchAll(/\n\n\n(?:\d+(?:st|nd|rd|th))\n([^\n\t]{2,60})\n\t-?\d+\t-?\d+\t/g)].map(x=>x[1]);if(names.length>20)state.poolSize=new Set(names).size}
   if(Number.isInteger(Number(obj.poolSize))&&Number(obj.poolSize)>1)state.poolSize=Number(obj.poolSize);
   state.seasonContext=validSeasonContext(obj?.seasonContext)?clone(obj.seasonContext):null;
+  state.cardIntentValidation=1;
   state.importedAt=obj.exportedAt||pickSnap?.ts||nowIso();state.cbsUpdatedAt=pickSnap?.ts||obj.exportedAt||nowIso();state.cbsSource='scan';
   const importedStatus=cardImportStatus();
   state.confidenceStatus=obj?.confidenceStatus||(importedStatus.picks===0?'unsubmitted':'submitted');state.confidenceSource=obj?.confidenceSource||(importedStatus.picks===0?'CBS slate — no picks submitted':'CBS import');state.originalConfidenceStatus=state.confidenceStatus;
@@ -1886,7 +1886,7 @@ async function loadPublishedCbs({silent=true,onlyIfNewer=true}={}){
   try{
     const r=await fetch(LIVE_CBS_URL+'?v='+Date.now(),{cache:'no-store'});if(!r.ok)throw new Error('HTTP '+r.status);
     const obj=await r.json();const incoming=Date.parse(obj?.exportedAt||''),stored=Date.parse(state.importedAt||state.cbsUpdatedAt||'');
-    if(onlyIfNewer&&Number.isFinite(stored)&&Number.isFinite(incoming)&&incoming<=stored)return false;
+    if(onlyIfNewer&&state.cardIntentValidation===1&&Number.isFinite(stored)&&Number.isFinite(incoming)&&incoming<=stored)return false;
     await importScan(obj);if(!silent)show('CBS refreshed from the published live data file.');return true;
   }catch(err){console.error('Published CBS data load failed',err);if(!silent)show('Could not load the published CBS data from GitHub. Try again in a moment.','red');return false}
 }
