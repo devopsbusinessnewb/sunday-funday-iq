@@ -60,4 +60,9 @@ else:
     assert not card, 'unsubmitted status must not publish myCard'
     assert live.get('confidenceSource'), 'unsubmitted status requires a sanitized reason'
     card_state='valid unsubmitted card'
+
+assert bridge.card_intent_confirmed('15 / 15 Picks',[]) is False
+assert bridge.card_intent_confirmed('15 / 15 Picks\nYour picks have been saved',[]) is True
+assert bridge.card_intent_confirmed('15 / 15 Picks',[{'completed':True,'statusText':'FINAL'}]) is True
+
 print(f"CBS current-week regression passed: Week {live['week']}, {n}-game slate, {card_state}")
