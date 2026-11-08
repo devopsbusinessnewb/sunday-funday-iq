@@ -1,5 +1,8 @@
-import json,re
+import json,re,importlib.util
 from pathlib import Path
+
+spec=importlib.util.spec_from_file_location('bridge',Path('tools/cbs-bridge-server.py'))
+bridge=importlib.util.module_from_spec(spec); spec.loader.exec_module(bridge)
 
 app=Path('apps/pickem/index.html').read_text(encoding='utf-8')
 live=json.loads(Path('data/live/cbs-pickem.json').read_text(encoding='utf-8'))
