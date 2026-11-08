@@ -250,3 +250,14 @@ console.log('Field identity regression passed: 87 HOU-JAX observations resolve t
   }
   console.log('Market refresh regression passed: primary/fallback odds omit SEA-DEN; all 14 imported games and completed state survive.');
 })().catch(error=>{console.error(error);process.exitCode=1;});
+
+const lockedBlank=[{away:'JAX',home:'BAL',pick:'JAX',weight:12,locked:true,completed:true},{away:'CIN',home:'ATL',pick:null,weight:null,locked:false}];
+if(t.partialCardBlocksSimulation(lockedBlank,'unsubmitted'))throw Error('Locked Thursday history blocked blank-slate simulation');
+if(!t.partialCardBlocksSimulation(lockedBlank,'partial'))throw Error('Unverified partial submission bypassed guard');
+const partialOpen=clone(lockedBlank);partialOpen[1].pick='CIN';
+if(!t.partialCardBlocksSimulation(partialOpen,'unsubmitted'))throw Error('Incomplete open-game edit bypassed partial-card guard');
+console.log('Locked-history blank-slate simulation guard passed.');
+
+const seededLocked=clone(blankGames);Object.assign(seededLocked[0],{pick:seededLocked[0].home,weight:12,locked:true,completed:true});
+const lockedBaseline=t.simulationCurrentCard(seededLocked);
+if(lockedBaseline.card.choices[0]!==1||lockedBaseline.card.weights[0]!==12||!t.validConfidence(lockedBaseline.card.weights,16))throw Error('Blank-slate baseline changed a known locked pick/confidence');
