@@ -37,6 +37,13 @@ const dual=home.dualGoalRecommendation({cards:[
   {key:'maxUpside',label:'Max Upside',eval:{top2:.14,win:.09,bottomHalf:.45,avg:82}}
 ]});
 if(dual?.choice?.key!=='balanced'||dual?.max?.key!=='maxUpside')throw new Error('Home did not choose the season + weekly-money posture from the strategy frontier');
+const seasonAware=home.seasonAwareRecommendation({week:9,cards:[
+  {key:'safest',label:'Safest',eval:{top2:.03,win:.01,bottomHalf:.30,avg:90}},
+  {key:'balanced',label:'Balanced',eval:{top2:.08,win:.04,bottomHalf:.33,avg:89}},
+  {key:'aggressive',label:'Aggressive',eval:{top2:.12,win:.07,bottomHalf:.37,avg:87.8}},
+  {key:'maxUpside',label:'Max Upside',eval:{top2:.14,win:.09,bottomHalf:.46,avg:82}}
+]},{rank:3,pointsBehindLeader:12,pointsAheadOfNext:7},9);
+if(!seasonAware?.seasonAware||seasonAware.choice.key!=='aggressive'||!seasonAware.reason.includes('Overall #3'))throw new Error('Home did not adapt recommendation to live season position');
 const nodes=Object.fromEntries(['week','status','strategies','leftDecisionLabel','rightDecisionLabel','currentOdds','currentDetail','bestStrategy','bestOdds','modelRead'].map(id=>[id,{textContent:'',innerHTML:''}]));
 nodes.decision={classList:{add:x=>nodes.decision.shown=x==='show'}};
 context.localStorage={getItem:()=>JSON.stringify(state)};
