@@ -24,7 +24,7 @@
 <main class="app">
   <header class="bar"><div><div class="eyebrow">SUNDAY FUNDAY IQ</div><h1>CBS Pick'em</h1><p class="subtitle">Choose the card you want to take into CBS.</p></div><span class="week" id="week">Week —</span></header>
   <section class="panel" aria-label="Data and simulation"><h2>Get the latest card</h2><div class="status" id="status">Checking CBS data and your last simulation…</div><div class="actions"><a class="btn primary" href="./apps/pickem/?action=refresh-simulate">Refresh data &amp; simulate</a><a class="btn" href="./apps/pickem/?details=1">Data &amp; model details</a><a class="btn" href="./apps/pickem/?lab=1">Model Lab · Live Context</a></div></section>
-  <section class="panel decision" id="decision" aria-label="IQ recommendation"><h2>What the model says now</h2><div class="decision-grid"><div class="decision-box"><span id="leftDecisionLabel">Your current card</span><strong id="currentOdds">—</strong><small id="currentDetail">Top-2 outlook</small></div><div class="decision-box"><span id="rightDecisionLabel">Best tradeoff</span><strong id="bestStrategy">—</strong><small id="bestOdds">Waiting for simulation</small></div></div><div class="read" id="modelRead"></div></section>
+  <section class="panel decision" id="decision" aria-label="IQ recommendation"><h2>What the model says now</h2><div class="decision-grid"><div class="decision-box"><span id="leftDecisionLabel">Recommended this week</span><strong id="currentOdds">—</strong><small id="currentDetail">Top-2 outlook</small></div><div class="decision-box"><span id="rightDecisionLabel">Highest weekly Top 2</span><strong id="bestStrategy">—</strong><small id="bestOdds">Waiting for simulation</small></div></div><div class="read" id="modelRead"></div></section>
   <section class="panel tiebreaker" id="tiebreaker" aria-label="Tiebreaker recommendation"><h2>Recommended tiebreaker</h2><strong id="tiebreakerScore">—</strong><div class="status" id="tiebreakerDetail">Based on the current market total for the Monday Night Football game.</div></section>
   <div class="section-head"><h2>Choose your strategy</h2><p>Each option opens every pick and its final confidence points, highest first.</p></div>
   <section class="strategies" id="strategies" aria-label="CBS strategy cards"><div class="empty">Loading your strategy cards…</div></section>
@@ -82,7 +82,7 @@ function dualGoalRecommendation(snapshot){
   const safest=cards.find(c=>c.key==='safest')||cards.reduce((a,b)=>(b.eval?.avg||0)>(a.eval?.avg||0)?b:a);
   const max=cards.reduce((a,b)=>(b.eval?.top2||0)>(a.eval?.top2||0)?b:a);
   const seasonFloor=(safest.eval?.avg||0)-2.0;
-  const riskCeiling=(safest.eval?.bottomHalf||0)+0.05;
+  const riskCeiling=(safest.eval?.bottomHalf||0)+0.10;
   const eligible=cards.filter(c=>(c.eval?.avg||0)>=seasonFloor&&(c.eval?.bottomHalf||0)<=riskCeiling);
   const choice=(eligible.length?eligible:cards).reduce((a,b)=>(b.eval?.top2||0)>(a.eval?.top2||0)?b:a);
   const pointsCost=(safest.eval?.avg||0)-(choice.eval?.avg||0);
@@ -90,6 +90,22 @@ function dualGoalRecommendation(snapshot){
   const riskGap=(max.eval?.bottomHalf||0)-(choice.eval?.bottomHalf||0);
   const reason=`${choice.label} best balances the two goals right now: preserve season points while keeping a real weekly Top-2 path. It gives up ${Math.max(0,pointsCost).toFixed(1)} expected points versus Safest${choice.key!==max.key?` while Max Upside adds only ${(weeklyGap*100).toFixed(1)} points of Top-2 probability at ${(riskGap*100).toFixed(0)} points more bottom-half risk`:''}.`;
   return{choice,max,safest,reason};
+}
+function strategyAdvice(snapshot){
+  const result=dualGoalRecommendation(snapshot);
+  if(!result)return null;
+  const {choice,safest}=result;
+  const paragraphs=[`Use ${choice.label} this week. For a strong season position, this is the scoring/upside compromise among these four cards: ${pct(choice.eval.top2)} weekly Top 2, ${Number(choice.eval.avg).toFixed(1)} expected points, and ${pct(choice.eval.bottomHalf,0)} bottom-half risk.`];
+  for(const card of snapshot.cards){
+    if(card.key===choice.key)continue;
+    const points=card.eval.avg-choice.eval.avg,top2=(card.eval.top2-choice.eval.top2)*100,risk=(card.eval.bottomHalf-choice.eval.bottomHalf)*100;
+    paragraphs.push(`${card.label}: compared with ${choice.label}, ${Math.abs(top2).toFixed(1)} percentage points ${top2>=0?'more':'less'} weekly Top-2 probability, ${Math.abs(points).toFixed(1)} ${points>=0?'more':'fewer'} expected points, and ${Math.abs(risk).toFixed(0)} percentage points ${risk>=0?'more':'less'} bottom-half risk. ${points<-.5&&risk>0?'That is a larger season-scoring gamble.':points>=0&&top2<0?'That protects expected scoring but gives up weekly-money opportunity.':'Consider whether the weekly payoff is worth the scoring tradeoff.'}`);
+  }
+  const aggressive=snapshot.cards.find(c=>c.key==='aggressive'),max=snapshot.cards.find(c=>c.key==='maxUpside');
+  if(aggressive&&max&&max.eval.top2<=aggressive.eval.top2&&max.eval.avg<aggressive.eval.avg&&max.eval.bottomHalf>aggressive.eval.bottomHalf){
+    paragraphs.push(`Max Upside versus Aggressive: ${Math.abs((max.eval.win-aggressive.eval.win)*100).toFixed(1)} percentage points ${max.eval.win>=aggressive.eval.win?'more':'less'} chance of outright first, but no better Top-2 probability, ${(aggressive.eval.avg-max.eval.avg).toFixed(1)} fewer expected points and ${((max.eval.bottomHalf-aggressive.eval.bottomHalf)*100).toFixed(0)} percentage points more bottom-half risk. The extra risk is aimed at first place, not a better chance of weekly money.`);
+  }
+  return{...result,paragraphs};
 }
 function validSeasonContext(x){
   if(!x||!Number.isFinite(Number(x.rank))||Number(x.rank)<1)return false;
@@ -150,42 +166,21 @@ async function bootHome(){
   const time=new Date(snapshot.ranAt).toLocaleString();
   const impact=snapshot.fieldImpact,impactText=impact?.classification==='WIDELY_SHARED_LOSS'?` · ${pct(impact.samePickShare,0)} of observed entries shared the locked loss`:'';
   $('status').textContent=(snapshot.status==='stale'?'Previous run · rerun before using these cards. ':'Last run: ')+time+(snapshot.provisional?' · Future pool picks are estimated.':'')+impactText;
-  const noSubmittedCard=snapshot.currentSource==='generated_baseline';
-  const recommendation=noSubmittedCard?(()=>{
-    const choice=snapshot.cards.find(c=>c.key===snapshot.selectedStrategy)||snapshot.cards.find(c=>c.key==='balanced')||snapshot.cards[0];
-    const max=snapshot.cards.reduce((a,b)=>(b.eval?.top2||0)>(a.eval?.top2||0)?b:a);
-    const bd=snapshot.blankDecision||{};
-    const safest=snapshot.cards.find(c=>c.key==='safest')||snapshot.cards[0];
-    const pointsCost=(safest?.eval?.avg||0)-(choice?.eval?.avg||0);
-    const weeklyGap=(max?.eval?.top2||0)-(choice?.eval?.top2||0);
-    const riskGap=(max?.eval?.bottomHalf||0)-(choice?.eval?.bottomHalf||0);
-    const position=bd?.seasonAware&&validSeasonContext(bd?.seasonContext)?`Overall #${bd.seasonContext.rank}. `:'';
-    return{choice,max,seasonAware:!!(bd?.seasonAware&&validSeasonContext(bd?.seasonContext)),posture:bd?.posture||'Balanced season + weekly money',seasonContext:validSeasonContext(bd?.seasonContext)?bd.seasonContext:null,reason:`${position}${choice.label} is the optimizer-selected complete card for the current season + weekly-money objective. It costs ${Math.max(0,pointsCost).toFixed(1)} expected points versus Safest${choice.key!==max.key?` while leaving ${(weeklyGap*100).toFixed(1)} points of Top-2 ceiling to avoid ${Math.max(0,riskGap*100).toFixed(0)} additional points of bottom-half risk`:''}.`};
-  })():strategyRecommendation(snapshot);
+  const recommendation=strategyAdvice(snapshot);
   if(recommendation){
     $('decision').classList.add('show');
-    if(noSubmittedCard){
-      $('leftDecisionLabel').textContent=recommendation.seasonAware?'Season-aware approach':'Recommended approach';
-      $('rightDecisionLabel').textContent='Weekly ceiling';
-      $('currentOdds').textContent=recommendation.choice.label;
-      $('currentDetail').textContent=(recommendation.seasonAware?`Overall #${recommendation.seasonContext.rank} · `:'')+`Avg ${Number(recommendation.choice.eval.avg).toFixed(1)} · Bottom-half risk ${pct(recommendation.choice.eval.bottomHalf,0)}`;
-      $('bestStrategy').textContent=recommendation.max.label;
-      $('bestOdds').textContent=`${pct(recommendation.max.eval.top2)} Top 2 · Win ${pct(recommendation.max.eval.win)}`;
-      $('modelRead').innerHTML=`<b>${esc(recommendation.seasonAware?`${recommendation.posture}: use ${recommendation.choice.label}.`:`Use ${recommendation.choice.label} as the season + weekly-money posture.`)}</b> ${esc(recommendation.reason)}${recommendation.seasonAware?'':` ${esc('Live overall standings are not available yet, so this is still a points/downside proxy.')}`}`;
-    }else{
-      $('leftDecisionLabel').textContent='Your current card';
-      $('rightDecisionLabel').textContent='Best tradeoff';
-      $('currentOdds').textContent=pct(snapshot.currentEval.top2);
-      $('currentDetail').textContent=`Win ${pct(snapshot.currentEval.win)} · Avg score ${Number(snapshot.currentEval.avg).toFixed(1)}`;
-      $('bestStrategy').textContent=recommendation.choice.label;
-      $('bestOdds').textContent=`${pct(recommendation.choice.eval.top2)} Top 2 · Win ${pct(recommendation.choice.eval.win)}`;
-      $('modelRead').innerHTML=`<b>${esc(recommendation.choice.key==='current'?'Keep the current card.':`Use ${recommendation.choice.label}.`)}</b> ${esc(recommendation.reason)}`;
-    }
+    $('leftDecisionLabel').textContent='Recommended this week';
+    $('rightDecisionLabel').textContent='Highest weekly Top 2';
+    $('currentOdds').textContent=recommendation.choice.label;
+    $('currentDetail').textContent=`${pct(recommendation.choice.eval.top2)} Top 2 · Avg ${Number(recommendation.choice.eval.avg).toFixed(1)} · Bottom-half risk ${pct(recommendation.choice.eval.bottomHalf,0)}`;
+    $('bestStrategy').textContent=recommendation.max.label;
+    $('bestOdds').textContent=`${pct(recommendation.max.eval.top2)} Top 2 · Win ${pct(recommendation.max.eval.win)}`;
+    $('modelRead').innerHTML=recommendation.paragraphs.map((text,i)=>`<p${i===0?' style="margin-top:0"':''}>${i===0?'<b>':''}${esc(text)}${i===0?'</b>':''}</p>`).join('')+'<small>Season lens: favor weekly upside within 2 expected points and 10 percentage points of bottom-half risk of Safest. This compares existing model outputs; it does not estimate season-title odds or forecast next week. Reassess with each new slate.</small>';
   }
   const safest=snapshot.cards.find(c=>c.key==='safest');
   $('strategies').innerHTML=snapshot.cards.map(c=>{const equivalent=c.equivalentTo?`Same card as ${STRATEGIES.find(x=>x[0]===c.equivalentTo)?.[1]||c.equivalentTo}`:null,trade=safest&&c.key!=='safest'?{top2:(c.eval.top2-safest.eval.top2)*100,win:(c.eval.win-safest.eval.win)*100,avg:c.eval.avg-safest.eval.avg,risk:(c.eval.bottomHalf-safest.eval.bottomHalf)*100}:null;return`<a class="strategy ${snapshot.status==='stale'?'stale':''}" href="${c.href}"><strong>${c.label}</strong>${snapshot.status==='stale'?'<span class="tag">OLD SIMULATION</span>':''}<div class="odds">${pct(c.eval.top2)} <span style="font-size:12px;font-weight:600;color:var(--muted)">Top 2</span></div><div class="secondary">Win ${pct(c.eval.win)} · Avg score ${Number(c.eval.avg).toFixed(1)}<br>Bottom-half risk ${pct(c.eval.bottomHalf,0)}${trade?`<br><b>vs Safest:</b> +${trade.top2.toFixed(1)} pts Top-2 · ${trade.avg>=0?'+':''}${trade.avg.toFixed(1)} avg pts`:''}${equivalent?`<br>${equivalent}`:''}</div><span class="foot">View complete card →</span></a>`}).join('');
 }
-globalThis.SFIQ_HOME_TEST={MODEL_BUILD,strategySnapshot,strategyRecommendation,dualGoalRecommendation,validSeasonContext,seasonAwareRecommendation,tiebreakerRecommendation,chooseFreshLive,liveVersionKey};
+globalThis.SFIQ_HOME_TEST={MODEL_BUILD,strategySnapshot,strategyAdvice,strategyRecommendation,dualGoalRecommendation,validSeasonContext,seasonAwareRecommendation,tiebreakerRecommendation,chooseFreshLive,liveVersionKey};
 if(!TESTING)bootHome();
 </script>
 </body>
