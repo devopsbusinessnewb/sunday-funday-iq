@@ -1341,6 +1341,11 @@ async function pasteCbsPhoneSync(){
 }
 
 async function importScan(obj){
+  const incomingLocked=Array.isArray(obj?.gameState)&&obj.gameState.some(g=>g?.completed||/\b(?:Q[1-4]|HALF|FINAL|OT|IN PROGRESS)\b/i.test(String(g?.statusText||'')));
+  const confirmedSubmitted=obj?.confidenceStatus==='submitted'&&(obj?.cardIntentConfirmed===true||incomingLocked);
+  if(obj?.confidenceStatus==='submitted'&&!confirmedSubmitted){
+    obj=clone(obj);obj.confidenceStatus='unsubmitted';delete obj.myCard;
+  }
   let lockedBeforeImport=snapshotLockedGames();
   const priorWeek=Number(state.week||0);
   const snaps=obj.snapshots||[],pickSnap=newest(snaps.filter(s=>/\|\s*Picks/i.test(s.title||'')||/Picks$/i.test(s.title||'')))||newest(snaps.filter(s=>/pickem/i.test(s.url||'')));
