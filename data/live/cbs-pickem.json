@@ -5,28 +5,28 @@
   "week": 10,
   "slateSize": 14,
   "poolSize": 94,
-  "exportedAt": "2026-11-11T00:24:26.942836Z",
+  "exportedAt": "2026-11-11T06:09:24.963166Z",
   "source": "Automated local CBS browser capture",
   "privacy": "Raw CBS session/page data sanitized locally; pool/account identifiers and participant names not published.",
   "confidenceStatus": "unsubmitted",
   "cardIntentConfirmed": false,
   "cardIntentSource": null,
   "confidenceSource": "CBS Picks status",
-  "marketCapturedAt": "2026-11-11T00:24:26.942795Z",
+  "marketCapturedAt": "2026-11-11T06:09:24.963075Z",
   "marketSource": "CBS Sports odds \u2014 Week 10",
   "market": [
     {
       "away": "WAS",
       "home": "NYG",
       "awayML": 115,
-      "homeML": -130,
+      "homeML": -134,
       "total": 41.2
     },
     {
       "away": "NE",
       "home": "DET",
-      "awayML": 130,
-      "homeML": -148,
+      "awayML": 135,
+      "homeML": -152,
       "total": 51.2
     },
     {
@@ -39,29 +39,29 @@
     {
       "away": "HOU",
       "home": "CLE",
-      "awayML": -225,
-      "homeML": 194,
-      "total": 39.5
+      "awayML": -230,
+      "homeML": 195,
+      "total": 39.8
     },
     {
       "away": "MIN",
       "home": "GB",
       "awayML": 145,
-      "homeML": -170,
+      "homeML": -172,
       "total": 42.0
     },
     {
       "away": "JAX",
       "home": "TEN",
-      "awayML": -556,
-      "homeML": 440,
+      "awayML": -535,
+      "homeML": 430,
       "total": 46.2
     },
     {
       "away": "MIA",
       "home": "IND",
-      "awayML": 165,
-      "homeML": -188,
+      "awayML": 168,
+      "homeML": -192,
       "total": 38.0
     },
     {
@@ -74,14 +74,14 @@
     {
       "away": "BUF",
       "home": "NYJ",
-      "awayML": -450,
+      "awayML": -410,
       "homeML": 350,
       "total": 50.8
     },
     {
       "away": "SEA",
       "home": "LV",
-      "awayML": -278,
+      "awayML": -286,
       "homeML": 245,
       "total": 40.5
     },
@@ -97,12 +97,12 @@
       "home": "DAL",
       "awayML": -205,
       "homeML": 175,
-      "total": 55.8
+      "total": 55.5
     },
     {
       "away": "PIT",
       "home": "CIN",
-      "awayML": 164,
+      "awayML": 155,
       "homeML": -180,
       "total": 49.5
     },
@@ -110,7 +110,7 @@
       "away": "LAC",
       "home": "BAL",
       "awayML": 190,
-      "homeML": -205,
+      "homeML": -218,
       "total": 38.5
     }
   ],
@@ -216,7 +216,7 @@
   ],
   "fieldModel": {
     "source": "Sanitized CBS revealed-pool observations",
-    "capturedAt": "2026-11-11T00:24:06.654102Z",
+    "capturedAt": "2026-11-11T06:09:04.859726Z",
     "observedEntries": 0,
     "locked": []
   },
@@ -224,13 +224,13 @@
     {
       "title": "NFL Football Tourney | Picks",
       "url": "sanitized://cbs-pickem/week-10",
-      "ts": "2026-11-11T00:24:01.539059Z",
-      "text": "CBS Pickem sanitized ownership\n0-0\nWAS\n13%\n0-0\nNYG\n87%\n0-0\nNE\n10%\n0-0\nDET\n90%\n0-0\nKC\n96%\n0-0\nATL\n4%\n0-0\nHOU\n64%\n0-0\nCLE\n36%\n0-0\nMIN\n13%\n0-0\nGB\n87%\n0-0\nJAX\n100%\n0-0\nTEN\n0%\n0-0\nMIA\n24%\n0-0\nIND\n76%\n0-0\nCAR\n44%\n0-0\nNO\n56%\n0-0\nBUF\n100%\n0-0\nNYJ\n0%\n0-0\nSEA\n89%\n0-0\nLV\n11%\n0-0\nLAR\n96%\n0-0\nARI\n4%\n0-0\nSF\n96%\n0-0\nDAL\n4%\n0-0\nPIT\n15%\n0-0\nCIN\n85%\n0-0\nLAC\n17%\n0-0\nBAL\n83%"
+      "ts": "2026-11-11T06:08:59.988639Z",
+      "text": "CBS Pickem sanitized ownership\n0-0\nWAS\n13%\n0-0\nNYG\n87%\n0-0\nNE\n10%\n0-0\nDET\n90%\n0-0\nKC\n97%\n0-0\nATL\n3%\n0-0\nHOU\n64%\n0-0\nCLE\n36%\n0-0\nMIN\n14%\n0-0\nGB\n86%\n0-0\nJAX\n100%\n0-0\nTEN\n0%\n0-0\nMIA\n23%\n0-0\nIND\n77%\n0-0\nCAR\n43%\n0-0\nNO\n57%\n0-0\nBUF\n100%\n0-0\nNYJ\n0%\n0-0\nSEA\n90%\n0-0\nLV\n10%\n0-0\nLAR\n96%\n0-0\nARI\n4%\n0-0\nSF\n95%\n0-0\nDAL\n5%\n0-0\nPIT\n15%\n0-0\nCIN\n85%\n0-0\nLAC\n17%\n0-0\nBAL\n83%"
     },
     {
       "title": "NFL Football Tourney | Weekly Standings",
       "url": "sanitized://cbs-pickem/week-10/standings/weekly",
-      "ts": "2026-11-11T00:24:06.654102Z",
+      "ts": "2026-11-11T06:09:04.859726Z",
       "text": "Weekly Standings\nSanitized observations\nSUN\nWAS\nNYG\nSUN\nNE\nDET\nSUN\nKC\nATL\nSUN\nHOU\nCLE\nSUN\nMIN\nGB\nSUN\nJAX\nTEN\nSUN\nMIA\nIND\nSUN\nCAR\nNO\nSUN\nBUF\nNYJ\nSUN\nSEA\nLV\nSUN\nLAR\nARI\nSUN\nSF\nDAL\nSUN\nPIT\nCIN\nSUN\nLAC\nBAL"
     }
   ]
