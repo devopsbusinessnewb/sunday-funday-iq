@@ -57,7 +57,7 @@ ctx.testGames=clone(t.SEED);ctx.testCard={choices:ctx.testGames.map(g=>g.pick===
 vm.runInContext("state.games=testGames;state.week=3;state.optimization={modelBuild:MODEL_BUILD,ranAt:new Date().toISOString(),current:testCard,strategies:{balanced:{label:'Balanced',card:testCard,eval:{top2:.04,win:.01,bottomHalf:.3,avg:85}}}};renderFullCard()",ctx);
 if(cardView.hidden||!cardView.innerHTML.includes('16 picks')||(cardView.innerHTML.match(/<details class="row">/g)||[]).length!==16)throw new Error('Strategy navigation did not render a complete 16-game card');
 if(cardView.innerHTML.indexOf('class="points">16')>cardView.innerHTML.indexOf('class="points">1'))throw new Error('Full card displays points in the wrong order');
-if(!cardView.innerHTML.includes('The simulation should be rerun before using these picks'))throw new Error('Card suppressed stale simulation warning');
+if(!/CBS pool data|Market odds are out of date|Inputs changed/.test(cardView.innerHTML))throw new Error('Card suppressed stale simulation warning');
 if(/PICK CHANGE|CONFIDENCE MOVE|Submitted confidence|Keep the winner|difference(?:s)? from the card/.test(cardView.innerHTML))throw new Error('Strategy card still reads like a change list');
 if(!/Pick [A-Z]+ for 16 points/.test(cardView.innerHTML)||!cardView.innerHTML.includes('Data &amp; model details')||!cardView.innerHTML.includes('strategy=balanced&amp;details=1'))throw new Error('Card lacks direct pick instructions or focused details navigation');
 ctx.location={search:'?strategy=balanced&details=1'};
@@ -261,3 +261,7 @@ console.log('Locked-history blank-slate simulation guard passed.');
 const seededLocked=clone(blankGames);Object.assign(seededLocked[0],{pick:seededLocked[0].home,weight:12,locked:true,completed:true});
 const lockedBaseline=t.simulationCurrentCard(seededLocked);
 if(lockedBaseline.card.choices[0]!==1||lockedBaseline.card.weights[0]!==12||!t.validConfidence(lockedBaseline.card.weights,16))throw Error('Blank-slate baseline changed a known locked pick/confidence');
+
+const warningFixture={cbsUpdatedAt:'2026-11-11T12:56:00Z',marketUpdatedAt:'2026-11-12T17:57:00Z',optimization:{ranAt:'2026-11-12T17:58:00Z'}};
+if(!t.strategyFreshnessWarning(warningFixture,Date.parse('2026-11-12T18:00:00Z')).includes('Rerunning alone'))throw Error('Old CBS data misdiagnosed as old simulation');
+if(t.strategyFreshnessWarning({...warningFixture,cbsUpdatedAt:'2026-11-12T17:56:00Z'},Date.parse('2026-11-12T18:00:00Z')))throw Error('Fresh strategy incorrectly warned');
