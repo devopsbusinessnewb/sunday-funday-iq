@@ -66,3 +66,7 @@ if(screenshotAdvice.choice.key!=='balanced')throw Error('Screenshot tradeoff sho
 if(!screenshotAdvice.paragraphs.join(' ').includes('1.3 fewer expected points')||!screenshotAdvice.paragraphs.join(' ').includes('no better Top-2 probability'))throw Error('Missing quantified season/weekly tradeoff');
 
 if(!html.includes('<details class="panel drilldown">')||html.includes('<h2>Get the latest card</h2>'))throw Error('Home must keep analysis collapsed and refresh compact');
+
+const freshRunOldCbs={cbsUpdatedAt:'2026-11-11T12:56:00Z',marketUpdatedAt:'2026-11-12T17:57:00Z'};
+if(!home.inputAgeWarning(freshRunOldCbs,Date.parse('2026-11-12T18:00:00Z')).includes('29h old'))throw Error('Fresh simulation must disclose older CBS input');
+if(home.inputAgeWarning({...freshRunOldCbs,cbsUpdatedAt:'2026-11-12T17:56:00Z'},Date.parse('2026-11-12T18:00:00Z')))throw Error('Fresh inputs should not warn');
