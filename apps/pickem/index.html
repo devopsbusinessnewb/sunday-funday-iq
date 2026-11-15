@@ -1292,14 +1292,33 @@ function repairKnownWeek1LockedSeattle(){
   return true;
 }
 
+function applyConfirmedLockedPicks(){
+  let changed=false;
+  for(const r of state.confirmedLockedPicks||[]){
+    if(Number(r.season)!==Number(state.season)||Number(r.week)!==Number(state.week))continue;
+    const g=state.games.find(g=>g.away===r.away&&g.home===r.home),weight=Number(r.weight);
+    if(!g||!isLocked(g)||![g.away,g.home].includes(r.pick)||!Number.isInteger(weight)||weight<1||weight>state.games.length)continue;
+    if(g.pick!==r.pick||Number(g.weight)!==weight){g.pick=r.pick;g.weight=weight;changed=true;}
+  }
+  if(changed){state.optimization=null;state.recommendedCard=null;state.originalCard=null;state.sim=null;state.applied=false;}
+  return changed;
+}
+function confirmLockedPick(r){
+  const g=state.games.find(g=>g.away===r.away&&g.home===r.home),weight=Number(r.weight);
+  if(Number(r.season)!==Number(state.season)||Number(r.week)!==Number(state.week)||!g||!isLocked(g)||![g.away,g.home].includes(r.pick)||!Number.isInteger(weight)||weight<1||weight>state.games.length)throw new Error('The correction does not match a locked game in the current week.');
+  const record={season:Number(r.season),week:Number(r.week),away:g.away,home:g.home,pick:r.pick,weight,confirmedAt:nowIso()};
+  state.confirmedLockedPicks=(state.confirmedLockedPicks||[]).filter(x=>!(x.season===record.season&&x.week===record.week&&x.away===record.away&&x.home===record.home));
+  state.confirmedLockedPicks.push(record);repairLockedConfidenceCollision();save();
+}
 function repairLockedConfidenceCollision(){
+  const corrected=applyConfirmedLockedPicks();
   const n=state.games.length;
   const locked=state.games.filter(g=>isLocked(g)&&Number.isInteger(Number(g.weight)));
-  if(locked.length!==1)return false;
+  if(locked.length!==1)return corrected;
 
   const lockedWeight=Number(locked[0].weight);
   const vals=state.games.map(g=>Number(g.weight)).filter(v=>Number.isInteger(v)&&v>=1&&v<=n);
-  if(vals.length!==n)return false;
+  if(vals.length!==n)return corrected;
 
   const counts=new Map();
   for(const v of vals)counts.set(v,(counts.get(v)||0)+1);
@@ -1308,10 +1327,10 @@ function repairLockedConfidenceCollision(){
 
   // Safe repair only for the exact postgame pattern:
   // the locked game's confidence was preserved, while one remaining CBS value duplicated it.
-  if(missing.length!==1||dupes.length!==1||dupes[0]!==lockedWeight)return false;
+  if(missing.length!==1||dupes.length!==1||dupes[0]!==lockedWeight)return corrected;
 
   const idx=state.games.findIndex(g=>!isLocked(g)&&Number(g.weight)===lockedWeight);
-  if(idx<0)return false;
+  if(idx<0)return corrected;
 
   state.games[idx].weight=missing[0];
   return true;
@@ -1925,6 +1944,16 @@ async function boot(){
   render();
   await Promise.all([loadPublishedCbs({silent:true,onlyIfNewer:true}),loadPoolHistory()]);
   const routeParams=new URLSearchParams(location.search);
+  if(routeParams.get('action')==='repair-locked'){
+    try{
+      await refreshResults(true);
+      confirmLockedPick({season:routeParams.get('season'),week:routeParams.get('week'),away:routeParams.get('away'),home:routeParams.get('home'),pick:routeParams.get('pick'),weight:routeParams.get('weight')});
+      render();await runSimulation();
+      if(state.optimization)location.replace('../../');
+    }catch(e){show(e.message,'red');}
+    return;
+  }
+
   if(routeParams.get('compare')==='1'){await runStrategyComparison();return}
   if(['safest','balanced','aggressive','maxUpside'].includes(routeParams.get('scenario'))){await runScenarioLab(routeParams.get('scenario'));return}
   if(routeParams.get('lab')==='1'){await runModelLab();return}
@@ -1947,7 +1976,7 @@ async function boot(){
     await runSimulation();
   }
 }
-globalThis.SFIQ_TEST={strategyFreshnessWarning,partialCardBlocksSimulation,scenarioGameLocked,buildLiveScenarioResult,miniPcRefreshHandshake,MODEL_BUILD,simulationCurrentCard,validSeasonContext,fullSlateLabGames,labCardDiff,renderModelLabResult,renderStrategyComparison,scenarioSwapConfidence,scenarioMetrics,strategyCardRows,validConfidence,ensureValidCard,completeCard,cardImportIssues,dataFreshness,buildWorlds,buildWorldEnsemble,evaluateCard,evaluateProxyField,compareCards,lockedFieldImpact,robustMetrics,optimizeConfidence,optimizeTournamentConfidence,seedStability,searchCandidates,runOptimizer,chooseBlankSlateStrategy,buildStrategyFrontier,strategyObjective,strategyEquivalent,strategyFlipEvidence,strategyLaneConfig,cardStrategyDistance,chooseLaneCard,confidenceStrategyConfig,confidenceStrategyScore,safestExpectedCard,neutralTop2,neutralWin,cardActions,marketProb,iqProb,formProb,iqFormWeight,scenarioProbability,probabilityProfile,confidenceSafetyProb,confidenceCeilingFromProbability,confidenceCeiling,confidenceRiskPenalty,allocateConfidence,seedRiskCalibratedConfidence,expectedWinnerSide,strategicPickEvidence,upsidePickEvidence,cardChangeCost,ownProb,clone,refreshResults,refreshIqModel,isLocked,fixedWinner,parsePicks,extractStructuredCard,extractFieldModel,applyStructuredCard,normalizePoolHistory,poolConfidenceSignal,drawFieldPicks,SEED,normalizeTeam};
+globalThis.SFIQ_TEST={confirmLockedPick,applyConfirmedLockedPicks,strategyFreshnessWarning,partialCardBlocksSimulation,scenarioGameLocked,buildLiveScenarioResult,miniPcRefreshHandshake,MODEL_BUILD,simulationCurrentCard,validSeasonContext,fullSlateLabGames,labCardDiff,renderModelLabResult,renderStrategyComparison,scenarioSwapConfidence,scenarioMetrics,strategyCardRows,validConfidence,ensureValidCard,completeCard,cardImportIssues,dataFreshness,buildWorlds,buildWorldEnsemble,evaluateCard,evaluateProxyField,compareCards,lockedFieldImpact,robustMetrics,optimizeConfidence,optimizeTournamentConfidence,seedStability,searchCandidates,runOptimizer,chooseBlankSlateStrategy,buildStrategyFrontier,strategyObjective,strategyEquivalent,strategyFlipEvidence,strategyLaneConfig,cardStrategyDistance,chooseLaneCard,confidenceStrategyConfig,confidenceStrategyScore,safestExpectedCard,neutralTop2,neutralWin,cardActions,marketProb,iqProb,formProb,iqFormWeight,scenarioProbability,probabilityProfile,confidenceSafetyProb,confidenceCeilingFromProbability,confidenceCeiling,confidenceRiskPenalty,allocateConfidence,seedRiskCalibratedConfidence,expectedWinnerSide,strategicPickEvidence,upsidePickEvidence,cardChangeCost,ownProb,clone,refreshResults,refreshIqModel,isLocked,fixedWinner,parsePicks,extractStructuredCard,extractFieldModel,applyStructuredCard,normalizePoolHistory,poolConfidenceSignal,drawFieldPicks,SEED,normalizeTeam};
 if(!TESTING)boot();
 </script>
 </body></html>

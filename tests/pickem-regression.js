@@ -265,3 +265,13 @@ if(lockedBaseline.card.choices[0]!==1||lockedBaseline.card.weights[0]!==12||!t.v
 const warningFixture={cbsUpdatedAt:'2026-11-11T12:56:00Z',marketUpdatedAt:'2026-11-12T17:57:00Z',optimization:{ranAt:'2026-11-12T17:58:00Z'}};
 if(!t.strategyFreshnessWarning(warningFixture,Date.parse('2026-11-12T18:00:00Z')).includes('Rerunning alone'))throw Error('Old CBS data misdiagnosed as old simulation');
 if(t.strategyFreshnessWarning({...warningFixture,cbsUpdatedAt:'2026-11-12T17:56:00Z'},Date.parse('2026-11-12T18:00:00Z')))throw Error('Fresh strategy incorrectly warned');
+
+// A user-confirmed locked correction overrides cached synthetic history, scoped to its week.
+vm.runInContext(`state={season:2026,week:10,games:Array.from({length:14},(_,i)=>({id:'x'+i,away:i?'A'+i:'WAS',home:i?'H'+i:'NYG',pick:i?'A'+i:'NYG',weight:i===0?13:i===12?1:i+1,locked:i===0,completed:i===0,winner:i===0?0:null})),optimization:{old:true}};confirmLockedPick({season:2026,week:10,away:'WAS',home:'NYG',pick:'WAS',weight:1});`,ctx);
+const corrected=JSON.parse(vm.runInContext('JSON.stringify(state)',ctx));
+if(corrected.games[0].pick!=='WAS'||corrected.games[0].weight!==1||corrected.optimization!==null||new Set(corrected.games.map(g=>g.weight)).size!==14)throw Error('Confirmed Thursday correction failed or left duplicate confidence');
+vm.runInContext(`state.games[0].pick='NYG';state.games[0].weight=13;applyConfirmedLockedPicks();`,ctx);
+if(vm.runInContext("state.games[0].pick!=='WAS'||state.games[0].weight!==1",ctx))throw Error('Refresh overwrote a confirmed Thursday correction');
+vm.runInContext('state.week=11;state.games[0].pick="NYG";applyConfirmedLockedPicks();',ctx);
+if(vm.runInContext('state.games[0].pick!=="NYG"',ctx))throw Error('Locked correction leaked into another week');
+console.log('Confirmed locked-pick correction regression passed.');
