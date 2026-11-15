@@ -5,14 +5,14 @@
   "week": 10,
   "slateSize": 14,
   "poolSize": 94,
-  "exportedAt": "2026-11-15T21:30:34.083256Z",
+  "exportedAt": "2026-11-15T22:09:18.317963Z",
   "source": "Automated local CBS browser capture",
   "privacy": "Raw CBS session/page data sanitized locally; pool/account identifiers and participant names not published.",
   "confidenceStatus": "unsubmitted",
   "cardIntentConfirmed": false,
   "cardIntentSource": null,
   "confidenceSource": "Complete CBS controls detected but no intentional save/submission confirmed",
-  "marketCapturedAt": "2026-11-15T21:30:34.083218Z",
+  "marketCapturedAt": "2026-11-15T22:09:18.317933Z",
   "marketSource": "CBS Sports odds \u2014 Week 10",
   "market": [
     {
@@ -120,21 +120,21 @@
       "home": "LV",
       "completed": false,
       "winner": null,
-      "statusText": "2:32 - 1st"
+      "statusText": "2:22 - 2nd"
     },
     {
       "away": "LAR",
       "home": "ARI",
       "completed": false,
       "winner": null,
-      "statusText": "5:22 - 1st"
+      "statusText": "5:24 - 2nd"
     },
     {
       "away": "SF",
       "home": "DAL",
       "completed": false,
       "winner": null,
-      "statusText": "13:01 - 1st"
+      "statusText": "14:39 - 2nd"
     },
     {
       "away": "NE",
@@ -216,7 +216,7 @@
   ],
   "fieldModel": {
     "source": "Sanitized CBS revealed-pool observations",
-    "capturedAt": "2026-11-15T21:30:14.370117Z",
+    "capturedAt": "2026-11-15T22:08:58.287395Z",
     "observedEntries": 89,
     "locked": [
       {
@@ -231,11 +231,11 @@
           },
           {
             "pick": "SEA",
-            "weight": 5
+            "weight": 3
           },
           {
             "pick": "SEA",
-            "weight": 3
+            "weight": 5
           },
           {
             "pick": "SEA",
@@ -255,6 +255,10 @@
           },
           {
             "pick": "SEA",
+            "weight": 10
+          },
+          {
+            "pick": "SEA",
             "weight": 5
           },
           {
@@ -262,8 +266,8 @@
             "weight": 3
           },
           {
-            "pick": "SEA",
-            "weight": 10
+            "pick": "LV",
+            "weight": 6
           },
           {
             "pick": "SEA",
@@ -291,207 +295,7 @@
           },
           {
             "pick": "SEA",
-            "weight": 8
-          },
-          {
-            "pick": "SEA",
-            "weight": 9
-          },
-          {
-            "pick": "SEA",
-            "weight": 3
-          },
-          {
-            "pick": "SEA",
-            "weight": 11
-          },
-          {
-            "pick": "SEA",
-            "weight": 9
-          },
-          {
-            "pick": "SEA",
-            "weight": 9
-          },
-          {
-            "pick": "SEA",
-            "weight": 12
-          },
-          {
-            "pick": "SEA",
             "weight": 4
-          },
-          {
-            "pick": "SEA",
-            "weight": 4
-          },
-          {
-            "pick": "SEA",
-            "weight": 10
-          },
-          {
-            "pick": "SEA",
-            "weight": 13
-          },
-          {
-            "pick": "LV",
-            "weight": 6
-          },
-          {
-            "pick": "SEA",
-            "weight": 9
-          },
-          {
-            "pick": "SEA",
-            "weight": 5
-          },
-          {
-            "pick": "SEA",
-            "weight": 8
-          },
-          {
-            "pick": "SEA",
-            "weight": 9
-          },
-          {
-            "pick": "SEA",
-            "weight": 9
-          },
-          {
-            "pick": "SEA",
-            "weight": 11
-          },
-          {
-            "pick": "SEA",
-            "weight": 12
-          },
-          {
-            "pick": "SEA",
-            "weight": 10
-          },
-          {
-            "pick": "SEA",
-            "weight": 6
-          },
-          {
-            "pick": "SEA",
-            "weight": 5
-          },
-          {
-            "pick": "SEA",
-            "weight": 5
-          },
-          {
-            "pick": "SEA",
-            "weight": 5
-          },
-          {
-            "pick": "SEA",
-            "weight": 13
-          },
-          {
-            "pick": "SEA",
-            "weight": 9
-          },
-          {
-            "pick": "SEA",
-            "weight": 5
-          },
-          {
-            "pick": "SEA",
-            "weight": 11
-          },
-          {
-            "pick": "SEA",
-            "weight": 7
-          },
-          {
-            "pick": "SEA",
-            "weight": 8
-          },
-          {
-            "pick": "LV",
-            "weight": 2
-          },
-          {
-            "pick": "SEA",
-            "weight": 5
-          },
-          {
-            "pick": "SEA",
-            "weight": 11
-          },
-          {
-            "pick": "SEA",
-            "weight": 9
-          },
-          {
-            "pick": "SEA",
-            "weight": 10
-          },
-          {
-            "pick": "LV",
-            "weight": 5
-          },
-          {
-            "pick": "SEA",
-            "weight": 11
-          },
-          {
-            "pick": "SEA",
-            "weight": 4
-          },
-          {
-            "pick": "SEA",
-            "weight": 9
-          },
-          {
-            "pick": "LV",
-            "weight": 2
-          },
-          {
-            "pick": "SEA",
-            "weight": 5
-          },
-          {
-            "pick": "SEA",
-            "weight": 10
-          },
-          {
-            "pick": "SEA",
-            "weight": 6
-          },
-          {
-            "pick": "SEA",
-            "weight": 8
-          },
-          {
-            "pick": "SEA",
-            "weight": 12
-          },
-          {
-            "pick": "SEA",
-            "weight": 11
-          },
-          {
-            "pick": "SEA",
-            "weight": 10
-          },
-          {
-            "pick": "SEA",
-            "weight": 10
-          },
-          {
-            "pick": "SEA",
-            "weight": 11
-          },
-          {
-            "pick": "SEA",
-            "weight": 5
-          },
-          {
-            "pick": "SEA",
-            "weight": 7
           },
           {
             "pick": "LV",
@@ -499,6 +303,214 @@
           },
           {
             "pick": "SEA",
+            "weight": 8
+          },
+          {
+            "pick": "SEA",
+            "weight": 9
+          },
+          {
+            "pick": "SEA",
+            "weight": 3
+          },
+          {
+            "pick": "SEA",
+            "weight": 11
+          },
+          {
+            "pick": "SEA",
+            "weight": 9
+          },
+          {
+            "pick": "SEA",
+            "weight": 9
+          },
+          {
+            "pick": "SEA",
+            "weight": 12
+          },
+          {
+            "pick": "SEA",
+            "weight": 4
+          },
+          {
+            "pick": "SEA",
+            "weight": 10
+          },
+          {
+            "pick": "SEA",
+            "weight": 13
+          },
+          {
+            "pick": "SEA",
+            "weight": 9
+          },
+          {
+            "pick": "LV",
+            "weight": 5
+          },
+          {
+            "pick": "SEA",
+            "weight": 5
+          },
+          {
+            "pick": "SEA",
+            "weight": 8
+          },
+          {
+            "pick": "SEA",
+            "weight": 9
+          },
+          {
+            "pick": "SEA",
+            "weight": 9
+          },
+          {
+            "pick": "LV",
+            "weight": 2
+          },
+          {
+            "pick": "SEA",
+            "weight": 11
+          },
+          {
+            "pick": "SEA",
+            "weight": 12
+          },
+          {
+            "pick": "SEA",
+            "weight": 10
+          },
+          {
+            "pick": "SEA",
+            "weight": 6
+          },
+          {
+            "pick": "SEA",
+            "weight": 5
+          },
+          {
+            "pick": "SEA",
+            "weight": 5
+          },
+          {
+            "pick": "SEA",
+            "weight": 5
+          },
+          {
+            "pick": "SEA",
+            "weight": 13
+          },
+          {
+            "pick": "SEA",
+            "weight": 9
+          },
+          {
+            "pick": "SEA",
+            "weight": 5
+          },
+          {
+            "pick": "SEA",
+            "weight": 11
+          },
+          {
+            "pick": "SEA",
+            "weight": 7
+          },
+          {
+            "pick": "SEA",
+            "weight": 8
+          },
+          {
+            "pick": "LV",
+            "weight": 2
+          },
+          {
+            "pick": "SEA",
+            "weight": 5
+          },
+          {
+            "pick": "SEA",
+            "weight": 11
+          },
+          {
+            "pick": "SEA",
+            "weight": 9
+          },
+          {
+            "pick": "SEA",
+            "weight": 10
+          },
+          {
+            "pick": "SEA",
+            "weight": 11
+          },
+          {
+            "pick": "SEA",
+            "weight": 4
+          },
+          {
+            "pick": "SEA",
+            "weight": 9
+          },
+          {
+            "pick": "SEA",
+            "weight": 5
+          },
+          {
+            "pick": "SEA",
+            "weight": 10
+          },
+          {
+            "pick": "LV",
+            "weight": 6
+          },
+          {
+            "pick": "SEA",
+            "weight": 6
+          },
+          {
+            "pick": "SEA",
+            "weight": 8
+          },
+          {
+            "pick": "SEA",
+            "weight": 12
+          },
+          {
+            "pick": "SEA",
+            "weight": 11
+          },
+          {
+            "pick": "SEA",
+            "weight": 10
+          },
+          {
+            "pick": "SEA",
+            "weight": 10
+          },
+          {
+            "pick": "LV",
+            "weight": 3
+          },
+          {
+            "pick": "SEA",
+            "weight": 11
+          },
+          {
+            "pick": "SEA",
+            "weight": 5
+          },
+          {
+            "pick": "SEA",
+            "weight": 7
+          },
+          {
+            "pick": "SEA",
+            "weight": 11
+          },
+          {
+            "pick": "SEA",
             "weight": 11
           },
           {
@@ -508,14 +520,6 @@
           {
             "pick": "SEA",
             "weight": 6
-          },
-          {
-            "pick": "LV",
-            "weight": 6
-          },
-          {
-            "pick": "LV",
-            "weight": 3
           },
           {
             "pick": "SEA",
@@ -528,10 +532,6 @@
           {
             "pick": "SEA",
             "weight": 10
-          },
-          {
-            "pick": "SEA",
-            "weight": 11
           },
           {
             "pick": "SEA",
@@ -595,11 +595,11 @@
             "weight": 5
           },
           {
-            "pick": "LAR",
+            "pick": "ARI",
             "weight": 6
           },
           {
-            "pick": "ARI",
+            "pick": "LAR",
             "weight": 6
           },
           {
@@ -619,6 +619,10 @@
             "weight": 11
           },
           {
+            "pick": "ARI",
+            "weight": 2
+          },
+          {
             "pick": "LAR",
             "weight": 11
           },
@@ -627,8 +631,8 @@
             "weight": 4
           },
           {
-            "pick": "ARI",
-            "weight": 2
+            "pick": "LAR",
+            "weight": 7
           },
           {
             "pick": "LAR",
@@ -652,7 +656,15 @@
           },
           {
             "pick": "LAR",
+            "weight": 10
+          },
+          {
+            "pick": "LAR",
             "weight": 5
+          },
+          {
+            "pick": "LAR",
+            "weight": 10
           },
           {
             "pick": "LAR",
@@ -684,10 +696,6 @@
           },
           {
             "pick": "LAR",
-            "weight": 10
-          },
-          {
-            "pick": "LAR",
             "weight": 5
           },
           {
@@ -700,11 +708,11 @@
           },
           {
             "pick": "LAR",
-            "weight": 7
+            "weight": 6
           },
           {
             "pick": "LAR",
-            "weight": 6
+            "weight": 8
           },
           {
             "pick": "LAR",
@@ -721,6 +729,10 @@
           {
             "pick": "LAR",
             "weight": 11
+          },
+          {
+            "pick": "LAR",
+            "weight": 13
           },
           {
             "pick": "LAR",
@@ -776,7 +788,7 @@
           },
           {
             "pick": "LAR",
-            "weight": 13
+            "weight": 12
           },
           {
             "pick": "LAR",
@@ -793,10 +805,6 @@
           {
             "pick": "LAR",
             "weight": 11
-          },
-          {
-            "pick": "LAR",
-            "weight": 8
           },
           {
             "pick": "LAR",
@@ -812,15 +820,15 @@
           },
           {
             "pick": "LAR",
-            "weight": 12
-          },
-          {
-            "pick": "LAR",
             "weight": 8
           },
           {
             "pick": "LAR",
             "weight": 13
+          },
+          {
+            "pick": "LAR",
+            "weight": 7
           },
           {
             "pick": "LAR",
@@ -856,15 +864,19 @@
           },
           {
             "pick": "LAR",
+            "weight": 13
+          },
+          {
+            "pick": "LAR",
             "weight": 12
           },
           {
             "pick": "LAR",
-            "weight": 10
+            "weight": 13
           },
           {
             "pick": "LAR",
-            "weight": 13
+            "weight": 12
           },
           {
             "pick": "LAR",
@@ -873,14 +885,6 @@
           {
             "pick": "LAR",
             "weight": 12
-          },
-          {
-            "pick": "LAR",
-            "weight": 7
-          },
-          {
-            "pick": "LAR",
-            "weight": 13
           },
           {
             "pick": "LAR",
@@ -893,10 +897,6 @@
           {
             "pick": "LAR",
             "weight": 11
-          },
-          {
-            "pick": "LAR",
-            "weight": 12
           },
           {
             "pick": "LAR",
@@ -961,11 +961,11 @@
           },
           {
             "pick": "SF",
-            "weight": 4
+            "weight": 12
           },
           {
             "pick": "SF",
-            "weight": 12
+            "weight": 4
           },
           {
             "pick": "SF",
@@ -985,6 +985,10 @@
           },
           {
             "pick": "SF",
+            "weight": 6
+          },
+          {
+            "pick": "SF",
             "weight": 10
           },
           {
@@ -993,7 +997,7 @@
           },
           {
             "pick": "SF",
-            "weight": 6
+            "weight": 13
           },
           {
             "pick": "SF",
@@ -1016,8 +1020,16 @@
             "weight": 13
           },
           {
+            "pick": "DAL",
+            "weight": 3
+          },
+          {
             "pick": "SF",
             "weight": 3
+          },
+          {
+            "pick": "SF",
+            "weight": 12
           },
           {
             "pick": "SF",
@@ -1048,10 +1060,6 @@
             "weight": 3
           },
           {
-            "pick": "DAL",
-            "weight": 3
-          },
-          {
             "pick": "SF",
             "weight": 3
           },
@@ -1065,7 +1073,7 @@
           },
           {
             "pick": "SF",
-            "weight": 13
+            "weight": 12
           },
           {
             "pick": "SF",
@@ -1086,6 +1094,10 @@
           {
             "pick": "SF",
             "weight": 10
+          },
+          {
+            "pick": "SF",
+            "weight": 11
           },
           {
             "pick": "SF",
@@ -1141,7 +1153,7 @@
           },
           {
             "pick": "SF",
-            "weight": 11
+            "weight": 5
           },
           {
             "pick": "SF",
@@ -1161,10 +1173,6 @@
           },
           {
             "pick": "SF",
-            "weight": 12
-          },
-          {
-            "pick": "SF",
             "weight": 7
           },
           {
@@ -1177,15 +1185,15 @@
           },
           {
             "pick": "SF",
-            "weight": 5
-          },
-          {
-            "pick": "SF",
             "weight": 9
           },
           {
             "pick": "SF",
             "weight": 4
+          },
+          {
+            "pick": "SF",
+            "weight": 3
           },
           {
             "pick": "SF",
@@ -1213,6 +1221,10 @@
           },
           {
             "pick": "SF",
+            "weight": 11
+          },
+          {
+            "pick": "SF",
             "weight": 7
           },
           {
@@ -1225,11 +1237,11 @@
           },
           {
             "pick": "SF",
-            "weight": 12
+            "weight": 7
           },
           {
-            "pick": "SF",
-            "weight": 7
+            "pick": "DAL",
+            "weight": 2
           },
           {
             "pick": "SF",
@@ -1238,14 +1250,6 @@
           {
             "pick": "SF",
             "weight": 8
-          },
-          {
-            "pick": "SF",
-            "weight": 3
-          },
-          {
-            "pick": "SF",
-            "weight": 11
           },
           {
             "pick": "SF",
@@ -1258,10 +1262,6 @@
           {
             "pick": "SF",
             "weight": 9
-          },
-          {
-            "pick": "DAL",
-            "weight": 2
           },
           {
             "pick": "SF",
@@ -1326,14 +1326,14 @@
           },
           {
             "pick": "DET",
-            "weight": 13
-          },
-          {
-            "pick": "DET",
             "weight": 5
           },
           {
             "pick": "DET",
+            "weight": 13
+          },
+          {
+            "pick": "DET",
             "weight": 10
           },
           {
@@ -1343,6 +1343,10 @@
           {
             "pick": "DET",
             "weight": 10
+          },
+          {
+            "pick": "DET",
+            "weight": 12
           },
           {
             "pick": "DET",
@@ -1354,7 +1358,7 @@
           },
           {
             "pick": "DET",
-            "weight": 12
+            "weight": 14
           },
           {
             "pick": "DET",
@@ -1378,7 +1382,15 @@
           },
           {
             "pick": "DET",
+            "weight": 11
+          },
+          {
+            "pick": "DET",
             "weight": 13
+          },
+          {
+            "pick": "DET",
+            "weight": 6
           },
           {
             "pick": "DET",
@@ -1410,10 +1422,6 @@
           },
           {
             "pick": "DET",
-            "weight": 11
-          },
-          {
-            "pick": "DET",
             "weight": 12
           },
           {
@@ -1426,11 +1434,11 @@
           },
           {
             "pick": "DET",
-            "weight": 14
+            "weight": 8
           },
           {
-            "pick": "DET",
-            "weight": 8
+            "pick": "NE",
+            "weight": 6
           },
           {
             "pick": "DET",
@@ -1447,6 +1455,10 @@
           {
             "pick": "DET",
             "weight": 8
+          },
+          {
+            "pick": "DET",
+            "weight": 10
           },
           {
             "pick": "DET",
@@ -1502,7 +1514,7 @@
           },
           {
             "pick": "DET",
-            "weight": 10
+            "weight": 8
           },
           {
             "pick": "DET",
@@ -1521,20 +1533,12 @@
             "weight": 5
           },
           {
-            "pick": "NE",
-            "weight": 6
-          },
-          {
             "pick": "DET",
             "weight": 4
           },
           {
             "pick": "DET",
             "weight": 13
-          },
-          {
-            "pick": "DET",
-            "weight": 8
           },
           {
             "pick": "DET",
@@ -1547,6 +1551,10 @@
           {
             "pick": "DET",
             "weight": 5
+          },
+          {
+            "pick": "DET",
+            "weight": 13
           },
           {
             "pick": "DET",
@@ -1574,6 +1582,10 @@
           },
           {
             "pick": "DET",
+            "weight": 9
+          },
+          {
+            "pick": "DET",
             "weight": 4
           },
           {
@@ -1586,11 +1598,11 @@
           },
           {
             "pick": "DET",
-            "weight": 6
+            "weight": 2
           },
           {
-            "pick": "DET",
-            "weight": 2
+            "pick": "NE",
+            "weight": 3
           },
           {
             "pick": "DET",
@@ -1598,23 +1610,11 @@
           },
           {
             "pick": "DET",
-            "weight": 13
-          },
-          {
-            "pick": "DET",
-            "weight": 9
-          },
-          {
-            "pick": "DET",
             "weight": 5
           },
           {
             "pick": "DET",
             "weight": 5
-          },
-          {
-            "pick": "NE",
-            "weight": 3
           },
           {
             "pick": "NE",
@@ -1679,14 +1679,14 @@
           },
           {
             "pick": "KC",
-            "weight": 14
-          },
-          {
-            "pick": "KC",
             "weight": 11
           },
           {
             "pick": "KC",
+            "weight": 14
+          },
+          {
+            "pick": "KC",
             "weight": 13
           },
           {
@@ -1700,6 +1700,10 @@
           {
             "pick": "KC",
             "weight": 12
+          },
+          {
+            "pick": "KC",
+            "weight": 14
           },
           {
             "pick": "KC",
@@ -1711,7 +1715,7 @@
           },
           {
             "pick": "KC",
-            "weight": 14
+            "weight": 11
           },
           {
             "pick": "KC",
@@ -1736,6 +1740,14 @@
           {
             "pick": "KC",
             "weight": 12
+          },
+          {
+            "pick": "KC",
+            "weight": 12
+          },
+          {
+            "pick": "KC",
+            "weight": 9
           },
           {
             "pick": "KC",
@@ -1767,10 +1779,6 @@
           },
           {
             "pick": "KC",
-            "weight": 12
-          },
-          {
-            "pick": "KC",
             "weight": 13
           },
           {
@@ -1787,7 +1795,7 @@
           },
           {
             "pick": "KC",
-            "weight": 11
+            "weight": 13
           },
           {
             "pick": "KC",
@@ -1804,6 +1812,10 @@
           {
             "pick": "KC",
             "weight": 12
+          },
+          {
+            "pick": "ATL",
+            "weight": 7
           },
           {
             "pick": "KC",
@@ -1858,8 +1870,8 @@
             "weight": 11
           },
           {
-            "pick": "ATL",
-            "weight": 7
+            "pick": "KC",
+            "weight": 13
           },
           {
             "pick": "ATL",
@@ -1879,10 +1891,6 @@
           },
           {
             "pick": "KC",
-            "weight": 13
-          },
-          {
-            "pick": "KC",
             "weight": 8
           },
           {
@@ -1895,15 +1903,15 @@
           },
           {
             "pick": "KC",
-            "weight": 13
-          },
-          {
-            "pick": "KC",
             "weight": 12
           },
           {
             "pick": "KC",
             "weight": 7
+          },
+          {
+            "pick": "KC",
+            "weight": 12
           },
           {
             "pick": "KC",
@@ -1931,6 +1939,10 @@
           },
           {
             "pick": "KC",
+            "weight": 12
+          },
+          {
+            "pick": "KC",
             "weight": 6
           },
           {
@@ -1943,23 +1955,15 @@
           },
           {
             "pick": "KC",
-            "weight": 9
-          },
-          {
-            "pick": "KC",
             "weight": 6
           },
           {
             "pick": "KC",
+            "weight": 10
+          },
+          {
+            "pick": "KC",
             "weight": 5
-          },
-          {
-            "pick": "KC",
-            "weight": 12
-          },
-          {
-            "pick": "KC",
-            "weight": 12
           },
           {
             "pick": "KC",
@@ -1972,10 +1976,6 @@
           {
             "pick": "KC",
             "weight": 12
-          },
-          {
-            "pick": "KC",
-            "weight": 10
           },
           {
             "pick": "KC",
@@ -2040,11 +2040,11 @@
           },
           {
             "pick": "CLE",
-            "weight": 12
+            "weight": 9
           },
           {
             "pick": "CLE",
-            "weight": 9
+            "weight": 12
           },
           {
             "pick": "CLE",
@@ -2064,15 +2064,19 @@
           },
           {
             "pick": "HOU",
-            "weight": 8
-          },
-          {
-            "pick": "HOU",
-            "weight": 8
-          },
-          {
-            "pick": "HOU",
             "weight": 5
+          },
+          {
+            "pick": "HOU",
+            "weight": 8
+          },
+          {
+            "pick": "HOU",
+            "weight": 8
+          },
+          {
+            "pick": "HOU",
+            "weight": 4
           },
           {
             "pick": "HOU",
@@ -2096,7 +2100,15 @@
           },
           {
             "pick": "CLE",
+            "weight": 6
+          },
+          {
+            "pick": "CLE",
             "weight": 11
+          },
+          {
+            "pick": "HOU",
+            "weight": 8
           },
           {
             "pick": "CLE",
@@ -2125,10 +2137,6 @@
           {
             "pick": "HOU",
             "weight": 10
-          },
-          {
-            "pick": "CLE",
-            "weight": 6
           },
           {
             "pick": "CLE",
@@ -2143,12 +2151,12 @@
             "weight": 2
           },
           {
-            "pick": "HOU",
-            "weight": 4
-          },
-          {
             "pick": "CLE",
             "weight": 5
+          },
+          {
+            "pick": "HOU",
+            "weight": 11
           },
           {
             "pick": "HOU",
@@ -2165,6 +2173,10 @@
           {
             "pick": "CLE",
             "weight": 2
+          },
+          {
+            "pick": "CLE",
+            "weight": 5
           },
           {
             "pick": "CLE",
@@ -2219,8 +2231,8 @@
             "weight": 5
           },
           {
-            "pick": "CLE",
-            "weight": 5
+            "pick": "HOU",
+            "weight": 7
           },
           {
             "pick": "HOU",
@@ -2240,10 +2252,6 @@
           },
           {
             "pick": "HOU",
-            "weight": 11
-          },
-          {
-            "pick": "HOU",
             "weight": 5
           },
           {
@@ -2260,11 +2268,11 @@
           },
           {
             "pick": "HOU",
-            "weight": 7
+            "weight": 11
           },
           {
             "pick": "HOU",
-            "weight": 11
+            "weight": 5
           },
           {
             "pick": "HOU",
@@ -2296,6 +2304,10 @@
           },
           {
             "pick": "HOU",
+            "weight": 10
+          },
+          {
+            "pick": "HOU",
             "weight": 3
           },
           {
@@ -2304,11 +2316,11 @@
           },
           {
             "pick": "HOU",
-            "weight": 8
+            "weight": 9
           },
           {
             "pick": "HOU",
-            "weight": 9
+            "weight": 7
           },
           {
             "pick": "CLE",
@@ -2320,14 +2332,6 @@
           },
           {
             "pick": "HOU",
-            "weight": 5
-          },
-          {
-            "pick": "HOU",
-            "weight": 10
-          },
-          {
-            "pick": "HOU",
             "weight": 10
           },
           {
@@ -2337,10 +2341,6 @@
           {
             "pick": "HOU",
             "weight": 5
-          },
-          {
-            "pick": "HOU",
-            "weight": 7
           },
           {
             "pick": "HOU",
@@ -2404,12 +2404,12 @@
             "weight": 8
           },
           {
-            "pick": "GB",
-            "weight": 11
-          },
-          {
             "pick": "MIN",
             "weight": 4
+          },
+          {
+            "pick": "GB",
+            "weight": 11
           },
           {
             "pick": "MIN",
@@ -2428,6 +2428,10 @@
             "weight": 6
           },
           {
+            "pick": "GB",
+            "weight": 8
+          },
+          {
             "pick": "MIN",
             "weight": 7
           },
@@ -2437,7 +2441,7 @@
           },
           {
             "pick": "GB",
-            "weight": 8
+            "weight": 5
           },
           {
             "pick": "GB",
@@ -2461,7 +2465,15 @@
           },
           {
             "pick": "GB",
+            "weight": 8
+          },
+          {
+            "pick": "GB",
             "weight": 10
+          },
+          {
+            "pick": "GB",
+            "weight": 3
           },
           {
             "pick": "MIN",
@@ -2497,10 +2509,6 @@
           },
           {
             "pick": "GB",
-            "weight": 8
-          },
-          {
-            "pick": "GB",
             "weight": 6
           },
           {
@@ -2509,11 +2517,11 @@
           },
           {
             "pick": "GB",
-            "weight": 5
+            "weight": 10
           },
           {
-            "pick": "GB",
-            "weight": 10
+            "pick": "MIN",
+            "weight": 3
           },
           {
             "pick": "MIN",
@@ -2530,6 +2538,10 @@
           {
             "pick": "GB",
             "weight": 5
+          },
+          {
+            "pick": "MIN",
+            "weight": 6
           },
           {
             "pick": "GB",
@@ -2584,8 +2596,8 @@
             "weight": 12
           },
           {
-            "pick": "MIN",
-            "weight": 6
+            "pick": "GB",
+            "weight": 11
           },
           {
             "pick": "GB",
@@ -2602,10 +2614,6 @@
           {
             "pick": "GB",
             "weight": 7
-          },
-          {
-            "pick": "MIN",
-            "weight": 3
           },
           {
             "pick": "GB",
@@ -2625,11 +2633,11 @@
           },
           {
             "pick": "GB",
-            "weight": 11
+            "weight": 1
           },
           {
             "pick": "GB",
-            "weight": 1
+            "weight": 11
           },
           {
             "pick": "GB",
@@ -2657,6 +2665,10 @@
           },
           {
             "pick": "GB",
+            "weight": 5
+          },
+          {
+            "pick": "GB",
             "weight": 3
           },
           {
@@ -2673,7 +2685,7 @@
           },
           {
             "pick": "GB",
-            "weight": 3
+            "weight": 8
           },
           {
             "pick": "MIN",
@@ -2682,14 +2694,6 @@
           {
             "pick": "GB",
             "weight": 9
-          },
-          {
-            "pick": "GB",
-            "weight": 11
-          },
-          {
-            "pick": "GB",
-            "weight": 5
           },
           {
             "pick": "GB",
@@ -2702,10 +2706,6 @@
           {
             "pick": "GB",
             "weight": 6
-          },
-          {
-            "pick": "GB",
-            "weight": 8
           },
           {
             "pick": "GB",
@@ -2770,11 +2770,11 @@
           },
           {
             "pick": "JAX",
-            "weight": 7
+            "weight": 13
           },
           {
             "pick": "JAX",
-            "weight": 13
+            "weight": 7
           },
           {
             "pick": "JAX",
@@ -2791,14 +2791,6 @@
           {
             "pick": "JAX",
             "weight": 14
-          },
-          {
-            "pick": "JAX",
-            "weight": 14
-          },
-          {
-            "pick": "JAX",
-            "weight": 12
           },
           {
             "pick": "JAX",
@@ -2810,6 +2802,18 @@
           },
           {
             "pick": "JAX",
+            "weight": 12
+          },
+          {
+            "pick": "JAX",
+            "weight": 8
+          },
+          {
+            "pick": "JAX",
+            "weight": 14
+          },
+          {
+            "pick": "JAX",
             "weight": 10
           },
           {
@@ -2823,6 +2827,46 @@
           {
             "pick": "JAX",
             "weight": 10
+          },
+          {
+            "pick": "JAX",
+            "weight": 14
+          },
+          {
+            "pick": "JAX",
+            "weight": 6
+          },
+          {
+            "pick": "JAX",
+            "weight": 13
+          },
+          {
+            "pick": "JAX",
+            "weight": 13
+          },
+          {
+            "pick": "JAX",
+            "weight": 14
+          },
+          {
+            "pick": "JAX",
+            "weight": 13
+          },
+          {
+            "pick": "JAX",
+            "weight": 14
+          },
+          {
+            "pick": "JAX",
+            "weight": 14
+          },
+          {
+            "pick": "JAX",
+            "weight": 13
+          },
+          {
+            "pick": "JAX",
+            "weight": 13
           },
           {
             "pick": "JAX",
@@ -2846,6 +2890,22 @@
           },
           {
             "pick": "JAX",
+            "weight": 11
+          },
+          {
+            "pick": "JAX",
+            "weight": 12
+          },
+          {
+            "pick": "JAX",
+            "weight": 14
+          },
+          {
+            "pick": "JAX",
+            "weight": 14
+          },
+          {
+            "pick": "JAX",
             "weight": 14
           },
           {
@@ -2854,7 +2914,71 @@
           },
           {
             "pick": "JAX",
+            "weight": 14
+          },
+          {
+            "pick": "JAX",
+            "weight": 12
+          },
+          {
+            "pick": "JAX",
             "weight": 13
+          },
+          {
+            "pick": "JAX",
+            "weight": 6
+          },
+          {
+            "pick": "JAX",
+            "weight": 7
+          },
+          {
+            "pick": "JAX",
+            "weight": 7
+          },
+          {
+            "pick": "JAX",
+            "weight": 14
+          },
+          {
+            "pick": "JAX",
+            "weight": 12
+          },
+          {
+            "pick": "JAX",
+            "weight": 14
+          },
+          {
+            "pick": "JAX",
+            "weight": 12
+          },
+          {
+            "pick": "JAX",
+            "weight": 14
+          },
+          {
+            "pick": "JAX",
+            "weight": 13
+          },
+          {
+            "pick": "JAX",
+            "weight": 10
+          },
+          {
+            "pick": "JAX",
+            "weight": 14
+          },
+          {
+            "pick": "JAX",
+            "weight": 13
+          },
+          {
+            "pick": "JAX",
+            "weight": 14
+          },
+          {
+            "pick": "JAX",
+            "weight": 12
           },
           {
             "pick": "JAX",
@@ -2863,6 +2987,10 @@
           {
             "pick": "JAX",
             "weight": 6
+          },
+          {
+            "pick": "JAX",
+            "weight": 13
           },
           {
             "pick": "JAX",
@@ -2878,126 +3006,6 @@
           },
           {
             "pick": "JAX",
-            "weight": 13
-          },
-          {
-            "pick": "JAX",
-            "weight": 11
-          },
-          {
-            "pick": "JAX",
-            "weight": 12
-          },
-          {
-            "pick": "JAX",
-            "weight": 14
-          },
-          {
-            "pick": "JAX",
-            "weight": 14
-          },
-          {
-            "pick": "JAX",
-            "weight": 13
-          },
-          {
-            "pick": "JAX",
-            "weight": 14
-          },
-          {
-            "pick": "JAX",
-            "weight": 12
-          },
-          {
-            "pick": "JAX",
-            "weight": 13
-          },
-          {
-            "pick": "JAX",
-            "weight": 6
-          },
-          {
-            "pick": "JAX",
-            "weight": 7
-          },
-          {
-            "pick": "JAX",
-            "weight": 7
-          },
-          {
-            "pick": "JAX",
-            "weight": 14
-          },
-          {
-            "pick": "JAX",
-            "weight": 12
-          },
-          {
-            "pick": "JAX",
-            "weight": 14
-          },
-          {
-            "pick": "JAX",
-            "weight": 12
-          },
-          {
-            "pick": "JAX",
-            "weight": 14
-          },
-          {
-            "pick": "JAX",
-            "weight": 13
-          },
-          {
-            "pick": "JAX",
-            "weight": 14
-          },
-          {
-            "pick": "JAX",
-            "weight": 14
-          },
-          {
-            "pick": "JAX",
-            "weight": 13
-          },
-          {
-            "pick": "JAX",
-            "weight": 14
-          },
-          {
-            "pick": "JAX",
-            "weight": 12
-          },
-          {
-            "pick": "JAX",
-            "weight": 14
-          },
-          {
-            "pick": "JAX",
-            "weight": 14
-          },
-          {
-            "pick": "JAX",
-            "weight": 6
-          },
-          {
-            "pick": "JAX",
-            "weight": 13
-          },
-          {
-            "pick": "JAX",
-            "weight": 10
-          },
-          {
-            "pick": "JAX",
-            "weight": 13
-          },
-          {
-            "pick": "JAX",
-            "weight": 14
-          },
-          {
-            "pick": "JAX",
             "weight": 12
           },
           {
@@ -3019,38 +3027,6 @@
           {
             "pick": "JAX",
             "weight": 14
-          },
-          {
-            "pick": "JAX",
-            "weight": 14
-          },
-          {
-            "pick": "JAX",
-            "weight": 6
-          },
-          {
-            "pick": "JAX",
-            "weight": 13
-          },
-          {
-            "pick": "JAX",
-            "weight": 13
-          },
-          {
-            "pick": "JAX",
-            "weight": 14
-          },
-          {
-            "pick": "JAX",
-            "weight": 6
-          },
-          {
-            "pick": "JAX",
-            "weight": 14
-          },
-          {
-            "pick": "JAX",
-            "weight": 8
           },
           {
             "pick": "TEN",
@@ -3062,7 +3038,7 @@
           },
           {
             "pick": "JAX",
-            "weight": 14
+            "weight": 6
           },
           {
             "pick": "JAX",
@@ -3071,6 +3047,30 @@
           {
             "pick": "JAX",
             "weight": 14
+          },
+          {
+            "pick": "JAX",
+            "weight": 14
+          },
+          {
+            "pick": "JAX",
+            "weight": 6
+          },
+          {
+            "pick": "JAX",
+            "weight": 14
+          },
+          {
+            "pick": "JAX",
+            "weight": 14
+          },
+          {
+            "pick": "JAX",
+            "weight": 14
+          },
+          {
+            "pick": "JAX",
+            "weight": 13
           },
           {
             "pick": "JAX",
@@ -3135,11 +3135,11 @@
           },
           {
             "pick": "IND",
-            "weight": 10
+            "weight": 8
           },
           {
             "pick": "IND",
-            "weight": 8
+            "weight": 10
           },
           {
             "pick": "IND",
@@ -3163,11 +3163,15 @@
           },
           {
             "pick": "IND",
+            "weight": 9
+          },
+          {
+            "pick": "IND",
             "weight": 7
           },
           {
             "pick": "IND",
-            "weight": 9
+            "weight": 10
           },
           {
             "pick": "IND",
@@ -3190,8 +3194,16 @@
             "weight": 3
           },
           {
+            "pick": "MIA",
+            "weight": 2
+          },
+          {
             "pick": "IND",
             "weight": 9
+          },
+          {
+            "pick": "IND",
+            "weight": 5
           },
           {
             "pick": "IND",
@@ -3226,10 +3238,6 @@
             "weight": 2
           },
           {
-            "pick": "MIA",
-            "weight": 2
-          },
-          {
             "pick": "IND",
             "weight": 7
           },
@@ -3239,11 +3247,11 @@
           },
           {
             "pick": "IND",
-            "weight": 10
+            "weight": 4
           },
           {
             "pick": "IND",
-            "weight": 4
+            "weight": 7
           },
           {
             "pick": "IND",
@@ -3256,6 +3264,10 @@
           {
             "pick": "IND",
             "weight": 6
+          },
+          {
+            "pick": "IND",
+            "weight": 4
           },
           {
             "pick": "IND",
@@ -3314,8 +3326,8 @@
             "weight": 6
           },
           {
-            "pick": "IND",
-            "weight": 4
+            "pick": "MIA",
+            "weight": 6
           },
           {
             "pick": "IND",
@@ -3335,10 +3347,6 @@
           },
           {
             "pick": "IND",
-            "weight": 7
-          },
-          {
-            "pick": "IND",
             "weight": 10
           },
           {
@@ -3350,16 +3358,16 @@
             "weight": 3
           },
           {
-            "pick": "MIA",
-            "weight": 6
-          },
-          {
             "pick": "IND",
             "weight": 10
           },
           {
             "pick": "IND",
             "weight": 8
+          },
+          {
+            "pick": "MIA",
+            "weight": 4
           },
           {
             "pick": "IND",
@@ -3387,6 +3395,10 @@
           },
           {
             "pick": "IND",
+            "weight": 7
+          },
+          {
+            "pick": "IND",
             "weight": 8
           },
           {
@@ -3399,11 +3411,11 @@
           },
           {
             "pick": "IND",
-            "weight": 5
+            "weight": 8
           },
           {
-            "pick": "IND",
-            "weight": 8
+            "pick": "MIA",
+            "weight": 5
           },
           {
             "pick": "IND",
@@ -3412,14 +3424,6 @@
           {
             "pick": "IND",
             "weight": 3
-          },
-          {
-            "pick": "MIA",
-            "weight": 4
-          },
-          {
-            "pick": "IND",
-            "weight": 7
           },
           {
             "pick": "IND",
@@ -3432,10 +3436,6 @@
           {
             "pick": "MIA",
             "weight": 4
-          },
-          {
-            "pick": "MIA",
-            "weight": 5
           },
           {
             "pick": "IND",
@@ -3500,11 +3500,11 @@
           },
           {
             "pick": "CAR",
-            "weight": 9
+            "weight": 7
           },
           {
             "pick": "CAR",
-            "weight": 7
+            "weight": 9
           },
           {
             "pick": "CAR",
@@ -3524,15 +3524,19 @@
           },
           {
             "pick": "CAR",
-            "weight": 6
-          },
-          {
-            "pick": "CAR",
-            "weight": 6
-          },
-          {
-            "pick": "CAR",
             "weight": 3
+          },
+          {
+            "pick": "CAR",
+            "weight": 6
+          },
+          {
+            "pick": "CAR",
+            "weight": 6
+          },
+          {
+            "pick": "NO",
+            "weight": 9
           },
           {
             "pick": "CAR",
@@ -3553,6 +3557,10 @@
           {
             "pick": "NO",
             "weight": 1
+          },
+          {
+            "pick": "NO",
+            "weight": 5
           },
           {
             "pick": "NO",
@@ -3563,6 +3571,10 @@
             "weight": 4
           },
           {
+            "pick": "NO",
+            "weight": 4
+          },
+          {
             "pick": "CAR",
             "weight": 4
           },
@@ -3588,10 +3600,6 @@
           },
           {
             "pick": "NO",
-            "weight": 5
-          },
-          {
-            "pick": "NO",
             "weight": 9
           },
           {
@@ -3604,11 +3612,11 @@
           },
           {
             "pick": "NO",
-            "weight": 9
+            "weight": 3
           },
           {
-            "pick": "NO",
-            "weight": 3
+            "pick": "CAR",
+            "weight": 4
           },
           {
             "pick": "NO",
@@ -3621,6 +3629,10 @@
           {
             "pick": "NO",
             "weight": 5
+          },
+          {
+            "pick": "NO",
+            "weight": 3
           },
           {
             "pick": "NO",
@@ -3679,8 +3691,8 @@
             "weight": 4
           },
           {
-            "pick": "NO",
-            "weight": 3
+            "pick": "CAR",
+            "weight": 4
           },
           {
             "pick": "CAR",
@@ -3699,10 +3711,6 @@
             "weight": 1
           },
           {
-            "pick": "CAR",
-            "weight": 4
-          },
-          {
             "pick": "NO",
             "weight": 2
           },
@@ -3715,16 +3723,16 @@
             "weight": 1
           },
           {
-            "pick": "CAR",
-            "weight": 4
-          },
-          {
             "pick": "NO",
             "weight": 3
           },
           {
             "pick": "CAR",
             "weight": 2
+          },
+          {
+            "pick": "NO",
+            "weight": 10
           },
           {
             "pick": "NO",
@@ -3752,6 +3760,10 @@
           },
           {
             "pick": "NO",
+            "weight": 6
+          },
+          {
+            "pick": "NO",
             "weight": 2
           },
           {
@@ -3767,7 +3779,7 @@
             "weight": 4
           },
           {
-            "pick": "NO",
+            "pick": "CAR",
             "weight": 4
           },
           {
@@ -3780,14 +3792,6 @@
           },
           {
             "pick": "NO",
-            "weight": 10
-          },
-          {
-            "pick": "NO",
-            "weight": 6
-          },
-          {
-            "pick": "NO",
             "weight": 1
           },
           {
@@ -3797,10 +3801,6 @@
           {
             "pick": "CAR",
             "weight": 2
-          },
-          {
-            "pick": "CAR",
-            "weight": 4
           },
           {
             "pick": "CAR",
@@ -3865,11 +3865,11 @@
           },
           {
             "pick": "BUF",
-            "weight": 8
+            "weight": 14
           },
           {
             "pick": "BUF",
-            "weight": 14
+            "weight": 8
           },
           {
             "pick": "BUF",
@@ -3893,11 +3893,15 @@
           },
           {
             "pick": "BUF",
+            "weight": 13
+          },
+          {
+            "pick": "BUF",
             "weight": 5
           },
           {
             "pick": "BUF",
-            "weight": 13
+            "weight": 12
           },
           {
             "pick": "BUF",
@@ -3921,10 +3925,18 @@
           },
           {
             "pick": "BUF",
+            "weight": 13
+          },
+          {
+            "pick": "BUF",
             "weight": 7
           },
           {
             "pick": "BUF",
+            "weight": 11
+          },
+          {
+            "pick": "BUF",
             "weight": 14
           },
           {
@@ -3953,10 +3965,6 @@
           },
           {
             "pick": "BUF",
-            "weight": 13
-          },
-          {
-            "pick": "BUF",
             "weight": 14
           },
           {
@@ -3969,27 +3977,31 @@
           },
           {
             "pick": "BUF",
+            "weight": 14
+          },
+          {
+            "pick": "BUF",
+            "weight": 9
+          },
+          {
+            "pick": "BUF",
+            "weight": 14
+          },
+          {
+            "pick": "BUF",
+            "weight": 14
+          },
+          {
+            "pick": "BUF",
+            "weight": 13
+          },
+          {
+            "pick": "BUF",
+            "weight": 13
+          },
+          {
+            "pick": "BUF",
             "weight": 12
-          },
-          {
-            "pick": "BUF",
-            "weight": 14
-          },
-          {
-            "pick": "BUF",
-            "weight": 14
-          },
-          {
-            "pick": "BUF",
-            "weight": 14
-          },
-          {
-            "pick": "BUF",
-            "weight": 13
-          },
-          {
-            "pick": "BUF",
-            "weight": 13
           },
           {
             "pick": "BUF",
@@ -4045,7 +4057,7 @@
           },
           {
             "pick": "BUF",
-            "weight": 12
+            "weight": 14
           },
           {
             "pick": "BUF",
@@ -4062,34 +4074,30 @@
           {
             "pick": "BUF",
             "weight": 13
+          },
+          {
+            "pick": "BUF",
+            "weight": 12
+          },
+          {
+            "pick": "BUF",
+            "weight": 7
+          },
+          {
+            "pick": "BUF",
+            "weight": 14
+          },
+          {
+            "pick": "BUF",
+            "weight": 14
+          },
+          {
+            "pick": "BUF",
+            "weight": 12
           },
           {
             "pick": "BUF",
             "weight": 9
-          },
-          {
-            "pick": "BUF",
-            "weight": 12
-          },
-          {
-            "pick": "BUF",
-            "weight": 7
-          },
-          {
-            "pick": "BUF",
-            "weight": 14
-          },
-          {
-            "pick": "BUF",
-            "weight": 14
-          },
-          {
-            "pick": "BUF",
-            "weight": 14
-          },
-          {
-            "pick": "BUF",
-            "weight": 12
           },
           {
             "pick": "BUF",
@@ -4117,6 +4125,10 @@
           },
           {
             "pick": "BUF",
+            "weight": 14
+          },
+          {
+            "pick": "BUF",
             "weight": 12
           },
           {
@@ -4129,11 +4141,11 @@
           },
           {
             "pick": "BUF",
-            "weight": 11
+            "weight": 12
           },
           {
             "pick": "BUF",
-            "weight": 12
+            "weight": 13
           },
           {
             "pick": "BUF",
@@ -4145,14 +4157,6 @@
           },
           {
             "pick": "BUF",
-            "weight": 9
-          },
-          {
-            "pick": "BUF",
-            "weight": 14
-          },
-          {
-            "pick": "BUF",
             "weight": 13
           },
           {
@@ -4162,10 +4166,6 @@
           {
             "pick": "BUF",
             "weight": 14
-          },
-          {
-            "pick": "BUF",
-            "weight": 13
           },
           {
             "pick": "BUF",
@@ -4229,12 +4229,12 @@
             "weight": 12
           },
           {
-            "pick": "WAS",
-            "weight": 1
-          },
-          {
             "pick": "NYG",
             "weight": 10
+          },
+          {
+            "pick": "WAS",
+            "weight": 1
           },
           {
             "pick": "NYG",
@@ -4253,6 +4253,10 @@
             "weight": 9
           },
           {
+            "pick": "NYG",
+            "weight": 7
+          },
+          {
             "pick": "WAS",
             "weight": 1
           },
@@ -4262,7 +4266,7 @@
           },
           {
             "pick": "NYG",
-            "weight": 7
+            "weight": 3
           },
           {
             "pick": "WAS",
@@ -4286,7 +4290,15 @@
           },
           {
             "pick": "NYG",
+            "weight": 7
+          },
+          {
+            "pick": "NYG",
             "weight": 14
+          },
+          {
+            "pick": "NYG",
+            "weight": 7
           },
           {
             "pick": "NYG",
@@ -4318,10 +4330,6 @@
           },
           {
             "pick": "NYG",
-            "weight": 7
-          },
-          {
-            "pick": "NYG",
             "weight": 8
           },
           {
@@ -4330,11 +4338,11 @@
           },
           {
             "pick": "NYG",
-            "weight": 3
+            "weight": 7
           },
           {
             "pick": "NYG",
-            "weight": 7
+            "weight": 10
           },
           {
             "pick": "NYG",
@@ -4351,6 +4359,10 @@
           {
             "pick": "NYG",
             "weight": 7
+          },
+          {
+            "pick": "NYG",
+            "weight": 9
           },
           {
             "pick": "NYG",
@@ -4413,10 +4425,6 @@
             "weight": 4
           },
           {
-            "pick": "NYG",
-            "weight": 10
-          },
-          {
             "pick": "WAS",
             "weight": 1
           },
@@ -4430,15 +4438,15 @@
           },
           {
             "pick": "NYG",
-            "weight": 9
-          },
-          {
-            "pick": "NYG",
             "weight": 6
           },
           {
             "pick": "NYG",
             "weight": 3
+          },
+          {
+            "pick": "NYG",
+            "weight": 14
           },
           {
             "pick": "NYG",
@@ -4477,12 +4485,12 @@
             "weight": 1
           },
           {
-            "pick": "NYG",
-            "weight": 7
-          },
-          {
             "pick": "WAS",
             "weight": 1
+          },
+          {
+            "pick": "NYG",
+            "weight": 9
           },
           {
             "pick": "NYG",
@@ -4491,10 +4499,6 @@
           {
             "pick": "WAS",
             "weight": 2
-          },
-          {
-            "pick": "NYG",
-            "weight": 14
           },
           {
             "pick": "NYG",
@@ -4507,10 +4511,6 @@
           {
             "pick": "NYG",
             "weight": 7
-          },
-          {
-            "pick": "NYG",
-            "weight": 9
           },
           {
             "pick": "WAS",
@@ -4565,14 +4565,14 @@
     {
       "title": "NFL Football Tourney | Picks",
       "url": "sanitized://cbs-pickem/week-10",
-      "ts": "2026-11-15T21:30:08.772255Z",
+      "ts": "2026-11-15T22:08:52.638114Z",
       "text": "CBS Pickem sanitized ownership\n0-0\nSEA\n91%\n0-0\nLV\n9%\n0-0\nLAR\n96%\n0-0\nARI\n4%\n0-0\nSF\n94%\n0-0\nDAL\n6%\n0-0\nNE\n11%\n0-0\nDET\n89%\n0-0\nKC\n96%\n0-0\nATL\n4%\n0-0\nHOU\n67%\n0-0\nCLE\n33%\n0-0\nMIN\n22%\n0-0\nGB\n78%\n0-0\nJAX\n99%\n0-0\nTEN\n1%\n0-0\nMIA\n19%\n0-0\nIND\n81%\n0-0\nCAR\n44%\n0-0\nNO\n56%\n0-0\nBUF\n99%\n0-0\nNYJ\n1%\n0-0\nPIT\n16%\n0-0\nCIN\n84%\n0-0\nWAS\n15%\n0-0\nNYG\n85%\n0-0\nLAC\n16%\n0-0\nBAL\n84%"
     },
     {
       "title": "NFL Football Tourney | Weekly Standings",
       "url": "sanitized://cbs-pickem/week-10/standings/weekly",
-      "ts": "2026-11-15T21:30:14.370117Z",
-      "text": "Weekly Standings\nSanitized observations\nSUN\nSEA\nLV\nSUN\nLAR\nARI\nSUN\nSF\nDAL\nSUN\nNE\nDET\nSUN\nKC\nATL\nSUN\nHOU\nCLE\nSUN\nMIN\nGB\nSUN\nJAX\nTEN\nSUN\nMIA\nIND\nSUN\nCAR\nNO\nSUN\nBUF\nNYJ\nSUN\nPIT\nCIN\nSUN\nWAS\nNYG\nSUN\nLAC\nBAL\nSEA\n(4)\nSEA\n(5)\nSEA\n(3)\nSEA\n(5)\nSEA\n(5)\nSEA\n(4)\nSEA\n(3)\nSEA\n(5)\nSEA\n(3)\nSEA\n(10)\nSEA\n(6)\nSEA\n(9)\nSEA\n(4)\nSEA\n(3)\nSEA\n(4)\nSEA\n(4)\nSEA\n(8)\nSEA\n(9)\nSEA\n(3)\nSEA\n(11)\nSEA\n(9)\nSEA\n(9)\nSEA\n(12)\nSEA\n(4)\nSEA\n(4)\nSEA\n(10)\nSEA\n(13)\nLV\n(6)\nSEA\n(9)\nSEA\n(5)\nSEA\n(8)\nSEA\n(9)\nSEA\n(9)\nSEA\n(11)\nSEA\n(12)\nSEA\n(10)\nSEA\n(6)\nSEA\n(5)\nSEA\n(5)\nSEA\n(5)\nSEA\n(13)\nSEA\n(9)\nSEA\n(5)\nSEA\n(11)\nSEA\n(7)\nSEA\n(8)\nLV\n(2)\nSEA\n(5)\nSEA\n(11)\nSEA\n(9)\nSEA\n(10)\nLV\n(5)\nSEA\n(11)\nSEA\n(4)\nSEA\n(9)\nLV\n(2)\nSEA\n(5)\nSEA\n(10)\nSEA\n(6)\nSEA\n(8)\nSEA\n(12)\nSEA\n(11)\nSEA\n(10)\nSEA\n(10)\nSEA\n(11)\nSEA\n(5)\nSEA\n(7)\nLV\n(14)\nSEA\n(11)\nSEA\n(4)\nSEA\n(6)\nLV\n(6)\nLV\n(3)\nSEA\n(4)\nSEA\n(11)\nSEA\n(10)\nSEA\n(11)\nSEA\n(11)\nSEA\n(11)\nSEA\n(6)\nSEA\n(11)\nSEA\n(5)\nSEA\n(13)\nSEA\n(8)\nSEA\n(7)\nSEA\n(4)\nSEA\n(11)\nSEA\n(4)\nSEA\n(13)\nLAR\n(5)\nLAR\n(6)\nARI\n(6)\nLAR\n(6)\nLAR\n(8)\nLAR\n(5)\nLAR\n(11)\nLAR\n(11)\nLAR\n(4)\nARI\n(2)\nLAR\n(7)\nLAR\n(6)\nLAR\n(5)\nLAR\n(5)\nLAR\n(8)\nLAR\n(5)\nLAR\n(6)\nLAR\n(12)\nLAR\n(4)\nLAR\n(9)\nLAR\n(13)\nLAR\n(11)\nLAR\n(11)\nLAR\n(10)\nLAR\n(5)\nLAR\n(12)\nLAR\n(8)\nLAR\n(7)\nLAR\n(6)\nLAR\n(6)\nLAR\n(11)\nLAR\n(8)\nLAR\n(11)\nLAR\n(10)\nLAR\n(10)\nLAR\n(3)\nLAR\n(5)\nLAR\n(12)\nLAR\n(6)\nLAR\n(6)\nLAR\n(12)\nLAR\n(10)\nLAR\n(12)\nLAR\n(7)\nLAR\n(8)\nLAR\n(10)\nLAR\n(13)\nLAR\n(10)\nLAR\n(10)\nLAR\n(11)\nLAR\n(11)\nLAR\n(8)\nLAR\n(13)\nLAR\n(5)\nLAR\n(11)\nLAR\n(12)\nLAR\n(8)\nLAR\n(13)\nLAR\n(9)\nLAR\n(11)\nLAR\n(11)\nLAR\n(13)\nLAR\n(8)\nLAR\n(11)\nLAR\n(13)\nLAR\n(13)\nLAR\n(12)\nLAR\n(10)\nLAR\n(13)\nLAR\n(5)\nLAR\n(12)\nLAR\n(7)\nLAR\n(13)\nLAR\n(12)\nLAR\n(13)\nLAR\n(11)\nLAR\n(12)\nLAR\n(13)\nLAR\n(13)\nLAR\n(7)\nLAR\n(14)\nLAR\n(13)\nLAR\n(12)\nLAR\n(10)\nLAR\n(12)\nLAR\n(13)\nLAR\n(14)\nLAR\n(5)\nLAR\n(10)\nSF\n(3)\nSF\n(4)\nSF\n(12)\nSF\n(4)\nSF\n(4)\nSF\n(3)\nSF\n(8)\nSF\n(10)\nSF\n(2)\nSF\n(6)\nSF\n(9)\nSF\n(8)\nSF\n(3)\nSF\n(2)\nSF\n(13)\nSF\n(3)\nSF\n(12)\nSF\n(5)\nSF\n(11)\nSF\n(7)\nSF\n(7)\nSF\n(7)\nSF\n(3)\nDAL\n(3)\nSF\n(3)\nSF\n(3)\nSF\n(11)\nSF\n(13)\nSF\n(12)\nSF\n(9)\nSF\n(7)\nSF\n(12)\nSF\n(10)\nSF\n(14)\nSF\n(6)\nSF\n(13)\nSF\n(12)\nSF\n(4)\nSF\n(4)\nSF\n(4)\nSF\n(3)\nSF\n(14)\nSF\n(10)\nSF\n(13)\nSF\n(6)\nSF\n(9)\nSF\n(11)\nSF\n(3)\nSF\n(8)\nSF\n(10)\nSF\n(6)\nSF\n(12)\nSF\n(7)\nSF\n(3)\nSF\n(12)\nSF\n(5)\nSF\n(9)\nSF\n(4)\nSF\n(11)\nSF\n(12)\nSF\n(7)\nSF\n(9)\nSF\n(13)\nSF\n(12)\nSF\n(7)\nSF\n(10)\nSF\n(9)\nSF\n(12)\nSF\n(7)\nSF\n(3)\nSF\n(8)\nSF\n(3)\nSF\n(11)\nSF\n(11)\nSF\n(8)\nSF\n(9)\nDAL\n(2)\nSF\n(8)\nSF\n(9)\nSF\n(4)\nSF\n(10)\nSF\n(6)\nSF\n(3)\nSF\n(11)\nSF\n(13)\nSF\n(5)\nSF\n(9)\nSF\n(3)\nSF\n(12)\nDET\n(11)\nDET\n(13)\nDET\n(5)\nDET\n(10)\nDET\n(13)\nDET\n(10)\nDET\n(2)\nDET\n(11)\nDET\n(12)\nDET\n(10)\nDET\n(13)\nDET\n(11)\nDET\n(4)\nDET\n(12)\nDET\n(13)\nDET\n(3)\nNE\n(2)\nNE\n(6)\nDET\n(10)\nDET\n(10)\nDET\n(10)\nDET\n(7)\nDET\n(11)\nDET\n(12)\nDET\n(4)\nDET\n(9)\nDET\n(14)\nDET\n(8)\nDET\n(10)\nDET\n(10)\nDET\n(11)\nDET\n(8)\nDET\n(8)\nDET\n(7)\nDET\n(6)\nNE\n(3)\nDET\n(11)\nDET\n(14)\nDET\n(14)\nDET\n(9)\nDET\n(8)\nDET\n(6)\nDET\n(9)\nNE\n(3)\nDET\n(2)\nDET\n(10)\nDET\n(13)\nNE\n(4)\nDET\n(6)\nDET\n(5)\nNE\n(6)\nDET\n(4)\nDET\n(13)\nDET\n(8)\nDET\n(8)\nNE\n(2)\nDET\n(5)\nDET\n(8)\nDET\n(5)\nDET\n(2)\nDET\n(2)\nDET\n(12)\nNE\n(5)\nDET\n(4)\nDET\n(11)\nDET\n(2)\nDET\n(6)\nDET\n(2)\nDET\n(4)\nDET\n(13)\nDET\n(9)\nDET\n(5)\nDET\n(5)\nNE\n(3)\nNE\n(3)\nNE\n(3)\nDET\n(3)\nDET\n(5)\nDET\n(3)\nDET\n(3)\nNE\n(10)\nNE\n(9)\nDET\n(8)\nDET\n(3)\nDET\n(2)\nNE\n(2)\nKC\n(10)\nKC\n(14)\nKC\n(11)\nKC\n(13)\nKC\n(13)\nKC\n(12)\nKC\n(12)\nKC\n(12)\nKC\n(9)\nKC\n(14)\nKC\n(12)\nKC\n(1)\nKC\n(12)\nKC\n(12)\nKC\n(11)\nKC\n(12)\nKC\n(11)\nKC\n(10)\nKC\n(5)\nKC\n(12)\nKC\n(11)\nATL\n(2)\nKC\n(6)\nKC\n(12)\nKC\n(13)\nKC\n(11)\nKC\n(10)\nKC\n(11)\nKC\n(11)\nKC\n(13)\nKC\n(13)\nKC\n(10)\nKC\n(12)\nKC\n(9)\nKC\n(11)\nKC\n(9)\nKC\n(11)\nKC\n(13)\nKC\n(13)\nKC\n(13)\nKC\n(10)\nKC\n(11)\nKC\n(11)\nKC\n(8)\nKC\n(12)\nKC\n(11)\nATL\n(7)\nATL\n(4)\nKC\n(9)\nKC\n(12)\nKC\n(14)\nKC\n(13)\nKC\n(8)\nKC\n(12)\nKC\n(10)\nKC\n(13)\nKC\n(12)\nKC\n(7)\nKC\n(10)\nKC\n(10)\nKC\n(8)\nKC\n(8)\nKC\n(9)\nKC\n(4)\nKC\n(6)\nKC\n(12)\nKC\n(11)\nKC\n(9)\nKC\n(6)\nKC\n(5)\nKC\n(12)\nKC\n(12)\nKC\n(6)\nATL\n(3)\nKC\n(12)\nKC\n(10)\nKC\n(5)\nKC\n(5)\nKC\n(9)\nKC\n(4)\nKC\n(8)\nATL\n(6)\nKC\n(13)\nKC\n(9)\nATL\n(9)\nKC\n(7)\nKC\n(12)\nKC\n(3)\nHOU\n(9)\nCLE\n(12)\nCLE\n(9)\nCLE\n(12)\nCLE\n(2)\nCLE\n(11)\nCLE\n(7)\nHOU\n(8)\nHOU\n(8)\nHOU\n(5)\nHOU\n(11)\nCLE\n(12)\nHOU\n(7)\nHOU\n(10)\nHOU\n(2)\nCLE\n(11)\nCLE\n(9)\nCLE\n(3)\nCLE\n(10)\nHOU\n(8)\nCLE\n(5)\nHOU\n(5)\nHOU\n(10)\nCLE\n(6)\nCLE\n(10)\nCLE\n(1)\nHOU\n(2)\nHOU\n(4)\nCLE\n(5)\nHOU\n(2)\nHOU\n(3)\nHOU\n(4)\nCLE\n(2)\nCLE\n(5)\nHOU\n(3)\nHOU\n(4)\nCLE\n(10)\nHOU\n(9)\nHOU\n(12)\nHOU\n(12)\nHOU\n(11)\nCLE\n(2)\nHOU\n(9)\nCLE\n(3)\nHOU\n(11)\nCLE\n(5)\nCLE\n(5)\nHOU\n(11)\nHOU\n(5)\nCLE\n(3)\nCLE\n(2)\nHOU\n(11)\nHOU\n(5)\nCLE\n(11)\nHOU\n(5)\nHOU\n(7)\nHOU\n(7)\nHOU\n(11)\nHOU\n(7)\nHOU\n(9)\nHOU\n(3)\nHOU\n(10)\nHOU\n(2)\nCLE\n(7)\nHOU\n(10)\nHOU\n(3)\nHOU\n(8)\nHOU\n(8)\nHOU\n(9)\nCLE\n(11)\nHOU\n(10)\nHOU\n(5)\nHOU\n(10)\nHOU\n(10)\nHOU\n(9)\nHOU\n(5)\nHOU\n(7)\nHOU\n(10)\nHOU\n(8)\nHOU\n(14)\nHOU\n(9)\nHOU\n(4)\nHOU\n(5)\nHOU\n(6)\nHOU\n(3)\nHOU\n(10)\nHOU\n(3)\nHOU\n(11)\nHOU\n(6)\nMIN\n(8)\nGB\n(11)\nMIN\n(4)\nMIN\n(11)\nMIN\n(6)\nGB\n(10)\nGB\n(6)\nMIN\n(7)\nMIN\n(13)\nGB\n(8)\nGB\n(8)\nGB\n(3)\nGB\n(10)\nMIN\n(9)\nMIN\n(9)\nGB\n(10)\nMIN\n(2)\nMIN\n(6)\nGB\n(12)\nGB\n(4)\nGB\n(8)\nGB\n(8)\nGB\n(4)\nGB\n(8)\nGB\n(8)\nGB\n(6)\nMIN\n(1)\nGB\n(5)\nGB\n(10)\nMIN\n(4)\nGB\n(6)\nGB\n(2)\nGB\n(5)\nGB\n(4)\nMIN\n(2)\nGB\n(5)\nGB\n(7)\nGB\n(10)\nGB\n(11)\nGB\n(11)\nGB\n(1)\nMIN\n(1)\nGB\n(3)\nGB\n(10)\nMIN\n(2)\nGB\n(12)\nMIN\n(6)\nGB\n(6)\nMIN\n(7)\nGB\n(5)\nGB\n(7)\nMIN\n(3)\nGB\n(3)\nGB\n(10)\nGB\n(7)\nGB\n(11)\nGB\n(11)\nGB\n(1)\nGB\n(13)\nGB\n(4)\nGB\n(9)\nGB\n(3)\nGB\n(6)\nGB\n(6)\nGB\n(3)\nGB\n(9)\nGB\n(10)\nGB\n(3)\nGB\n(3)\nMIN\n(10)\nGB\n(9)\nGB\n(11)\nGB\n(5)\nGB\n(9)\nGB\n(7)\nGB\n(6)\nGB\n(8)\nGB\n(4)\nGB\n(4)\nMIN\n(13)\nGB\n(5)\nGB\n(11)\nMIN\n(4)\nGB\n(5)\nGB\n(5)\nGB\n(6)\nGB\n(10)\nGB\n(10)\nGB\n(1)\nJAX\n(13)\nJAX\n(7)\nJAX\n(13)\nJAX\n(7)\nJAX\n(14)\nJAX\n(6)\nJAX\n(14)\nJAX\n(14)\nJAX\n(12)\nJAX\n(11)\nJAX\n(14)\nJAX\n(10)\nJAX\n(14)\nJAX\n(14)\nJAX\n(10)\nJAX\n(6)\nJAX\n(13)\nJAX\n(14)\nJAX\n(13)\nJAX\n(14)\nJAX\n(14)\nJAX\n(13)\nJAX\n(13)\nJAX\n(14)\nJAX\n(6)\nJAX\n(13)\nJAX\n(14)\nJAX\n(8)\nJAX\n(13)\nJAX\n(11)\nJAX\n(12)\nJAX\n(14)\nJAX\n(14)\nJAX\n(13)\nJAX\n(14)\nJAX\n(12)\nJAX\n(13)\nJAX\n(6)\nJAX\n(7)\nJAX\n(7)\nJAX\n(14)\nJAX\n(12)\nJAX\n(14)\nJAX\n(12)\nJAX\n(14)\nJAX\n(13)\nJAX\n(14)\nJAX\n(14)\nJAX\n(13)\nJAX\n(14)\nJAX\n(12)\nJAX\n(14)\nJAX\n(14)\nJAX\n(6)\nJAX\n(13)\nJAX\n(10)\nJAX\n(13)\nJAX\n(14)\nJAX\n(12)\nJAX\n(14)\nJAX\n(13)\nJAX\n(14)\nJAX\n(14)\nJAX\n(14)\nJAX\n(14)\nJAX\n(6)\nJAX\n(13)\nJAX\n(13)\nJAX\n(14)\nJAX\n(6)\nJAX\n(14)\nJAX\n(8)\nTEN\n(2)\nJAX\n(14)\nJAX\n(14)\nJAX\n(13)\nJAX\n(14)\nJAX\n(14)\nJAX\n(14)\nTEN\n(8)\nJAX\n(13)\nJAX\n(14)\nJAX\n(14)\nJAX\n(14)\nJAX\n(11)\nJAX\n(12)\nJAX\n(8)\nJAX\n(6)\nJAX\n(11)\nIND\n(7)\nIND\n(10)\nIND\n(8)\nIND\n(10)\nIND\n(9)\nIND\n(9)\nIND\n(5)\nIND\n(9)\nIND\n(7)\nIND\n(9)\nIND\n(4)\nIND\n(11)\nIND\n(9)\nIND\n(8)\nIND\n(3)\nIND\n(9)\nIND\n(5)\nIND\n(7)\nIND\n(8)\nIND\n(5)\nIND\n(4)\nIND\n(12)\nIND\n(9)\nMIA\n(2)\nMIA\n(2)\nIND\n(7)\nIND\n(6)\nIND\n(10)\nIND\n(4)\nIND\n(3)\nIND\n(5)\nIND\n(6)\nIND\n(4)\nIND\n(3)\nIND\n(1)\nMIA\n(7)\nIND\n(4)\nIND\n(8)\nIND\n(10)\nIND\n(10)\nIND\n(6)\nIND\n(4)\nIND\n(7)\nIND\n(1)\nIND\n(10)\nIND\n(6)\nIND\n(4)\nIND\n(9)\nIND\n(1)\nMIA\n(1)\nIND\n(3)\nIND\n(7)\nIND\n(10)\nMIA\n(9)\nIND\n(3)\nMIA\n(6)\nIND\n(10)\nIND\n(8)\nIND\n(4)\nIND\n(6)\nIND\n(5)\nIND\n(7)\nIND\n(7)\nMIA\n(1)\nIND\n(8)\nIND\n(8)\nMIA\n(5)\nIND\n(5)\nIND\n(8)\nIND\n(9)\nIND\n(3)\nMIA\n(4)\nIND\n(7)\nIND\n(3)\nIND\n(6)\nMIA\n(4)\nMIA\n(5)\nIND\n(7)\nIND\n(6)\nIND\n(12)\nIND\n(7)\nIND\n(2)\nIND\n(8)\nMIA\n(4)\nMIA\n(1)\nIND\n(8)\nIND\n(5)\nIND\n(9)\nMIA\n(5)\nCAR\n(6)\nCAR\n(9)\nCAR\n(7)\nCAR\n(9)\nCAR\n(1)\nCAR\n(8)\nCAR\n(4)\nCAR\n(6)\nCAR\n(6)\nCAR\n(3)\nCAR\n(3)\nNO\n(4)\nCAR\n(6)\nCAR\n(7)\nNO\n(1)\nNO\n(8)\nNO\n(4)\nCAR\n(4)\nCAR\n(7)\nCAR\n(2)\nNO\n(1)\nCAR\n(3)\nCAR\n(2)\nNO\n(5)\nNO\n(9)\nCAR\n(5)\nCAR\n(3)\nNO\n(9)\nNO\n(3)\nNO\n(1)\nNO\n(2)\nNO\n(5)\nNO\n(3)\nCAR\n(2)\nCAR\n(4)\nCAR\n(14)\nNO\n(1)\nNO\n(7)\nNO\n(9)\nNO\n(9)\nNO\n(4)\nNO\n(3)\nNO\n(1)\nCAR\n(4)\nNO\n(9)\nNO\n(4)\nNO\n(3)\nCAR\n(8)\nCAR\n(6)\nCAR\n(2)\nCAR\n(1)\nCAR\n(4)\nNO\n(2)\nNO\n(8)\nCAR\n(1)\nCAR\n(4)\nNO\n(3)\nCAR\n(2)\nNO\n(3)\nNO\n(1)\nCAR\n(4)\nNO\n(5)\nNO\n(1)\nCAR\n(9)\nNO\n(2)\nNO\n(4)\nCAR\n(3)\nNO\n(4)\nNO\n(4)\nNO\n(8)\nCAR\n(1)\nNO\n(10)\nNO\n(6)\nNO\n(1)\nCAR\n(4)\nCAR\n(2)\nCAR\n(4)\nCAR\n(1)\nNO\n(2)\nNO\n(11)\nNO\n(2)\nNO\n(1)\nNO\n(1)\nNO\n(3)\nNO\n(2)\nCAR\n(2)\nNO\n(12)\nNO\n(8)\nNO\n(8)\nBUF\n(14)\nBUF\n(8)\nBUF\n(14)\nBUF\n(8)\nBUF\n(12)\nBUF\n(7)\nBUF\n(13)\nBUF\n(13)\nBUF\n(5)\nBUF\n(13)\nBUF\n(13)\nBUF\n(14)\nBUF\n(8)\nBUF\n(6)\nBUF\n(14)\nBUF\n(7)\nBUF\n(14)\nBUF\n(13)\nBUF\n(14)\nBUF\n(13)\nBUF\n(12)\nBUF\n(14)\nBUF\n(14)\nBUF\n(13)\nBUF\n(14)\nBUF\n(14)\nBUF\n(12)\nBUF\n(12)\nBUF\n(14)\nBUF\n(14)\nBUF\n(14)\nBUF\n(13)\nBUF\n(13)\nBUF\n(12)\nBUF\n(13)\nBUF\n(11)\nBUF\n(14)\nBUF\n(14)\nBUF\n(8)\nBUF\n(8)\nBUF\n(8)\nBUF\n(13)\nBUF\n(13)\nBUF\n(14)\nBUF\n(13)\nBUF\n(14)\nBUF\n(12)\nBUF\n(7)\nBUF\n(14)\nBUF\n(13)\nBUF\n(13)\nBUF\n(9)\nBUF\n(12)\nBUF\n(7)\nBUF\n(14)\nBUF\n(14)\nBUF\n(14)\nBUF\n(12)\nBUF\n(14)\nBUF\n(13)\nBUF\n(14)\nBUF\n(12)\nBUF\n(5)\nBUF\n(13)\nBUF\n(12)\nBUF\n(7)\nBUF\n(14)\nBUF\n(11)\nBUF\n(12)\nBUF\n(7)\nBUF\n(13)\nBUF\n(9)\nBUF\n(14)\nBUF\n(13)\nBUF\n(12)\nBUF\n(14)\nBUF\n(13)\nBUF\n(12)\nBUF\n(12)\nNYJ\n(10)\nBUF\n(12)\nBUF\n(12)\nBUF\n(2)\nBUF\n(12)\nBUF\n(10)\nBUF\n(11)\nBUF\n(13)\nBUF\n(7)\nBUF\n(14)\nWAS\n(12)\nWAS\n(1)\nNYG\n(10)\nNYG\n(1)\nNYG\n(11)\nNYG\n(14)\nNYG\n(9)\nWAS\n(1)\nNYG\n(14)\nNYG\n(7)\nWAS\n(5)\nNYG\n(2)\nNYG\n(13)\nNYG\n(11)\nNYG\n(7)\nNYG\n(14)\nNYG\n(10)\nNYG\n(8)\nNYG\n(1)\nNYG\n(6)\nWAS\n(4)\nWAS\n(5)\nNYG\n(7)\nNYG\n(7)\nNYG\n(8)\nNYG\n(4)\nNYG\n(3)\nNYG\n(7)\nNYG\n(12)\nNYG\n(9)\nNYG\n(3)\nNYG\n(7)\nNYG\n(7)\nNYG\n(8)\nNYG\n(8)\nNYG\n(8)\nNYG\n(1)\nNYG\n(3)\nWAS\n(5)\nNYG\n(7)\nNYG\n(2)\nNYG\n(2)\nNYG\n(9)\nNYG\n(12)\nNYG\n(12)\nNYG\n(8)\nNYG\n(4)\nNYG\n(10)\nWAS\n(1)\nNYG\n(14)\nNYG\n(6)\nNYG\n(9)\nNYG\n(6)\nNYG\n(3)\nNYG\n(5)\nNYG\n(2)\nWAS\n(1)\nWAS\n(4)\nNYG\n(3)\nNYG\n(8)\nNYG\n(1)\nNYG\n(14)\nWAS\n(1)\nNYG\n(7)\nWAS\n(1)\nNYG\n(14)\nWAS\n(2)\nNYG\n(14)\nNYG\n(2)\nNYG\n(10)\nNYG\n(7)\nNYG\n(9)\nWAS\n(2)\nNYG\n(1)\nWAS\n(1)\nNYG\n(1)\nNYG\n(9)\nWAS\n(11)\nNYG\n(7)\nNYG\n(6)\nWAS\n(1)\nNYG\n(14)\nNYG\n(9)"
+      "ts": "2026-11-15T22:08:58.287395Z",
+      "text": "Weekly Standings\nSanitized observations\nSUN\nSEA\nLV\nSUN\nLAR\nARI\nSUN\nSF\nDAL\nSUN\nNE\nDET\nSUN\nKC\nATL\nSUN\nHOU\nCLE\nSUN\nMIN\nGB\nSUN\nJAX\nTEN\nSUN\nMIA\nIND\nSUN\nCAR\nNO\nSUN\nBUF\nNYJ\nSUN\nPIT\nCIN\nSUN\nWAS\nNYG\nSUN\nLAC\nBAL\nSEA\n(4)\nSEA\n(3)\nSEA\n(5)\nSEA\n(5)\nSEA\n(5)\nSEA\n(4)\nSEA\n(3)\nSEA\n(10)\nSEA\n(5)\nSEA\n(3)\nLV\n(6)\nSEA\n(6)\nSEA\n(9)\nSEA\n(4)\nSEA\n(3)\nSEA\n(4)\nSEA\n(4)\nSEA\n(4)\nLV\n(14)\nSEA\n(8)\nSEA\n(9)\nSEA\n(3)\nSEA\n(11)\nSEA\n(9)\nSEA\n(9)\nSEA\n(12)\nSEA\n(4)\nSEA\n(10)\nSEA\n(13)\nSEA\n(9)\nLV\n(5)\nSEA\n(5)\nSEA\n(8)\nSEA\n(9)\nSEA\n(9)\nLV\n(2)\nSEA\n(11)\nSEA\n(12)\nSEA\n(10)\nSEA\n(6)\nSEA\n(5)\nSEA\n(5)\nSEA\n(5)\nSEA\n(13)\nSEA\n(9)\nSEA\n(5)\nSEA\n(11)\nSEA\n(7)\nSEA\n(8)\nLV\n(2)\nSEA\n(5)\nSEA\n(11)\nSEA\n(9)\nSEA\n(10)\nSEA\n(11)\nSEA\n(4)\nSEA\n(9)\nSEA\n(5)\nSEA\n(10)\nLV\n(6)\nSEA\n(6)\nSEA\n(8)\nSEA\n(12)\nSEA\n(11)\nSEA\n(10)\nSEA\n(10)\nLV\n(3)\nSEA\n(11)\nSEA\n(5)\nSEA\n(7)\nSEA\n(11)\nSEA\n(11)\nSEA\n(4)\nSEA\n(6)\nSEA\n(4)\nSEA\n(11)\nSEA\n(10)\nSEA\n(11)\nSEA\n(11)\nSEA\n(6)\nSEA\n(11)\nSEA\n(5)\nSEA\n(13)\nSEA\n(8)\nSEA\n(7)\nSEA\n(4)\nSEA\n(11)\nSEA\n(4)\nSEA\n(13)\nLAR\n(5)\nARI\n(6)\nLAR\n(6)\nLAR\n(6)\nLAR\n(8)\nLAR\n(5)\nLAR\n(11)\nARI\n(2)\nLAR\n(11)\nLAR\n(4)\nLAR\n(7)\nLAR\n(7)\nLAR\n(6)\nLAR\n(5)\nLAR\n(5)\nLAR\n(8)\nLAR\n(10)\nLAR\n(5)\nLAR\n(10)\nLAR\n(6)\nLAR\n(12)\nLAR\n(4)\nLAR\n(9)\nLAR\n(13)\nLAR\n(11)\nLAR\n(11)\nLAR\n(5)\nLAR\n(12)\nLAR\n(8)\nLAR\n(6)\nLAR\n(8)\nLAR\n(6)\nLAR\n(11)\nLAR\n(8)\nLAR\n(11)\nLAR\n(13)\nLAR\n(10)\nLAR\n(10)\nLAR\n(3)\nLAR\n(5)\nLAR\n(12)\nLAR\n(6)\nLAR\n(6)\nLAR\n(12)\nLAR\n(10)\nLAR\n(12)\nLAR\n(7)\nLAR\n(8)\nLAR\n(10)\nLAR\n(12)\nLAR\n(10)\nLAR\n(10)\nLAR\n(11)\nLAR\n(11)\nLAR\n(13)\nLAR\n(5)\nLAR\n(11)\nLAR\n(8)\nLAR\n(13)\nLAR\n(7)\nLAR\n(9)\nLAR\n(11)\nLAR\n(11)\nLAR\n(13)\nLAR\n(8)\nLAR\n(11)\nLAR\n(13)\nLAR\n(13)\nLAR\n(13)\nLAR\n(12)\nLAR\n(13)\nLAR\n(12)\nLAR\n(5)\nLAR\n(12)\nLAR\n(12)\nLAR\n(13)\nLAR\n(11)\nLAR\n(13)\nLAR\n(13)\nLAR\n(7)\nLAR\n(14)\nLAR\n(13)\nLAR\n(12)\nLAR\n(10)\nLAR\n(12)\nLAR\n(13)\nLAR\n(14)\nLAR\n(5)\nLAR\n(10)\nSF\n(3)\nSF\n(12)\nSF\n(4)\nSF\n(4)\nSF\n(4)\nSF\n(3)\nSF\n(8)\nSF\n(6)\nSF\n(10)\nSF\n(2)\nSF\n(13)\nSF\n(9)\nSF\n(8)\nSF\n(3)\nSF\n(2)\nSF\n(13)\nDAL\n(3)\nSF\n(3)\nSF\n(12)\nSF\n(12)\nSF\n(5)\nSF\n(11)\nSF\n(7)\nSF\n(7)\nSF\n(7)\nSF\n(3)\nSF\n(3)\nSF\n(3)\nSF\n(11)\nSF\n(12)\nSF\n(12)\nSF\n(9)\nSF\n(7)\nSF\n(12)\nSF\n(10)\nSF\n(11)\nSF\n(14)\nSF\n(6)\nSF\n(13)\nSF\n(12)\nSF\n(4)\nSF\n(4)\nSF\n(4)\nSF\n(3)\nSF\n(14)\nSF\n(10)\nSF\n(13)\nSF\n(6)\nSF\n(9)\nSF\n(5)\nSF\n(3)\nSF\n(8)\nSF\n(10)\nSF\n(6)\nSF\n(7)\nSF\n(3)\nSF\n(12)\nSF\n(9)\nSF\n(4)\nSF\n(3)\nSF\n(11)\nSF\n(12)\nSF\n(7)\nSF\n(9)\nSF\n(13)\nSF\n(12)\nSF\n(11)\nSF\n(7)\nSF\n(10)\nSF\n(9)\nSF\n(7)\nDAL\n(2)\nSF\n(3)\nSF\n(8)\nSF\n(11)\nSF\n(8)\nSF\n(9)\nSF\n(8)\nSF\n(9)\nSF\n(4)\nSF\n(10)\nSF\n(6)\nSF\n(3)\nSF\n(11)\nSF\n(13)\nSF\n(5)\nSF\n(9)\nSF\n(3)\nSF\n(12)\nDET\n(11)\nDET\n(5)\nDET\n(13)\nDET\n(10)\nDET\n(13)\nDET\n(10)\nDET\n(12)\nDET\n(2)\nDET\n(11)\nDET\n(14)\nDET\n(10)\nDET\n(13)\nDET\n(11)\nDET\n(4)\nDET\n(12)\nDET\n(11)\nDET\n(13)\nDET\n(6)\nDET\n(3)\nNE\n(2)\nNE\n(6)\nDET\n(10)\nDET\n(10)\nDET\n(10)\nDET\n(7)\nDET\n(12)\nDET\n(4)\nDET\n(9)\nDET\n(8)\nNE\n(6)\nDET\n(10)\nDET\n(10)\nDET\n(11)\nDET\n(8)\nDET\n(10)\nDET\n(8)\nDET\n(7)\nDET\n(6)\nNE\n(3)\nDET\n(11)\nDET\n(14)\nDET\n(14)\nDET\n(9)\nDET\n(8)\nDET\n(6)\nDET\n(9)\nNE\n(3)\nDET\n(2)\nDET\n(8)\nDET\n(13)\nNE\n(4)\nDET\n(6)\nDET\n(5)\nDET\n(4)\nDET\n(13)\nDET\n(8)\nNE\n(2)\nDET\n(5)\nDET\n(13)\nDET\n(8)\nDET\n(5)\nDET\n(2)\nDET\n(2)\nDET\n(12)\nNE\n(5)\nDET\n(9)\nDET\n(4)\nDET\n(11)\nDET\n(2)\nDET\n(2)\nNE\n(3)\nDET\n(4)\nDET\n(5)\nDET\n(5)\nNE\n(3)\nNE\n(3)\nDET\n(3)\nDET\n(5)\nDET\n(3)\nDET\n(3)\nNE\n(10)\nNE\n(9)\nDET\n(8)\nDET\n(3)\nDET\n(2)\nNE\n(2)\nKC\n(10)\nKC\n(11)\nKC\n(14)\nKC\n(13)\nKC\n(13)\nKC\n(12)\nKC\n(12)\nKC\n(14)\nKC\n(12)\nKC\n(9)\nKC\n(11)\nKC\n(12)\nKC\n(1)\nKC\n(12)\nKC\n(12)\nKC\n(11)\nKC\n(12)\nKC\n(12)\nKC\n(9)\nKC\n(11)\nKC\n(10)\nKC\n(5)\nKC\n(12)\nKC\n(11)\nATL\n(2)\nKC\n(6)\nKC\n(13)\nKC\n(11)\nKC\n(10)\nKC\n(11)\nKC\n(13)\nKC\n(13)\nKC\n(13)\nKC\n(10)\nKC\n(12)\nATL\n(7)\nKC\n(9)\nKC\n(11)\nKC\n(9)\nKC\n(11)\nKC\n(13)\nKC\n(13)\nKC\n(13)\nKC\n(10)\nKC\n(11)\nKC\n(11)\nKC\n(8)\nKC\n(12)\nKC\n(11)\nKC\n(13)\nATL\n(4)\nKC\n(9)\nKC\n(12)\nKC\n(14)\nKC\n(8)\nKC\n(12)\nKC\n(10)\nKC\n(12)\nKC\n(7)\nKC\n(12)\nKC\n(10)\nKC\n(10)\nKC\n(8)\nKC\n(8)\nKC\n(9)\nKC\n(4)\nKC\n(12)\nKC\n(6)\nKC\n(12)\nKC\n(11)\nKC\n(6)\nKC\n(10)\nKC\n(5)\nKC\n(6)\nATL\n(3)\nKC\n(12)\nKC\n(5)\nKC\n(5)\nKC\n(9)\nKC\n(4)\nKC\n(8)\nATL\n(6)\nKC\n(13)\nKC\n(9)\nATL\n(9)\nKC\n(7)\nKC\n(12)\nKC\n(3)\nHOU\n(9)\nCLE\n(9)\nCLE\n(12)\nCLE\n(12)\nCLE\n(2)\nCLE\n(11)\nCLE\n(7)\nHOU\n(5)\nHOU\n(8)\nHOU\n(8)\nHOU\n(4)\nHOU\n(11)\nCLE\n(12)\nHOU\n(7)\nHOU\n(10)\nHOU\n(2)\nCLE\n(6)\nCLE\n(11)\nHOU\n(8)\nCLE\n(9)\nCLE\n(3)\nCLE\n(10)\nHOU\n(8)\nCLE\n(5)\nHOU\n(5)\nHOU\n(10)\nCLE\n(10)\nCLE\n(1)\nHOU\n(2)\nCLE\n(5)\nHOU\n(11)\nHOU\n(2)\nHOU\n(3)\nHOU\n(4)\nCLE\n(2)\nCLE\n(5)\nCLE\n(5)\nHOU\n(3)\nHOU\n(4)\nCLE\n(10)\nHOU\n(9)\nHOU\n(12)\nHOU\n(12)\nHOU\n(11)\nCLE\n(2)\nHOU\n(9)\nCLE\n(3)\nHOU\n(11)\nCLE\n(5)\nHOU\n(7)\nHOU\n(11)\nHOU\n(5)\nCLE\n(3)\nCLE\n(2)\nHOU\n(5)\nCLE\n(11)\nHOU\n(5)\nHOU\n(7)\nHOU\n(11)\nHOU\n(5)\nHOU\n(7)\nHOU\n(9)\nHOU\n(3)\nHOU\n(10)\nHOU\n(2)\nCLE\n(7)\nHOU\n(10)\nHOU\n(10)\nHOU\n(3)\nHOU\n(8)\nHOU\n(9)\nHOU\n(7)\nCLE\n(11)\nHOU\n(10)\nHOU\n(10)\nHOU\n(9)\nHOU\n(5)\nHOU\n(10)\nHOU\n(8)\nHOU\n(14)\nHOU\n(9)\nHOU\n(4)\nHOU\n(5)\nHOU\n(6)\nHOU\n(3)\nHOU\n(10)\nHOU\n(3)\nHOU\n(11)\nHOU\n(6)\nMIN\n(8)\nMIN\n(4)\nGB\n(11)\nMIN\n(11)\nMIN\n(6)\nGB\n(10)\nGB\n(6)\nGB\n(8)\nMIN\n(7)\nMIN\n(13)\nGB\n(5)\nGB\n(8)\nGB\n(3)\nGB\n(10)\nMIN\n(9)\nMIN\n(9)\nGB\n(8)\nGB\n(10)\nGB\n(3)\nMIN\n(2)\nMIN\n(6)\nGB\n(12)\nGB\n(4)\nGB\n(8)\nGB\n(8)\nGB\n(4)\nGB\n(8)\nGB\n(6)\nMIN\n(1)\nGB\n(10)\nMIN\n(3)\nMIN\n(4)\nGB\n(6)\nGB\n(2)\nGB\n(5)\nMIN\n(6)\nGB\n(4)\nMIN\n(2)\nGB\n(5)\nGB\n(7)\nGB\n(10)\nGB\n(11)\nGB\n(11)\nGB\n(1)\nMIN\n(1)\nGB\n(3)\nGB\n(10)\nMIN\n(2)\nGB\n(12)\nGB\n(11)\nGB\n(6)\nMIN\n(7)\nGB\n(5)\nGB\n(7)\nGB\n(3)\nGB\n(10)\nGB\n(7)\nGB\n(11)\nGB\n(1)\nGB\n(11)\nGB\n(13)\nGB\n(4)\nGB\n(9)\nGB\n(3)\nGB\n(6)\nGB\n(6)\nGB\n(5)\nGB\n(3)\nGB\n(9)\nGB\n(10)\nGB\n(3)\nGB\n(8)\nMIN\n(10)\nGB\n(9)\nGB\n(9)\nGB\n(7)\nGB\n(6)\nGB\n(4)\nGB\n(4)\nMIN\n(13)\nGB\n(5)\nGB\n(11)\nMIN\n(4)\nGB\n(5)\nGB\n(5)\nGB\n(6)\nGB\n(10)\nGB\n(10)\nGB\n(1)\nJAX\n(13)\nJAX\n(13)\nJAX\n(7)\nJAX\n(7)\nJAX\n(14)\nJAX\n(6)\nJAX\n(14)\nJAX\n(11)\nJAX\n(14)\nJAX\n(12)\nJAX\n(8)\nJAX\n(14)\nJAX\n(10)\nJAX\n(14)\nJAX\n(14)\nJAX\n(10)\nJAX\n(14)\nJAX\n(6)\nJAX\n(13)\nJAX\n(13)\nJAX\n(14)\nJAX\n(13)\nJAX\n(14)\nJAX\n(14)\nJAX\n(13)\nJAX\n(13)\nJAX\n(6)\nJAX\n(13)\nJAX\n(14)\nJAX\n(13)\nJAX\n(14)\nJAX\n(11)\nJAX\n(12)\nJAX\n(14)\nJAX\n(14)\nJAX\n(14)\nJAX\n(13)\nJAX\n(14)\nJAX\n(12)\nJAX\n(13)\nJAX\n(6)\nJAX\n(7)\nJAX\n(7)\nJAX\n(14)\nJAX\n(12)\nJAX\n(14)\nJAX\n(12)\nJAX\n(14)\nJAX\n(13)\nJAX\n(10)\nJAX\n(14)\nJAX\n(13)\nJAX\n(14)\nJAX\n(12)\nJAX\n(14)\nJAX\n(6)\nJAX\n(13)\nJAX\n(13)\nJAX\n(14)\nJAX\n(8)\nJAX\n(12)\nJAX\n(14)\nJAX\n(13)\nJAX\n(14)\nJAX\n(14)\nJAX\n(14)\nTEN\n(2)\nJAX\n(14)\nJAX\n(6)\nJAX\n(13)\nJAX\n(14)\nJAX\n(14)\nJAX\n(6)\nJAX\n(14)\nJAX\n(14)\nJAX\n(14)\nJAX\n(13)\nJAX\n(14)\nJAX\n(14)\nTEN\n(8)\nJAX\n(13)\nJAX\n(14)\nJAX\n(14)\nJAX\n(14)\nJAX\n(11)\nJAX\n(12)\nJAX\n(8)\nJAX\n(6)\nJAX\n(11)\nIND\n(7)\nIND\n(8)\nIND\n(10)\nIND\n(10)\nIND\n(9)\nIND\n(9)\nIND\n(5)\nIND\n(9)\nIND\n(9)\nIND\n(7)\nIND\n(10)\nIND\n(4)\nIND\n(11)\nIND\n(9)\nIND\n(8)\nIND\n(3)\nMIA\n(2)\nIND\n(9)\nIND\n(5)\nIND\n(5)\nIND\n(7)\nIND\n(8)\nIND\n(5)\nIND\n(4)\nIND\n(12)\nIND\n(9)\nMIA\n(2)\nIND\n(7)\nIND\n(6)\nIND\n(4)\nIND\n(7)\nIND\n(3)\nIND\n(5)\nIND\n(6)\nIND\n(4)\nIND\n(4)\nIND\n(3)\nIND\n(1)\nMIA\n(7)\nIND\n(4)\nIND\n(8)\nIND\n(10)\nIND\n(10)\nIND\n(6)\nIND\n(4)\nIND\n(7)\nIND\n(1)\nIND\n(10)\nIND\n(6)\nMIA\n(6)\nIND\n(9)\nIND\n(1)\nMIA\n(1)\nIND\n(3)\nIND\n(10)\nMIA\n(9)\nIND\n(3)\nIND\n(10)\nIND\n(8)\nMIA\n(4)\nIND\n(4)\nIND\n(6)\nIND\n(5)\nIND\n(7)\nIND\n(7)\nMIA\n(1)\nIND\n(7)\nIND\n(8)\nIND\n(8)\nMIA\n(5)\nIND\n(8)\nMIA\n(5)\nIND\n(9)\nIND\n(3)\nIND\n(3)\nIND\n(6)\nMIA\n(4)\nIND\n(7)\nIND\n(6)\nIND\n(12)\nIND\n(7)\nIND\n(2)\nIND\n(8)\nMIA\n(4)\nMIA\n(1)\nIND\n(8)\nIND\n(5)\nIND\n(9)\nMIA\n(5)\nCAR\n(6)\nCAR\n(7)\nCAR\n(9)\nCAR\n(9)\nCAR\n(1)\nCAR\n(8)\nCAR\n(4)\nCAR\n(3)\nCAR\n(6)\nCAR\n(6)\nNO\n(9)\nCAR\n(3)\nNO\n(4)\nCAR\n(6)\nCAR\n(7)\nNO\n(1)\nNO\n(5)\nNO\n(8)\nNO\n(4)\nNO\n(4)\nCAR\n(4)\nCAR\n(7)\nCAR\n(2)\nNO\n(1)\nCAR\n(3)\nCAR\n(2)\nNO\n(9)\nCAR\n(5)\nCAR\n(3)\nNO\n(3)\nCAR\n(4)\nNO\n(1)\nNO\n(2)\nNO\n(5)\nNO\n(3)\nNO\n(3)\nCAR\n(2)\nCAR\n(4)\nCAR\n(14)\nNO\n(1)\nNO\n(7)\nNO\n(9)\nNO\n(9)\nNO\n(4)\nNO\n(3)\nNO\n(1)\nCAR\n(4)\nNO\n(9)\nNO\n(4)\nCAR\n(4)\nCAR\n(8)\nCAR\n(6)\nCAR\n(2)\nCAR\n(1)\nNO\n(2)\nNO\n(8)\nCAR\n(1)\nNO\n(3)\nCAR\n(2)\nNO\n(10)\nNO\n(3)\nNO\n(1)\nCAR\n(4)\nNO\n(5)\nNO\n(1)\nCAR\n(9)\nNO\n(6)\nNO\n(2)\nNO\n(4)\nCAR\n(3)\nNO\n(4)\nCAR\n(4)\nNO\n(8)\nCAR\n(1)\nNO\n(1)\nCAR\n(4)\nCAR\n(2)\nCAR\n(1)\nNO\n(2)\nNO\n(11)\nNO\n(2)\nNO\n(1)\nNO\n(1)\nNO\n(3)\nNO\n(2)\nCAR\n(2)\nNO\n(12)\nNO\n(8)\nNO\n(8)\nBUF\n(14)\nBUF\n(14)\nBUF\n(8)\nBUF\n(8)\nBUF\n(12)\nBUF\n(7)\nBUF\n(13)\nBUF\n(13)\nBUF\n(13)\nBUF\n(5)\nBUF\n(12)\nBUF\n(13)\nBUF\n(14)\nBUF\n(8)\nBUF\n(6)\nBUF\n(14)\nBUF\n(13)\nBUF\n(7)\nBUF\n(11)\nBUF\n(14)\nBUF\n(13)\nBUF\n(14)\nBUF\n(13)\nBUF\n(12)\nBUF\n(14)\nBUF\n(14)\nBUF\n(14)\nBUF\n(14)\nBUF\n(12)\nBUF\n(14)\nBUF\n(9)\nBUF\n(14)\nBUF\n(14)\nBUF\n(13)\nBUF\n(13)\nBUF\n(12)\nBUF\n(12)\nBUF\n(13)\nBUF\n(11)\nBUF\n(14)\nBUF\n(14)\nBUF\n(8)\nBUF\n(8)\nBUF\n(8)\nBUF\n(13)\nBUF\n(13)\nBUF\n(14)\nBUF\n(13)\nBUF\n(14)\nBUF\n(14)\nBUF\n(7)\nBUF\n(14)\nBUF\n(13)\nBUF\n(13)\nBUF\n(12)\nBUF\n(7)\nBUF\n(14)\nBUF\n(14)\nBUF\n(12)\nBUF\n(9)\nBUF\n(14)\nBUF\n(13)\nBUF\n(14)\nBUF\n(12)\nBUF\n(5)\nBUF\n(13)\nBUF\n(14)\nBUF\n(12)\nBUF\n(7)\nBUF\n(14)\nBUF\n(12)\nBUF\n(13)\nBUF\n(7)\nBUF\n(13)\nBUF\n(13)\nBUF\n(12)\nBUF\n(14)\nBUF\n(12)\nBUF\n(12)\nNYJ\n(10)\nBUF\n(12)\nBUF\n(12)\nBUF\n(2)\nBUF\n(12)\nBUF\n(10)\nBUF\n(11)\nBUF\n(13)\nBUF\n(7)\nBUF\n(14)\nWAS\n(12)\nNYG\n(10)\nWAS\n(1)\nNYG\n(1)\nNYG\n(11)\nNYG\n(14)\nNYG\n(9)\nNYG\n(7)\nWAS\n(1)\nNYG\n(14)\nNYG\n(3)\nWAS\n(5)\nNYG\n(2)\nNYG\n(13)\nNYG\n(11)\nNYG\n(7)\nNYG\n(7)\nNYG\n(14)\nNYG\n(7)\nNYG\n(10)\nNYG\n(8)\nNYG\n(1)\nNYG\n(6)\nWAS\n(4)\nWAS\n(5)\nNYG\n(7)\nNYG\n(8)\nNYG\n(4)\nNYG\n(7)\nNYG\n(10)\nNYG\n(12)\nNYG\n(9)\nNYG\n(3)\nNYG\n(7)\nNYG\n(9)\nNYG\n(7)\nNYG\n(8)\nNYG\n(8)\nNYG\n(8)\nNYG\n(1)\nNYG\n(3)\nWAS\n(5)\nNYG\n(7)\nNYG\n(2)\nNYG\n(2)\nNYG\n(9)\nNYG\n(12)\nNYG\n(12)\nNYG\n(8)\nNYG\n(4)\nWAS\n(1)\nNYG\n(14)\nNYG\n(6)\nNYG\n(6)\nNYG\n(3)\nNYG\n(14)\nNYG\n(5)\nNYG\n(2)\nWAS\n(1)\nWAS\n(4)\nNYG\n(3)\nNYG\n(8)\nNYG\n(1)\nNYG\n(14)\nWAS\n(1)\nWAS\n(1)\nNYG\n(9)\nNYG\n(14)\nWAS\n(2)\nNYG\n(2)\nNYG\n(10)\nNYG\n(7)\nWAS\n(2)\nNYG\n(1)\nWAS\n(1)\nNYG\n(1)\nNYG\n(9)\nWAS\n(11)\nNYG\n(7)\nNYG\n(6)\nWAS\n(1)\nNYG\n(14)\nNYG\n(9)"
     }
   ]
 }
