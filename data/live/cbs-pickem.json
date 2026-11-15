@@ -5,14 +5,14 @@
   "week": 10,
   "slateSize": 14,
   "poolSize": 94,
-  "exportedAt": "2026-11-15T14:06:53.943296Z",
+  "exportedAt": "2026-11-15T14:15:33.021525Z",
   "source": "Automated local CBS browser capture",
   "privacy": "Raw CBS session/page data sanitized locally; pool/account identifiers and participant names not published.",
   "confidenceStatus": "unsubmitted",
   "cardIntentConfirmed": false,
   "cardIntentSource": null,
   "confidenceSource": "Complete CBS controls detected but no intentional save/submission confirmed",
-  "marketCapturedAt": "2026-11-15T14:06:53.943251Z",
+  "marketCapturedAt": "2026-11-15T14:15:33.021496Z",
   "marketSource": "CBS Sports odds \u2014 Week 10",
   "market": [
     {
@@ -68,14 +68,14 @@
       "away": "BUF",
       "home": "NYJ",
       "awayML": -435,
-      "homeML": 360,
+      "homeML": 350,
       "total": 50.8
     },
     {
       "away": "SEA",
       "home": "LV",
       "awayML": -290,
-      "homeML": 250,
+      "homeML": 245,
       "total": 40.5
     },
     {
@@ -216,7 +216,7 @@
   ],
   "fieldModel": {
     "source": "Sanitized CBS revealed-pool observations",
-    "capturedAt": "2026-11-15T14:06:32.748593Z",
+    "capturedAt": "2026-11-15T14:15:14.133514Z",
     "observedEntries": 83,
     "locked": [
       {
@@ -566,13 +566,13 @@
     {
       "title": "NFL Football Tourney | Picks",
       "url": "sanitized://cbs-pickem/week-10",
-      "ts": "2026-11-15T14:06:27.336542Z",
+      "ts": "2026-11-15T14:15:08.787759Z",
       "text": "CBS Pickem sanitized ownership\n0-0\nNE\n11%\n0-0\nDET\n89%\n0-0\nKC\n96%\n0-0\nATL\n4%\n0-0\nHOU\n66%\n0-0\nCLE\n34%\n0-0\nMIN\n22%\n0-0\nGB\n78%\n0-0\nJAX\n99%\n0-0\nTEN\n1%\n0-0\nMIA\n19%\n0-0\nIND\n81%\n0-0\nCAR\n44%\n0-0\nNO\n56%\n0-0\nBUF\n99%\n0-0\nNYJ\n1%\n0-0\nSEA\n91%\n0-0\nLV\n9%\n0-0\nLAR\n96%\n0-0\nARI\n4%\n0-0\nSF\n94%\n0-0\nDAL\n6%\n0-0\nPIT\n16%\n0-0\nCIN\n84%\n0-0\nWAS\n15%\n0-0\nNYG\n85%\n0-0\nLAC\n16%\n0-0\nBAL\n84%"
     },
     {
       "title": "NFL Football Tourney | Weekly Standings",
       "url": "sanitized://cbs-pickem/week-10/standings/weekly",
-      "ts": "2026-11-15T14:06:32.748593Z",
+      "ts": "2026-11-15T14:15:14.133514Z",
       "text": "Weekly Standings\nSanitized observations\nSUN\nNE\nDET\nSUN\nKC\nATL\nSUN\nHOU\nCLE\nSUN\nMIN\nGB\nSUN\nJAX\nTEN\nSUN\nMIA\nIND\nSUN\nCAR\nNO\nSUN\nBUF\nNYJ\nSUN\nSEA\nLV\nSUN\nLAR\nARI\nSUN\nSF\nDAL\nSUN\nPIT\nCIN\nSUN\nWAS\nNYG\nSUN\nLAC\nBAL\nWAS\n(12)\nWAS\n(11)\nWAS\n(5)\nWAS\n(5)\nWAS\n(5)\nWAS\n(4)\nWAS\n(4)\nWAS\n(2)\nWAS\n(2)\nWAS\n(1)\nWAS\n(1)\nWAS\n(1)\nWAS\n(1)\nWAS\n(1)\nWAS\n(1)\nWAS\n(1)\nWAS\n(1)\nNYG\n(7)\nNYG\n(8)\nNYG\n(7)\nNYG\n(1)\nNYG\n(3)\nNYG\n(7)\nNYG\n(7)\nNYG\n(2)\nNYG\n(1)\nNYG\n(1)\nNYG\n(8)\nNYG\n(12)\nNYG\n(8)\nNYG\n(2)\nNYG\n(8)\nNYG\n(2)\nNYG\n(4)\nNYG\n(14)\nNYG\n(6)\nNYG\n(9)\nNYG\n(3)\nNYG\n(7)\nNYG\n(1)\nNYG\n(4)\nNYG\n(10)\nNYG\n(10)\nNYG\n(8)\nNYG\n(9)\nNYG\n(7)\nNYG\n(14)\nNYG\n(6)\nNYG\n(3)\nNYG\n(7)\nNYG\n(13)\nNYG\n(1)\nNYG\n(2)\nNYG\n(9)\nNYG\n(9)\nNYG\n(7)\nNYG\n(10)\nNYG\n(7)\nNYG\n(8)\nNYG\n(3)\nNYG\n(9)\nNYG\n(7)\nNYG\n(14)\nNYG\n(14)\nNYG\n(9)\nNYG\n(6)\nNYG\n(5)\nNYG\n(8)\nNYG\n(2)\nNYG\n(10)\nNYG\n(14)\nNYG\n(12)\nNYG\n(9)\nNYG\n(14)\nNYG\n(7)\nNYG\n(11)\nNYG\n(6)\nNYG\n(12)\nNYG\n(11)\nNYG\n(14)\nNYG\n(1)\nNYG\n(3)\nNYG\n(14)"
     }
   ]
