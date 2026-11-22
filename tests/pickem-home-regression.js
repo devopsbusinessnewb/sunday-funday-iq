@@ -20,6 +20,16 @@ const result=home.strategySnapshot(state,{season:2026,week:3},Date.parse('2026-0
 if(result.status!=='ready'||result.cards.length!==4||result.cards[3].key!=='maxUpside')throw new Error('Current week four-strategy dashboard missing');
 if(!result.cards.every(x=>x.href.includes('strategy='+x.key)))throw new Error('Strategy tiles do not open corresponding full cards');
 if(home.strategySnapshot(state,{season:2026,week:4},Date.now()).status!=='missing')throw new Error('Old week projections appeared as current cards');
+const lockedState=JSON.parse(JSON.stringify(state));
+lockedState.games=[{away:'IND',home:'HOU',pick:'HOU',weight:9,locked:true},...Array.from({length:12},(_,i)=>({away:'A'+i,home:'H'+i,locked:false}))];
+const lockedSnapshot=home.strategySnapshot(lockedState,{season:2026,week:3});
+if(lockedSnapshot.status!=='locked-conflict'||lockedSnapshot.cards.length||!lockedSnapshot.message.includes('HOU is locked at 9'))throw Error('Home advertised probabilities for cards contradicting a known lock');
+for(const s of Object.values(lockedState.optimization.strategies))s.card={choices:[1,...Array(12).fill(0)],weights:[9,1,2,3,4,5,6,7,8,10,11,12,13]};
+if(home.strategySnapshot(lockedState,{season:2026,week:3}).cards.length!==4)throw Error('Home blocked cards that preserve the actual locked pick');
+lockedState.confirmedLockedPicks=[{season:2026,week:3,away:'IND',home:'HOU',pick:'HOU',weight:8}];
+if(home.strategySnapshot(lockedState,{season:2026,week:3}).status!=='locked-conflict')throw Error('Home ignored a user-confirmed confidence correction');
+lockedState.confirmedLockedPicks[0].week=2;
+if(home.strategySnapshot(lockedState,{season:2026,week:3}).cards.length!==4)throw Error('A prior-week correction leaked into this week');
 if(home.chooseFreshLive([{season:2026,week:6,exportedAt:'2026-10-20T14:10:00Z'},{season:2026,week:7,exportedAt:'2026-10-20T14:09:00Z'}]).week!==7)throw new Error('Home did not prefer the newer CBS week over a later stale-week timestamp');
 if(home.chooseFreshLive([{season:2026,week:7,exportedAt:'2026-10-20T14:09:00Z'},{season:2026,week:7,exportedAt:'2026-10-20T14:11:00Z'}]).exportedAt!=='2026-10-20T14:11:00Z')throw new Error('Home did not prefer the newest publication within the same week');
 if(home.strategySnapshot({...state,marketUpdatedAt:'2026-09-27T12:05:00Z'},{season:2026,week:3},Date.parse('2026-09-27T12:30:00Z')).status!=='stale')throw new Error('New market inputs did not stale the saved simulation');
