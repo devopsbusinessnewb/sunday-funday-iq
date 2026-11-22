@@ -5,14 +5,14 @@
   "week": 11,
   "slateSize": 13,
   "poolSize": 94,
-  "exportedAt": "2026-11-22T18:54:16.917043Z",
+  "exportedAt": "2026-11-22T19:39:17.699826Z",
   "source": "Automated local CBS browser capture",
   "privacy": "Raw CBS session/page data sanitized locally; pool/account identifiers and participant names not published.",
   "confidenceStatus": "unsubmitted",
   "cardIntentConfirmed": false,
   "cardIntentSource": null,
   "confidenceSource": "Complete CBS controls detected but no intentional save/submission confirmed",
-  "marketCapturedAt": "2026-11-22T18:54:16.917012Z",
+  "marketCapturedAt": "2026-11-22T19:39:17.699794Z",
   "marketSource": "CBS Sports odds \u2014 Week 11",
   "market": [
     {
@@ -67,8 +67,8 @@
     {
       "away": "NYJ",
       "home": "LAC",
-      "awayML": 149,
-      "homeML": -175,
+      "awayML": 150,
+      "homeML": -172,
       "total": 43.0
     },
     {
@@ -113,49 +113,49 @@
       "home": "BUF",
       "completed": false,
       "winner": null,
-      "statusText": "9:44 - 2nd"
+      "statusText": "Halftime"
     },
     {
       "away": "NO",
       "home": "CHI",
       "completed": false,
       "winner": null,
-      "statusText": "10:16 - 2nd"
+      "statusText": "Halftime"
     },
     {
       "away": "TEN",
       "home": "DAL",
       "completed": false,
       "winner": null,
-      "statusText": "12:40 - 2nd"
+      "statusText": "Halftime"
     },
     {
       "away": "TB",
       "home": "DET",
       "completed": false,
       "winner": null,
-      "statusText": "5:26 - 2nd"
+      "statusText": "13:21 - 3rd"
     },
     {
       "away": "ARI",
       "home": "KC",
       "completed": false,
       "winner": null,
-      "statusText": "5:22 - 2nd"
+      "statusText": "13:41 - 3rd"
     },
     {
       "away": "PIT",
       "home": "PHI",
       "completed": false,
       "winner": null,
-      "statusText": "9:23 - 2nd"
+      "statusText": "13:55 - 3rd"
     },
     {
       "away": "BAL",
       "home": "CAR",
       "completed": false,
       "winner": null,
-      "statusText": "10:52 - 2nd"
+      "statusText": "0:03 - 2nd"
     },
     {
       "away": "NYJ",
@@ -202,7 +202,7 @@
   ],
   "fieldModel": {
     "source": "Sanitized CBS revealed-pool observations",
-    "capturedAt": "2026-11-22T18:53:57.938180Z",
+    "capturedAt": "2026-11-22T19:38:57.956534Z",
     "observedEntries": 90,
     "locked": [
       {
@@ -3123,13 +3123,13 @@
     {
       "title": "NFL Football Tourney | Picks",
       "url": "sanitized://cbs-pickem/week-11",
-      "ts": "2026-11-22T18:53:52.287966Z",
+      "ts": "2026-11-22T19:38:52.170248Z",
       "text": "CBS Pickem sanitized ownership\n0-0\nMIA\n1%\n0-0\nBUF\n99%\n0-0\nNO\n2%\n0-0\nCHI\n98%\n0-0\nTEN\n5%\n0-0\nDAL\n95%\n0-0\nTB\n5%\n0-0\nDET\n95%\n0-0\nARI\n1%\n0-0\nKC\n99%\n0-0\nPIT\n93%\n0-0\nPHI\n7%\n0-0\nBAL\n17%\n0-0\nCAR\n83%\n0-0\nNYJ\n26%\n0-0\nLAC\n74%\n0-0\nLV\n4%\n0-0\nDEN\n96%\n0-0\nJAX\n92%\n0-0\nNYG\n8%\n0-0\nMIN\n28%\n0-0\nSF\n72%\n0-0\nIND\n7%\n0-0\nHOU\n93%\n0-0\nCIN\n96%\n0-0\nWAS\n4%"
     },
     {
       "title": "NFL Football Tourney | Weekly Standings",
       "url": "sanitized://cbs-pickem/week-11/standings/weekly",
-      "ts": "2026-11-22T18:53:57.938180Z",
+      "ts": "2026-11-22T19:38:57.956534Z",
       "text": "Weekly Standings\nSanitized observations\nSUN\nMIA\nBUF\nSUN\nNO\nCHI\nSUN\nTEN\nDAL\nSUN\nTB\nDET\nSUN\nARI\nKC\nSUN\nPIT\nPHI\nSUN\nBAL\nCAR\nSUN\nNYJ\nLAC\nSUN\nLV\nDEN\nSUN\nJAX\nNYG\nSUN\nMIN\nSF\nSUN\nIND\nHOU\nSUN\nCIN\nWAS\nBUF\n(13)\nBUF\n(13)\nBUF\n(13)\nBUF\n(12)\nBUF\n(13)\nBUF\n(12)\nBUF\n(13)\nBUF\n(12)\nBUF\n(13)\nBUF\n(13)\nBUF\n(13)\nBUF\n(13)\nBUF\n(12)\nBUF\n(13)\nBUF\n(13)\nBUF\n(13)\nBUF\n(13)\nBUF\n(13)\nBUF\n(12)\nBUF\n(12)\nBUF\n(13)\nBUF\n(13)\nBUF\n(12)\nBUF\n(13)\nBUF\n(13)\nBUF\n(12)\nBUF\n(13)\nBUF\n(13)\nBUF\n(13)\nBUF\n(13)\nBUF\n(11)\nBUF\n(13)\nBUF\n(13)\nBUF\n(13)\nBUF\n(10)\nBUF\n(12)\nBUF\n(12)\nBUF\n(10)\nBUF\n(12)\nBUF\n(13)\nBUF\n(12)\nBUF\n(12)\nBUF\n(13)\nBUF\n(11)\nBUF\n(13)\nBUF\n(13)\nBUF\n(12)\nBUF\n(12)\nBUF\n(13)\nBUF\n(13)\nBUF\n(12)\nBUF\n(11)\nBUF\n(12)\nBUF\n(13)\nBUF\n(13)\nBUF\n(10)\nBUF\n(13)\nBUF\n(12)\nBUF\n(13)\nBUF\n(13)\nBUF\n(13)\nBUF\n(12)\nBUF\n(12)\nBUF\n(13)\nBUF\n(12)\nBUF\n(13)\nBUF\n(11)\nBUF\n(13)\nBUF\n(13)\nBUF\n(12)\nBUF\n(11)\nBUF\n(12)\nBUF\n(12)\nBUF\n(13)\nBUF\n(13)\nBUF\n(13)\nBUF\n(13)\nBUF\n(13)\nBUF\n(13)\nBUF\n(13)\nBUF\n(13)\nBUF\n(12)\nBUF\n(7)\nBUF\n(13)\nBUF\n(10)\nBUF\n(12)\nBUF\n(9)\nBUF\n(13)\nBUF\n(11)\nMIA\n(1)\nCHI\n(11)\nCHI\n(12)\nCHI\n(11)\nCHI\n(10)\nCHI\n(12)\nCHI\n(11)\nCHI\n(10)\nCHI\n(11)\nCHI\n(12)\nCHI\n(12)\nCHI\n(11)\nCHI\n(11)\nCHI\n(9)\nCHI\n(11)\nCHI\n(10)\nCHI\n(10)\nCHI\n(10)\nCHI\n(12)\nCHI\n(13)\nCHI\n(10)\nCHI\n(10)\nCHI\n(11)\nCHI\n(8)\nCHI\n(11)\nCHI\n(12)\nCHI\n(11)\nCHI\n(11)\nCHI\n(11)\nCHI\n(10)\nCHI\n(10)\nCHI\n(10)\nCHI\n(12)\nCHI\n(11)\nCHI\n(10)\nCHI\n(9)\nCHI\n(10)\nCHI\n(10)\nCHI\n(9)\nCHI\n(10)\nCHI\n(10)\nCHI\n(8)\nCHI\n(11)\nCHI\n(10)\nCHI\n(10)\nCHI\n(11)\nCHI\n(8)\nCHI\n(8)\nCHI\n(9)\nCHI\n(12)\nCHI\n(11)\nCHI\n(10)\nCHI\n(10)\nCHI\n(10)\nCHI\n(12)\nCHI\n(12)\nCHI\n(7)\nCHI\n(11)\nCHI\n(10)\nCHI\n(9)\nCHI\n(11)\nCHI\n(9)\nCHI\n(10)\nCHI\n(10)\nCHI\n(10)\nCHI\n(11)\nCHI\n(11)\nCHI\n(10)\nCHI\n(10)\nCHI\n(11)\nCHI\n(13)\nCHI\n(10)\nCHI\n(7)\nCHI\n(13)\nCHI\n(12)\nCHI\n(9)\nCHI\n(11)\nCHI\n(12)\nCHI\n(4)\nCHI\n(11)\nCHI\n(11)\nCHI\n(10)\nCHI\n(13)\nCHI\n(6)\nCHI\n(9)\nCHI\n(13)\nCHI\n(7)\nCHI\n(3)\nCHI\n(10)\nCHI\n(13)\nCHI\n(10)\nDAL\n(9)\nDAL\n(9)\nDAL\n(10)\nDAL\n(7)\nDAL\n(11)\nDAL\n(10)\nDAL\n(8)\nDAL\n(10)\nDAL\n(11)\nDAL\n(10)\nDAL\n(7)\nDAL\n(9)\nDAL\n(7)\nDAL\n(7)\nDAL\n(8)\nDAL\n(8)\nDAL\n(8)\nDAL\n(11)\nDAL\n(9)\nTEN\n(9)\nDAL\n(8)\nDAL\n(9)\nDAL\n(9)\nDAL\n(9)\nDAL\n(8)\nDAL\n(8)\nDAL\n(8)\nDAL\n(10)\nDAL\n(8)\nDAL\n(8)\nDAL\n(5)\nDAL\n(7)\nDAL\n(5)\nDAL\n(9)\nDAL\n(8)\nDAL\n(9)\nDAL\n(9)\nDAL\n(7)\nDAL\n(9)\nDAL\n(4)\nDAL\n(4)\nDAL\n(5)\nDAL\n(7)\nDAL\n(9)\nDAL\n(10)\nDAL\n(7)\nDAL\n(4)\nDAL\n(3)\nDAL\n(10)\nDAL\n(7)\nDAL\n(9)\nDAL\n(9)\nDAL\n(9)\nDAL\n(6)\nDAL\n(11)\nTEN\n(1)\nDAL\n(7)\nDAL\n(3)\nDAL\n(8)\nDAL\n(7)\nDAL\n(5)\nDAL\n(9)\nDAL\n(7)\nDAL\n(7)\nDAL\n(9)\nDAL\n(7)\nDAL\n(8)\nDAL\n(9)\nDAL\n(6)\nDAL\n(8)\nDAL\n(7)\nTEN\n(1)\nDAL\n(11)\nDAL\n(8)\nDAL\n(6)\nDAL\n(10)\nDAL\n(8)\nDAL\n(3)\nDAL\n(10)\nDAL\n(10)\nDAL\n(2)\nDAL\n(4)\nDAL\n(9)\nDAL\n(3)\nDAL\n(1)\nDAL\n(8)\nDAL\n(4)\nDAL\n(8)\nDAL\n(3)\nDAL\n(8)\nDET\n(8)\nDET\n(11)\nDET\n(9)\nDET\n(8)\nDET\n(10)\nDET\n(9)\nDET\n(11)\nDET\n(9)\nDET\n(8)\nDET\n(7)\nDET\n(9)\nDET\n(7)\nDET\n(10)\nDET\n(9)\nDET\n(7)\nDET\n(7)\nDET\n(7)\nDET\n(8)\nDET\n(8)\nDET\n(8)\nDET\n(6)\nDET\n(8)\nDET\n(7)\nDET\n(5)\nDET\n(10)\nDET\n(3)\nDET\n(9)\nDET\n(8)\nDET\n(5)\nDET\n(5)\nDET\n(7)\nDET\n(10)\nDET\n(8)\nDET\n(11)\nDET\n(7)\nDET\n(8)\nDET\n(8)\nDET\n(2)\nDET\n(8)\nDET\n(8)\nDET\n(10)\nDET\n(9)\nDET\n(11)\nTB\n(1)\nDET\n(7)\nDET\n(6)\nDET\n(11)\nDET\n(7)\nDET\n(9)\nDET\n(6)\nDET\n(8)\nDET\n(8)\nDET\n(8)\nDET\n(4)\nDET\n(10)\nTB\n(4)\nDET\n(8)\nDET\n(9)\nDET\n(7)\nDET\n(2)\nDET\n(11)\nDET\n(8)\nTB\n(6)\nTB\n(2)\nDET\n(8)\nDET\n(10)\nDET\n(3)\nDET\n(8)\nDET\n(10)\nDET\n(9)\nDET\n(9)\nDET\n(11)\nDET\n(7)\nDET\n(10)\nTB\n(1)\nDET\n(9)\nTB\n(2)\nDET\n(11)\nDET\n(9)\nDET\n(9)\nDET\n(5)\nTB\n(1)\nDET\n(8)\nDET\n(8)\nDET\n(12)\nDET\n(1)\nDET\n(6)\nTB\n(3)\nDET\n(2)\nDET\n(7)\nKC\n(6)\nKC\n(10)\nKC\n(2)\nKC\n(11)\nKC\n(9)\nKC\n(13)\nKC\n(12)\nKC\n(8)\nKC\n(10)\nKC\n(11)\nKC\n(12)\nKC\n(10)\nKC\n(11)\nKC\n(10)\nKC\n(12)\nKC\n(12)\nKC\n(12)\nKC\n(7)\nKC\n(10)\nKC\n(7)\nKC\n(12)\nKC\n(7)\nKC\n(11)\nKC\n(12)\nKC\n(11)\nKC\n(13)\nKC\n(12)\nKC\n(12)\nKC\n(12)\nKC\n(12)\nKC\n(12)\nKC\n(11)\nKC\n(10)\nKC\n(12)\nKC\n(12)\nKC\n(7)\nKC\n(7)\nKC\n(11)\nKC\n(7)\nKC\n(12)\nKC\n(13)\nKC\n(13)\nKC\n(12)\nKC\n(12)\nKC\n(12)\nKC\n(12)\nKC\n(13)\nKC\n(11)\nKC\n(8)\nKC\n(12)\nKC\n(13)\nKC\n(7)\nKC\n(7)\nKC\n(11)\nKC\n(9)\nKC\n(13)\nKC\n(12)\nKC\n(8)\nKC\n(6)\nKC\n(12)\nKC\n(10)\nKC\n(11)\nKC\n(11)\nKC\n(12)\nKC\n(13)\nKC\n(9)\nKC\n(12)\nKC\n(12)\nKC\n(12)\nKC\n(10)\nKC\n(12)\nKC\n(13)\nKC\n(6)\nKC\n(9)\nKC\n(12)\nKC\n(8)\nKC\n(11)\nKC\n(12)\nKC\n(8)\nKC\n(8)\nKC\n(12)\nKC\n(11)\nKC\n(5)\nKC\n(12)\nKC\n(6)\nKC\n(11)\nKC\n(13)\nKC\n(12)\nKC\n(12)\nKC\n(13)\nPIT\n(5)\nPIT\n(3)\nPHI\n(8)\nPHI\n(3)\nPIT\n(6)\nPIT\n(2)\nPIT\n(6)\nPIT\n(7)\nPIT\n(6)\nPIT\n(4)\nPIT\n(5)\nPIT\n(3)\nPIT\n(5)\nPIT\n(5)\nPIT\n(4)\nPIT\n(4)\nPIT\n(2)\nPIT\n(5)\nPHI\n(7)\nPIT\n(6)\nPIT\n(4)\nPIT\n(6)\nPIT\n(6)\nPIT\n(6)\nPIT\n(5)\nPHI\n(1)\nPIT\n(5)\nPIT\n(3)\nPIT\n(4)\nPIT\n(6)\nPHI\n(1)\nPIT\n(8)\nPIT\n(7)\nPIT\n(8)\nPIT\n(3)\nPIT\n(6)\nPIT\n(6)\nPHI\n(12)\nPIT\n(6)\nPIT\n(9)\nPIT\n(5)\nPIT\n(4)\nPIT\n(8)\nPIT\n(6)\nPIT\n(6)\nPIT\n(3)\nPIT\n(5)\nPHI\n(2)\nPIT\n(7)\nPIT\n(5)\nPIT\n(3)\nPIT\n(6)\nPIT\n(6)\nPIT\n(5)\nPIT\n(8)\nPHI\n(9)\nPIT\n(6)\nPIT\n(7)\nPIT\n(5)\nPIT\n(5)\nPIT\n(4)\nPIT\n(7)\nPIT\n(4)\nPIT\n(8)\nPIT\n(6)\nPIT\n(8)\nPIT\n(7)\nPIT\n(5)\nPIT\n(5)\nPIT\n(3)\nPIT\n(6)\nPIT\n(10)\nPIT\n(5)\nPIT\n(11)\nPIT\n(4)\nPIT\n(6)\nPIT\n(3)\nPIT\n(7)\nPIT\n(7)\nPIT\n(7)\nPIT\n(4)\nPIT\n(8)\nPIT\n(10)\nPIT\n(6)\nPIT\n(4)\nPIT\n(3)\nPIT\n(8)\nPIT\n(6)\nPIT\n(7)\nPHI\n(2)\nBAL\n(10)\nBAL\n(4)\nBAL\n(12)\nCAR\n(2)\nCAR\n(3)\nCAR\n(3)\nCAR\n(4)\nCAR\n(5)\nCAR\n(7)\nCAR\n(3)\nCAR\n(6)\nCAR\n(4)\nCAR\n(3)\nCAR\n(8)\nCAR\n(1)\nCAR\n(3)\nCAR\n(4)\nCAR\n(9)\nBAL\n(2)\nBAL\n(11)\nCAR\n(2)\nCAR\n(10)\nCAR\n(1)\nCAR\n(3)\nCAR\n(4)\nBAL\n(2)\nCAR\n(3)\nCAR\n(6)\nCAR\n(2)\nCAR\n(1)\nCAR\n(8)\nCAR\n(4)\nCAR\n(9)\nCAR\n(2)\nCAR\n(6)\nCAR\n(11)\nCAR\n(11)\nCAR\n(5)\nCAR\n(11)\nCAR\n(3)\nBAL\n(2)\nCAR\n(6)\nCAR\n(6)\nBAL\n(3)\nCAR\n(3)\nCAR\n(2)\nCAR\n(3)\nCAR\n(6)\nBAL\n(2)\nCAR\n(3)\nCAR\n(11)\nCAR\n(1)\nBAL\n(11)\nCAR\n(3)\nCAR\n(2)\nBAL\n(11)\nCAR\n(3)\nCAR\n(4)\nCAR\n(11)\nCAR\n(3)\nCAR\n(2)\nCAR\n(6)\nBAL\n(1)\nCAR\n(4)\nCAR\n(10)\nCAR\n(12)\nCAR\n(2)\nCAR\n(2)\nCAR\n(3)\nCAR\n(11)\nCAR\n(8)\nCAR\n(4)\nCAR\n(1)\nCAR\n(3)\nCAR\n(10)\nCAR\n(12)\nCAR\n(4)\nCAR\n(5)\nCAR\n(12)\nCAR\n(12)\nCAR\n(6)\nCAR\n(3)\nBAL\n(13)\nCAR\n(2)\nCAR\n(2)\nCAR\n(4)\nCAR\n(7)\nCAR\n(5)\nCAR\n(9)\nCAR\n(5)\nHOU\n(12)\nHOU\n(8)\nIND\n(1)\nHOU\n(13)\nHOU\n(8)\nHOU\n(8)\nHOU\n(9)\nHOU\n(13)\nHOU\n(9)\nHOU\n(9)\nHOU\n(10)\nHOU\n(12)\nHOU\n(13)\nHOU\n(12)\nHOU\n(11)\nHOU\n(11)\nHOU\n(11)\nHOU\n(10)\nHOU\n(13)\nHOU\n(11)\nHOU\n(12)\nHOU\n(13)\nHOU\n(10)\nHOU\n(6)\nHOU\n(9)\nHOU\n(6)\nHOU\n(5)\nHOU\n(11)\nHOU\n(11)\nHOU\n(13)\nHOU\n(6)\nHOU\n(12)\nHOU\n(4)\nHOU\n(13)\nHOU\n(13)\nHOU\n(13)\nHOU\n(8)\nHOU\n(13)\nHOU\n(11)\nHOU\n(9)\nHOU\n(8)\nHOU\n(5)\nHOU\n(13)\nHOU\n(4)\nHOU\n(11)\nHOU\n(9)\nHOU\n(13)\nHOU\n(3)\nHOU\n(8)\nHOU\n(5)\nHOU\n(12)\nIND\n(13)\nHOU\n(10)\nHOU\n(1)\nHOU\n(6)\nHOU\n(4)\nHOU\n(13)\nHOU\n(12)\nHOU\n(9)\nHOU\n(6)\nHOU\n(4)\nHOU\n(13)\nHOU\n(11)\nIND\n(5)\nHOU\n(3)\nHOU\n(9)\nHOU\n(3)\nHOU\n(9)\nHOU\n(3)\nHOU\n(11)\nHOU\n(7)\nHOU\n(8)\nHOU\n(8)\nHOU\n(9)\nHOU\n(1)\nHOU\n(3)\nHOU\n(6)\nHOU\n(10)\nIND\n(4)\nHOU\n(4)"
     }
   ]
