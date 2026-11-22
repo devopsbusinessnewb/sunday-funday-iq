@@ -48,6 +48,13 @@ function inputAgeWarning(state,now=Date.now()){
 function strategySnapshot(state,live,now=Date.now()){
   const opt=state?.optimization,week=Number(live?.week||state?.week||0),season=Number(live?.season||state?.season||2026);
   if(!opt||opt.modelBuild!==MODEL_BUILD||Number(state?.week)!==week||Number(state?.season||2026)!==season||!STRATEGIES.every(([key])=>opt.strategies?.[key]?.card&&opt.strategies[key]?.eval))return{status:'missing',week,cards:[]};
+  for(const [i,g] of (state.games||[]).entries()){
+    if(!(g.locked||g.completed||live?.gameState?.some(x=>x.away===g.away&&x.home===g.home&&x.completed)))continue;
+    const confirmed=(state.confirmedLockedPicks||[]).find(r=>Number(r.season)===season&&Number(r.week)===week&&r.away===g.away&&r.home===g.home);
+    const pick=confirmed?.pick||g.pick,weight=Number(confirmed?.weight??g.weight),side=pick===g.away?0:pick===g.home?1:null;
+    const mismatch=side==null||!Number.isInteger(weight)||weight<1||weight>state.games.length||STRATEGIES.some(([key])=>opt.strategies[key].card.choices?.[i]!==side||opt.strategies[key].card.weights?.[i]!==weight);
+    if(mismatch)return{status:'locked-conflict',week,cards:[],message:side!=null&&Number.isInteger(weight)&&weight>0?`${pick} is locked at ${weight}. The saved strategy cards disagree; rebuild them before using their picks or probabilities.`:`Your locked pick for ${g.away} @ ${g.home} needs confirmation before IQ can build valid cards.`};
+  }
   const ran=Date.parse(opt.ranAt||''),cbs=Date.parse(state.cbsUpdatedAt||''),market=Date.parse(state.marketUpdatedAt||'');
   const published=Date.parse(live?.exportedAt||''),stale=!Number.isFinite(ran)||now-ran>12*3600e3||now<ran||cbs>ran||market>ran||published>ran||live?.unavailable;
   return{status:stale?'stale':'ready',inputWarning:inputAgeWarning(state,now),week,ranAt:opt.ranAt,provisional:!!opt.provisional,currentSource:opt.currentSource||'submitted',currentEval:opt.currentControl?.eval||opt.currentEval,fieldImpact:opt.currentControl?.fieldImpact||null,selectedStrategy:opt.selectedStrategy||'balanced',blankDecision:opt.blankDecision||null,cards:STRATEGIES.map(([key,label])=>({key,label,href:'./apps/pickem/?strategy='+key,eval:opt.strategies[key].eval,stability:opt.strategies[key].stability,changes:opt.strategies[key].changes,objective:opt.strategies[key].objective,equivalentTo:opt.strategies[key].equivalentTo}))};
@@ -175,6 +182,11 @@ async function bootHome(){
   const snapshot=strategySnapshot(state,live),$=id=>document.getElementById(id);
   $('week').textContent='Week '+(snapshot.week||'—');
   const tb=tiebreakerRecommendation(live);if(tb){$('tiebreaker').classList.add('show');$('tiebreakerScore').textContent=tb.score+' points';$('tiebreakerDetail').textContent=`${tb.away} @ ${tb.home} · market total ${tb.total}. Same recommendation for all four strategy cards.`}
+  if(snapshot.status==='locked-conflict'){
+    $('status').textContent=snapshot.message;
+    $('strategies').innerHTML='<div class="empty">Locked picks must match across all four cards.<div class="actions"><a class="btn primary" href="./apps/pickem/?action=check-locked">Verify locked picks &amp; rebuild</a></div></div>';
+    return;
+  }
   if(snapshot.status==='missing'){
     $('status').textContent='No saved simulation for this CBS week in this browser. Refresh the CBS data and market, then run the model to see four complete cards.';
     $('strategies').innerHTML='<div class="empty">Your four strategies will appear here after a current-week simulation. IQ does not show last week’s card as a new recommendation.</div>';

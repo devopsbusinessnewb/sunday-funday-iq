@@ -275,3 +275,42 @@ if(vm.runInContext("state.games[0].pick!=='WAS'||state.games[0].weight!==1",ctx)
 vm.runInContext('state.week=11;state.games[0].pick="NYG";applyConfirmedLockedPicks();',ctx);
 if(vm.runInContext('state.games[0].pick!=="NYG"',ctx))throw Error('Locked correction leaked into another week');
 console.log('Confirmed locked-pick correction regression passed.');
+
+// Week 11: Houston was actually locked at 9, not a cached strategy's 12.
+const houstonSlate=[['MIA','BUF'],['NO','CHI'],['TEN','DAL'],['TB','DET'],['ARI','KC'],['PIT','PHI'],['BAL','CAR'],['NYJ','LAC'],['LV','DEN'],['JAX','NYG'],['MIN','SF'],['IND','HOU'],['CIN','WAS']];
+const houstonGames=houstonSlate.map(([away,home],i)=>({away,home,awayML:150,homeML:-170,total:45,id:'h'+i,awayPct:45,homePct:55,pick:null,weight:null,locked:false,completed:false}));
+const hi=houstonGames.findIndex(g=>g.away==='IND'&&g.home==='HOU');
+if(hi<0)throw Error('Week 11 Houston fixture missing');
+Object.assign(houstonGames[hi],{pick:'HOU',weight:9,locked:true,completed:true,winner:1});
+const houstonBase=t.simulationCurrentCard(houstonGames).card;
+const wrongHouston=clone(houstonBase),twelve=wrongHouston.weights.indexOf(12);
+[wrongHouston.weights[hi],wrongHouston.weights[twelve]]=[wrongHouston.weights[twelve],wrongHouston.weights[hi]];
+if(!t.lockedCardError(houstonGames,wrongHouston).includes('HOU is locked at 9'))throw Error('Houston 12 cached strategy was not rejected');
+let rejected=false;
+try{t.runOptimizer(houstonGames,94,{currentCard:wrongHouston,searchIters:10,finalIters:20})}catch(e){rejected=e.message.includes('locked at 9')}
+if(!rejected)throw Error('Optimizer accepted a control that contradicted the locked confidence');
+const houstonRun=t.runOptimizer(houstonGames,94,{currentCard:houstonBase,blankSlate:true,searchIters:25,finalIters:60});
+for(const key of ['safest','balanced','aggressive','maxUpside']){
+  const card=houstonRun.strategies[key].card;
+  if(card.weights[hi]!==9||card.choices[hi]!==1||!t.validConfidence(card.weights,houstonGames.length))throw Error(key+' changed Houston 9 or duplicated confidence');
+}
+const unknownHouston=clone(houstonGames);unknownHouston[hi].weight=null;
+let guessed=false;try{t.simulationCurrentCard(unknownHouston);guessed=true}catch{}
+if(guessed)throw Error('Blank-slate optimizer guessed an unknown locked confidence');
+ctx.houstonFixture=houstonGames;ctx.wrongHouston=wrongHouston;
+vm.runInContext(`state={season:2026,week:11,games:houstonFixture,confirmedLockedPicks:[{season:2026,week:11,away:'IND',home:'HOU',pick:'HOU',weight:9}],optimization:{strategies:{aggressive:{card:wrongHouston}}}};applyConfirmedLockedPicks();`,ctx);
+if(vm.runInContext('state.optimization!==null',ctx))throw Error('Known Houston 9 failed to invalidate a cached Houston 12 strategy');
+console.log('Houston locked confidence regression passed: all four strategies freeze HOU 9; conflicting caches and unknown locks are rejected.');
+
+(async()=>{
+  const refreshCtx={console,globalThis:null,setTimeout,clearTimeout,__SFIQ_TESTING__:true,fetch:async()=>({ok:false})};refreshCtx.globalThis=refreshCtx;
+  vm.createContext(refreshCtx);vm.runInContext(js,refreshCtx);
+  refreshCtx.fixtureGames=clone(houstonGames);
+  refreshCtx.fixture={season:2026,week:11,confidenceStatus:'unsubmitted',market:houstonGames.map(({away,home,awayML,homeML,total})=>({away,home,awayML,homeML,total}))};
+  vm.runInContext(`render=()=>{};show=()=>{};refreshResults=async()=>false;refreshMarket=async()=>false;state={season:2026,week:11,games:fixtureGames,confirmedLockedPicks:[{season:2026,week:11,away:'IND',home:'HOU',pick:'HOU',weight:9}]};state.games.find(g=>g.home==='HOU').weight=12;`,refreshCtx);
+  await vm.runInContext('importScan(fixture)',refreshCtx);
+  if(vm.runInContext("state.games.find(g=>g.home==='HOU').weight!==9||state.games.find(g=>g.home==='HOU').pick!=='HOU'",refreshCtx))throw Error('Published CBS refresh overwrote the user-confirmed Houston 9 lock');
+  const base=vm.runInContext('simulationCurrentCard(state.games).card',refreshCtx);
+  if(base.weights[hi]!==9||!t.validConfidence(base.weights,13))throw Error('Refreshed Houston 9 did not produce a valid simulation baseline');
+  console.log('Houston refresh regression passed: user-confirmed lock survives published unsubmitted data.');
+})().catch(e=>{console.error(e);process.exitCode=1});
