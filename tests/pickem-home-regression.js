@@ -62,8 +62,31 @@ const screenshotAdvice=home.strategyAdvice({cards:[
 {key:'aggressive',label:'Aggressive',eval:{top2:.133,win:.085,avg:87.5,bottomHalf:.43}},
 {key:'maxUpside',label:'Max Upside',eval:{top2:.132,win:.095,avg:83.7,bottomHalf:.55}}
 ]});
-if(screenshotAdvice.choice.key!=='balanced')throw Error('Screenshot tradeoff should recommend Balanced');
-if(!screenshotAdvice.paragraphs.join(' ').includes('1.3 fewer expected points')||!screenshotAdvice.paragraphs.join(' ').includes('no better Top-2 probability'))throw Error('Missing quantified season/weekly tradeoff');
+if(screenshotAdvice.choice.key!=='aggressive')throw Error('Weekly volatility must not veto affordable weekly-money upside');
+if(!screenshotAdvice.paragraphs.join(' ').includes('1.3 more expected points')||!screenshotAdvice.paragraphs.join(' ').includes('no better Top-2 probability'))throw Error('Missing quantified season/weekly tradeoff');
+
+// November 22: the old weekly bottom-half cap discarded all three alternatives,
+// recommending 0.2% Top 2 despite Aggressive costing only 0.7 expected points.
+const november22={cards:[
+{key:'safest',label:'Safest',eval:{top2:.002,win:.0004,avg:73.7,bottomHalf:.08}},
+{key:'balanced',label:'Balanced',eval:{top2:.037,win:.013,avg:73.5,bottomHalf:.22}},
+{key:'aggressive',label:'Aggressive',eval:{top2:.113,win:.061,avg:73,bottomHalf:.34}},
+{key:'maxUpside',label:'Max Upside',eval:{top2:.136,win:.092,avg:71.4,bottomHalf:.44}}
+]};
+const originalCards=JSON.stringify(november22.cards);
+const weeklyMoney=home.strategyAdvice(november22);
+if(weeklyMoney.choice.key!=='aggressive'||weeklyMoney.max.key!=='maxUpside')throw Error('November 22 recommendation failed to retain a weekly-money path');
+if(!weeklyMoney.summary.includes('+11.1 percentage points')||!weeklyMoney.summary.includes('0.7 fewer expected points')||!weeklyMoney.summary.includes('8% → 34%'))throw Error('Recommendation must quantify weekly upside, scoring cost, and downside');
+if(JSON.stringify(november22.cards)!==originalCards)throw Error('Recommendation must not mutate the four strategy outputs');
+const moreVolatile={cards:november22.cards.map(c=>({...c,eval:{...c.eval,bottomHalf:c.key==='aggressive'?.60:c.eval.bottomHalf}}))};
+if(home.strategyAdvice(moreVolatile).choice.key!=='aggressive')throw Error('Weekly bottom-half risk became a hidden season-risk veto');
+const expensive={cards:november22.cards.map(c=>({...c,eval:{...c.eval,avg:c.key==='aggressive'?70:c.eval.avg}}))};
+if(home.strategyAdvice(expensive).choice.key!=='balanced')throw Error('Recommendation lost its expected-points budget');
+const tied={cards:november22.cards.map(c=>({...c,eval:{...c.eval,top2:.10}}))};
+if(home.strategyAdvice(tied).choice.key!=='safest')throw Error('Equal weekly-money chances should retain expected scoring');
+const safeOnly=home.strategyAdvice({cards:[november22.cards[0],november22.cards[3]]});
+if(safeOnly.choice.key!=='safest'||!safeOnly.summary.includes('13.6% Top 2 for 2.3 fewer expected points'))throw Error('A scoring-budget exclusion must disclose the weekly opportunity being passed up');
+if(html.includes('the other cards do not offer enough weekly upside'))throw Error('Home must not misrepresent excluded weekly-money upside');
 
 if(!html.includes('<details class="panel drilldown">')||html.includes('<h2>Get the latest card</h2>'))throw Error('Home must keep analysis collapsed and refresh compact');
 
