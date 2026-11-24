@@ -5,14 +5,14 @@
   "week": 11,
   "slateSize": 13,
   "poolSize": 94,
-  "exportedAt": "2026-11-24T04:09:21.048021Z",
+  "exportedAt": "2026-11-24T04:30:37.356316Z",
   "source": "Automated local CBS browser capture",
   "privacy": "Raw CBS session/page data sanitized locally; pool/account identifiers and participant names not published.",
   "confidenceStatus": "unsubmitted",
   "cardIntentConfirmed": false,
   "cardIntentSource": null,
   "confidenceSource": "Complete CBS controls detected but no intentional save/submission confirmed",
-  "marketCapturedAt": "2026-11-24T04:09:21.047990Z",
+  "marketCapturedAt": "2026-11-24T04:30:37.356275Z",
   "marketSource": "CBS Sports odds \u2014 Week 11",
   "market": [
     {
@@ -111,9 +111,9 @@
     {
       "away": "CIN",
       "home": "WAS",
-      "completed": false,
-      "winner": null,
-      "statusText": "1:39 - 4th"
+      "completed": true,
+      "winner": "WAS",
+      "statusText": "Final"
     },
     {
       "away": "IND",
@@ -202,7 +202,7 @@
   ],
   "fieldModel": {
     "source": "Sanitized CBS revealed-pool observations",
-    "capturedAt": "2026-11-24T04:09:01.408763Z",
+    "capturedAt": "2026-11-24T04:30:17.576795Z",
     "observedEntries": 90,
     "locked": [
       {
@@ -225,6 +225,10 @@
           },
           {
             "pick": "CIN",
+            "weight": 1
+          },
+          {
+            "pick": "CIN",
             "weight": 5
           },
           {
@@ -233,10 +237,6 @@
           },
           {
             "pick": "CIN",
-            "weight": 1
-          },
-          {
-            "pick": "CIN",
             "weight": 6
           },
           {
@@ -246,14 +246,14 @@
           {
             "pick": "CIN",
             "weight": 6
-          },
-          {
-            "pick": "CIN",
-            "weight": 2
           },
           {
             "pick": "CIN",
             "weight": 9
+          },
+          {
+            "pick": "CIN",
+            "weight": 2
           },
           {
             "pick": "CIN",
@@ -269,6 +269,26 @@
           },
           {
             "pick": "CIN",
+            "weight": 1
+          },
+          {
+            "pick": "CIN",
+            "weight": 4
+          },
+          {
+            "pick": "CIN",
+            "weight": 5
+          },
+          {
+            "pick": "CIN",
+            "weight": 2
+          },
+          {
+            "pick": "CIN",
+            "weight": 1
+          },
+          {
+            "pick": "CIN",
             "weight": 7
           },
           {
@@ -281,14 +301,6 @@
           },
           {
             "pick": "CIN",
-            "weight": 2
-          },
-          {
-            "pick": "CIN",
-            "weight": 4
-          },
-          {
-            "pick": "CIN",
             "weight": 6
           },
           {
@@ -297,23 +309,7 @@
           },
           {
             "pick": "CIN",
-            "weight": 1
-          },
-          {
-            "pick": "CIN",
-            "weight": 5
-          },
-          {
-            "pick": "CIN",
-            "weight": 1
-          },
-          {
-            "pick": "CIN",
-            "weight": 5
-          },
-          {
-            "pick": "CIN",
-            "weight": 5
+            "weight": 4
           },
           {
             "pick": "CIN",
@@ -325,11 +321,11 @@
           },
           {
             "pick": "CIN",
-            "weight": 7
+            "weight": 5
           },
           {
             "pick": "CIN",
-            "weight": 4
+            "weight": 5
           },
           {
             "pick": "CIN",
@@ -342,10 +338,6 @@
           {
             "pick": "CIN",
             "weight": 2
-          },
-          {
-            "pick": "CIN",
-            "weight": 6
           },
           {
             "pick": "CIN",
@@ -357,7 +349,11 @@
           },
           {
             "pick": "CIN",
-            "weight": 9
+            "weight": 7
+          },
+          {
+            "pick": "CIN",
+            "weight": 6
           },
           {
             "pick": "CIN",
@@ -365,11 +361,15 @@
           },
           {
             "pick": "CIN",
+            "weight": 9
+          },
+          {
+            "pick": "CIN",
             "weight": 10
           },
           {
             "pick": "CIN",
-            "weight": 6
+            "weight": 4
           },
           {
             "pick": "CIN",
@@ -389,7 +389,7 @@
           },
           {
             "pick": "CIN",
-            "weight": 4
+            "weight": 6
           },
           {
             "pick": "CIN",
@@ -402,10 +402,6 @@
           {
             "pick": "CIN",
             "weight": 6
-          },
-          {
-            "pick": "CIN",
-            "weight": 2
           },
           {
             "pick": "CIN",
@@ -413,30 +409,26 @@
           },
           {
             "pick": "CIN",
+            "weight": 2
+          },
+          {
+            "pick": "CIN",
+            "weight": 9
+          },
+          {
+            "pick": "CIN",
+            "weight": 7
+          },
+          {
+            "pick": "CIN",
+            "weight": 4
+          },
+          {
+            "pick": "CIN",
             "weight": 5
           },
           {
             "pick": "CIN",
-            "weight": 7
-          },
-          {
-            "pick": "CIN",
-            "weight": 4
-          },
-          {
-            "pick": "CIN",
-            "weight": 9
-          },
-          {
-            "pick": "CIN",
-            "weight": 7
-          },
-          {
-            "pick": "CIN",
-            "weight": 10
-          },
-          {
-            "pick": "CIN",
             "weight": 10
           },
           {
@@ -449,15 +441,15 @@
           },
           {
             "pick": "CIN",
-            "weight": 9
-          },
-          {
-            "pick": "CIN",
             "weight": 7
           },
           {
             "pick": "CIN",
             "weight": 10
+          },
+          {
+            "pick": "CIN",
+            "weight": 7
           },
           {
             "pick": "CIN",
@@ -465,7 +457,7 @@
           },
           {
             "pick": "CIN",
-            "weight": 7
+            "weight": 9
           },
           {
             "pick": "CIN",
@@ -473,11 +465,23 @@
           },
           {
             "pick": "CIN",
+            "weight": 4
+          },
+          {
+            "pick": "CIN",
+            "weight": 10
+          },
+          {
+            "pick": "CIN",
+            "weight": 7
+          },
+          {
+            "pick": "CIN",
             "weight": 2
           },
           {
             "pick": "CIN",
-            "weight": 4
+            "weight": 5
           },
           {
             "pick": "CIN",
@@ -489,10 +493,6 @@
           },
           {
             "pick": "CIN",
-            "weight": 5
-          },
-          {
-            "pick": "CIN",
             "weight": 10
           },
           {
@@ -513,14 +513,6 @@
           },
           {
             "pick": "CIN",
-            "weight": 11
-          },
-          {
-            "pick": "CIN",
-            "weight": 9
-          },
-          {
-            "pick": "CIN",
             "weight": 7
           },
           {
@@ -529,15 +521,15 @@
           },
           {
             "pick": "CIN",
-            "weight": 13
+            "weight": 11
+          },
+          {
+            "pick": "CIN",
+            "weight": 9
           },
           {
             "pick": "CIN",
             "weight": 10
-          },
-          {
-            "pick": "CIN",
-            "weight": 5
           },
           {
             "pick": "CIN",
@@ -546,6 +538,14 @@
           {
             "pick": "CIN",
             "weight": 4
+          },
+          {
+            "pick": "CIN",
+            "weight": 5
+          },
+          {
+            "pick": "CIN",
+            "weight": 13
           },
           {
             "pick": "CIN",
@@ -586,6 +586,10 @@
           },
           {
             "pick": "HOU",
+            "weight": 13
+          },
+          {
+            "pick": "HOU",
             "weight": 8
           },
           {
@@ -594,15 +598,7 @@
           },
           {
             "pick": "HOU",
-            "weight": 13
-          },
-          {
-            "pick": "HOU",
             "weight": 5
-          },
-          {
-            "pick": "HOU",
-            "weight": 13
           },
           {
             "pick": "HOU",
@@ -610,11 +606,15 @@
           },
           {
             "pick": "HOU",
-            "weight": 5
+            "weight": 13
           },
           {
             "pick": "HOU",
             "weight": 8
+          },
+          {
+            "pick": "HOU",
+            "weight": 5
           },
           {
             "pick": "HOU",
@@ -626,19 +626,7 @@
           },
           {
             "pick": "HOU",
-            "weight": 11
-          },
-          {
-            "pick": "HOU",
-            "weight": 9
-          },
-          {
-            "pick": "HOU",
-            "weight": 10
-          },
-          {
-            "pick": "HOU",
-            "weight": 9
+            "weight": 12
           },
           {
             "pick": "HOU",
@@ -646,7 +634,11 @@
           },
           {
             "pick": "HOU",
-            "weight": 11
+            "weight": 9
+          },
+          {
+            "pick": "HOU",
+            "weight": 9
           },
           {
             "pick": "HOU",
@@ -654,23 +646,27 @@
           },
           {
             "pick": "HOU",
+            "weight": 11
+          },
+          {
+            "pick": "HOU",
+            "weight": 9
+          },
+          {
+            "pick": "HOU",
+            "weight": 10
+          },
+          {
+            "pick": "HOU",
+            "weight": 11
+          },
+          {
+            "pick": "HOU",
             "weight": 13
           },
           {
             "pick": "HOU",
-            "weight": 9
-          },
-          {
-            "pick": "HOU",
             "weight": 12
-          },
-          {
-            "pick": "HOU",
-            "weight": 9
-          },
-          {
-            "pick": "HOU",
-            "weight": 11
           },
           {
             "pick": "HOU",
@@ -682,11 +678,19 @@
           },
           {
             "pick": "HOU",
+            "weight": 11
+          },
+          {
+            "pick": "HOU",
             "weight": 9
           },
           {
             "pick": "HOU",
-            "weight": 12
+            "weight": 9
+          },
+          {
+            "pick": "HOU",
+            "weight": 13
           },
           {
             "pick": "HOU",
@@ -694,11 +698,7 @@
           },
           {
             "pick": "HOU",
-            "weight": 11
-          },
-          {
-            "pick": "HOU",
-            "weight": 13
+            "weight": 12
           },
           {
             "pick": "HOU",
@@ -706,11 +706,7 @@
           },
           {
             "pick": "HOU",
-            "weight": 12
-          },
-          {
-            "pick": "HOU",
-            "weight": 6
+            "weight": 11
           },
           {
             "pick": "IND",
@@ -722,23 +718,7 @@
           },
           {
             "pick": "HOU",
-            "weight": 9
-          },
-          {
-            "pick": "HOU",
-            "weight": 9
-          },
-          {
-            "pick": "HOU",
-            "weight": 11
-          },
-          {
-            "pick": "HOU",
-            "weight": 11
-          },
-          {
-            "pick": "HOU",
-            "weight": 13
+            "weight": 6
           },
           {
             "pick": "HOU",
@@ -750,6 +730,26 @@
           },
           {
             "pick": "HOU",
+            "weight": 11
+          },
+          {
+            "pick": "HOU",
+            "weight": 11
+          },
+          {
+            "pick": "HOU",
+            "weight": 9
+          },
+          {
+            "pick": "HOU",
+            "weight": 9
+          },
+          {
+            "pick": "HOU",
+            "weight": 13
+          },
+          {
+            "pick": "HOU",
             "weight": 13
           },
           {
@@ -758,7 +758,7 @@
           },
           {
             "pick": "HOU",
-            "weight": 11
+            "weight": 6
           },
           {
             "pick": "HOU",
@@ -766,19 +766,11 @@
           },
           {
             "pick": "HOU",
-            "weight": 6
-          },
-          {
-            "pick": "HOU",
             "weight": 11
           },
           {
             "pick": "HOU",
             "weight": 4
-          },
-          {
-            "pick": "HOU",
-            "weight": 8
           },
           {
             "pick": "HOU",
@@ -790,11 +782,31 @@
           },
           {
             "pick": "HOU",
-            "weight": 4
+            "weight": 11
+          },
+          {
+            "pick": "HOU",
+            "weight": 8
           },
           {
             "pick": "HOU",
             "weight": 6
+          },
+          {
+            "pick": "HOU",
+            "weight": 13
+          },
+          {
+            "pick": "HOU",
+            "weight": 8
+          },
+          {
+            "pick": "HOU",
+            "weight": 4
+          },
+          {
+            "pick": "HOU",
+            "weight": 8
           },
           {
             "pick": "HOU",
@@ -802,27 +814,11 @@
           },
           {
             "pick": "HOU",
-            "weight": 13
-          },
-          {
-            "pick": "HOU",
             "weight": 12
           },
           {
             "pick": "HOU",
-            "weight": 8
-          },
-          {
-            "pick": "HOU",
             "weight": 13
-          },
-          {
-            "pick": "HOU",
-            "weight": 8
-          },
-          {
-            "pick": "HOU",
-            "weight": 10
           },
           {
             "pick": "HOU",
@@ -830,6 +826,10 @@
           },
           {
             "pick": "HOU",
+            "weight": 10
+          },
+          {
+            "pick": "HOU",
             "weight": 13
           },
           {
@@ -842,7 +842,7 @@
           },
           {
             "pick": "HOU",
-            "weight": 8
+            "weight": 9
           },
           {
             "pick": "HOU",
@@ -850,7 +850,7 @@
           },
           {
             "pick": "HOU",
-            "weight": 13
+            "weight": 8
           },
           {
             "pick": "HOU",
@@ -858,7 +858,7 @@
           },
           {
             "pick": "HOU",
-            "weight": 9
+            "weight": 13
           },
           {
             "pick": "HOU",
@@ -866,7 +866,7 @@
           },
           {
             "pick": "HOU",
-            "weight": 4
+            "weight": 13
           },
           {
             "pick": "HOU",
@@ -874,7 +874,7 @@
           },
           {
             "pick": "HOU",
-            "weight": 13
+            "weight": 4
           },
           {
             "pick": "HOU",
@@ -939,11 +939,11 @@
           },
           {
             "pick": "BUF",
-            "weight": 11
+            "weight": 13
           },
           {
             "pick": "BUF",
-            "weight": 13
+            "weight": 11
           },
           {
             "pick": "BUF",
@@ -995,26 +995,6 @@
           },
           {
             "pick": "BUF",
-            "weight": 12
-          },
-          {
-            "pick": "BUF",
-            "weight": 13
-          },
-          {
-            "pick": "BUF",
-            "weight": 13
-          },
-          {
-            "pick": "BUF",
-            "weight": 12
-          },
-          {
-            "pick": "BUF",
-            "weight": 13
-          },
-          {
-            "pick": "BUF",
             "weight": 13
           },
           {
@@ -1044,6 +1024,18 @@
           {
             "pick": "BUF",
             "weight": 12
+          },
+          {
+            "pick": "BUF",
+            "weight": 12
+          },
+          {
+            "pick": "BUF",
+            "weight": 12
+          },
+          {
+            "pick": "BUF",
+            "weight": 13
           },
           {
             "pick": "BUF",
@@ -1052,6 +1044,10 @@
           {
             "pick": "BUF",
             "weight": 11
+          },
+          {
+            "pick": "BUF",
+            "weight": 13
           },
           {
             "pick": "BUF",
@@ -1071,27 +1067,31 @@
           },
           {
             "pick": "BUF",
+            "weight": 13
+          },
+          {
+            "pick": "BUF",
+            "weight": 13
+          },
+          {
+            "pick": "BUF",
+            "weight": 13
+          },
+          {
+            "pick": "BUF",
+            "weight": 13
+          },
+          {
+            "pick": "BUF",
+            "weight": 13
+          },
+          {
+            "pick": "BUF",
             "weight": 12
           },
           {
             "pick": "BUF",
-            "weight": 13
-          },
-          {
-            "pick": "BUF",
-            "weight": 13
-          },
-          {
-            "pick": "BUF",
             "weight": 12
-          },
-          {
-            "pick": "BUF",
-            "weight": 13
-          },
-          {
-            "pick": "BUF",
-            "weight": 13
           },
           {
             "pick": "BUF",
@@ -1131,10 +1131,6 @@
           },
           {
             "pick": "BUF",
-            "weight": 13
-          },
-          {
-            "pick": "BUF",
             "weight": 12
           },
           {
@@ -1143,6 +1139,18 @@
           },
           {
             "pick": "BUF",
+            "weight": 13
+          },
+          {
+            "pick": "BUF",
+            "weight": 12
+          },
+          {
+            "pick": "BUF",
+            "weight": 13
+          },
+          {
+            "pick": "BUF",
             "weight": 12
           },
           {
@@ -1155,11 +1163,7 @@
           },
           {
             "pick": "BUF",
-            "weight": 13
-          },
-          {
-            "pick": "BUF",
-            "weight": 12
+            "weight": 10
           },
           {
             "pick": "BUF",
@@ -1175,10 +1179,6 @@
           },
           {
             "pick": "BUF",
-            "weight": 10
-          },
-          {
-            "pick": "BUF",
             "weight": 13
           },
           {
@@ -1203,14 +1203,6 @@
           },
           {
             "pick": "BUF",
-            "weight": 13
-          },
-          {
-            "pick": "BUF",
-            "weight": 13
-          },
-          {
-            "pick": "BUF",
             "weight": 12
           },
           {
@@ -1219,7 +1211,11 @@
           },
           {
             "pick": "BUF",
-            "weight": 12
+            "weight": 13
+          },
+          {
+            "pick": "BUF",
+            "weight": 13
           },
           {
             "pick": "BUF",
@@ -1235,15 +1231,19 @@
           },
           {
             "pick": "BUF",
-            "weight": 10
-          },
-          {
-            "pick": "BUF",
             "weight": 12
           },
           {
             "pick": "BUF",
             "weight": 13
+          },
+          {
+            "pick": "BUF",
+            "weight": 10
+          },
+          {
+            "pick": "BUF",
+            "weight": 12
           },
           {
             "pick": "BUF",
@@ -1292,27 +1292,27 @@
           },
           {
             "pick": "CHI",
-            "weight": 11
-          },
-          {
-            "pick": "CHI",
-            "weight": 10
-          },
-          {
-            "pick": "CHI",
-            "weight": 10
-          },
-          {
-            "pick": "CHI",
-            "weight": 10
-          },
-          {
-            "pick": "CHI",
             "weight": 10
           },
           {
             "pick": "CHI",
             "weight": 11
+          },
+          {
+            "pick": "CHI",
+            "weight": 10
+          },
+          {
+            "pick": "CHI",
+            "weight": 10
+          },
+          {
+            "pick": "CHI",
+            "weight": 11
+          },
+          {
+            "pick": "CHI",
+            "weight": 10
           },
           {
             "pick": "CHI",
@@ -1336,6 +1336,26 @@
           },
           {
             "pick": "CHI",
+            "weight": 9
+          },
+          {
+            "pick": "CHI",
+            "weight": 10
+          },
+          {
+            "pick": "CHI",
+            "weight": 12
+          },
+          {
+            "pick": "CHI",
+            "weight": 10
+          },
+          {
+            "pick": "CHI",
+            "weight": 12
+          },
+          {
+            "pick": "CHI",
             "weight": 10
           },
           {
@@ -1356,19 +1376,7 @@
           },
           {
             "pick": "CHI",
-            "weight": 10
-          },
-          {
-            "pick": "CHI",
-            "weight": 12
-          },
-          {
-            "pick": "CHI",
-            "weight": 10
-          },
-          {
-            "pick": "CHI",
-            "weight": 12
+            "weight": 11
           },
           {
             "pick": "CHI",
@@ -1381,10 +1389,6 @@
           {
             "pick": "CHI",
             "weight": 10
-          },
-          {
-            "pick": "CHI",
-            "weight": 9
           },
           {
             "pick": "CHI",
@@ -1400,6 +1404,10 @@
           },
           {
             "pick": "CHI",
+            "weight": 11
+          },
+          {
+            "pick": "CHI",
             "weight": 12
           },
           {
@@ -1412,11 +1420,7 @@
           },
           {
             "pick": "CHI",
-            "weight": 11
-          },
-          {
-            "pick": "CHI",
-            "weight": 11
+            "weight": 10
           },
           {
             "pick": "CHI",
@@ -1428,11 +1432,23 @@
           },
           {
             "pick": "CHI",
-            "weight": 10
+            "weight": 11
           },
           {
             "pick": "CHI",
             "weight": 11
+          },
+          {
+            "pick": "CHI",
+            "weight": 10
+          },
+          {
+            "pick": "CHI",
+            "weight": 10
+          },
+          {
+            "pick": "CHI",
+            "weight": 10
           },
           {
             "pick": "CHI",
@@ -1444,23 +1460,7 @@
           },
           {
             "pick": "CHI",
-            "weight": 10
-          },
-          {
-            "pick": "CHI",
-            "weight": 10
-          },
-          {
-            "pick": "CHI",
             "weight": 9
-          },
-          {
-            "pick": "CHI",
-            "weight": 11
-          },
-          {
-            "pick": "CHI",
-            "weight": 10
           },
           {
             "pick": "CHI",
@@ -1480,30 +1480,22 @@
           },
           {
             "pick": "CHI",
+            "weight": 12
+          },
+          {
+            "pick": "CHI",
+            "weight": 10
+          },
+          {
+            "pick": "CHI",
+            "weight": 12
+          },
+          {
+            "pick": "CHI",
             "weight": 8
           },
           {
             "pick": "CHI",
-            "weight": 10
-          },
-          {
-            "pick": "CHI",
-            "weight": 12
-          },
-          {
-            "pick": "CHI",
-            "weight": 12
-          },
-          {
-            "pick": "CHI",
-            "weight": 10
-          },
-          {
-            "pick": "CHI",
-            "weight": 11
-          },
-          {
-            "pick": "CHI",
             "weight": 11
           },
           {
@@ -1516,6 +1508,10 @@
           },
           {
             "pick": "CHI",
+            "weight": 10
+          },
+          {
+            "pick": "CHI",
             "weight": 11
           },
           {
@@ -1524,7 +1520,7 @@
           },
           {
             "pick": "CHI",
-            "weight": 12
+            "weight": 10
           },
           {
             "pick": "CHI",
@@ -1533,14 +1529,6 @@
           {
             "pick": "CHI",
             "weight": 11
-          },
-          {
-            "pick": "CHI",
-            "weight": 10
-          },
-          {
-            "pick": "CHI",
-            "weight": 10
           },
           {
             "pick": "CHI",
@@ -1557,6 +1545,18 @@
           {
             "pick": "CHI",
             "weight": 10
+          },
+          {
+            "pick": "CHI",
+            "weight": 10
+          },
+          {
+            "pick": "CHI",
+            "weight": 12
+          },
+          {
+            "pick": "CHI",
+            "weight": 11
           },
           {
             "pick": "CHI",
@@ -1572,7 +1572,7 @@
           },
           {
             "pick": "CHI",
-            "weight": 12
+            "weight": 13
           },
           {
             "pick": "CHI",
@@ -1580,7 +1580,7 @@
           },
           {
             "pick": "CHI",
-            "weight": 10
+            "weight": 12
           },
           {
             "pick": "CHI",
@@ -1588,14 +1588,6 @@
           },
           {
             "pick": "CHI",
-            "weight": 13
-          },
-          {
-            "pick": "CHI",
-            "weight": 13
-          },
-          {
-            "pick": "CHI",
             "weight": 10
           },
           {
@@ -1604,7 +1596,7 @@
           },
           {
             "pick": "CHI",
-            "weight": 7
+            "weight": 13
           },
           {
             "pick": "CHI",
@@ -1613,6 +1605,14 @@
           {
             "pick": "CHI",
             "weight": 12
+          },
+          {
+            "pick": "CHI",
+            "weight": 7
+          },
+          {
+            "pick": "CHI",
+            "weight": 10
           },
           {
             "pick": "CHI",
@@ -1661,6 +1661,10 @@
           },
           {
             "pick": "DAL",
+            "weight": 9
+          },
+          {
+            "pick": "DAL",
             "weight": 10
           },
           {
@@ -1673,7 +1677,7 @@
           },
           {
             "pick": "DAL",
-            "weight": 9
+            "weight": 7
           },
           {
             "pick": "DAL",
@@ -1686,10 +1690,6 @@
           {
             "pick": "DAL",
             "weight": 10
-          },
-          {
-            "pick": "DAL",
-            "weight": 7
           },
           {
             "pick": "DAL",
@@ -1709,6 +1709,26 @@
           },
           {
             "pick": "DAL",
+            "weight": 7
+          },
+          {
+            "pick": "DAL",
+            "weight": 11
+          },
+          {
+            "pick": "DAL",
+            "weight": 8
+          },
+          {
+            "pick": "DAL",
+            "weight": 11
+          },
+          {
+            "pick": "DAL",
+            "weight": 8
+          },
+          {
+            "pick": "DAL",
             "weight": 10
           },
           {
@@ -1721,35 +1741,11 @@
           },
           {
             "pick": "DAL",
-            "weight": 7
-          },
-          {
-            "pick": "DAL",
-            "weight": 8
-          },
-          {
-            "pick": "DAL",
-            "weight": 11
-          },
-          {
-            "pick": "DAL",
             "weight": 9
           },
           {
             "pick": "DAL",
-            "weight": 11
-          },
-          {
-            "pick": "DAL",
-            "weight": 8
-          },
-          {
-            "pick": "DAL",
-            "weight": 8
-          },
-          {
-            "pick": "DAL",
-            "weight": 8
+            "weight": 9
           },
           {
             "pick": "DAL",
@@ -1761,11 +1757,23 @@
           },
           {
             "pick": "DAL",
+            "weight": 8
+          },
+          {
+            "pick": "DAL",
+            "weight": 8
+          },
+          {
+            "pick": "DAL",
             "weight": 4
           },
           {
             "pick": "DAL",
-            "weight": 9
+            "weight": 10
+          },
+          {
+            "pick": "DAL",
+            "weight": 10
           },
           {
             "pick": "DAL",
@@ -1773,18 +1781,6 @@
           },
           {
             "pick": "DAL",
-            "weight": 8
-          },
-          {
-            "pick": "DAL",
-            "weight": 10
-          },
-          {
-            "pick": "DAL",
-            "weight": 10
-          },
-          {
-            "pick": "DAL",
             "weight": 9
           },
           {
@@ -1793,10 +1789,6 @@
           },
           {
             "pick": "DAL",
-            "weight": 7
-          },
-          {
-            "pick": "DAL",
             "weight": 8
           },
           {
@@ -1809,19 +1801,7 @@
           },
           {
             "pick": "DAL",
-            "weight": 4
-          },
-          {
-            "pick": "DAL",
             "weight": 8
-          },
-          {
-            "pick": "DAL",
-            "weight": 8
-          },
-          {
-            "pick": "DAL",
-            "weight": 7
           },
           {
             "pick": "DAL",
@@ -1841,27 +1821,7 @@
           },
           {
             "pick": "DAL",
-            "weight": 10
-          },
-          {
-            "pick": "DAL",
             "weight": 7
-          },
-          {
-            "pick": "DAL",
-            "weight": 7
-          },
-          {
-            "pick": "DAL",
-            "weight": 9
-          },
-          {
-            "pick": "DAL",
-            "weight": 11
-          },
-          {
-            "pick": "DAL",
-            "weight": 8
           },
           {
             "pick": "DAL",
@@ -1873,7 +1833,39 @@
           },
           {
             "pick": "DAL",
-            "weight": 5
+            "weight": 8
+          },
+          {
+            "pick": "DAL",
+            "weight": 8
+          },
+          {
+            "pick": "DAL",
+            "weight": 7
+          },
+          {
+            "pick": "DAL",
+            "weight": 10
+          },
+          {
+            "pick": "DAL",
+            "weight": 8
+          },
+          {
+            "pick": "DAL",
+            "weight": 9
+          },
+          {
+            "pick": "DAL",
+            "weight": 11
+          },
+          {
+            "pick": "DAL",
+            "weight": 7
+          },
+          {
+            "pick": "DAL",
+            "weight": 7
           },
           {
             "pick": "DAL",
@@ -1885,7 +1877,7 @@
           },
           {
             "pick": "DAL",
-            "weight": 10
+            "weight": 4
           },
           {
             "pick": "DAL",
@@ -1893,15 +1885,11 @@
           },
           {
             "pick": "DAL",
-            "weight": 8
+            "weight": 5
           },
           {
             "pick": "DAL",
             "weight": 7
-          },
-          {
-            "pick": "DAL",
-            "weight": 9
           },
           {
             "pick": "DAL",
@@ -1909,6 +1897,22 @@
           },
           {
             "pick": "DAL",
+            "weight": 10
+          },
+          {
+            "pick": "DAL",
+            "weight": 7
+          },
+          {
+            "pick": "DAL",
+            "weight": 8
+          },
+          {
+            "pick": "DAL",
+            "weight": 9
+          },
+          {
+            "pick": "DAL",
             "weight": 9
           },
           {
@@ -1922,10 +1926,6 @@
           {
             "pick": "DAL",
             "weight": 6
-          },
-          {
-            "pick": "DAL",
-            "weight": 7
           },
           {
             "pick": "DAL",
@@ -1941,6 +1941,14 @@
           },
           {
             "pick": "DAL",
+            "weight": 4
+          },
+          {
+            "pick": "DAL",
+            "weight": 3
+          },
+          {
+            "pick": "DAL",
             "weight": 9
           },
           {
@@ -1950,14 +1958,6 @@
           {
             "pick": "DAL",
             "weight": 3
-          },
-          {
-            "pick": "DAL",
-            "weight": 3
-          },
-          {
-            "pick": "DAL",
-            "weight": 4
           },
           {
             "pick": "DAL",
@@ -1965,15 +1965,7 @@
           },
           {
             "pick": "DAL",
-            "weight": 9
-          },
-          {
-            "pick": "DAL",
             "weight": 3
-          },
-          {
-            "pick": "TEN",
-            "weight": 1
           },
           {
             "pick": "TEN",
@@ -1982,6 +1974,14 @@
           {
             "pick": "DAL",
             "weight": 8
+          },
+          {
+            "pick": "TEN",
+            "weight": 1
+          },
+          {
+            "pick": "DAL",
+            "weight": 9
           },
           {
             "pick": "DAL",
@@ -2030,6 +2030,10 @@
           },
           {
             "pick": "DET",
+            "weight": 8
+          },
+          {
+            "pick": "DET",
             "weight": 9
           },
           {
@@ -2042,7 +2046,7 @@
           },
           {
             "pick": "DET",
-            "weight": 8
+            "weight": 9
           },
           {
             "pick": "DET",
@@ -2050,15 +2054,11 @@
           },
           {
             "pick": "DET",
-            "weight": 9
+            "weight": 6
           },
           {
             "pick": "DET",
             "weight": 8
-          },
-          {
-            "pick": "DET",
-            "weight": 6
           },
           {
             "pick": "DET",
@@ -2074,6 +2074,26 @@
           },
           {
             "pick": "DET",
+            "weight": 7
+          },
+          {
+            "pick": "DET",
+            "weight": 11
+          },
+          {
+            "pick": "DET",
+            "weight": 8
+          },
+          {
+            "pick": "DET",
+            "weight": 11
+          },
+          {
+            "pick": "DET",
+            "weight": 8
+          },
+          {
+            "pick": "DET",
             "weight": 6
           },
           {
@@ -2086,14 +2106,6 @@
           },
           {
             "pick": "DET",
-            "weight": 11
-          },
-          {
-            "pick": "DET",
-            "weight": 11
-          },
-          {
-            "pick": "DET",
             "weight": 7
           },
           {
@@ -2105,8 +2117,12 @@
             "weight": 8
           },
           {
+            "pick": "TB",
+            "weight": 1
+          },
+          {
             "pick": "DET",
-            "weight": 8
+            "weight": 7
           },
           {
             "pick": "DET",
@@ -2118,15 +2134,15 @@
           },
           {
             "pick": "DET",
-            "weight": 7
-          },
-          {
-            "pick": "TB",
-            "weight": 1
+            "weight": 10
           },
           {
             "pick": "DET",
-            "weight": 7
+            "weight": 9
+          },
+          {
+            "pick": "DET",
+            "weight": 9
           },
           {
             "pick": "DET",
@@ -2135,22 +2151,6 @@
           {
             "pick": "DET",
             "weight": 8
-          },
-          {
-            "pick": "DET",
-            "weight": 10
-          },
-          {
-            "pick": "DET",
-            "weight": 7
-          },
-          {
-            "pick": "DET",
-            "weight": 9
-          },
-          {
-            "pick": "DET",
-            "weight": 9
           },
           {
             "pick": "DET",
@@ -2158,11 +2158,7 @@
           },
           {
             "pick": "DET",
-            "weight": 8
-          },
-          {
-            "pick": "DET",
-            "weight": 10
+            "weight": 7
           },
           {
             "pick": "DET",
@@ -2170,7 +2166,27 @@
           },
           {
             "pick": "DET",
+            "weight": 10
+          },
+          {
+            "pick": "DET",
             "weight": 9
+          },
+          {
+            "pick": "DET",
+            "weight": 8
+          },
+          {
+            "pick": "DET",
+            "weight": 11
+          },
+          {
+            "pick": "DET",
+            "weight": 5
+          },
+          {
+            "pick": "DET",
+            "weight": 5
           },
           {
             "pick": "DET",
@@ -2182,23 +2198,7 @@
           },
           {
             "pick": "DET",
-            "weight": 5
-          },
-          {
-            "pick": "DET",
-            "weight": 5
-          },
-          {
-            "pick": "DET",
             "weight": 10
-          },
-          {
-            "pick": "DET",
-            "weight": 8
-          },
-          {
-            "pick": "DET",
-            "weight": 11
           },
           {
             "pick": "DET",
@@ -2210,7 +2210,19 @@
           },
           {
             "pick": "DET",
+            "weight": 10
+          },
+          {
+            "pick": "DET",
             "weight": 9
+          },
+          {
+            "pick": "DET",
+            "weight": 10
+          },
+          {
+            "pick": "DET",
+            "weight": 8
           },
           {
             "pick": "DET",
@@ -2226,11 +2238,7 @@
           },
           {
             "pick": "DET",
-            "weight": 10
-          },
-          {
-            "pick": "DET",
-            "weight": 10
+            "weight": 7
           },
           {
             "pick": "DET",
@@ -2246,23 +2254,7 @@
           },
           {
             "pick": "DET",
-            "weight": 7
-          },
-          {
-            "pick": "DET",
-            "weight": 8
-          },
-          {
-            "pick": "DET",
-            "weight": 7
-          },
-          {
-            "pick": "DET",
             "weight": 11
-          },
-          {
-            "pick": "TB",
-            "weight": 2
           },
           {
             "pick": "TB",
@@ -2270,18 +2262,30 @@
           },
           {
             "pick": "DET",
-            "weight": 8
-          },
-          {
-            "pick": "DET",
             "weight": 5
           },
           {
+            "pick": "DET",
+            "weight": 7
+          },
+          {
+            "pick": "DET",
+            "weight": 2
+          },
+          {
+            "pick": "TB",
+            "weight": 2
+          },
+          {
+            "pick": "DET",
+            "weight": 8
+          },
+          {
             "pick": "TB",
             "weight": 1
           },
           {
-            "pick": "DET",
+            "pick": "TB",
             "weight": 2
           },
           {
@@ -2291,10 +2295,6 @@
           {
             "pick": "DET",
             "weight": 10
-          },
-          {
-            "pick": "TB",
-            "weight": 2
           },
           {
             "pick": "DET",
@@ -2309,12 +2309,20 @@
             "weight": 11
           },
           {
+            "pick": "TB",
+            "weight": 1
+          },
+          {
+            "pick": "DET",
+            "weight": 8
+          },
+          {
             "pick": "DET",
             "weight": 11
           },
           {
             "pick": "DET",
-            "weight": 8
+            "weight": 11
           },
           {
             "pick": "DET",
@@ -2322,27 +2330,11 @@
           },
           {
             "pick": "DET",
-            "weight": 11
-          },
-          {
-            "pick": "TB",
-            "weight": 1
-          },
-          {
-            "pick": "DET",
             "weight": 7
           },
           {
             "pick": "DET",
-            "weight": 8
-          },
-          {
-            "pick": "DET",
             "weight": 2
-          },
-          {
-            "pick": "TB",
-            "weight": 4
           },
           {
             "pick": "DET",
@@ -2351,6 +2343,14 @@
           {
             "pick": "DET",
             "weight": 10
+          },
+          {
+            "pick": "TB",
+            "weight": 4
+          },
+          {
+            "pick": "DET",
+            "weight": 8
           },
           {
             "pick": "DET",
@@ -2399,14 +2399,6 @@
           },
           {
             "pick": "KC",
-            "weight": 13
-          },
-          {
-            "pick": "KC",
-            "weight": 7
-          },
-          {
-            "pick": "KC",
             "weight": 7
           },
           {
@@ -2415,11 +2407,19 @@
           },
           {
             "pick": "KC",
-            "weight": 12
+            "weight": 7
+          },
+          {
+            "pick": "KC",
+            "weight": 13
           },
           {
             "pick": "KC",
             "weight": 10
+          },
+          {
+            "pick": "KC",
+            "weight": 12
           },
           {
             "pick": "KC",
@@ -2443,202 +2443,6 @@
           },
           {
             "pick": "KC",
-            "weight": 12
-          },
-          {
-            "pick": "KC",
-            "weight": 11
-          },
-          {
-            "pick": "KC",
-            "weight": 12
-          },
-          {
-            "pick": "KC",
-            "weight": 12
-          },
-          {
-            "pick": "KC",
-            "weight": 12
-          },
-          {
-            "pick": "KC",
-            "weight": 12
-          },
-          {
-            "pick": "KC",
-            "weight": 7
-          },
-          {
-            "pick": "KC",
-            "weight": 7
-          },
-          {
-            "pick": "KC",
-            "weight": 10
-          },
-          {
-            "pick": "KC",
-            "weight": 6
-          },
-          {
-            "pick": "KC",
-            "weight": 13
-          },
-          {
-            "pick": "KC",
-            "weight": 12
-          },
-          {
-            "pick": "KC",
-            "weight": 12
-          },
-          {
-            "pick": "KC",
-            "weight": 10
-          },
-          {
-            "pick": "KC",
-            "weight": 13
-          },
-          {
-            "pick": "KC",
-            "weight": 7
-          },
-          {
-            "pick": "KC",
-            "weight": 9
-          },
-          {
-            "pick": "KC",
-            "weight": 12
-          },
-          {
-            "pick": "KC",
-            "weight": 8
-          },
-          {
-            "pick": "KC",
-            "weight": 8
-          },
-          {
-            "pick": "KC",
-            "weight": 12
-          },
-          {
-            "pick": "KC",
-            "weight": 7
-          },
-          {
-            "pick": "KC",
-            "weight": 11
-          },
-          {
-            "pick": "KC",
-            "weight": 13
-          },
-          {
-            "pick": "KC",
-            "weight": 12
-          },
-          {
-            "pick": "KC",
-            "weight": 12
-          },
-          {
-            "pick": "KC",
-            "weight": 13
-          },
-          {
-            "pick": "KC",
-            "weight": 12
-          },
-          {
-            "pick": "KC",
-            "weight": 12
-          },
-          {
-            "pick": "KC",
-            "weight": 11
-          },
-          {
-            "pick": "KC",
-            "weight": 10
-          },
-          {
-            "pick": "KC",
-            "weight": 12
-          },
-          {
-            "pick": "KC",
-            "weight": 12
-          },
-          {
-            "pick": "KC",
-            "weight": 10
-          },
-          {
-            "pick": "KC",
-            "weight": 8
-          },
-          {
-            "pick": "KC",
-            "weight": 9
-          },
-          {
-            "pick": "KC",
-            "weight": 12
-          },
-          {
-            "pick": "KC",
-            "weight": 12
-          },
-          {
-            "pick": "KC",
-            "weight": 9
-          },
-          {
-            "pick": "KC",
-            "weight": 11
-          },
-          {
-            "pick": "KC",
-            "weight": 12
-          },
-          {
-            "pick": "KC",
-            "weight": 12
-          },
-          {
-            "pick": "KC",
-            "weight": 13
-          },
-          {
-            "pick": "KC",
-            "weight": 11
-          },
-          {
-            "pick": "KC",
-            "weight": 13
-          },
-          {
-            "pick": "KC",
-            "weight": 12
-          },
-          {
-            "pick": "KC",
-            "weight": 10
-          },
-          {
-            "pick": "KC",
-            "weight": 11
-          },
-          {
-            "pick": "KC",
-            "weight": 11
-          },
-          {
-            "pick": "KC",
             "weight": 6
           },
           {
@@ -2647,6 +2451,18 @@
           },
           {
             "pick": "KC",
+            "weight": 10
+          },
+          {
+            "pick": "KC",
+            "weight": 12
+          },
+          {
+            "pick": "KC",
+            "weight": 7
+          },
+          {
+            "pick": "KC",
             "weight": 12
           },
           {
@@ -2655,10 +2471,6 @@
           },
           {
             "pick": "KC",
-            "weight": 11
-          },
-          {
-            "pick": "KC",
             "weight": 12
           },
           {
@@ -2667,15 +2479,15 @@
           },
           {
             "pick": "KC",
-            "weight": 11
+            "weight": 7
           },
           {
             "pick": "KC",
-            "weight": 8
+            "weight": 7
           },
           {
             "pick": "KC",
-            "weight": 13
+            "weight": 12
           },
           {
             "pick": "KC",
@@ -2687,11 +2499,147 @@
           },
           {
             "pick": "KC",
+            "weight": 13
+          },
+          {
+            "pick": "KC",
+            "weight": 13
+          },
+          {
+            "pick": "KC",
             "weight": 8
           },
           {
             "pick": "KC",
+            "weight": 8
+          },
+          {
+            "pick": "KC",
+            "weight": 9
+          },
+          {
+            "pick": "KC",
+            "weight": 7
+          },
+          {
+            "pick": "KC",
             "weight": 12
+          },
+          {
+            "pick": "KC",
+            "weight": 12
+          },
+          {
+            "pick": "KC",
+            "weight": 13
+          },
+          {
+            "pick": "KC",
+            "weight": 11
+          },
+          {
+            "pick": "KC",
+            "weight": 12
+          },
+          {
+            "pick": "KC",
+            "weight": 10
+          },
+          {
+            "pick": "KC",
+            "weight": 12
+          },
+          {
+            "pick": "KC",
+            "weight": 12
+          },
+          {
+            "pick": "KC",
+            "weight": 12
+          },
+          {
+            "pick": "KC",
+            "weight": 12
+          },
+          {
+            "pick": "KC",
+            "weight": 13
+          },
+          {
+            "pick": "KC",
+            "weight": 11
+          },
+          {
+            "pick": "KC",
+            "weight": 12
+          },
+          {
+            "pick": "KC",
+            "weight": 10
+          },
+          {
+            "pick": "KC",
+            "weight": 9
+          },
+          {
+            "pick": "KC",
+            "weight": 8
+          },
+          {
+            "pick": "KC",
+            "weight": 11
+          },
+          {
+            "pick": "KC",
+            "weight": 12
+          },
+          {
+            "pick": "KC",
+            "weight": 9
+          },
+          {
+            "pick": "KC",
+            "weight": 12
+          },
+          {
+            "pick": "KC",
+            "weight": 12
+          },
+          {
+            "pick": "KC",
+            "weight": 11
+          },
+          {
+            "pick": "KC",
+            "weight": 13
+          },
+          {
+            "pick": "KC",
+            "weight": 12
+          },
+          {
+            "pick": "KC",
+            "weight": 13
+          },
+          {
+            "pick": "KC",
+            "weight": 10
+          },
+          {
+            "pick": "KC",
+            "weight": 11
+          },
+          {
+            "pick": "KC",
+            "weight": 12
+          },
+          {
+            "pick": "KC",
+            "weight": 12
+          },
+          {
+            "pick": "KC",
+            "weight": 11
           },
           {
             "pick": "KC",
@@ -2703,6 +2651,14 @@
           },
           {
             "pick": "KC",
+            "weight": 12
+          },
+          {
+            "pick": "KC",
+            "weight": 12
+          },
+          {
+            "pick": "KC",
             "weight": 11
           },
           {
@@ -2711,7 +2667,43 @@
           },
           {
             "pick": "KC",
+            "weight": 11
+          },
+          {
+            "pick": "KC",
+            "weight": 8
+          },
+          {
+            "pick": "KC",
             "weight": 13
+          },
+          {
+            "pick": "KC",
+            "weight": 11
+          },
+          {
+            "pick": "KC",
+            "weight": 12
+          },
+          {
+            "pick": "KC",
+            "weight": 10
+          },
+          {
+            "pick": "KC",
+            "weight": 12
+          },
+          {
+            "pick": "KC",
+            "weight": 8
+          },
+          {
+            "pick": "KC",
+            "weight": 6
+          },
+          {
+            "pick": "KC",
+            "weight": 12
           },
           {
             "pick": "KC",
@@ -2720,6 +2712,14 @@
           {
             "pick": "KC",
             "weight": 9
+          },
+          {
+            "pick": "KC",
+            "weight": 13
+          },
+          {
+            "pick": "KC",
+            "weight": 11
           },
           {
             "pick": "KC",
@@ -2768,6 +2768,10 @@
           },
           {
             "pick": "PIT",
+            "weight": 6
+          },
+          {
+            "pick": "PIT",
             "weight": 2
           },
           {
@@ -2776,11 +2780,11 @@
           },
           {
             "pick": "PIT",
-            "weight": 6
+            "weight": 3
           },
           {
             "pick": "PIT",
-            "weight": 3
+            "weight": 5
           },
           {
             "pick": "PHI",
@@ -2796,10 +2800,6 @@
           },
           {
             "pick": "PIT",
-            "weight": 5
-          },
-          {
-            "pick": "PIT",
             "weight": 4
           },
           {
@@ -2812,19 +2812,7 @@
           },
           {
             "pick": "PIT",
-            "weight": 4
-          },
-          {
-            "pick": "PIT",
-            "weight": 4
-          },
-          {
-            "pick": "PIT",
             "weight": 5
-          },
-          {
-            "pick": "PIT",
-            "weight": 6
           },
           {
             "pick": "PIT",
@@ -2832,14 +2820,34 @@
           },
           {
             "pick": "PIT",
+            "weight": 6
+          },
+          {
+            "pick": "PIT",
+            "weight": 6
+          },
+          {
+            "pick": "PIT",
+            "weight": 5
+          },
+          {
+            "pick": "PIT",
+            "weight": 4
+          },
+          {
+            "pick": "PIT",
+            "weight": 4
+          },
+          {
+            "pick": "PIT",
+            "weight": 5
+          },
+          {
+            "pick": "PIT",
             "weight": 2
           },
           {
             "pick": "PIT",
-            "weight": 5
-          },
-          {
-            "pick": "PIT",
             "weight": 6
           },
           {
@@ -2848,7 +2856,15 @@
           },
           {
             "pick": "PIT",
-            "weight": 5
+            "weight": 4
+          },
+          {
+            "pick": "PIT",
+            "weight": 3
+          },
+          {
+            "pick": "PIT",
+            "weight": 4
           },
           {
             "pick": "PHI",
@@ -2856,35 +2872,7 @@
           },
           {
             "pick": "PIT",
-            "weight": 4
-          },
-          {
-            "pick": "PIT",
-            "weight": 4
-          },
-          {
-            "pick": "PIT",
-            "weight": 3
-          },
-          {
-            "pick": "PIT",
             "weight": 5
-          },
-          {
-            "pick": "PIT",
-            "weight": 6
-          },
-          {
-            "pick": "PIT",
-            "weight": 6
-          },
-          {
-            "pick": "PIT",
-            "weight": 4
-          },
-          {
-            "pick": "PIT",
-            "weight": 6
           },
           {
             "pick": "PIT",
@@ -2900,7 +2888,15 @@
           },
           {
             "pick": "PIT",
-            "weight": 8
+            "weight": 6
+          },
+          {
+            "pick": "PIT",
+            "weight": 6
+          },
+          {
+            "pick": "PIT",
+            "weight": 4
           },
           {
             "pick": "PHI",
@@ -2908,7 +2904,7 @@
           },
           {
             "pick": "PIT",
-            "weight": 5
+            "weight": 8
           },
           {
             "pick": "PIT",
@@ -2916,7 +2912,11 @@
           },
           {
             "pick": "PIT",
-            "weight": 5
+            "weight": 7
+          },
+          {
+            "pick": "PIT",
+            "weight": 8
           },
           {
             "pick": "PIT",
@@ -2932,7 +2932,19 @@
           },
           {
             "pick": "PIT",
-            "weight": 7
+            "weight": 5
+          },
+          {
+            "pick": "PIT",
+            "weight": 5
+          },
+          {
+            "pick": "PIT",
+            "weight": 3
+          },
+          {
+            "pick": "PIT",
+            "weight": 3
           },
           {
             "pick": "PIT",
@@ -2940,23 +2952,11 @@
           },
           {
             "pick": "PIT",
-            "weight": 3
-          },
-          {
-            "pick": "PIT",
-            "weight": 3
-          },
-          {
-            "pick": "PIT",
             "weight": 7
           },
           {
             "pick": "PIT",
-            "weight": 8
-          },
-          {
-            "pick": "PIT",
-            "weight": 3
+            "weight": 5
           },
           {
             "pick": "PIT",
@@ -2968,7 +2968,19 @@
           },
           {
             "pick": "PIT",
-            "weight": 5
+            "weight": 3
+          },
+          {
+            "pick": "PIT",
+            "weight": 6
+          },
+          {
+            "pick": "PHI",
+            "weight": 2
+          },
+          {
+            "pick": "PIT",
+            "weight": 6
           },
           {
             "pick": "PIT",
@@ -2976,23 +2988,7 @@
           },
           {
             "pick": "PIT",
-            "weight": 6
-          },
-          {
-            "pick": "PIT",
             "weight": 4
-          },
-          {
-            "pick": "PHI",
-            "weight": 2
-          },
-          {
-            "pick": "PIT",
-            "weight": 6
-          },
-          {
-            "pick": "PIT",
-            "weight": 6
           },
           {
             "pick": "PIT",
@@ -3000,15 +2996,7 @@
           },
           {
             "pick": "PIT",
-            "weight": 3
-          },
-          {
-            "pick": "PIT",
             "weight": 4
-          },
-          {
-            "pick": "PIT",
-            "weight": 5
           },
           {
             "pick": "PIT",
@@ -3024,15 +3012,27 @@
           },
           {
             "pick": "PIT",
-            "weight": 5
+            "weight": 3
           },
           {
             "pick": "PIT",
             "weight": 5
+          },
+          {
+            "pick": "PIT",
+            "weight": 6
           },
           {
             "pick": "PIT",
             "weight": 8
+          },
+          {
+            "pick": "PIT",
+            "weight": 5
+          },
+          {
+            "pick": "PIT",
+            "weight": 5
           },
           {
             "pick": "PIT",
@@ -3048,7 +3048,7 @@
           },
           {
             "pick": "PIT",
-            "weight": 3
+            "weight": 8
           },
           {
             "pick": "PIT",
@@ -3056,7 +3056,7 @@
           },
           {
             "pick": "PIT",
-            "weight": 7
+            "weight": 3
           },
           {
             "pick": "PIT",
@@ -3064,7 +3064,7 @@
           },
           {
             "pick": "PIT",
-            "weight": 8
+            "weight": 7
           },
           {
             "pick": "PIT",
@@ -3076,7 +3076,11 @@
           },
           {
             "pick": "PIT",
-            "weight": 7
+            "weight": 6
+          },
+          {
+            "pick": "PIT",
+            "weight": 11
           },
           {
             "pick": "PHI",
@@ -3084,11 +3088,7 @@
           },
           {
             "pick": "PIT",
-            "weight": 6
-          },
-          {
-            "pick": "PIT",
-            "weight": 11
+            "weight": 7
           },
           {
             "pick": "PIT",
@@ -3137,6 +3137,10 @@
           },
           {
             "pick": "CAR",
+            "weight": 11
+          },
+          {
+            "pick": "CAR",
             "weight": 3
           },
           {
@@ -3149,23 +3153,19 @@
           },
           {
             "pick": "CAR",
-            "weight": 11
-          },
-          {
-            "pick": "CAR",
             "weight": 8
           },
           {
             "pick": "CAR",
             "weight": 8
+          },
+          {
+            "pick": "CAR",
+            "weight": 3
           },
           {
             "pick": "CAR",
             "weight": 6
-          },
-          {
-            "pick": "CAR",
-            "weight": 3
           },
           {
             "pick": "CAR",
@@ -3181,35 +3181,11 @@
           },
           {
             "pick": "CAR",
-            "weight": 2
-          },
-          {
-            "pick": "CAR",
-            "weight": 3
-          },
-          {
-            "pick": "CAR",
-            "weight": 6
-          },
-          {
-            "pick": "CAR",
-            "weight": 4
-          },
-          {
-            "pick": "CAR",
-            "weight": 6
-          },
-          {
-            "pick": "CAR",
-            "weight": 4
-          },
-          {
-            "pick": "CAR",
-            "weight": 9
-          },
-          {
-            "pick": "CAR",
             "weight": 11
+          },
+          {
+            "pick": "CAR",
+            "weight": 6
           },
           {
             "pick": "CAR",
@@ -3217,15 +3193,35 @@
           },
           {
             "pick": "CAR",
-            "weight": 11
+            "weight": 4
           },
           {
-            "pick": "BAL",
+            "pick": "CAR",
+            "weight": 9
+          },
+          {
+            "pick": "CAR",
             "weight": 2
           },
           {
             "pick": "CAR",
             "weight": 3
+          },
+          {
+            "pick": "CAR",
+            "weight": 6
+          },
+          {
+            "pick": "CAR",
+            "weight": 4
+          },
+          {
+            "pick": "CAR",
+            "weight": 11
+          },
+          {
+            "pick": "CAR",
+            "weight": 10
           },
           {
             "pick": "CAR",
@@ -3236,20 +3232,20 @@
             "weight": 4
           },
           {
+            "pick": "CAR",
+            "weight": 3
+          },
+          {
+            "pick": "BAL",
+            "weight": 2
+          },
+          {
             "pick": "BAL",
             "weight": 2
           },
           {
             "pick": "CAR",
-            "weight": 10
-          },
-          {
-            "pick": "CAR",
-            "weight": 3
-          },
-          {
-            "pick": "CAR",
-            "weight": 1
+            "weight": 5
           },
           {
             "pick": "CAR",
@@ -3257,7 +3253,11 @@
           },
           {
             "pick": "CAR",
-            "weight": 5
+            "weight": 3
+          },
+          {
+            "pick": "CAR",
+            "weight": 1
           },
           {
             "pick": "CAR",
@@ -3266,34 +3266,14 @@
           {
             "pick": "CAR",
             "weight": 1
+          },
+          {
+            "pick": "CAR",
+            "weight": 5
           },
           {
             "pick": "CAR",
             "weight": 4
-          },
-          {
-            "pick": "CAR",
-            "weight": 5
-          },
-          {
-            "pick": "CAR",
-            "weight": 3
-          },
-          {
-            "pick": "CAR",
-            "weight": 3
-          },
-          {
-            "pick": "CAR",
-            "weight": 3
-          },
-          {
-            "pick": "CAR",
-            "weight": 2
-          },
-          {
-            "pick": "CAR",
-            "weight": 1
           },
           {
             "pick": "CAR",
@@ -3309,6 +3289,26 @@
           },
           {
             "pick": "CAR",
+            "weight": 2
+          },
+          {
+            "pick": "CAR",
+            "weight": 1
+          },
+          {
+            "pick": "CAR",
+            "weight": 3
+          },
+          {
+            "pick": "CAR",
+            "weight": 3
+          },
+          {
+            "pick": "CAR",
+            "weight": 3
+          },
+          {
+            "pick": "CAR",
             "weight": 6
           },
           {
@@ -3325,31 +3325,23 @@
           },
           {
             "pick": "CAR",
-            "weight": 2
-          },
-          {
-            "pick": "CAR",
-            "weight": 2
-          },
-          {
-            "pick": "CAR",
-            "weight": 2
-          },
-          {
-            "pick": "CAR",
             "weight": 4
           },
           {
             "pick": "CAR",
-            "weight": 3
+            "weight": 2
+          },
+          {
+            "pick": "CAR",
+            "weight": 2
+          },
+          {
+            "pick": "CAR",
+            "weight": 2
           },
           {
             "pick": "CAR",
             "weight": 3
-          },
-          {
-            "pick": "CAR",
-            "weight": 6
           },
           {
             "pick": "CAR",
@@ -3365,43 +3357,51 @@
           },
           {
             "pick": "CAR",
-            "weight": 2
+            "weight": 6
           },
           {
             "pick": "CAR",
-            "weight": 4
+            "weight": 2
           },
           {
             "pick": "BAL",
             "weight": 1
+          },
+          {
+            "pick": "CAR",
+            "weight": 6
+          },
+          {
+            "pick": "CAR",
+            "weight": 3
+          },
+          {
+            "pick": "CAR",
+            "weight": 5
+          },
+          {
+            "pick": "CAR",
+            "weight": 4
           },
           {
             "pick": "BAL",
             "weight": 10
           },
           {
-            "pick": "CAR",
-            "weight": 6
-          },
-          {
             "pick": "BAL",
             "weight": 3
           },
           {
             "pick": "CAR",
-            "weight": 5
-          },
-          {
-            "pick": "CAR",
-            "weight": 3
-          },
-          {
-            "pick": "CAR",
-            "weight": 3
-          },
-          {
-            "pick": "CAR",
             "weight": 4
+          },
+          {
+            "pick": "CAR",
+            "weight": 3
+          },
+          {
+            "pick": "CAR",
+            "weight": 3
           },
           {
             "pick": "CAR",
@@ -3416,15 +3416,15 @@
             "weight": 4
           },
           {
-            "pick": "BAL",
-            "weight": 4
+            "pick": "CAR",
+            "weight": 3
           },
           {
             "pick": "CAR",
             "weight": 2
           },
           {
-            "pick": "CAR",
+            "pick": "BAL",
             "weight": 4
           },
           {
@@ -3433,15 +3433,11 @@
           },
           {
             "pick": "CAR",
-            "weight": 3
+            "weight": 4
           },
           {
             "pick": "CAR",
             "weight": 1
-          },
-          {
-            "pick": "CAR",
-            "weight": 6
           },
           {
             "pick": "CAR",
@@ -3452,12 +3448,16 @@
             "weight": 11
           },
           {
+            "pick": "CAR",
+            "weight": 3
+          },
+          {
             "pick": "BAL",
             "weight": 11
           },
           {
             "pick": "CAR",
-            "weight": 3
+            "weight": 6
           },
           {
             "pick": "CAR",
@@ -3505,6 +3505,10 @@
             "weight": 4
           },
           {
+            "pick": "NYJ",
+            "weight": 5
+          },
+          {
             "pick": "LAC",
             "weight": 4
           },
@@ -3514,11 +3518,11 @@
           },
           {
             "pick": "NYJ",
-            "weight": 5
+            "weight": 4
           },
           {
             "pick": "NYJ",
-            "weight": 4
+            "weight": 1
           },
           {
             "pick": "LAC",
@@ -3534,10 +3538,6 @@
           },
           {
             "pick": "NYJ",
-            "weight": 1
-          },
-          {
-            "pick": "NYJ",
             "weight": 5
           },
           {
@@ -3550,19 +3550,11 @@
           },
           {
             "pick": "NYJ",
-            "weight": 1
+            "weight": 4
           },
           {
             "pick": "LAC",
             "weight": 1
-          },
-          {
-            "pick": "NYJ",
-            "weight": 1
-          },
-          {
-            "pick": "LAC",
-            "weight": 3
           },
           {
             "pick": "LAC",
@@ -3577,8 +3569,8 @@
             "weight": 4
           },
           {
-            "pick": "LAC",
-            "weight": 5
+            "pick": "NYJ",
+            "weight": 1
           },
           {
             "pick": "LAC",
@@ -3586,34 +3578,6 @@
           },
           {
             "pick": "NYJ",
-            "weight": 4
-          },
-          {
-            "pick": "LAC",
-            "weight": 4
-          },
-          {
-            "pick": "LAC",
-            "weight": 2
-          },
-          {
-            "pick": "LAC",
-            "weight": 3
-          },
-          {
-            "pick": "NYJ",
-            "weight": 2
-          },
-          {
-            "pick": "LAC",
-            "weight": 3
-          },
-          {
-            "pick": "LAC",
-            "weight": 2
-          },
-          {
-            "pick": "LAC",
             "weight": 1
           },
           {
@@ -3626,7 +3590,19 @@
           },
           {
             "pick": "LAC",
-            "weight": 1
+            "weight": 2
+          },
+          {
+            "pick": "LAC",
+            "weight": 3
+          },
+          {
+            "pick": "NYJ",
+            "weight": 2
+          },
+          {
+            "pick": "LAC",
+            "weight": 2
           },
           {
             "pick": "LAC",
@@ -3634,7 +3610,35 @@
           },
           {
             "pick": "LAC",
+            "weight": 3
+          },
+          {
+            "pick": "LAC",
+            "weight": 1
+          },
+          {
+            "pick": "LAC",
             "weight": 5
+          },
+          {
+            "pick": "LAC",
+            "weight": 1
+          },
+          {
+            "pick": "LAC",
+            "weight": 5
+          },
+          {
+            "pick": "LAC",
+            "weight": 4
+          },
+          {
+            "pick": "LAC",
+            "weight": 3
+          },
+          {
+            "pick": "LAC",
+            "weight": 3
           },
           {
             "pick": "NYJ",
@@ -3642,11 +3646,23 @@
           },
           {
             "pick": "LAC",
+            "weight": 1
+          },
+          {
+            "pick": "NYJ",
             "weight": 3
           },
           {
             "pick": "LAC",
             "weight": 1
+          },
+          {
+            "pick": "LAC",
+            "weight": 3
+          },
+          {
+            "pick": "LAC",
+            "weight": 3
           },
           {
             "pick": "LAC",
@@ -3658,27 +3674,15 @@
           },
           {
             "pick": "LAC",
-            "weight": 3
-          },
-          {
-            "pick": "LAC",
-            "weight": 3
-          },
-          {
-            "pick": "LAC",
-            "weight": 1
-          },
-          {
-            "pick": "NYJ",
-            "weight": 3
-          },
-          {
-            "pick": "LAC",
             "weight": 1
           },
           {
             "pick": "NYJ",
             "weight": 1
+          },
+          {
+            "pick": "LAC",
+            "weight": 4
           },
           {
             "pick": "LAC",
@@ -3690,31 +3694,19 @@
           },
           {
             "pick": "LAC",
-            "weight": 4
-          },
-          {
-            "pick": "LAC",
-            "weight": 4
-          },
-          {
-            "pick": "LAC",
-            "weight": 3
-          },
-          {
-            "pick": "LAC",
-            "weight": 3
-          },
-          {
-            "pick": "LAC",
             "weight": 1
           },
           {
-            "pick": "NYJ",
-            "weight": 2
+            "pick": "LAC",
+            "weight": 3
           },
           {
             "pick": "LAC",
-            "weight": 2
+            "weight": 3
+          },
+          {
+            "pick": "LAC",
+            "weight": 4
           },
           {
             "pick": "LAC",
@@ -3729,6 +3721,26 @@
             "weight": 4
           },
           {
+            "pick": "NYJ",
+            "weight": 2
+          },
+          {
+            "pick": "LAC",
+            "weight": 2
+          },
+          {
+            "pick": "LAC",
+            "weight": 1
+          },
+          {
+            "pick": "LAC",
+            "weight": 3
+          },
+          {
+            "pick": "LAC",
+            "weight": 3
+          },
+          {
             "pick": "LAC",
             "weight": 1
           },
@@ -3739,18 +3751,10 @@
           {
             "pick": "NYJ",
             "weight": 1
-          },
-          {
-            "pick": "LAC",
-            "weight": 3
           },
           {
             "pick": "NYJ",
             "weight": 4
-          },
-          {
-            "pick": "LAC",
-            "weight": 3
           },
           {
             "pick": "LAC",
@@ -3758,22 +3762,18 @@
           },
           {
             "pick": "LAC",
-            "weight": 1
-          },
-          {
-            "pick": "LAC",
-            "weight": 2
-          },
-          {
-            "pick": "LAC",
-            "weight": 4
-          },
-          {
-            "pick": "LAC",
             "weight": 3
           },
           {
             "pick": "LAC",
+            "weight": 2
+          },
+          {
+            "pick": "LAC",
+            "weight": 4
+          },
+          {
+            "pick": "LAC",
             "weight": 5
           },
           {
@@ -3786,7 +3786,7 @@
           },
           {
             "pick": "LAC",
-            "weight": 2
+            "weight": 6
           },
           {
             "pick": "NYJ",
@@ -3802,7 +3802,7 @@
           },
           {
             "pick": "LAC",
-            "weight": 6
+            "weight": 2
           },
           {
             "pick": "LAC",
@@ -3811,14 +3811,6 @@
           {
             "pick": "LAC",
             "weight": 5
-          },
-          {
-            "pick": "LAC",
-            "weight": 5
-          },
-          {
-            "pick": "NYJ",
-            "weight": 2
           },
           {
             "pick": "NYJ",
@@ -3827,6 +3819,14 @@
           {
             "pick": "LAC",
             "weight": 7
+          },
+          {
+            "pick": "NYJ",
+            "weight": 2
+          },
+          {
+            "pick": "LAC",
+            "weight": 5
           },
           {
             "pick": "LAC",
@@ -3875,14 +3875,6 @@
           },
           {
             "pick": "DEN",
-            "weight": 7
-          },
-          {
-            "pick": "DEN",
-            "weight": 3
-          },
-          {
-            "pick": "DEN",
             "weight": 3
           },
           {
@@ -3891,7 +3883,11 @@
           },
           {
             "pick": "DEN",
-            "weight": 9
+            "weight": 3
+          },
+          {
+            "pick": "DEN",
+            "weight": 7
           },
           {
             "pick": "DEN",
@@ -3899,11 +3895,15 @@
           },
           {
             "pick": "DEN",
-            "weight": 7
+            "weight": 9
           },
           {
             "pick": "DEN",
             "weight": 10
+          },
+          {
+            "pick": "DEN",
+            "weight": 7
           },
           {
             "pick": "DEN",
@@ -3919,6 +3919,26 @@
           },
           {
             "pick": "DEN",
+            "weight": 3
+          },
+          {
+            "pick": "DEN",
+            "weight": 9
+          },
+          {
+            "pick": "DEN",
+            "weight": 3
+          },
+          {
+            "pick": "DEN",
+            "weight": 7
+          },
+          {
+            "pick": "DEN",
+            "weight": 3
+          },
+          {
+            "pick": "DEN",
             "weight": 9
           },
           {
@@ -3931,14 +3951,6 @@
           },
           {
             "pick": "DEN",
-            "weight": 7
-          },
-          {
-            "pick": "DEN",
-            "weight": 9
-          },
-          {
-            "pick": "DEN",
             "weight": 9
           },
           {
@@ -3948,22 +3960,6 @@
           {
             "pick": "DEN",
             "weight": 3
-          },
-          {
-            "pick": "DEN",
-            "weight": 3
-          },
-          {
-            "pick": "DEN",
-            "weight": 3
-          },
-          {
-            "pick": "DEN",
-            "weight": 10
-          },
-          {
-            "pick": "DEN",
-            "weight": 9
           },
           {
             "pick": "DEN",
@@ -3972,6 +3968,14 @@
           {
             "pick": "DEN",
             "weight": 5
+          },
+          {
+            "pick": "DEN",
+            "weight": 9
+          },
+          {
+            "pick": "DEN",
+            "weight": 10
           },
           {
             "pick": "DEN",
@@ -3983,19 +3987,15 @@
           },
           {
             "pick": "DEN",
+            "weight": 3
+          },
+          {
+            "pick": "DEN",
             "weight": 2
           },
           {
             "pick": "DEN",
-            "weight": 9
-          },
-          {
-            "pick": "DEN",
-            "weight": 3
-          },
-          {
-            "pick": "DEN",
-            "weight": 3
+            "weight": 2
           },
           {
             "pick": "DEN",
@@ -4003,7 +4003,11 @@
           },
           {
             "pick": "DEN",
-            "weight": 2
+            "weight": 9
+          },
+          {
+            "pick": "DEN",
+            "weight": 9
           },
           {
             "pick": "DEN",
@@ -4011,31 +4015,7 @@
           },
           {
             "pick": "DEN",
-            "weight": 9
-          },
-          {
-            "pick": "DEN",
             "weight": 7
-          },
-          {
-            "pick": "DEN",
-            "weight": 10
-          },
-          {
-            "pick": "DEN",
-            "weight": 10
-          },
-          {
-            "pick": "DEN",
-            "weight": 9
-          },
-          {
-            "pick": "DEN",
-            "weight": 9
-          },
-          {
-            "pick": "DEN",
-            "weight": 4
           },
           {
             "pick": "LV",
@@ -4047,6 +4027,30 @@
           },
           {
             "pick": "DEN",
+            "weight": 9
+          },
+          {
+            "pick": "DEN",
+            "weight": 9
+          },
+          {
+            "pick": "DEN",
+            "weight": 10
+          },
+          {
+            "pick": "DEN",
+            "weight": 10
+          },
+          {
+            "pick": "DEN",
+            "weight": 4
+          },
+          {
+            "pick": "DEN",
+            "weight": 5
+          },
+          {
+            "pick": "DEN",
             "weight": 5
           },
           {
@@ -4059,11 +4063,7 @@
           },
           {
             "pick": "DEN",
-            "weight": 5
-          },
-          {
-            "pick": "DEN",
-            "weight": 9
+            "weight": 3
           },
           {
             "pick": "DEN",
@@ -4075,19 +4075,11 @@
           },
           {
             "pick": "DEN",
-            "weight": 3
-          },
-          {
-            "pick": "DEN",
-            "weight": 5
-          },
-          {
-            "pick": "DEN",
             "weight": 9
           },
           {
             "pick": "DEN",
-            "weight": 3
+            "weight": 9
           },
           {
             "pick": "DEN",
@@ -4103,19 +4095,15 @@
           },
           {
             "pick": "DEN",
+            "weight": 3
+          },
+          {
+            "pick": "DEN",
             "weight": 8
           },
           {
             "pick": "DEN",
-            "weight": 6
-          },
-          {
-            "pick": "DEN",
             "weight": 9
-          },
-          {
-            "pick": "DEN",
-            "weight": 1
           },
           {
             "pick": "DEN",
@@ -4123,31 +4111,11 @@
           },
           {
             "pick": "DEN",
-            "weight": 8
-          },
-          {
-            "pick": "DEN",
-            "weight": 3
-          },
-          {
-            "pick": "DEN",
-            "weight": 7
-          },
-          {
-            "pick": "DEN",
-            "weight": 9
-          },
-          {
-            "pick": "DEN",
-            "weight": 9
-          },
-          {
-            "pick": "DEN",
-            "weight": 3
-          },
-          {
-            "pick": "DEN",
             "weight": 5
+          },
+          {
+            "pick": "DEN",
+            "weight": 3
           },
           {
             "pick": "DEN",
@@ -4159,7 +4127,23 @@
           },
           {
             "pick": "DEN",
+            "weight": 8
+          },
+          {
+            "pick": "DEN",
+            "weight": 9
+          },
+          {
+            "pick": "DEN",
             "weight": 7
+          },
+          {
+            "pick": "DEN",
+            "weight": 9
+          },
+          {
+            "pick": "DEN",
+            "weight": 3
           },
           {
             "pick": "DEN",
@@ -4175,15 +4159,35 @@
           },
           {
             "pick": "DEN",
+            "weight": 7
+          },
+          {
+            "pick": "DEN",
+            "weight": 1
+          },
+          {
+            "pick": "DEN",
+            "weight": 6
+          },
+          {
+            "pick": "DEN",
+            "weight": 5
+          },
+          {
+            "pick": "DEN",
             "weight": 8
           },
           {
             "pick": "DEN",
-            "weight": 2
+            "weight": 8
           },
           {
             "pick": "DEN",
-            "weight": 8
+            "weight": 3
+          },
+          {
+            "pick": "DEN",
+            "weight": 5
           },
           {
             "pick": "DEN",
@@ -4191,11 +4195,7 @@
           },
           {
             "pick": "DEN",
-            "weight": 3
-          },
-          {
-            "pick": "DEN",
-            "weight": 5
+            "weight": 2
           },
           {
             "pick": "DEN",
@@ -4243,6 +4243,10 @@
             "weight": 2
           },
           {
+            "pick": "JAX",
+            "weight": 4
+          },
+          {
             "pick": "NYG",
             "weight": 1
           },
@@ -4252,7 +4256,7 @@
           },
           {
             "pick": "JAX",
-            "weight": 4
+            "weight": 2
           },
           {
             "pick": "JAX",
@@ -4263,16 +4267,12 @@
             "weight": 3
           },
           {
-            "pick": "JAX",
-            "weight": 2
+            "pick": "NYG",
+            "weight": 4
           },
           {
             "pick": "NYG",
             "weight": 1
-          },
-          {
-            "pick": "NYG",
-            "weight": 4
           },
           {
             "pick": "NYG",
@@ -4285,42 +4285,6 @@
           {
             "pick": "JAX",
             "weight": 5
-          },
-          {
-            "pick": "JAX",
-            "weight": 5
-          },
-          {
-            "pick": "JAX",
-            "weight": 5
-          },
-          {
-            "pick": "JAX",
-            "weight": 3
-          },
-          {
-            "pick": "JAX",
-            "weight": 5
-          },
-          {
-            "pick": "JAX",
-            "weight": 3
-          },
-          {
-            "pick": "JAX",
-            "weight": 5
-          },
-          {
-            "pick": "JAX",
-            "weight": 6
-          },
-          {
-            "pick": "JAX",
-            "weight": 4
-          },
-          {
-            "pick": "JAX",
-            "weight": 4
           },
           {
             "pick": "JAX",
@@ -4328,15 +4292,55 @@
           },
           {
             "pick": "JAX",
-            "weight": 6
+            "weight": 3
+          },
+          {
+            "pick": "JAX",
+            "weight": 4
+          },
+          {
+            "pick": "JAX",
+            "weight": 5
           },
           {
             "pick": "JAX",
             "weight": 6
+          },
+          {
+            "pick": "JAX",
+            "weight": 5
+          },
+          {
+            "pick": "JAX",
+            "weight": 5
+          },
+          {
+            "pick": "JAX",
+            "weight": 3
+          },
+          {
+            "pick": "JAX",
+            "weight": 5
+          },
+          {
+            "pick": "JAX",
+            "weight": 4
+          },
+          {
+            "pick": "JAX",
+            "weight": 5
           },
           {
             "pick": "JAX",
             "weight": 2
+          },
+          {
+            "pick": "JAX",
+            "weight": 6
+          },
+          {
+            "pick": "JAX",
+            "weight": 6
           },
           {
             "pick": "JAX",
@@ -4348,15 +4352,7 @@
           },
           {
             "pick": "JAX",
-            "weight": 5
-          },
-          {
-            "pick": "JAX",
             "weight": 4
-          },
-          {
-            "pick": "JAX",
-            "weight": 5
           },
           {
             "pick": "JAX",
@@ -4365,6 +4361,10 @@
           {
             "pick": "JAX",
             "weight": 4
+          },
+          {
+            "pick": "JAX",
+            "weight": 3
           },
           {
             "pick": "NYG",
@@ -4372,11 +4372,7 @@
           },
           {
             "pick": "JAX",
-            "weight": 3
-          },
-          {
-            "pick": "JAX",
-            "weight": 2
+            "weight": 5
           },
           {
             "pick": "NYG",
@@ -4384,6 +4380,26 @@
           },
           {
             "pick": "JAX",
+            "weight": 2
+          },
+          {
+            "pick": "JAX",
+            "weight": 4
+          },
+          {
+            "pick": "JAX",
+            "weight": 6
+          },
+          {
+            "pick": "JAX",
+            "weight": 5
+          },
+          {
+            "pick": "JAX",
+            "weight": 7
+          },
+          {
+            "pick": "JAX",
             "weight": 4
           },
           {
@@ -4396,26 +4412,10 @@
           },
           {
             "pick": "JAX",
-            "weight": 7
-          },
-          {
-            "pick": "JAX",
-            "weight": 4
-          },
-          {
-            "pick": "JAX",
             "weight": 8
           },
           {
             "pick": "JAX",
-            "weight": 6
-          },
-          {
-            "pick": "JAX",
-            "weight": 5
-          },
-          {
-            "pick": "JAX",
             "weight": 4
           },
           {
@@ -4424,11 +4424,23 @@
           },
           {
             "pick": "JAX",
+            "weight": 6
+          },
+          {
+            "pick": "JAX",
             "weight": 5
           },
           {
             "pick": "JAX",
+            "weight": 7
+          },
+          {
+            "pick": "JAX",
             "weight": 6
+          },
+          {
+            "pick": "JAX",
+            "weight": 7
           },
           {
             "pick": "JAX",
@@ -4436,27 +4448,7 @@
           },
           {
             "pick": "JAX",
-            "weight": 6
-          },
-          {
-            "pick": "JAX",
-            "weight": 7
-          },
-          {
-            "pick": "JAX",
-            "weight": 7
-          },
-          {
-            "pick": "JAX",
-            "weight": 6
-          },
-          {
-            "pick": "JAX",
             "weight": 5
-          },
-          {
-            "pick": "JAX",
-            "weight": 7
           },
           {
             "pick": "JAX",
@@ -4468,11 +4460,31 @@
           },
           {
             "pick": "JAX",
-            "weight": 8
+            "weight": 6
+          },
+          {
+            "pick": "JAX",
+            "weight": 7
           },
           {
             "pick": "JAX",
             "weight": 12
+          },
+          {
+            "pick": "JAX",
+            "weight": 8
+          },
+          {
+            "pick": "JAX",
+            "weight": 1
+          },
+          {
+            "pick": "JAX",
+            "weight": 8
+          },
+          {
+            "pick": "JAX",
+            "weight": 6
           },
           {
             "pick": "JAX",
@@ -4480,15 +4492,7 @@
           },
           {
             "pick": "JAX",
-            "weight": 8
-          },
-          {
-            "pick": "JAX",
             "weight": 2
-          },
-          {
-            "pick": "JAX",
-            "weight": 1
           },
           {
             "pick": "JAX",
@@ -4508,10 +4512,6 @@
           },
           {
             "pick": "JAX",
-            "weight": 6
-          },
-          {
-            "pick": "JAX",
             "weight": 4
           },
           {
@@ -4524,7 +4524,7 @@
           },
           {
             "pick": "JAX",
-            "weight": 6
+            "weight": 5
           },
           {
             "pick": "JAX",
@@ -4540,7 +4540,7 @@
           },
           {
             "pick": "JAX",
-            "weight": 5
+            "weight": 6
           },
           {
             "pick": "JAX",
@@ -4548,7 +4548,11 @@
           },
           {
             "pick": "JAX",
-            "weight": 3
+            "weight": 6
+          },
+          {
+            "pick": "NYG",
+            "weight": 4
           },
           {
             "pick": "JAX",
@@ -4559,12 +4563,8 @@
             "weight": 8
           },
           {
-            "pick": "NYG",
-            "weight": 4
-          },
-          {
             "pick": "JAX",
-            "weight": 6
+            "weight": 3
           },
           {
             "pick": "JAX",
@@ -4613,11 +4613,11 @@
           },
           {
             "pick": "SF",
-            "weight": 6
+            "weight": 2
           },
           {
             "pick": "SF",
-            "weight": 2
+            "weight": 6
           },
           {
             "pick": "SF",
@@ -4629,11 +4629,15 @@
           },
           {
             "pick": "SF",
+            "weight": 3
+          },
+          {
+            "pick": "SF",
             "weight": 2
           },
           {
             "pick": "SF",
-            "weight": 3
+            "weight": 2
           },
           {
             "pick": "SF",
@@ -4641,10 +4645,6 @@
           },
           {
             "pick": "SF",
-            "weight": 2
-          },
-          {
-            "pick": "SF",
             "weight": 7
           },
           {
@@ -4654,6 +4654,26 @@
           {
             "pick": "SF",
             "weight": 3
+          },
+          {
+            "pick": "SF",
+            "weight": 2
+          },
+          {
+            "pick": "SF",
+            "weight": 2
+          },
+          {
+            "pick": "SF",
+            "weight": 2
+          },
+          {
+            "pick": "SF",
+            "weight": 1
+          },
+          {
+            "pick": "SF",
+            "weight": 2
           },
           {
             "pick": "SF",
@@ -4674,30 +4694,6 @@
           {
             "pick": "SF",
             "weight": 2
-          },
-          {
-            "pick": "SF",
-            "weight": 1
-          },
-          {
-            "pick": "SF",
-            "weight": 2
-          },
-          {
-            "pick": "SF",
-            "weight": 2
-          },
-          {
-            "pick": "SF",
-            "weight": 2
-          },
-          {
-            "pick": "SF",
-            "weight": 2
-          },
-          {
-            "pick": "SF",
-            "weight": 7
           },
           {
             "pick": "SF",
@@ -4713,39 +4709,11 @@
           },
           {
             "pick": "SF",
-            "weight": 6
-          },
-          {
-            "pick": "SF",
             "weight": 1
-          },
-          {
-            "pick": "SF",
-            "weight": 5
-          },
-          {
-            "pick": "SF",
-            "weight": 2
           },
           {
             "pick": "SF",
             "weight": 7
-          },
-          {
-            "pick": "SF",
-            "weight": 2
-          },
-          {
-            "pick": "MIN",
-            "weight": 1
-          },
-          {
-            "pick": "MIN",
-            "weight": 4
-          },
-          {
-            "pick": "SF",
-            "weight": 1
           },
           {
             "pick": "SF",
@@ -4757,19 +4725,31 @@
           },
           {
             "pick": "SF",
+            "weight": 7
+          },
+          {
+            "pick": "SF",
+            "weight": 5
+          },
+          {
+            "pick": "MIN",
             "weight": 4
           },
           {
-            "pick": "SF",
-            "weight": 1
-          },
-          {
-            "pick": "SF",
+            "pick": "MIN",
             "weight": 1
           },
           {
             "pick": "SF",
             "weight": 2
+          },
+          {
+            "pick": "SF",
+            "weight": 6
+          },
+          {
+            "pick": "SF",
+            "weight": 1
           },
           {
             "pick": "SF",
@@ -4784,11 +4764,35 @@
             "weight": 7
           },
           {
+            "pick": "SF",
+            "weight": 1
+          },
+          {
+            "pick": "SF",
+            "weight": 2
+          },
+          {
+            "pick": "SF",
+            "weight": 4
+          },
+          {
+            "pick": "SF",
+            "weight": 1
+          },
+          {
+            "pick": "SF",
+            "weight": 2
+          },
+          {
             "pick": "MIN",
             "weight": 2
           },
           {
             "pick": "SF",
+            "weight": 2
+          },
+          {
+            "pick": "MIN",
             "weight": 2
           },
           {
@@ -4796,12 +4800,8 @@
             "weight": 3
           },
           {
-            "pick": "MIN",
-            "weight": 2
-          },
-          {
             "pick": "SF",
-            "weight": 1
+            "weight": 2
           },
           {
             "pick": "SF",
@@ -4813,14 +4813,6 @@
           },
           {
             "pick": "SF",
-            "weight": 2
-          },
-          {
-            "pick": "MIN",
-            "weight": 1
-          },
-          {
-            "pick": "SF",
             "weight": 1
           },
           {
@@ -4836,8 +4828,12 @@
             "weight": 2
           },
           {
+            "pick": "MIN",
+            "weight": 1
+          },
+          {
             "pick": "SF",
-            "weight": 2
+            "weight": 1
           },
           {
             "pick": "SF",
@@ -4846,14 +4842,6 @@
           {
             "pick": "SF",
             "weight": 5
-          },
-          {
-            "pick": "SF",
-            "weight": 5
-          },
-          {
-            "pick": "SF",
-            "weight": 3
           },
           {
             "pick": "MIN",
@@ -4861,23 +4849,35 @@
           },
           {
             "pick": "SF",
-            "weight": 4
+            "weight": 2
           },
           {
             "pick": "MIN",
             "weight": 13
           },
           {
+            "pick": "SF",
+            "weight": 5
+          },
+          {
+            "pick": "SF",
+            "weight": 3
+          },
+          {
+            "pick": "SF",
+            "weight": 4
+          },
+          {
+            "pick": "MIN",
+            "weight": 1
+          },
+          {
             "pick": "MIN",
             "weight": 1
           },
           {
             "pick": "SF",
             "weight": 2
-          },
-          {
-            "pick": "MIN",
-            "weight": 1
           },
           {
             "pick": "SF",
@@ -4890,6 +4890,14 @@
           {
             "pick": "SF",
             "weight": 3
+          },
+          {
+            "pick": "SF",
+            "weight": 2
+          },
+          {
+            "pick": "SF",
+            "weight": 4
           },
           {
             "pick": "MIN",
@@ -4897,22 +4905,6 @@
           },
           {
             "pick": "SF",
-            "weight": 4
-          },
-          {
-            "pick": "MIN",
-            "weight": 1
-          },
-          {
-            "pick": "SF",
-            "weight": 2
-          },
-          {
-            "pick": "SF",
-            "weight": 2
-          },
-          {
-            "pick": "SF",
             "weight": 2
           },
           {
@@ -4921,7 +4913,19 @@
           },
           {
             "pick": "SF",
+            "weight": 2
+          },
+          {
+            "pick": "SF",
             "weight": 4
+          },
+          {
+            "pick": "MIN",
+            "weight": 2
+          },
+          {
+            "pick": "SF",
+            "weight": 2
           },
           {
             "pick": "SF",
@@ -4929,11 +4933,7 @@
           },
           {
             "pick": "MIN",
-            "weight": 2
-          },
-          {
-            "pick": "SF",
-            "weight": 2
+            "weight": 1
           },
           {
             "pick": "SF",
@@ -4968,14 +4968,14 @@
     {
       "title": "NFL Football Tourney | Picks",
       "url": "sanitized://cbs-pickem/week-11",
-      "ts": "2026-11-24T04:08:52.369197Z",
+      "ts": "2026-11-24T04:30:11.437838Z",
       "text": "CBS Pickem sanitized ownership\n0-0\nCIN\n95%\n0-0\nWAS\n5%\n0-0\nIND\n7%\n0-0\nHOU\n93%\n0-0\nMIA\n1%\n0-0\nBUF\n99%\n0-0\nNO\n2%\n0-0\nCHI\n98%\n0-0\nTEN\n5%\n0-0\nDAL\n95%\n0-0\nTB\n5%\n0-0\nDET\n95%\n0-0\nARI\n1%\n0-0\nKC\n99%\n0-0\nPIT\n93%\n0-0\nPHI\n7%\n0-0\nBAL\n17%\n0-0\nCAR\n83%\n0-0\nNYJ\n26%\n0-0\nLAC\n74%\n0-0\nLV\n4%\n0-0\nDEN\n96%\n0-0\nJAX\n92%\n0-0\nNYG\n8%\n0-0\nMIN\n28%\n0-0\nSF\n72%"
     },
     {
       "title": "NFL Football Tourney | Weekly Standings",
       "url": "sanitized://cbs-pickem/week-11/standings/weekly",
-      "ts": "2026-11-24T04:09:01.408763Z",
-      "text": "Weekly Standings\nSanitized observations\nSUN\nCIN\nWAS\nSUN\nIND\nHOU\nSUN\nMIA\nBUF\nSUN\nNO\nCHI\nSUN\nTEN\nDAL\nSUN\nTB\nDET\nSUN\nARI\nKC\nSUN\nPIT\nPHI\nSUN\nBAL\nCAR\nSUN\nNYJ\nLAC\nSUN\nLV\nDEN\nSUN\nJAX\nNYG\nSUN\nMIN\nSF\nWAS\n(9)\nCIN\n(3)\nWAS\n(9)\nCIN\n(5)\nCIN\n(1)\nCIN\n(1)\nCIN\n(6)\nCIN\n(6)\nCIN\n(6)\nCIN\n(2)\nCIN\n(9)\nCIN\n(11)\nCIN\n(4)\nCIN\n(2)\nCIN\n(7)\nCIN\n(6)\nCIN\n(8)\nCIN\n(2)\nCIN\n(4)\nCIN\n(6)\nCIN\n(1)\nCIN\n(1)\nCIN\n(5)\nCIN\n(1)\nCIN\n(5)\nCIN\n(5)\nCIN\n(7)\nCIN\n(8)\nCIN\n(7)\nCIN\n(4)\nCIN\n(7)\nCIN\n(6)\nCIN\n(2)\nCIN\n(6)\nCIN\n(7)\nWAS\n(13)\nCIN\n(9)\nCIN\n(11)\nCIN\n(10)\nCIN\n(6)\nCIN\n(6)\nCIN\n(6)\nCIN\n(7)\nCIN\n(6)\nCIN\n(4)\nCIN\n(6)\nCIN\n(11)\nCIN\n(6)\nCIN\n(2)\nCIN\n(1)\nCIN\n(5)\nCIN\n(7)\nCIN\n(4)\nCIN\n(9)\nCIN\n(7)\nCIN\n(10)\nCIN\n(10)\nCIN\n(10)\nCIN\n(7)\nCIN\n(9)\nCIN\n(7)\nCIN\n(10)\nCIN\n(2)\nCIN\n(7)\nCIN\n(9)\nCIN\n(2)\nCIN\n(4)\nCIN\n(9)\nCIN\n(8)\nCIN\n(5)\nCIN\n(10)\nCIN\n(11)\nCIN\n(5)\nCIN\n(7)\nCIN\n(10)\nCIN\n(11)\nCIN\n(9)\nCIN\n(7)\nCIN\n(9)\nCIN\n(13)\nCIN\n(10)\nCIN\n(5)\nCIN\n(1)\nCIN\n(4)\nCIN\n(13)\nCIN\n(5)\nCIN\n(3)\nCIN\n(12)\nCIN\n(1)\nCIN\n(2)\nHOU\n(13)\nHOU\n(8)\nHOU\n(13)\nHOU\n(13)\nHOU\n(5)\nHOU\n(13)\nHOU\n(12)\nHOU\n(5)\nHOU\n(8)\nHOU\n(3)\nHOU\n(3)\nHOU\n(11)\nHOU\n(9)\nHOU\n(10)\nHOU\n(9)\nHOU\n(5)\nHOU\n(11)\nHOU\n(10)\nHOU\n(13)\nHOU\n(9)\nHOU\n(12)\nHOU\n(9)\nHOU\n(11)\nHOU\n(11)\nHOU\n(12)\nHOU\n(9)\nHOU\n(12)\nHOU\n(8)\nHOU\n(11)\nHOU\n(13)\nHOU\n(10)\nHOU\n(12)\nHOU\n(6)\nIND\n(4)\nHOU\n(6)\nHOU\n(9)\nHOU\n(9)\nHOU\n(11)\nHOU\n(11)\nHOU\n(13)\nHOU\n(12)\nHOU\n(4)\nHOU\n(13)\nHOU\n(3)\nHOU\n(11)\nHOU\n(1)\nHOU\n(6)\nHOU\n(11)\nHOU\n(4)\nHOU\n(8)\nHOU\n(13)\nIND\n(5)\nHOU\n(4)\nHOU\n(6)\nHOU\n(7)\nHOU\n(13)\nHOU\n(12)\nHOU\n(8)\nHOU\n(13)\nHOU\n(8)\nHOU\n(10)\nHOU\n(11)\nHOU\n(13)\nHOU\n(3)\nHOU\n(9)\nHOU\n(8)\nHOU\n(1)\nHOU\n(13)\nHOU\n(8)\nHOU\n(9)\nHOU\n(3)\nHOU\n(4)\nHOU\n(6)\nHOU\n(13)\nHOU\n(6)\nHOU\n(9)\nIND\n(1)\nHOU\n(10)\nIND\n(13)\nHOU\n(4)\nBUF\n(12)\nBUF\n(12)\nBUF\n(13)\nBUF\n(12)\nBUF\n(12)\nBUF\n(12)\nBUF\n(12)\nBUF\n(11)\nBUF\n(13)\nBUF\n(13)\nBUF\n(13)\nBUF\n(10)\nBUF\n(11)\nBUF\n(13)\nBUF\n(13)\nBUF\n(13)\nBUF\n(13)\nBUF\n(13)\nBUF\n(13)\nBUF\n(13)\nBUF\n(13)\nBUF\n(12)\nBUF\n(13)\nBUF\n(13)\nBUF\n(12)\nBUF\n(13)\nBUF\n(13)\nBUF\n(13)\nBUF\n(12)\nBUF\n(13)\nBUF\n(13)\nBUF\n(13)\nBUF\n(13)\nBUF\n(12)\nBUF\n(13)\nBUF\n(11)\nBUF\n(13)\nMIA\n(1)\nBUF\n(13)\nBUF\n(13)\nBUF\n(12)\nBUF\n(13)\nBUF\n(13)\nBUF\n(12)\nBUF\n(13)\nBUF\n(13)\nBUF\n(10)\nBUF\n(12)\nBUF\n(13)\nBUF\n(13)\nBUF\n(13)\nBUF\n(13)\nBUF\n(13)\nBUF\n(13)\nBUF\n(13)\nBUF\n(13)\nBUF\n(12)\nBUF\n(12)\nBUF\n(12)\nBUF\n(13)\nBUF\n(13)\nBUF\n(13)\nBUF\n(12)\nBUF\n(13)\nBUF\n(13)\nBUF\n(11)\nBUF\n(10)\nBUF\n(13)\nBUF\n(13)\nBUF\n(13)\nBUF\n(12)\nBUF\n(13)\nBUF\n(12)\nBUF\n(13)\nBUF\n(13)\nBUF\n(12)\nBUF\n(13)\nBUF\n(12)\nBUF\n(12)\nBUF\n(12)\nBUF\n(11)\nBUF\n(10)\nBUF\n(12)\nBUF\n(13)\nBUF\n(12)\nBUF\n(11)\nBUF\n(13)\nBUF\n(9)\nBUF\n(12)\nBUF\n(7)\nCHI\n(10)\nCHI\n(13)\nCHI\n(10)\nCHI\n(11)\nCHI\n(10)\nCHI\n(10)\nCHI\n(10)\nCHI\n(10)\nCHI\n(11)\nCHI\n(11)\nCHI\n(11)\nCHI\n(13)\nCHI\n(10)\nCHI\n(11)\nCHI\n(10)\nCHI\n(12)\nCHI\n(11)\nCHI\n(10)\nCHI\n(10)\nCHI\n(10)\nCHI\n(12)\nCHI\n(10)\nCHI\n(12)\nCHI\n(9)\nCHI\n(11)\nCHI\n(10)\nCHI\n(9)\nCHI\n(11)\nCHI\n(8)\nCHI\n(11)\nCHI\n(12)\nCHI\n(10)\nCHI\n(11)\nCHI\n(11)\nCHI\n(11)\nCHI\n(10)\nCHI\n(12)\nCHI\n(10)\nCHI\n(11)\nCHI\n(11)\nCHI\n(8)\nCHI\n(10)\nCHI\n(10)\nCHI\n(9)\nCHI\n(11)\nCHI\n(10)\nCHI\n(9)\nCHI\n(13)\nCHI\n(11)\nCHI\n(11)\nCHI\n(8)\nCHI\n(10)\nCHI\n(12)\nCHI\n(12)\nCHI\n(10)\nCHI\n(11)\nCHI\n(11)\nCHI\n(9)\nCHI\n(11)\nCHI\n(11)\nCHI\n(9)\nCHI\n(12)\nCHI\n(10)\nCHI\n(11)\nCHI\n(10)\nCHI\n(10)\nCHI\n(9)\nCHI\n(12)\nCHI\n(11)\nCHI\n(10)\nCHI\n(8)\nCHI\n(12)\nCHI\n(7)\nCHI\n(12)\nCHI\n(9)\nCHI\n(10)\nCHI\n(4)\nCHI\n(13)\nCHI\n(13)\nCHI\n(10)\nCHI\n(13)\nCHI\n(7)\nCHI\n(10)\nCHI\n(12)\nCHI\n(7)\nCHI\n(10)\nCHI\n(11)\nCHI\n(3)\nCHI\n(10)\nCHI\n(6)\nDAL\n(7)\nDAL\n(9)\nDAL\n(8)\nDAL\n(10)\nDAL\n(9)\nDAL\n(9)\nDAL\n(9)\nDAL\n(5)\nDAL\n(7)\nDAL\n(10)\nDAL\n(7)\nDAL\n(1)\nDAL\n(7)\nDAL\n(10)\nDAL\n(8)\nDAL\n(10)\nDAL\n(7)\nDAL\n(8)\nDAL\n(7)\nDAL\n(8)\nDAL\n(11)\nDAL\n(9)\nDAL\n(11)\nDAL\n(8)\nDAL\n(8)\nDAL\n(8)\nDAL\n(6)\nDAL\n(9)\nDAL\n(4)\nDAL\n(9)\nDAL\n(11)\nDAL\n(8)\nDAL\n(10)\nDAL\n(10)\nDAL\n(9)\nDAL\n(9)\nDAL\n(7)\nDAL\n(8)\nDAL\n(8)\nDAL\n(7)\nDAL\n(4)\nDAL\n(8)\nDAL\n(8)\nDAL\n(7)\nDAL\n(5)\nDAL\n(9)\nDAL\n(8)\nDAL\n(8)\nDAL\n(10)\nDAL\n(7)\nDAL\n(7)\nDAL\n(9)\nDAL\n(11)\nDAL\n(8)\nDAL\n(4)\nDAL\n(7)\nDAL\n(5)\nDAL\n(3)\nDAL\n(9)\nDAL\n(10)\nDAL\n(5)\nDAL\n(8)\nDAL\n(7)\nDAL\n(9)\nDAL\n(2)\nDAL\n(9)\nDAL\n(7)\nDAL\n(6)\nDAL\n(6)\nDAL\n(7)\nDAL\n(9)\nDAL\n(10)\nTEN\n(1)\nDAL\n(9)\nDAL\n(3)\nDAL\n(3)\nDAL\n(3)\nDAL\n(4)\nDAL\n(11)\nDAL\n(9)\nDAL\n(3)\nTEN\n(1)\nTEN\n(9)\nDAL\n(8)\nDAL\n(8)\nDAL\n(8)\nDAL\n(10)\nDAL\n(4)\nDAL\n(9)\nDAL\n(9)\nDET\n(8)\nDET\n(8)\nTB\n(3)\nDET\n(9)\nDET\n(8)\nDET\n(8)\nDET\n(8)\nDET\n(7)\nDET\n(9)\nDET\n(8)\nDET\n(6)\nDET\n(12)\nDET\n(9)\nDET\n(9)\nDET\n(6)\nDET\n(7)\nDET\n(9)\nDET\n(11)\nDET\n(11)\nDET\n(7)\nDET\n(8)\nDET\n(8)\nDET\n(8)\nDET\n(7)\nDET\n(3)\nDET\n(7)\nTB\n(1)\nDET\n(7)\nDET\n(10)\nDET\n(8)\nDET\n(10)\nDET\n(7)\nDET\n(9)\nDET\n(9)\nDET\n(5)\nDET\n(8)\nDET\n(10)\nDET\n(7)\nDET\n(9)\nDET\n(2)\nDET\n(11)\nDET\n(5)\nDET\n(5)\nDET\n(10)\nDET\n(8)\nDET\n(11)\nDET\n(7)\nDET\n(9)\nDET\n(9)\nDET\n(10)\nDET\n(6)\nDET\n(8)\nDET\n(10)\nDET\n(10)\nDET\n(8)\nDET\n(8)\nDET\n(9)\nDET\n(7)\nDET\n(8)\nDET\n(7)\nDET\n(11)\nTB\n(2)\nTB\n(6)\nDET\n(8)\nDET\n(5)\nTB\n(1)\nDET\n(2)\nDET\n(4)\nDET\n(10)\nTB\n(2)\nDET\n(7)\nDET\n(9)\nDET\n(11)\nDET\n(11)\nDET\n(8)\nDET\n(9)\nDET\n(11)\nTB\n(1)\nDET\n(7)\nDET\n(8)\nDET\n(2)\nTB\n(4)\nDET\n(8)\nDET\n(10)\nDET\n(1)\nDET\n(3)\nDET\n(9)\nDET\n(6)\nDET\n(8)\nDET\n(8)\nKC\n(11)\nKC\n(10)\nKC\n(12)\nKC\n(13)\nKC\n(7)\nKC\n(7)\nKC\n(13)\nKC\n(12)\nKC\n(10)\nKC\n(12)\nKC\n(12)\nKC\n(6)\nKC\n(12)\nKC\n(8)\nKC\n(12)\nKC\n(11)\nKC\n(12)\nKC\n(12)\nKC\n(12)\nKC\n(12)\nKC\n(7)\nKC\n(7)\nKC\n(10)\nKC\n(6)\nKC\n(13)\nKC\n(12)\nKC\n(12)\nKC\n(10)\nKC\n(13)\nKC\n(7)\nKC\n(9)\nKC\n(12)\nKC\n(8)\nKC\n(8)\nKC\n(12)\nKC\n(7)\nKC\n(11)\nKC\n(13)\nKC\n(12)\nKC\n(12)\nKC\n(13)\nKC\n(12)\nKC\n(12)\nKC\n(11)\nKC\n(10)\nKC\n(12)\nKC\n(12)\nKC\n(10)\nKC\n(8)\nKC\n(9)\nKC\n(12)\nKC\n(12)\nKC\n(9)\nKC\n(11)\nKC\n(12)\nKC\n(12)\nKC\n(13)\nKC\n(11)\nKC\n(13)\nKC\n(12)\nKC\n(10)\nKC\n(11)\nKC\n(11)\nKC\n(6)\nKC\n(12)\nKC\n(12)\nKC\n(11)\nKC\n(11)\nKC\n(12)\nKC\n(12)\nKC\n(11)\nKC\n(8)\nKC\n(13)\nKC\n(10)\nKC\n(12)\nKC\n(8)\nKC\n(12)\nKC\n(11)\nKC\n(6)\nKC\n(11)\nKC\n(12)\nKC\n(13)\nKC\n(7)\nKC\n(9)\nKC\n(11)\nKC\n(12)\nKC\n(2)\nKC\n(13)\nKC\n(7)\nKC\n(5)\nPHI\n(3)\nPHI\n(7)\nPIT\n(6)\nPIT\n(2)\nPIT\n(6)\nPIT\n(6)\nPIT\n(3)\nPHI\n(1)\nPIT\n(5)\nPIT\n(3)\nPIT\n(5)\nPIT\n(4)\nPIT\n(6)\nPIT\n(7)\nPIT\n(4)\nPIT\n(4)\nPIT\n(5)\nPIT\n(6)\nPIT\n(8)\nPIT\n(2)\nPIT\n(5)\nPIT\n(6)\nPIT\n(6)\nPIT\n(5)\nPHI\n(1)\nPIT\n(4)\nPIT\n(4)\nPIT\n(3)\nPIT\n(5)\nPIT\n(6)\nPIT\n(6)\nPIT\n(4)\nPIT\n(6)\nPIT\n(7)\nPIT\n(6)\nPIT\n(6)\nPIT\n(8)\nPHI\n(2)\nPIT\n(5)\nPIT\n(5)\nPIT\n(5)\nPIT\n(4)\nPIT\n(6)\nPIT\n(5)\nPIT\n(7)\nPIT\n(8)\nPIT\n(3)\nPIT\n(3)\nPIT\n(7)\nPIT\n(8)\nPIT\n(3)\nPIT\n(5)\nPIT\n(8)\nPIT\n(5)\nPIT\n(9)\nPIT\n(6)\nPIT\n(4)\nPHI\n(2)\nPIT\n(6)\nPIT\n(6)\nPIT\n(4)\nPIT\n(3)\nPIT\n(4)\nPIT\n(5)\nPIT\n(4)\nPIT\n(6)\nPHI\n(12)\nPIT\n(5)\nPIT\n(5)\nPIT\n(8)\nPIT\n(6)\nPIT\n(7)\nPIT\n(10)\nPIT\n(3)\nPIT\n(6)\nPIT\n(7)\nPIT\n(7)\nPIT\n(8)\nPIT\n(5)\nPIT\n(7)\nPIT\n(7)\nPHI\n(9)\nPIT\n(6)\nPIT\n(11)\nPIT\n(3)\nPIT\n(7)\nPHI\n(8)\nPIT\n(8)\nPIT\n(6)\nPIT\n(10)\nCAR\n(2)\nBAL\n(2)\nCAR\n(5)\nCAR\n(3)\nCAR\n(11)\nCAR\n(11)\nCAR\n(11)\nCAR\n(8)\nCAR\n(8)\nCAR\n(6)\nCAR\n(3)\nCAR\n(2)\nCAR\n(8)\nCAR\n(12)\nCAR\n(2)\nCAR\n(3)\nCAR\n(6)\nCAR\n(4)\nCAR\n(6)\nCAR\n(4)\nCAR\n(9)\nCAR\n(11)\nCAR\n(7)\nCAR\n(11)\nBAL\n(2)\nCAR\n(3)\nCAR\n(10)\nCAR\n(4)\nBAL\n(2)\nCAR\n(10)\nCAR\n(3)\nCAR\n(1)\nCAR\n(12)\nCAR\n(5)\nCAR\n(3)\nCAR\n(1)\nCAR\n(4)\nCAR\n(5)\nCAR\n(3)\nCAR\n(3)\nCAR\n(3)\nCAR\n(2)\nCAR\n(1)\nCAR\n(3)\nCAR\n(9)\nCAR\n(2)\nCAR\n(6)\nCAR\n(11)\nCAR\n(12)\nCAR\n(12)\nCAR\n(2)\nCAR\n(2)\nCAR\n(2)\nCAR\n(4)\nCAR\n(3)\nCAR\n(3)\nCAR\n(6)\nCAR\n(6)\nCAR\n(10)\nCAR\n(3)\nCAR\n(2)\nCAR\n(4)\nBAL\n(1)\nBAL\n(10)\nCAR\n(6)\nBAL\n(3)\nCAR\n(5)\nCAR\n(3)\nCAR\n(3)\nCAR\n(4)\nCAR\n(1)\nBAL\n(2)\nCAR\n(4)\nBAL\n(4)\nCAR\n(2)\nCAR\n(4)\nCAR\n(5)\nCAR\n(3)\nCAR\n(1)\nCAR\n(6)\nCAR\n(9)\nBAL\n(11)\nBAL\n(11)\nCAR\n(3)\nCAR\n(4)\nCAR\n(2)\nBAL\n(12)\nCAR\n(7)\nBAL\n(11)\nBAL\n(13)\nLAC\n(1)\nNYJ\n(6)\nNYJ\n(4)\nLAC\n(4)\nNYJ\n(5)\nNYJ\n(5)\nNYJ\n(4)\nLAC\n(4)\nNYJ\n(1)\nLAC\n(9)\nNYJ\n(1)\nNYJ\n(5)\nNYJ\n(1)\nNYJ\n(6)\nNYJ\n(1)\nLAC\n(1)\nNYJ\n(1)\nLAC\n(3)\nLAC\n(1)\nLAC\n(3)\nLAC\n(4)\nLAC\n(5)\nLAC\n(1)\nNYJ\n(4)\nLAC\n(4)\nLAC\n(2)\nLAC\n(3)\nNYJ\n(2)\nLAC\n(3)\nLAC\n(2)\nLAC\n(1)\nLAC\n(3)\nLAC\n(5)\nLAC\n(1)\nLAC\n(4)\nLAC\n(5)\nNYJ\n(3)\nLAC\n(3)\nLAC\n(1)\nLAC\n(1)\nLAC\n(2)\nLAC\n(3)\nLAC\n(3)\nLAC\n(1)\nNYJ\n(3)\nLAC\n(1)\nNYJ\n(1)\nLAC\n(4)\nLAC\n(6)\nLAC\n(4)\nLAC\n(4)\nLAC\n(3)\nLAC\n(3)\nLAC\n(1)\nNYJ\n(2)\nLAC\n(2)\nLAC\n(2)\nLAC\n(4)\nLAC\n(4)\nLAC\n(1)\nLAC\n(1)\nNYJ\n(1)\nLAC\n(3)\nNYJ\n(4)\nLAC\n(3)\nLAC\n(7)\nLAC\n(1)\nLAC\n(2)\nLAC\n(4)\nLAC\n(3)\nLAC\n(5)\nLAC\n(6)\nLAC\n(2)\nLAC\n(2)\nNYJ\n(5)\nLAC\n(2)\nLAC\n(1)\nLAC\n(6)\nLAC\n(4)\nLAC\n(5)\nLAC\n(5)\nNYJ\n(2)\nNYJ\n(5)\nLAC\n(7)\nLAC\n(5)\nLAC\n(1)\nLAC\n(7)\nLAC\n(2)\nLAC\n(5)\nLAC\n(11)\nDEN\n(6)\nDEN\n(11)\nDEN\n(11)\nDEN\n(7)\nDEN\n(3)\nDEN\n(3)\nDEN\n(7)\nDEN\n(9)\nDEN\n(4)\nDEN\n(7)\nDEN\n(10)\nDEN\n(9)\nDEN\n(13)\nDEN\n(4)\nDEN\n(9)\nDEN\n(8)\nDEN\n(4)\nDEN\n(7)\nDEN\n(9)\nDEN\n(9)\nDEN\n(3)\nDEN\n(3)\nDEN\n(3)\nDEN\n(3)\nDEN\n(10)\nDEN\n(9)\nDEN\n(8)\nDEN\n(5)\nDEN\n(11)\nDEN\n(3)\nDEN\n(2)\nDEN\n(9)\nDEN\n(3)\nDEN\n(3)\nDEN\n(8)\nDEN\n(2)\nDEN\n(5)\nDEN\n(9)\nDEN\n(7)\nDEN\n(10)\nDEN\n(10)\nDEN\n(9)\nDEN\n(9)\nDEN\n(4)\nLV\n(1)\nDEN\n(3)\nDEN\n(5)\nDEN\n(5)\nDEN\n(4)\nDEN\n(5)\nDEN\n(9)\nDEN\n(11)\nDEN\n(6)\nDEN\n(3)\nDEN\n(5)\nDEN\n(9)\nDEN\n(3)\nDEN\n(5)\nLV\n(1)\nDEN\n(5)\nDEN\n(8)\nDEN\n(6)\nDEN\n(9)\nDEN\n(1)\nDEN\n(11)\nDEN\n(8)\nDEN\n(3)\nDEN\n(7)\nDEN\n(9)\nDEN\n(9)\nDEN\n(3)\nDEN\n(5)\nDEN\n(6)\nDEN\n(1)\nDEN\n(7)\nDEN\n(5)\nDEN\n(6)\nDEN\n(10)\nDEN\n(8)\nDEN\n(2)\nDEN\n(8)\nDEN\n(12)\nDEN\n(3)\nDEN\n(5)\nDEN\n(10)\nDEN\n(4)\nDEN\n(5)\nLV\n(1)\nDEN\n(3)\nDEN\n(3)\nJAX\n(5)\nNYG\n(5)\nNYG\n(2)\nNYG\n(1)\nJAX\n(4)\nJAX\n(4)\nJAX\n(2)\nJAX\n(3)\nJAX\n(2)\nNYG\n(1)\nNYG\n(4)\nNYG\n(8)\nJAX\n(5)\nJAX\n(5)\nJAX\n(5)\nJAX\n(5)\nJAX\n(3)\nJAX\n(5)\nJAX\n(3)\nJAX\n(5)\nJAX\n(6)\nJAX\n(4)\nJAX\n(4)\nJAX\n(10)\nJAX\n(6)\nJAX\n(6)\nJAX\n(2)\nJAX\n(6)\nNYG\n(1)\nJAX\n(5)\nJAX\n(4)\nJAX\n(5)\nJAX\n(4)\nJAX\n(4)\nNYG\n(2)\nJAX\n(3)\nJAX\n(2)\nNYG\n(12)\nJAX\n(4)\nJAX\n(8)\nJAX\n(7)\nJAX\n(7)\nJAX\n(4)\nJAX\n(8)\nJAX\n(6)\nJAX\n(5)\nJAX\n(4)\nJAX\n(7)\nJAX\n(5)\nJAX\n(6)\nJAX\n(10)\nJAX\n(6)\nJAX\n(7)\nJAX\n(7)\nJAX\n(6)\nJAX\n(5)\nJAX\n(7)\nJAX\n(8)\nNYG\n(3)\nJAX\n(8)\nJAX\n(12)\nJAX\n(9)\nJAX\n(8)\nJAX\n(2)\nJAX\n(1)\nJAX\n(5)\nJAX\n(6)\nJAX\n(8)\nJAX\n(7)\nJAX\n(6)\nJAX\n(4)\nNYG\n(1)\nJAX\n(8)\nJAX\n(6)\nJAX\n(11)\nJAX\n(6)\nJAX\n(10)\nJAX\n(5)\nJAX\n(10)\nJAX\n(3)\nJAX\n(6)\nJAX\n(8)\nNYG\n(4)\nJAX\n(6)\nJAX\n(9)\nJAX\n(6)\nJAX\n(6)\nJAX\n(11)\nJAX\n(4)\nJAX\n(4)\nSF\n(4)\nSF\n(4)\nSF\n(7)\nSF\n(6)\nSF\n(2)\nSF\n(2)\nMIN\n(1)\nSF\n(2)\nSF\n(3)\nSF\n(4)\nSF\n(2)\nSF\n(7)\nSF\n(2)\nSF\n(3)\nSF\n(3)\nSF\n(2)\nSF\n(2)\nSF\n(1)\nSF\n(2)\nSF\n(1)\nSF\n(2)\nSF\n(2)\nSF\n(2)\nSF\n(2)\nSF\n(7)\nSF\n(1)\nSF\n(5)\nSF\n(1)\nSF\n(6)\nSF\n(1)\nSF\n(5)\nSF\n(2)\nSF\n(7)\nSF\n(2)\nMIN\n(1)\nMIN\n(4)\nSF\n(1)\nSF\n(6)\nSF\n(2)\nSF\n(4)\nSF\n(1)\nSF\n(1)\nSF\n(2)\nSF\n(2)\nMIN\n(2)\nSF\n(7)\nMIN\n(2)\nSF\n(2)\nSF\n(3)\nMIN\n(2)\nSF\n(1)\nSF\n(4)\nSF\n(5)\nSF\n(2)\nMIN\n(1)\nSF\n(1)\nSF\n(1)\nMIN\n(1)\nSF\n(2)\nSF\n(2)\nSF\n(3)\nSF\n(5)\nSF\n(5)\nSF\n(3)\nMIN\n(7)\nSF\n(4)\nMIN\n(13)\nMIN\n(1)\nSF\n(2)\nMIN\n(1)\nSF\n(2)\nSF\n(4)\nSF\n(3)\nMIN\n(5)\nSF\n(4)\nMIN\n(1)\nSF\n(2)\nSF\n(2)\nSF\n(2)\nMIN\n(1)\nSF\n(4)\nSF\n(3)\nMIN\n(2)\nSF\n(2)\nSF\n(2)\nMIN\n(13)\nMIN\n(4)\nMIN\n(5)\nMIN\n(2)\nMIN\n(12)"
+      "ts": "2026-11-24T04:30:17.576795Z",
+      "text": "Weekly Standings\nSanitized observations\nSUN\nCIN\nWAS\nSUN\nIND\nHOU\nSUN\nMIA\nBUF\nSUN\nNO\nCHI\nSUN\nTEN\nDAL\nSUN\nTB\nDET\nSUN\nARI\nKC\nSUN\nPIT\nPHI\nSUN\nBAL\nCAR\nSUN\nNYJ\nLAC\nSUN\nLV\nDEN\nSUN\nJAX\nNYG\nSUN\nMIN\nSF\nWAS\n(9)\nCIN\n(3)\nWAS\n(9)\nCIN\n(1)\nCIN\n(5)\nCIN\n(1)\nCIN\n(6)\nCIN\n(6)\nCIN\n(6)\nCIN\n(9)\nCIN\n(2)\nCIN\n(11)\nCIN\n(4)\nCIN\n(2)\nCIN\n(1)\nCIN\n(4)\nCIN\n(5)\nCIN\n(2)\nCIN\n(1)\nCIN\n(7)\nCIN\n(6)\nCIN\n(8)\nCIN\n(6)\nCIN\n(1)\nCIN\n(4)\nCIN\n(7)\nCIN\n(8)\nCIN\n(5)\nCIN\n(5)\nCIN\n(7)\nCIN\n(6)\nCIN\n(2)\nCIN\n(7)\nWAS\n(13)\nCIN\n(7)\nCIN\n(6)\nCIN\n(11)\nCIN\n(9)\nCIN\n(10)\nCIN\n(4)\nCIN\n(6)\nCIN\n(6)\nCIN\n(7)\nCIN\n(6)\nCIN\n(6)\nCIN\n(6)\nCIN\n(11)\nCIN\n(6)\nCIN\n(1)\nCIN\n(2)\nCIN\n(9)\nCIN\n(7)\nCIN\n(4)\nCIN\n(5)\nCIN\n(10)\nCIN\n(10)\nCIN\n(7)\nCIN\n(7)\nCIN\n(10)\nCIN\n(7)\nCIN\n(2)\nCIN\n(9)\nCIN\n(9)\nCIN\n(4)\nCIN\n(10)\nCIN\n(7)\nCIN\n(2)\nCIN\n(5)\nCIN\n(9)\nCIN\n(8)\nCIN\n(10)\nCIN\n(11)\nCIN\n(5)\nCIN\n(7)\nCIN\n(10)\nCIN\n(7)\nCIN\n(9)\nCIN\n(11)\nCIN\n(9)\nCIN\n(10)\nCIN\n(1)\nCIN\n(4)\nCIN\n(5)\nCIN\n(13)\nCIN\n(13)\nCIN\n(5)\nCIN\n(3)\nCIN\n(12)\nCIN\n(1)\nCIN\n(2)\nHOU\n(13)\nHOU\n(13)\nHOU\n(8)\nHOU\n(13)\nHOU\n(5)\nHOU\n(12)\nHOU\n(13)\nHOU\n(8)\nHOU\n(5)\nHOU\n(3)\nHOU\n(3)\nHOU\n(12)\nHOU\n(5)\nHOU\n(9)\nHOU\n(9)\nHOU\n(10)\nHOU\n(11)\nHOU\n(9)\nHOU\n(10)\nHOU\n(11)\nHOU\n(13)\nHOU\n(12)\nHOU\n(11)\nHOU\n(12)\nHOU\n(11)\nHOU\n(9)\nHOU\n(9)\nHOU\n(13)\nHOU\n(8)\nHOU\n(12)\nHOU\n(10)\nHOU\n(11)\nIND\n(4)\nHOU\n(6)\nHOU\n(6)\nHOU\n(12)\nHOU\n(4)\nHOU\n(11)\nHOU\n(11)\nHOU\n(9)\nHOU\n(9)\nHOU\n(13)\nHOU\n(13)\nHOU\n(3)\nHOU\n(6)\nHOU\n(1)\nHOU\n(11)\nHOU\n(4)\nHOU\n(13)\nIND\n(5)\nHOU\n(11)\nHOU\n(8)\nHOU\n(6)\nHOU\n(13)\nHOU\n(8)\nHOU\n(4)\nHOU\n(8)\nHOU\n(7)\nHOU\n(12)\nHOU\n(13)\nHOU\n(11)\nHOU\n(10)\nHOU\n(13)\nHOU\n(3)\nHOU\n(9)\nHOU\n(9)\nHOU\n(1)\nHOU\n(8)\nHOU\n(8)\nHOU\n(13)\nHOU\n(3)\nHOU\n(13)\nHOU\n(6)\nHOU\n(4)\nHOU\n(6)\nHOU\n(9)\nIND\n(1)\nHOU\n(10)\nIND\n(13)\nHOU\n(4)\nBUF\n(12)\nBUF\n(12)\nBUF\n(13)\nBUF\n(12)\nBUF\n(12)\nBUF\n(12)\nBUF\n(12)\nBUF\n(13)\nBUF\n(11)\nBUF\n(13)\nBUF\n(13)\nBUF\n(10)\nBUF\n(11)\nBUF\n(13)\nBUF\n(13)\nBUF\n(13)\nBUF\n(13)\nBUF\n(13)\nBUF\n(13)\nBUF\n(13)\nBUF\n(13)\nBUF\n(13)\nBUF\n(13)\nBUF\n(12)\nBUF\n(13)\nBUF\n(13)\nBUF\n(13)\nBUF\n(13)\nBUF\n(12)\nBUF\n(12)\nBUF\n(12)\nBUF\n(13)\nBUF\n(13)\nBUF\n(11)\nBUF\n(13)\nBUF\n(13)\nMIA\n(1)\nBUF\n(13)\nBUF\n(13)\nBUF\n(13)\nBUF\n(13)\nBUF\n(13)\nBUF\n(13)\nBUF\n(13)\nBUF\n(12)\nBUF\n(12)\nBUF\n(10)\nBUF\n(12)\nBUF\n(13)\nBUF\n(13)\nBUF\n(13)\nBUF\n(13)\nBUF\n(13)\nBUF\n(13)\nBUF\n(13)\nBUF\n(12)\nBUF\n(12)\nBUF\n(13)\nBUF\n(12)\nBUF\n(13)\nBUF\n(12)\nBUF\n(13)\nBUF\n(13)\nBUF\n(10)\nBUF\n(13)\nBUF\n(13)\nBUF\n(11)\nBUF\n(13)\nBUF\n(13)\nBUF\n(13)\nBUF\n(12)\nBUF\n(13)\nBUF\n(12)\nBUF\n(12)\nBUF\n(13)\nBUF\n(13)\nBUF\n(13)\nBUF\n(12)\nBUF\n(12)\nBUF\n(11)\nBUF\n(12)\nBUF\n(13)\nBUF\n(10)\nBUF\n(12)\nBUF\n(12)\nBUF\n(11)\nBUF\n(13)\nBUF\n(9)\nBUF\n(12)\nBUF\n(7)\nCHI\n(10)\nCHI\n(13)\nCHI\n(10)\nCHI\n(10)\nCHI\n(11)\nCHI\n(10)\nCHI\n(10)\nCHI\n(11)\nCHI\n(10)\nCHI\n(11)\nCHI\n(11)\nCHI\n(13)\nCHI\n(10)\nCHI\n(11)\nCHI\n(9)\nCHI\n(10)\nCHI\n(12)\nCHI\n(10)\nCHI\n(12)\nCHI\n(10)\nCHI\n(12)\nCHI\n(11)\nCHI\n(10)\nCHI\n(10)\nCHI\n(11)\nCHI\n(9)\nCHI\n(11)\nCHI\n(10)\nCHI\n(11)\nCHI\n(8)\nCHI\n(11)\nCHI\n(11)\nCHI\n(12)\nCHI\n(10)\nCHI\n(11)\nCHI\n(10)\nCHI\n(10)\nCHI\n(12)\nCHI\n(11)\nCHI\n(11)\nCHI\n(10)\nCHI\n(10)\nCHI\n(10)\nCHI\n(11)\nCHI\n(8)\nCHI\n(9)\nCHI\n(9)\nCHI\n(13)\nCHI\n(11)\nCHI\n(11)\nCHI\n(12)\nCHI\n(10)\nCHI\n(12)\nCHI\n(8)\nCHI\n(11)\nCHI\n(9)\nCHI\n(11)\nCHI\n(10)\nCHI\n(11)\nCHI\n(9)\nCHI\n(10)\nCHI\n(10)\nCHI\n(11)\nCHI\n(9)\nCHI\n(12)\nCHI\n(11)\nCHI\n(10)\nCHI\n(10)\nCHI\n(12)\nCHI\n(11)\nCHI\n(8)\nCHI\n(12)\nCHI\n(7)\nCHI\n(13)\nCHI\n(9)\nCHI\n(12)\nCHI\n(4)\nCHI\n(10)\nCHI\n(13)\nCHI\n(13)\nCHI\n(10)\nCHI\n(12)\nCHI\n(7)\nCHI\n(10)\nCHI\n(7)\nCHI\n(10)\nCHI\n(11)\nCHI\n(3)\nCHI\n(10)\nCHI\n(6)\nDAL\n(7)\nDAL\n(9)\nDAL\n(8)\nDAL\n(9)\nDAL\n(10)\nDAL\n(9)\nDAL\n(9)\nDAL\n(7)\nDAL\n(5)\nDAL\n(7)\nDAL\n(10)\nDAL\n(1)\nDAL\n(7)\nDAL\n(10)\nDAL\n(8)\nDAL\n(7)\nDAL\n(11)\nDAL\n(8)\nDAL\n(11)\nDAL\n(8)\nDAL\n(10)\nDAL\n(7)\nDAL\n(8)\nDAL\n(9)\nDAL\n(9)\nDAL\n(6)\nDAL\n(9)\nDAL\n(8)\nDAL\n(8)\nDAL\n(4)\nDAL\n(10)\nDAL\n(10)\nDAL\n(11)\nDAL\n(9)\nDAL\n(9)\nDAL\n(8)\nDAL\n(8)\nDAL\n(7)\nDAL\n(8)\nDAL\n(5)\nDAL\n(9)\nDAL\n(8)\nDAL\n(8)\nDAL\n(7)\nDAL\n(4)\nDAL\n(7)\nDAL\n(8)\nDAL\n(8)\nDAL\n(7)\nDAL\n(10)\nDAL\n(8)\nDAL\n(9)\nDAL\n(11)\nDAL\n(7)\nDAL\n(7)\nDAL\n(3)\nDAL\n(9)\nDAL\n(4)\nDAL\n(5)\nDAL\n(5)\nDAL\n(7)\nDAL\n(2)\nDAL\n(10)\nDAL\n(7)\nDAL\n(8)\nDAL\n(9)\nDAL\n(9)\nDAL\n(7)\nDAL\n(6)\nDAL\n(6)\nDAL\n(9)\nDAL\n(10)\nTEN\n(1)\nDAL\n(4)\nDAL\n(3)\nDAL\n(9)\nDAL\n(3)\nDAL\n(3)\nDAL\n(11)\nDAL\n(3)\nTEN\n(9)\nDAL\n(8)\nTEN\n(1)\nDAL\n(9)\nDAL\n(8)\nDAL\n(8)\nDAL\n(10)\nDAL\n(4)\nDAL\n(9)\nDAL\n(9)\nDET\n(8)\nDET\n(8)\nTB\n(3)\nDET\n(8)\nDET\n(9)\nDET\n(8)\nDET\n(8)\nDET\n(9)\nDET\n(7)\nDET\n(6)\nDET\n(8)\nDET\n(12)\nDET\n(9)\nDET\n(9)\nDET\n(7)\nDET\n(11)\nDET\n(8)\nDET\n(11)\nDET\n(8)\nDET\n(6)\nDET\n(7)\nDET\n(9)\nDET\n(7)\nDET\n(8)\nDET\n(8)\nTB\n(1)\nDET\n(7)\nDET\n(7)\nDET\n(3)\nDET\n(10)\nDET\n(9)\nDET\n(9)\nDET\n(10)\nDET\n(8)\nDET\n(5)\nDET\n(7)\nDET\n(7)\nDET\n(10)\nDET\n(9)\nDET\n(8)\nDET\n(11)\nDET\n(5)\nDET\n(5)\nDET\n(2)\nDET\n(11)\nDET\n(10)\nDET\n(7)\nDET\n(9)\nDET\n(10)\nDET\n(9)\nDET\n(10)\nDET\n(8)\nDET\n(10)\nDET\n(6)\nDET\n(8)\nDET\n(7)\nDET\n(8)\nDET\n(8)\nDET\n(9)\nDET\n(11)\nTB\n(6)\nDET\n(5)\nDET\n(7)\nDET\n(2)\nTB\n(2)\nDET\n(8)\nTB\n(1)\nTB\n(2)\nDET\n(4)\nDET\n(10)\nDET\n(7)\nDET\n(9)\nDET\n(11)\nTB\n(1)\nDET\n(8)\nDET\n(11)\nDET\n(11)\nDET\n(9)\nDET\n(7)\nDET\n(2)\nDET\n(8)\nDET\n(10)\nTB\n(4)\nDET\n(8)\nDET\n(1)\nDET\n(3)\nDET\n(9)\nDET\n(6)\nDET\n(8)\nDET\n(8)\nKC\n(11)\nKC\n(10)\nKC\n(12)\nKC\n(7)\nKC\n(13)\nKC\n(7)\nKC\n(13)\nKC\n(10)\nKC\n(12)\nKC\n(12)\nKC\n(12)\nKC\n(6)\nKC\n(12)\nKC\n(8)\nKC\n(6)\nKC\n(12)\nKC\n(10)\nKC\n(12)\nKC\n(7)\nKC\n(12)\nKC\n(11)\nKC\n(12)\nKC\n(12)\nKC\n(7)\nKC\n(7)\nKC\n(12)\nKC\n(10)\nKC\n(12)\nKC\n(13)\nKC\n(13)\nKC\n(8)\nKC\n(8)\nKC\n(9)\nKC\n(7)\nKC\n(12)\nKC\n(12)\nKC\n(13)\nKC\n(11)\nKC\n(12)\nKC\n(10)\nKC\n(12)\nKC\n(12)\nKC\n(12)\nKC\n(12)\nKC\n(13)\nKC\n(11)\nKC\n(12)\nKC\n(10)\nKC\n(9)\nKC\n(8)\nKC\n(11)\nKC\n(12)\nKC\n(9)\nKC\n(12)\nKC\n(12)\nKC\n(11)\nKC\n(13)\nKC\n(12)\nKC\n(13)\nKC\n(10)\nKC\n(11)\nKC\n(12)\nKC\n(12)\nKC\n(11)\nKC\n(11)\nKC\n(6)\nKC\n(12)\nKC\n(12)\nKC\n(11)\nKC\n(12)\nKC\n(11)\nKC\n(8)\nKC\n(13)\nKC\n(11)\nKC\n(12)\nKC\n(10)\nKC\n(12)\nKC\n(8)\nKC\n(6)\nKC\n(12)\nKC\n(7)\nKC\n(9)\nKC\n(13)\nKC\n(11)\nKC\n(11)\nKC\n(12)\nKC\n(2)\nKC\n(13)\nKC\n(7)\nKC\n(5)\nPHI\n(3)\nPHI\n(7)\nPIT\n(6)\nPIT\n(6)\nPIT\n(2)\nPIT\n(6)\nPIT\n(3)\nPIT\n(5)\nPHI\n(1)\nPIT\n(5)\nPIT\n(3)\nPIT\n(4)\nPIT\n(6)\nPIT\n(7)\nPIT\n(5)\nPIT\n(8)\nPIT\n(6)\nPIT\n(6)\nPIT\n(5)\nPIT\n(4)\nPIT\n(4)\nPIT\n(5)\nPIT\n(2)\nPIT\n(6)\nPIT\n(6)\nPIT\n(4)\nPIT\n(3)\nPIT\n(4)\nPHI\n(1)\nPIT\n(5)\nPIT\n(7)\nPIT\n(6)\nPIT\n(6)\nPIT\n(6)\nPIT\n(6)\nPIT\n(4)\nPHI\n(2)\nPIT\n(8)\nPIT\n(5)\nPIT\n(7)\nPIT\n(8)\nPIT\n(4)\nPIT\n(6)\nPIT\n(5)\nPIT\n(5)\nPIT\n(5)\nPIT\n(3)\nPIT\n(3)\nPIT\n(8)\nPIT\n(7)\nPIT\n(5)\nPIT\n(5)\nPIT\n(8)\nPIT\n(3)\nPIT\n(6)\nPHI\n(2)\nPIT\n(6)\nPIT\n(9)\nPIT\n(4)\nPIT\n(4)\nPIT\n(4)\nPIT\n(4)\nPIT\n(6)\nPHI\n(12)\nPIT\n(3)\nPIT\n(5)\nPIT\n(6)\nPIT\n(8)\nPIT\n(5)\nPIT\n(5)\nPIT\n(6)\nPIT\n(7)\nPIT\n(10)\nPIT\n(8)\nPIT\n(6)\nPIT\n(3)\nPIT\n(7)\nPIT\n(7)\nPIT\n(5)\nPIT\n(7)\nPIT\n(6)\nPIT\n(11)\nPHI\n(9)\nPIT\n(7)\nPIT\n(3)\nPIT\n(7)\nPHI\n(8)\nPIT\n(8)\nPIT\n(6)\nPIT\n(10)\nCAR\n(2)\nBAL\n(2)\nCAR\n(5)\nCAR\n(11)\nCAR\n(3)\nCAR\n(11)\nCAR\n(11)\nCAR\n(8)\nCAR\n(8)\nCAR\n(3)\nCAR\n(6)\nCAR\n(2)\nCAR\n(8)\nCAR\n(12)\nCAR\n(11)\nCAR\n(6)\nCAR\n(7)\nCAR\n(4)\nCAR\n(9)\nCAR\n(2)\nCAR\n(3)\nCAR\n(6)\nCAR\n(4)\nCAR\n(11)\nCAR\n(10)\nCAR\n(10)\nCAR\n(4)\nCAR\n(3)\nBAL\n(2)\nBAL\n(2)\nCAR\n(5)\nCAR\n(12)\nCAR\n(3)\nCAR\n(1)\nCAR\n(3)\nCAR\n(1)\nCAR\n(5)\nCAR\n(4)\nCAR\n(3)\nCAR\n(9)\nCAR\n(2)\nCAR\n(2)\nCAR\n(1)\nCAR\n(3)\nCAR\n(3)\nCAR\n(3)\nCAR\n(6)\nCAR\n(11)\nCAR\n(12)\nCAR\n(12)\nCAR\n(4)\nCAR\n(2)\nCAR\n(2)\nCAR\n(2)\nCAR\n(3)\nCAR\n(6)\nCAR\n(10)\nCAR\n(3)\nCAR\n(6)\nCAR\n(2)\nBAL\n(1)\nCAR\n(6)\nCAR\n(3)\nCAR\n(5)\nCAR\n(4)\nBAL\n(10)\nBAL\n(3)\nCAR\n(4)\nCAR\n(3)\nCAR\n(3)\nCAR\n(1)\nBAL\n(2)\nCAR\n(4)\nCAR\n(3)\nCAR\n(2)\nBAL\n(4)\nCAR\n(5)\nCAR\n(4)\nCAR\n(1)\nCAR\n(9)\nBAL\n(11)\nCAR\n(3)\nBAL\n(11)\nCAR\n(6)\nCAR\n(4)\nCAR\n(2)\nBAL\n(12)\nCAR\n(7)\nBAL\n(11)\nBAL\n(13)\nLAC\n(1)\nNYJ\n(6)\nNYJ\n(4)\nNYJ\n(5)\nLAC\n(4)\nNYJ\n(5)\nNYJ\n(4)\nNYJ\n(1)\nLAC\n(4)\nNYJ\n(1)\nLAC\n(9)\nNYJ\n(5)\nNYJ\n(1)\nNYJ\n(6)\nNYJ\n(4)\nLAC\n(1)\nLAC\n(1)\nLAC\n(3)\nLAC\n(4)\nNYJ\n(1)\nLAC\n(1)\nNYJ\n(1)\nLAC\n(3)\nLAC\n(5)\nLAC\n(2)\nLAC\n(3)\nNYJ\n(2)\nLAC\n(2)\nLAC\n(4)\nLAC\n(3)\nLAC\n(1)\nLAC\n(5)\nLAC\n(1)\nLAC\n(5)\nLAC\n(4)\nLAC\n(3)\nLAC\n(3)\nNYJ\n(3)\nLAC\n(1)\nNYJ\n(3)\nLAC\n(1)\nLAC\n(3)\nLAC\n(3)\nLAC\n(1)\nLAC\n(2)\nLAC\n(1)\nNYJ\n(1)\nLAC\n(4)\nLAC\n(4)\nLAC\n(6)\nLAC\n(1)\nLAC\n(3)\nLAC\n(3)\nLAC\n(4)\nLAC\n(2)\nLAC\n(4)\nLAC\n(4)\nNYJ\n(2)\nLAC\n(2)\nLAC\n(1)\nLAC\n(3)\nLAC\n(3)\nLAC\n(1)\nLAC\n(1)\nNYJ\n(1)\nNYJ\n(4)\nLAC\n(7)\nLAC\n(3)\nLAC\n(2)\nLAC\n(4)\nLAC\n(5)\nLAC\n(6)\nLAC\n(2)\nLAC\n(6)\nNYJ\n(5)\nLAC\n(2)\nLAC\n(1)\nLAC\n(2)\nLAC\n(4)\nLAC\n(5)\nNYJ\n(5)\nLAC\n(7)\nNYJ\n(2)\nLAC\n(5)\nLAC\n(5)\nLAC\n(1)\nLAC\n(7)\nLAC\n(2)\nLAC\n(5)\nLAC\n(11)\nDEN\n(6)\nDEN\n(11)\nDEN\n(11)\nDEN\n(3)\nDEN\n(7)\nDEN\n(3)\nDEN\n(7)\nDEN\n(4)\nDEN\n(9)\nDEN\n(10)\nDEN\n(7)\nDEN\n(9)\nDEN\n(13)\nDEN\n(4)\nDEN\n(3)\nDEN\n(9)\nDEN\n(3)\nDEN\n(7)\nDEN\n(3)\nDEN\n(9)\nDEN\n(8)\nDEN\n(4)\nDEN\n(9)\nDEN\n(3)\nDEN\n(3)\nDEN\n(8)\nDEN\n(5)\nDEN\n(9)\nDEN\n(10)\nDEN\n(11)\nDEN\n(3)\nDEN\n(3)\nDEN\n(2)\nDEN\n(2)\nDEN\n(8)\nDEN\n(9)\nDEN\n(9)\nDEN\n(5)\nDEN\n(7)\nLV\n(1)\nDEN\n(3)\nDEN\n(9)\nDEN\n(9)\nDEN\n(10)\nDEN\n(10)\nDEN\n(4)\nDEN\n(5)\nDEN\n(5)\nDEN\n(5)\nDEN\n(4)\nDEN\n(3)\nDEN\n(11)\nDEN\n(6)\nDEN\n(9)\nDEN\n(9)\nDEN\n(5)\nLV\n(1)\nDEN\n(5)\nDEN\n(3)\nDEN\n(8)\nDEN\n(9)\nDEN\n(11)\nDEN\n(5)\nDEN\n(3)\nDEN\n(6)\nDEN\n(1)\nDEN\n(8)\nDEN\n(9)\nDEN\n(7)\nDEN\n(9)\nDEN\n(3)\nDEN\n(5)\nDEN\n(6)\nDEN\n(10)\nDEN\n(7)\nDEN\n(1)\nDEN\n(6)\nDEN\n(5)\nDEN\n(8)\nDEN\n(8)\nDEN\n(3)\nDEN\n(5)\nDEN\n(12)\nDEN\n(2)\nDEN\n(10)\nDEN\n(4)\nDEN\n(5)\nLV\n(1)\nDEN\n(3)\nDEN\n(3)\nJAX\n(5)\nNYG\n(5)\nNYG\n(2)\nJAX\n(4)\nNYG\n(1)\nJAX\n(4)\nJAX\n(2)\nJAX\n(2)\nJAX\n(3)\nNYG\n(4)\nNYG\n(1)\nNYG\n(8)\nJAX\n(5)\nJAX\n(5)\nJAX\n(10)\nJAX\n(3)\nJAX\n(4)\nJAX\n(5)\nJAX\n(6)\nJAX\n(5)\nJAX\n(5)\nJAX\n(3)\nJAX\n(5)\nJAX\n(4)\nJAX\n(5)\nJAX\n(2)\nJAX\n(6)\nJAX\n(6)\nJAX\n(6)\nNYG\n(1)\nJAX\n(4)\nJAX\n(4)\nJAX\n(4)\nJAX\n(3)\nNYG\n(2)\nJAX\n(5)\nNYG\n(12)\nJAX\n(2)\nJAX\n(4)\nJAX\n(6)\nJAX\n(5)\nJAX\n(7)\nJAX\n(4)\nJAX\n(8)\nJAX\n(7)\nJAX\n(8)\nJAX\n(4)\nJAX\n(7)\nJAX\n(6)\nJAX\n(5)\nJAX\n(7)\nJAX\n(6)\nJAX\n(7)\nJAX\n(10)\nJAX\n(5)\nJAX\n(8)\nNYG\n(3)\nJAX\n(6)\nJAX\n(7)\nJAX\n(12)\nJAX\n(8)\nJAX\n(1)\nJAX\n(8)\nJAX\n(6)\nJAX\n(9)\nJAX\n(2)\nJAX\n(5)\nJAX\n(6)\nJAX\n(8)\nJAX\n(7)\nJAX\n(4)\nNYG\n(1)\nJAX\n(8)\nJAX\n(5)\nJAX\n(11)\nJAX\n(6)\nJAX\n(10)\nJAX\n(6)\nJAX\n(10)\nJAX\n(6)\nNYG\n(4)\nJAX\n(6)\nJAX\n(8)\nJAX\n(3)\nJAX\n(9)\nJAX\n(6)\nJAX\n(6)\nJAX\n(11)\nJAX\n(4)\nJAX\n(4)\nSF\n(4)\nSF\n(4)\nSF\n(7)\nSF\n(2)\nSF\n(6)\nSF\n(2)\nMIN\n(1)\nSF\n(3)\nSF\n(2)\nSF\n(2)\nSF\n(4)\nSF\n(7)\nSF\n(2)\nSF\n(3)\nSF\n(2)\nSF\n(2)\nSF\n(2)\nSF\n(1)\nSF\n(2)\nSF\n(3)\nSF\n(2)\nSF\n(2)\nSF\n(1)\nSF\n(2)\nSF\n(1)\nSF\n(5)\nSF\n(1)\nSF\n(1)\nSF\n(7)\nSF\n(6)\nSF\n(2)\nSF\n(7)\nSF\n(5)\nMIN\n(4)\nMIN\n(1)\nSF\n(2)\nSF\n(6)\nSF\n(1)\nSF\n(2)\nMIN\n(2)\nSF\n(7)\nSF\n(1)\nSF\n(2)\nSF\n(4)\nSF\n(1)\nSF\n(2)\nMIN\n(2)\nSF\n(2)\nMIN\n(2)\nSF\n(3)\nSF\n(2)\nSF\n(4)\nSF\n(5)\nSF\n(1)\nSF\n(1)\nMIN\n(1)\nSF\n(2)\nMIN\n(1)\nSF\n(1)\nSF\n(3)\nSF\n(5)\nMIN\n(7)\nSF\n(2)\nMIN\n(13)\nSF\n(5)\nSF\n(3)\nSF\n(4)\nMIN\n(1)\nMIN\n(1)\nSF\n(2)\nSF\n(2)\nSF\n(4)\nSF\n(3)\nSF\n(2)\nSF\n(4)\nMIN\n(5)\nSF\n(2)\nMIN\n(1)\nSF\n(2)\nSF\n(4)\nMIN\n(2)\nSF\n(2)\nSF\n(3)\nMIN\n(1)\nSF\n(2)\nMIN\n(13)\nMIN\n(4)\nMIN\n(5)\nMIN\n(2)\nMIN\n(12)"
     }
   ]
 }
