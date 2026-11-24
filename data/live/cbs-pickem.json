@@ -5,14 +5,14 @@
   "week": 12,
   "slateSize": 16,
   "poolSize": 94,
-  "exportedAt": "2026-11-24T12:09:21.451404Z",
+  "exportedAt": "2026-11-24T13:24:20.748923Z",
   "source": "Automated local CBS browser capture",
   "privacy": "Raw CBS session/page data sanitized locally; pool/account identifiers and participant names not published.",
   "confidenceStatus": "unsubmitted",
   "cardIntentConfirmed": false,
   "cardIntentSource": null,
   "confidenceSource": "CBS Picks status",
-  "marketCapturedAt": "2026-11-24T12:09:21.451379Z",
+  "marketCapturedAt": "2026-11-24T13:24:20.748893Z",
   "marketSource": "CBS Sports odds \u2014 Week 12",
   "market": [
     {
@@ -26,7 +26,7 @@
       "away": "CHI",
       "home": "DET",
       "awayML": -141,
-      "homeML": 122,
+      "homeML": 120,
       "total": 55.2
     },
     {
@@ -39,21 +39,21 @@
     {
       "away": "KC",
       "home": "BUF",
-      "awayML": 128,
-      "homeML": -150,
-      "total": 48.0
+      "awayML": 130,
+      "homeML": -149,
+      "total": 47.5
     },
     {
       "away": "DEN",
       "home": "PIT",
       "awayML": -154,
       "homeML": 132,
-      "total": 38.0
+      "total": 37.8
     },
     {
       "away": "NO",
       "home": "CIN",
-      "awayML": 457,
+      "awayML": 474,
       "homeML": -588,
       "total": 50.5
     },
@@ -74,14 +74,14 @@
     {
       "away": "ATL",
       "home": "MIN",
-      "awayML": 276,
+      "awayML": 280,
       "homeML": -319,
       "total": 42.5
     },
     {
       "away": "TEN",
       "home": "JAX",
-      "awayML": 760,
+      "awayML": 770,
       "homeML": -1111,
       "total": 47.5
     },
@@ -89,27 +89,27 @@
       "away": "BAL",
       "home": "HOU",
       "awayML": 265,
-      "homeML": -310,
-      "total": 46.5
+      "homeML": -304,
+      "total": 46.2
     },
     {
       "away": "NE",
       "home": "LAC",
-      "awayML": -102,
+      "awayML": -101,
       "homeML": -112,
       "total": 35.5
     },
     {
       "away": "WAS",
       "home": "ARI",
-      "awayML": -357,
-      "homeML": 319,
+      "awayML": -370,
+      "homeML": 323,
       "total": 42.0
     },
     {
       "away": "SEA",
       "home": "SF",
-      "awayML": 148,
+      "awayML": 150,
       "homeML": -172,
       "total": 46.2
     },
@@ -117,14 +117,14 @@
       "away": "LV",
       "home": "CLE",
       "awayML": 198,
-      "homeML": -221,
+      "homeML": -220,
       "total": 41.5
     },
     {
       "away": "CAR",
       "home": "TB",
       "awayML": 134,
-      "homeML": -154,
+      "homeML": -153,
       "total": 43.5
     }
   ],
@@ -244,7 +244,7 @@
   ],
   "fieldModel": {
     "source": "Sanitized CBS revealed-pool observations",
-    "capturedAt": "2026-11-24T12:09:01.771635Z",
+    "capturedAt": "2026-11-24T13:24:00.444483Z",
     "observedEntries": 0,
     "locked": []
   },
@@ -252,13 +252,13 @@
     {
       "title": "NFL Football Tourney | Picks",
       "url": "sanitized://cbs-pickem/week-12",
-      "ts": "2026-11-24T12:08:56.476782Z",
-      "text": "CBS Pickem sanitized ownership\n0-0\nGB\n34%\n0-0\nLAR\n66%\n0-0\nCHI\n49%\n0-0\nDET\n51%\n0-0\nPHI\n8%\n0-0\nDAL\n92%\n0-0\nKC\n22%\n0-0\nBUF\n78%\n0-0\nDEN\n89%\n0-0\nPIT\n11%\n0-0\nNO\n1%\n0-0\nCIN\n99%\n0-0\nNYG\n97%\n0-0\nIND\n3%\n0-0\nNYJ\n85%\n0-0\nMIA\n15%\n0-0\nATL\n2%\n0-0\nMIN\n98%\n0-0\nTEN\n1%\n0-0\nJAX\n99%\n0-0\nBAL\n9%\n0-0\nHOU\n91%\n0-0\nNE\n73%\n0-0\nLAC\n27%\n0-0\nWAS\n94%\n0-0\nARI\n6%\n0-0\nSEA\n7%\n0-0\nSF\n93%\n0-0\nLV\n14%\n0-0\nCLE\n86%\n0-0\nCAR\n47%\n0-0\nTB\n53%"
+      "ts": "2026-11-24T13:23:55.089526Z",
+      "text": "CBS Pickem sanitized ownership\n0-0\nGB\n36%\n0-0\nLAR\n64%\n0-0\nCHI\n50%\n0-0\nDET\n50%\n0-0\nPHI\n7%\n0-0\nDAL\n93%\n0-0\nKC\n22%\n0-0\nBUF\n78%\n0-0\nDEN\n89%\n0-0\nPIT\n11%\n0-0\nNO\n1%\n0-0\nCIN\n99%\n0-0\nNYG\n97%\n0-0\nIND\n3%\n0-0\nNYJ\n85%\n0-0\nMIA\n15%\n0-0\nATL\n2%\n0-0\nMIN\n98%\n0-0\nTEN\n1%\n0-0\nJAX\n99%\n0-0\nBAL\n8%\n0-0\nHOU\n92%\n0-0\nNE\n72%\n0-0\nLAC\n28%\n0-0\nWAS\n94%\n0-0\nARI\n6%\n0-0\nSEA\n7%\n0-0\nSF\n93%\n0-0\nLV\n14%\n0-0\nCLE\n86%\n0-0\nCAR\n46%\n0-0\nTB\n54%"
     },
     {
       "title": "NFL Football Tourney | Weekly Standings",
       "url": "sanitized://cbs-pickem/week-12/standings/weekly",
-      "ts": "2026-11-24T12:09:01.771635Z",
+      "ts": "2026-11-24T13:24:00.444483Z",
       "text": "Weekly Standings\nSanitized observations\nSUN\nGB\nLAR\nSUN\nCHI\nDET\nSUN\nPHI\nDAL\nSUN\nKC\nBUF\nSUN\nDEN\nPIT\nSUN\nNO\nCIN\nSUN\nNYG\nIND\nSUN\nNYJ\nMIA\nSUN\nATL\nMIN\nSUN\nTEN\nJAX\nSUN\nBAL\nHOU\nSUN\nNE\nLAC\nSUN\nWAS\nARI\nSUN\nSEA\nSF\nSUN\nLV\nCLE\nSUN\nCAR\nTB"
     }
   ]
