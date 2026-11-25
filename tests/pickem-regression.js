@@ -276,6 +276,32 @@ vm.runInContext('state.week=11;state.games[0].pick="NYG";applyConfirmedLockedPic
 if(vm.runInContext('state.games[0].pick!=="NYG"',ctx))throw Error('Locked correction leaked into another week');
 console.log('Confirmed locked-pick correction regression passed.');
 
+// Standing team preference changes selection constraints, never probabilities
+// or the truth of an already-submitted/locked card.
+const lionsGames=clone(blankGames);
+Object.assign(lionsGames[0],{away:'CHI',home:'DET',awayML:-250,homeML:210,awayPct:60,homePct:40});
+const lionsProbability=t.probabilityProfile(lionsGames[0],1).pick;
+t.applyPickRules(lionsGames,{mustPick:['DET']});
+if(lionsGames[0].requiredPick!=='DET'||!lionsGames[0].protectedPick||lionsGames[0].protectedConfidence)throw Error('Detroit must protect only the winner, not its confidence');
+if(t.probabilityProfile(lionsGames[0],1).pick!==lionsProbability)throw Error('Team preference inflated Detroit probability');
+const lionsBase=t.simulationCurrentCard(lionsGames).card;
+if(lionsBase.choices[0]!==1)throw Error('Blank-slate baseline ignored the Detroit preference');
+const lionsRun=t.runOptimizer(lionsGames,94,{currentCard:lionsBase,blankSlate:true,searchIters:25,finalIters:60});
+for(const key of ['safest','balanced','aggressive','maxUpside']){
+  const card=lionsRun.strategies[key].card;
+  if(card.choices[0]!==1||!t.validConfidence(card.weights,16))throw Error(key+' picked against Detroit or invalidated confidence');
+}
+const againstLions=clone(lionsBase);againstLions.choices[0]=0;
+if(!t.requiredPickError(lionsGames,againstLions))throw Error('Cached strategy against a required team was accepted');
+const actualLocked=clone(lionsGames);Object.assign(actualLocked[0],{pick:'CHI',weight:againstLions.weights[0],locked:true,completed:true,winner:0});
+if(t.requiredPickError(actualLocked,againstLions))throw Error('Preference attempted to rewrite actual locked history');
+ctx.lionsFixture=clone(lionsGames);ctx.againstLions=againstLions;
+vm.runInContext(`state={week:12,season:2026,pickRules:{mustPick:['DET']},games:lionsFixture};`,ctx);
+ctx.cachedLions={week:12,season:2026,games:clone(lionsGames),optimization:{modelBuild:t.MODEL_BUILD,strategies:{aggressive:{card:againstLions}}}};
+vm.runInContext('localStorage={getItem:()=>JSON.stringify(cachedLions),setItem:()=>{}};cachedLions=loadState();',ctx);
+if(vm.runInContext("cachedLions.optimization!==null||cachedLions.pickRules.mustPick[0]!=='DET'",ctx))throw Error('Legacy cache did not acquire the standing rule and invalidate an opposing card');
+console.log('Standing Detroit preference regression passed: every strategy picks Detroit, confidence stays free, and probabilities/locked history stay factual.');
+
 // Week 11: Houston was actually locked at 9, not a cached strategy's 12.
 const houstonSlate=[['MIA','BUF'],['NO','CHI'],['TEN','DAL'],['TB','DET'],['ARI','KC'],['PIT','PHI'],['BAL','CAR'],['NYJ','LAC'],['LV','DEN'],['JAX','NYG'],['MIN','SF'],['IND','HOU'],['CIN','WAS']];
 const houstonGames=houstonSlate.map(([away,home],i)=>({away,home,awayML:150,homeML:-170,total:45,id:'h'+i,awayPct:45,homePct:55,pick:null,weight:null,locked:false,completed:false}));

@@ -20,6 +20,12 @@ const result=home.strategySnapshot(state,{season:2026,week:3},Date.parse('2026-0
 if(result.status!=='ready'||result.cards.length!==4||result.cards[3].key!=='maxUpside')throw new Error('Current week four-strategy dashboard missing');
 if(!result.cards.every(x=>x.href.includes('strategy='+x.key)))throw new Error('Strategy tiles do not open corresponding full cards');
 if(home.strategySnapshot(state,{season:2026,week:4},Date.now()).status!=='missing')throw new Error('Old week projections appeared as current cards');
+const lionsHome=JSON.parse(JSON.stringify(state));
+lionsHome.games=[{away:'CHI',home:'DET',pick:null,locked:false}];
+for(const s of Object.values(lionsHome.optimization.strategies))s.card={choices:[0],weights:[1]};
+if(home.strategySnapshot(lionsHome,{season:2026,week:3}).status!=='pick-rule-conflict')throw Error('Home recommended a cached card against Detroit');
+for(const s of Object.values(lionsHome.optimization.strategies))s.card.choices[0]=1;
+if(home.strategySnapshot(lionsHome,{season:2026,week:3}).cards.length!==4)throw Error('Home blocked Detroit-protected cards');
 const lockedState=JSON.parse(JSON.stringify(state));
 lockedState.games=[{away:'IND',home:'HOU',pick:'HOU',weight:9,locked:true},...Array.from({length:12},(_,i)=>({away:'A'+i,home:'H'+i,locked:false}))];
 const lockedSnapshot=home.strategySnapshot(lockedState,{season:2026,week:3});

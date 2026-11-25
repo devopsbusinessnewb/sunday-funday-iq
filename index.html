@@ -48,6 +48,13 @@ function inputAgeWarning(state,now=Date.now()){
 function strategySnapshot(state,live,now=Date.now()){
   const opt=state?.optimization,week=Number(live?.week||state?.week||0),season=Number(live?.season||state?.season||2026);
   if(!opt||opt.modelBuild!==MODEL_BUILD||Number(state?.week)!==week||Number(state?.season||2026)!==season||!STRATEGIES.every(([key])=>opt.strategies?.[key]?.card&&opt.strategies[key]?.eval))return{status:'missing',week,cards:[]};
+  const requiredTeams=Array.isArray(state.pickRules?.mustPick)?state.pickRules.mustPick:['DET'];
+  for(const [i,g] of (state.games||[]).entries()){
+    const required=requiredTeams.find(t=>t===g.away||t===g.home);
+    if(!required||g.locked||g.completed)continue;
+    const side=required===g.away?0:1;
+    if(STRATEGIES.some(([key])=>opt.strategies[key].card.choices?.[i]!==side))return{status:'pick-rule-conflict',week,cards:[],message:`Your standing rule requires ${required}. Rebuild the four cards with that pick protected and its confidence optimized.`};
+  }
   for(const [i,g] of (state.games||[]).entries()){
     if(!(g.locked||g.completed||live?.gameState?.some(x=>x.away===g.away&&x.home===g.home&&x.completed)))continue;
     const confirmed=(state.confirmedLockedPicks||[]).find(r=>Number(r.season)===season&&Number(r.week)===week&&r.away===g.away&&r.home===g.home);
@@ -182,6 +189,11 @@ async function bootHome(){
   const snapshot=strategySnapshot(state,live),$=id=>document.getElementById(id);
   $('week').textContent='Week '+(snapshot.week||'—');
   const tb=tiebreakerRecommendation(live);if(tb){$('tiebreaker').classList.add('show');$('tiebreakerScore').textContent=tb.score+' points';$('tiebreakerDetail').textContent=`${tb.away} @ ${tb.home} · market total ${tb.total}. Same recommendation for all four strategy cards.`}
+  if(snapshot.status==='pick-rule-conflict'){
+    $('status').textContent=snapshot.message;
+    $('strategies').innerHTML='<div class="empty">Your protected pick must appear on every strategy.<div class="actions"><a class="btn primary" href="./apps/pickem/?action=refresh-simulate">Rebuild protected-pick cards</a></div></div>';
+    return;
+  }
   if(snapshot.status==='locked-conflict'){
     $('status').textContent=snapshot.message;
     $('strategies').innerHTML='<div class="empty">Locked picks must match across all four cards.<div class="actions"><a class="btn primary" href="./apps/pickem/?action=check-locked">Verify locked picks &amp; rebuild</a></div></div>';
@@ -194,7 +206,8 @@ async function bootHome(){
   }
   const time=new Date(snapshot.ranAt).toLocaleTimeString([],{hour:'numeric',minute:'2-digit'});
   const impact=snapshot.fieldImpact,impactText=impact?.classification==='WIDELY_SHARED_LOSS'?` · ${pct(impact.samePickShare,0)} of observed entries shared the locked loss`:'';
-  $('status').textContent=(snapshot.status==='stale'?'Refresh needed · ':'Simulated ')+time+(snapshot.inputWarning?' · '+snapshot.inputWarning:(snapshot.provisional?' · Estimated field':''));
+  const protectedTeams=(state.pickRules?.mustPick||['DET']).filter(t=>state.games?.some(g=>g.away===t||g.home===t));
+  $('status').textContent=(snapshot.status==='stale'?'Refresh needed · ':'Simulated ')+time+(snapshot.inputWarning?' · '+snapshot.inputWarning:(snapshot.provisional?' · Estimated field':''))+(protectedTeams.length?' · '+protectedTeams.join('/')+' pick protected':'');
   const recommendation=strategyAdvice(snapshot);
   if(recommendation){
     $('decision').classList.add('show');
