@@ -148,6 +148,8 @@ const SEARCH_ITERS=700;
 const FINAL_ITERS=3000;
 const VALIDATION_SEEDS=3;
 const MODEL_BUILD='1.16.14';
+// User preference, independent of football probabilities and strategy objectives.
+const DEFAULT_PICK_RULES={mustPick:['DET']};
 const CONFIDENCE_TIE_BAND=.025;
 const MIN_OPTIONAL_FLIP_PROB=.40;
 const MIN_OPTIONAL_MARKET_PROB=.38;
@@ -352,6 +354,21 @@ async function refreshIqModel(silent=true){
 }
 
 function isLocked(g){return !!g.locked}
+function applyPickRules(games,rules=DEFAULT_PICK_RULES){
+  const teams=(Array.isArray(rules?.mustPick)?rules.mustPick:DEFAULT_PICK_RULES.mustPick).map(normalizeTeam);
+  for(const g of games){
+    g.requiredPick=teams.find(t=>t===g.away||t===g.home)||null;
+    if(g.requiredPick)g.protectedPick=true;
+  }
+  return games;
+}
+function requiredPickError(games,card){
+  for(let i=0;i<games.length;i++){
+    const g=games[i];if(isLocked(g)||!g.requiredPick)continue;
+    if(card?.choices?.[i]!==sideOf(g,g.requiredPick))return `${g.requiredPick} is your protected pick. Rebuild the strategy with that preference before using its picks or probabilities.`;
+  }
+  return '';
+}
 function lockedCardError(games,card){
   for(let i=0;i<games.length;i++){
     const g=games[i];if(!isLocked(g))continue;
@@ -675,7 +692,7 @@ function searchCandidates(games,current,poolSize,opts={}){
     const expanded=[];
     for(const node of beam){
       for(let i=0;i<games.length;i++){
-        if(locked.has(i)||games[i].protectedPick||node.flipped.has(i))continue;
+        if(locked.has(i)||games[i].protectedPick||games[i].requiredPick||node.flipped.has(i))continue;
         const alt={choices:[...node.card.choices],weights:[...node.card.weights]};alt.choices[i]=1-alt.choices[i];
         const evidence=strategicPickEvidence(games[i],node.card.choices[i],alt.choices[i],{proxyField});
         if(!evidence.eligible)continue;
@@ -701,6 +718,7 @@ function safestExpectedCard(games,current){
   for(let i=0;i<games.length;i++){
     if(locked.has(i)){card.choices[i]=current.choices[i];card.weights[i]=current.weights[i];continue}
     card.weights[i]=available[next++];
+    if(games[i].requiredPick){card.choices[i]=sideOf(games[i],games[i].requiredPick);continue}
     if(games[i].protectedPick)continue;
     card.choices[i]=expectedWinnerSide(games[i]);
   }
@@ -754,7 +772,7 @@ function buildStrategyCards(strategy,games,safeSeed,tuningWorlds,locked){
   if(strategy==='safest')return{cards:raw,eligibleFlips:0,confidenceEvaluations:0};
   const leverage=[];
   for(let i=0;i<games.length;i++){
-    if(locked.has(i)||games[i].protectedPick)continue;
+    if(locked.has(i)||games[i].protectedPick||games[i].requiredPick)continue;
     const to=1-safeSeed.choices[i],e=strategyFlipEvidence(games[i],to,strategy);
     if(e.eligible)leverage.push({i,e,value:e.leverage*e.pickProbability});
   }
@@ -894,6 +912,7 @@ function runOptimizer(games,poolSize,opts={}){
   const frontier=buildStrategyFrontier(games,current,finalWorlds,search.candidates.map(x=>x.card),poolSize,opts.poolPrior||null,searchWorlds);
   for(const key of ['safest','balanced','aggressive','maxUpside']){
     const error=lockedCardError(games,frontier[key]?.card);if(error)throw new Error(error);
+    const preferenceError=requiredPickError(games,frontier[key]?.card);if(preferenceError)throw new Error(preferenceError);
   }
   frontier.searchEvaluationCount=(search.testedCount||0)+(frontier.confidenceSearchEvaluations||0);
   const blankDecision=blankSlate?chooseBlankSlateStrategy(frontier,opts.seasonContext||null,opts.week||0):null;
@@ -944,9 +963,11 @@ function loadState(){
   s.marketUpdatedAt=s.marketUpdatedAt||s.importedAt||SEED_TS;
   s.originalCard=s.originalCard||null;s.recommendedCard=s.recommendedCard||null;s.optimization=s.optimization||null;s.applied=!!s.applied;
   s.confidenceStatus=s.confidenceStatus||'submitted';s.confidenceSource=s.confidenceSource||'CBS import';s.originalConfidenceStatus=s.originalConfidenceStatus||s.confidenceStatus;
+  s.pickRules=s.pickRules||clone(DEFAULT_PICK_RULES);applyPickRules(s.games,s.pickRules);
   // Existing browser decisions and cards survive a model upgrade. Old model
   // estimates and recommendations must be recalculated before display.
   if(s.optimization?.modelBuild!==MODEL_BUILD){s.optimization=null;s.recommendedCard=null;s.sim=null}
+  if(s.optimization&&Object.values(s.optimization.strategies||{}).some(p=>p.card&&requiredPickError(s.games,p.card))){s.optimization=null;s.recommendedCard=null;s.sim=null}
   return s;
 }
 let state=loadState();
@@ -1460,6 +1481,7 @@ async function importScan(obj){
     g.protectedPick=fixedPicks.has(g.pick);
     g.protectedConfidence=fixedConfidence.some(x=>normalizeTeam(x.team)===g.pick&&Number(x.confidence)===Number(g.weight));
   });
+  applyPickRules(state.games,state.pickRules);
   restoreLockedGames(lockedBeforeImport,{restoreCard:false});
   repairLockedConfidenceCollision();
   const stand=newest(snaps.filter(s=>/Weekly Standings/i.test(s.title||'')));if(stand){const names=[...stand.text.matchAll(/\n\n\n(?:\d+(?:st|nd|rd|th))\n([^\n\t]{2,60})\n\t-?\d+\t-?\d+\t/g)].map(x=>x[1]);if(names.length>20)state.poolSize=new Set(names).size}
@@ -1644,7 +1666,7 @@ function renderModelLabResult(result,games){
 async function buildFullSlateLabResult(){
   const games=clone(state.games);
   const saved=state.optimization;
-  const completeSaved=saved&&saved.modelBuild===MODEL_BUILD&&['safest','balanced','aggressive','maxUpside'].every(key=>saved.strategies?.[key]?.card&&saved.strategies[key]?.eval&&!lockedCardError(games,saved.strategies[key].card));
+  const completeSaved=saved&&saved.modelBuild===MODEL_BUILD&&['safest','balanced','aggressive','maxUpside'].every(key=>saved.strategies?.[key]?.card&&saved.strategies[key]?.eval&&!lockedCardError(games,saved.strategies[key].card)&&!requiredPickError(games,saved.strategies[key].card));
   if(completeSaved)return{games,result:{strategies:saved.strategies},source:'saved-live-simulation'};
   const baseline=simulationCurrentCard(games);
   const result=runOptimizer(games,state.poolSize,{currentCard:baseline.card,searchIters:SEARCH_ITERS,finalIters:FINAL_ITERS,seed:20260908,fieldModel:state.fieldModel||null,poolPrior:poolHistoryPrior});
@@ -1769,6 +1791,8 @@ function renderFullCard(){
   document.body.classList.add('card-mode');view.hidden=false;
   if(details){view.innerHTML=renderDataDetails(['safest','balanced','aggressive','maxUpside'].includes(key)?key:null);return}
   const o=state.optimization,p=o?.strategies?.[key];
+  const preferenceError=p?.card&&requiredPickError(state.games,p.card);
+  if(preferenceError){view.innerHTML=`<h2>Rebuild your protected-pick card</h2><p class="meta">${htmlEscape(preferenceError)}</p><div class="actions"><a class="btn primary" href="?action=refresh-simulate">Refresh &amp; rebuild</a></div>`;return}
   const lockedError=lockedCardError(state.games,p?.card);
   if(lockedError){renderLockedPickRepair(lockedError);return}
   if(!p||!o||o.modelBuild!==MODEL_BUILD){view.innerHTML='<h2>Run a current-week simulation</h2><p class="meta">This browser has no saved complete card for this strategy. Refresh CBS and market data to generate one.</p><div class="actions"><a class="btn primary" href="?action=refresh-simulate">Refresh &amp; simulate</a><a class="btn" href="../../">Back to strategies</a></div>';return}
@@ -1778,8 +1802,8 @@ function renderFullCard(){
   const currentEval=o.currentControl?.eval||o.currentEval,delta=o.currentSource==='submitted'&&currentEval?p.eval.top2-currentEval.top2:null,equivalent=p.equivalentTo?` This produced the same complete card as ${htmlEscape(o.strategies?.[p.equivalentTo]?.label||p.equivalentTo)}.`:'';
   view.innerHTML=`<a class="btn" href="../../">← All strategies</a><h2>${htmlEscape(p.label||key)} card</h2><div class="meta">Week ${state.week||1} · ${rows.length} picks. ${inputWarning?`<b class="warn">${htmlEscape(inputWarning)}</b>`:''} ${o.provisional?'Future pool choices are estimated from CBS-wide data.':''}<br>Simulated ${Number.isFinite(runAt)?new Date(runAt).toLocaleString():'time unknown'}. IQ does not submit picks to CBS.</div><div class="numbers"><div><strong>${pct(p.eval.top2)}</strong><span>Top 2</span></div><div><strong>${pct(p.eval.win)}</strong><span>Win</span></div><div><strong>${pct(p.eval.bottomHalf,0)}</strong><span>Bottom half</span></div></div><div class="meta">Average score ${Number(p.eval.avg).toFixed(1)} confidence points${delta!==null?` · ${delta>=0?'+':''}${(delta*100).toFixed(1)} percentage points Top-2 versus your current card`:''}.${equivalent} Tap any game for its probability and rationale. Enter each pick and point value directly in CBS.</div><div class="actions"><a class="btn primary" href="?action=refresh-simulate">Rerun strategy search</a><a class="btn" href="?strategy=${encodeURIComponent(key)}&amp;details=1">Data &amp; model details</a></div><h2 style="font-size:15px;margin-top:22px">Picks by confidence</h2>${rows.map(row=>{
     const g=row.game,s=row.side,mp=marketProb(g,s),iq=iqProb(g,s),safe=confidenceSafetyProb(g,s),ownership=ownProb(g,s),favorite=iq!=null&&iq>=.5,minority=ownership!=null&&ownership<.5;
-    const flag=g.locked?'LOCKED':!favorite&&minority?'POOL LEVERAGE':favorite?'MODEL FAVORITE':'MODEL PICK';
-    const reason=g.locked?`Pick ${row.team} for ${row.confidence} points. This game's result and confidence are locked.`:!favorite&&minority?`Pick ${row.team} for ${row.confidence} points. This is a lower-probability pool leverage selection, kept at a controlled point value.`:`Pick ${row.team} for ${row.confidence} points. The point value reflects this game's conservative win chance relative to the rest of this card.`;
+    const flag=g.locked?'LOCKED':g.requiredPick?'PICK PROTECTED':!favorite&&minority?'POOL LEVERAGE':favorite?'MODEL FAVORITE':'MODEL PICK';
+    const reason=g.locked?`Pick ${row.team} for ${row.confidence} points. This game's result and confidence are locked.`:g.requiredPick?`${row.team} is selected by your standing preference. Its ${row.confidence} confidence points are optimized; the preference does not increase its modeled win probability.`:!favorite&&minority?`Pick ${row.team} for ${row.confidence} points. This is a lower-probability pool leverage selection, kept at a controlled point value.`:`Pick ${row.team} for ${row.confidence} points. The point value reflects this game's conservative win chance relative to the rest of this card.`;
     return`<details class="row"><summary><span class="points">${row.confidence}</span><span class="pick">${htmlEscape(row.team)}<span class="match">${htmlEscape(g.away)} @ ${htmlEscape(g.home)}</span></span><span class="flag">${flag}</span></summary><div class="detail"><b>${htmlEscape(reason)}</b><br>IQ win ${pct(iq)} · Market win ${pct(mp)} · Conservative confidence win ${pct(safe)} · CBS-wide pick ${pct(ownership,0)}.</div></details>`;
   }).join('')}`;
 }
@@ -2010,7 +2034,7 @@ async function boot(){
     await runSimulation();
   }
 }
-globalThis.SFIQ_TEST={lockedCardError,confirmLockedPick,applyConfirmedLockedPicks,strategyFreshnessWarning,partialCardBlocksSimulation,scenarioGameLocked,buildLiveScenarioResult,miniPcRefreshHandshake,MODEL_BUILD,simulationCurrentCard,validSeasonContext,fullSlateLabGames,labCardDiff,renderModelLabResult,renderStrategyComparison,scenarioSwapConfidence,scenarioMetrics,strategyCardRows,validConfidence,ensureValidCard,completeCard,cardImportIssues,dataFreshness,buildWorlds,buildWorldEnsemble,evaluateCard,evaluateProxyField,compareCards,lockedFieldImpact,robustMetrics,optimizeConfidence,optimizeTournamentConfidence,seedStability,searchCandidates,runOptimizer,chooseBlankSlateStrategy,buildStrategyFrontier,strategyObjective,strategyEquivalent,strategyFlipEvidence,strategyLaneConfig,cardStrategyDistance,chooseLaneCard,confidenceStrategyConfig,confidenceStrategyScore,safestExpectedCard,neutralTop2,neutralWin,cardActions,marketProb,iqProb,formProb,iqFormWeight,scenarioProbability,probabilityProfile,confidenceSafetyProb,confidenceCeilingFromProbability,confidenceCeiling,confidenceRiskPenalty,allocateConfidence,seedRiskCalibratedConfidence,expectedWinnerSide,strategicPickEvidence,upsidePickEvidence,cardChangeCost,ownProb,clone,refreshResults,refreshIqModel,isLocked,fixedWinner,parsePicks,extractStructuredCard,extractFieldModel,applyStructuredCard,normalizePoolHistory,poolConfidenceSignal,drawFieldPicks,SEED,normalizeTeam};
+globalThis.SFIQ_TEST={applyPickRules,requiredPickError,lockedCardError,confirmLockedPick,applyConfirmedLockedPicks,strategyFreshnessWarning,partialCardBlocksSimulation,scenarioGameLocked,buildLiveScenarioResult,miniPcRefreshHandshake,MODEL_BUILD,simulationCurrentCard,validSeasonContext,fullSlateLabGames,labCardDiff,renderModelLabResult,renderStrategyComparison,scenarioSwapConfidence,scenarioMetrics,strategyCardRows,validConfidence,ensureValidCard,completeCard,cardImportIssues,dataFreshness,buildWorlds,buildWorldEnsemble,evaluateCard,evaluateProxyField,compareCards,lockedFieldImpact,robustMetrics,optimizeConfidence,optimizeTournamentConfidence,seedStability,searchCandidates,runOptimizer,chooseBlankSlateStrategy,buildStrategyFrontier,strategyObjective,strategyEquivalent,strategyFlipEvidence,strategyLaneConfig,cardStrategyDistance,chooseLaneCard,confidenceStrategyConfig,confidenceStrategyScore,safestExpectedCard,neutralTop2,neutralWin,cardActions,marketProb,iqProb,formProb,iqFormWeight,scenarioProbability,probabilityProfile,confidenceSafetyProb,confidenceCeilingFromProbability,confidenceCeiling,confidenceRiskPenalty,allocateConfidence,seedRiskCalibratedConfidence,expectedWinnerSide,strategicPickEvidence,upsidePickEvidence,cardChangeCost,ownProb,clone,refreshResults,refreshIqModel,isLocked,fixedWinner,parsePicks,extractStructuredCard,extractFieldModel,applyStructuredCard,normalizePoolHistory,poolConfidenceSignal,drawFieldPicks,SEED,normalizeTeam};
 if(!TESTING)boot();
 </script>
 </body></html>
