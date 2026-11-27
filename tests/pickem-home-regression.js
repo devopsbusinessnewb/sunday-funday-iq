@@ -60,6 +60,28 @@ if(home.strategySnapshot(newLock,publish,now,startedEvidence).status!=='locked-c
 if(home.strategySnapshot(newLock,{...publish,gameState:[{away:'JAX',home:'HOU',started:true}]},now).status!=='locked-conflict')throw Error('Home missed an explicitly started game from current CBS data');
 const scheduledOnly={...publish,gameState:[{away:'JAX',home:'HOU',completed:false,statusText:'9/26 - 1:00 PM EST'}]};
 if(home.strategySnapshot(newLock,scheduledOnly,now).status!=='ready')throw Error('A schedule label alone must not lock a delayed game');
+// Minimal sanitized data extracted from Week 12 export commit 91c25595b404ec38dc8d539ddfce08110408b17f.
+// A current draft can have been rebuilt after export, so newer-published-data
+// freshness alone is not sufficient when the browser's scoreboard is down.
+const fridayPublished={season:2026,week:12,exportedAt:'2026-11-27T20:54:29.860705Z',gameState:[
+  {away:'DEN',home:'PIT',completed:false,winner:null,statusText:'9:42 - 2nd'},
+]};
+const fridayNow=Date.parse('2026-11-27T21:00:00Z');
+const fridayDraft=JSON.parse(JSON.stringify(newLock));
+Object.assign(fridayDraft,{week:12,cbsUpdatedAt:fridayPublished.exportedAt,marketUpdatedAt:'2026-11-27T20:54:29.860680Z'});
+fridayDraft.optimization.ranAt='2026-11-27T20:57:00Z';
+fridayDraft.games[0]={away:'DEN',home:'PIT',locked:false,pick:null,weight:null};
+if(home.strategySnapshot(fridayDraft,fridayPublished,fridayNow,[]).status!=='locked-conflict')throw Error('Friday CBS period-clock evidence did not block pre-kickoff strategies with ESPN unavailable');
+for(const statusText of ['11/27 - 3:00 PM EST','3:00 PM - EST','6:61 - 2nd','9:42 - 2nd postponed','Delayed']){
+  const draft={...fridayPublished,gameState:[{...fridayPublished.gameState[0],statusText}]};
+  if(home.strategySnapshot(fridayDraft,draft,fridayNow,[]).status!=='ready')throw Error('Non-live status text cannot prove kickoff');
+}
+const explicitFalse={...fridayPublished,gameState:[{...fridayPublished.gameState[0],started:false}]};
+if(home.strategySnapshot(fridayDraft,explicitFalse,fridayNow,[]).status!=='ready')throw Error('Structured kickoff flag should take precedence over the legacy text fallback');
+const fridayConfirmed={...fridayDraft,confirmedLockedPicks:[{season:2026,week:12,away:'DEN',home:'PIT',pick:'PIT',weight:9}]};
+const fridayOutdated=home.strategySnapshot(fridayConfirmed,fridayPublished,fridayNow,[]);
+if(!fridayOutdated.kickoffChanged||home.strategyAdvice(fridayOutdated))throw Error('Standings-confirmed lock still requires rerunning pre-kickoff cards');
+
 newLock.confirmedLockedPicks=[{season:2026,week:3,away:'JAX',home:'HOU',pick:'HOU',weight:9}];
 const preKickoff=home.strategySnapshot(newLock,publish,now,startedEvidence);
 if(preKickoff.status!=='stale'||!preKickoff.kickoffChanged||home.strategyAdvice(preKickoff)!==null)throw Error('A simulation predating kickoff cannot be a current recommendation even if it matched the locked pick');
@@ -108,6 +130,11 @@ vm.runInContext('bootHome()',context).then(async()=>{
   context.fetch=async url=>({ok:true,json:async()=>url.includes('site.api.espn.com')?startedRaw:publish});
   await vm.runInContext('bootHome()',context);
   if(nodes.decision.shown||!nodes.strategies.innerHTML.includes('Verify locked picks')||nodes.strategies.innerHTML.includes('View picks'))throw Error('Home must block newly locked conflicts from the live scoreboard');
+  context.Date=class extends Date{static now(){return fridayNow}};
+  context.localStorage={getItem:()=>JSON.stringify(fridayDraft)};
+  context.fetch=async url=>{if(url.includes('site.api.espn.com'))throw Error('Scoreboard unavailable');return{ok:true,json:async()=>fridayPublished}};
+  await vm.runInContext('bootHome()',context);
+  if(nodes.week.textContent!=='Week 12'||nodes.decision.shown||!nodes.strategies.innerHTML.includes('Verify locked picks')||nodes.strategies.innerHTML.includes('View picks'))throw Error('Phone Home exposed pre-kickoff advice from a fresh draft during scoreboard outage');
   console.log('CBS home regression passed: four strategies, freshness, and live kickoff locks.');
 }).catch(e=>{console.error(e);process.exitCode=1});
 
