@@ -55,4 +55,48 @@ for team,weight in zip(teams[1:],range(13,0,-1)):
     ambiguous.extend([team,'Some CBS row detail',f'{weight} Pts'])
 assert collector.authenticated_self_block('\n'.join(ambiguous))=='', 'Ambiguous two-team confidence row must fail closed'
 
+# Synthetic structured current-week evidence. The collector does not yet have
+# a trusted DOM adapter for these inputs; these tests do not certify one.
+from copy import deepcopy
+
+evidence=collector.assess_weekly_standings_evidence
+games=[
+    {'away':'AAA','home':'BBB','phase':'final'},
+    {'away':'CCC','home':'DDD','phase':'started'},
+    {'away':'EEE','home':'FFF','phase':'scheduled'},
+    {'away':'GGG','home':'HHH','phase':'scheduled'},
+]
+entry={'week':12,'label':'Example Owner','authenticated_own_entry':True}
+cell1={'away':'AAA','home':'BBB','pick':'BBB','confidence':4}
+cell2={'away':'CCC','home':'DDD','explicit_missed':True}
+cell3={'away':'EEE','home':'FFF','pick':'EEE','confidence':2}
+standings={'week':12,'rows':[
+    {'label':'Different Entry','cells':[None,None,None,None]},
+    {'label':' Example  Owner ','cells':[cell1,cell2,cell3,None]},
+]}
+base=evidence(12,'EXAMPLE OWNER',entry,standings,games,[games[2]])
+assert base=={'identity':'verified','alignment':True,'locked_exact':1,
+             'locked_missed_explicit':1,'locked_unknown':0,
+             'scheduled_exact':1,'open_confirmed':1}
+assert evidence(12,'Example Owner',entry,standings,games)['open_confirmed']==0
+assert evidence(12,'Example Owner',{**entry,'authenticated_own_entry':False},standings,games)['identity']=='unknown'
+assert evidence(12,'Example Owner',{**entry,'week':11},standings,games)['identity']=='unknown'
+assert evidence(12,'Example Owner',{**entry,'label':'Wrong Entry'},standings,games)['identity']=='unknown'
+assert evidence(12,'Example Owner',entry,{**standings,'rows':standings['rows']+standings['rows'][1:]},games)['identity']=='ambiguous'
+assert evidence(12,'Example Owner',entry,{**standings,'rows':standings['rows'][:1]},games)['identity']=='missing'
+unmapped=deepcopy(standings)
+unmapped['rows'][1]['cells'][1]={'away':'CCC','home':'DDD','text':'-'}
+assert evidence(12,'Example Owner',entry,unmapped,games)['locked_unknown']==1
+unmapped['rows'][1]['cells'][1]=None
+assert evidence(12,'Example Owner',entry,unmapped,games)['locked_unknown']==1
+unmapped['rows'][1]['cells'][1]={'away':'CCC','home':'DDD','pick':'AAA','confidence':3}
+assert evidence(12,'Example Owner',entry,unmapped,games)['locked_unknown']==1
+unmapped['rows'][1]['cells'][1]={'away':'CCC','home':'DDD','pick':'CCC','confidence':4}
+assert evidence(12,'Example Owner',entry,unmapped,games)['locked_unknown']==2
+unmapped['rows'][1]['cells'][1]={'away':'AAA','home':'BBB','pick':'AAA','confidence':3}
+assert not evidence(12,'Example Owner',entry,unmapped,games)['alignment']
+unmapped['rows'][1]['cells'].pop()
+assert not evidence(12,'Example Owner',entry,unmapped,games)['alignment']
+assert not evidence(12,'Example Owner',entry,standings,[games[0]]*4)['alignment']
+
 print('CBS collector card regression: PASS')
