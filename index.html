@@ -56,7 +56,12 @@ function homeGameEvidence(live,scoreboard){
   for(const row of [...(Array.isArray(live?.gameState)?live.gameState:[]),...(Array.isArray(scoreboard)?scoreboard:[])]){
     const key=homeGameKey(row?.away,row?.home);
     if(!key)continue;
-    const completed=row.completed===true,started=completed||row.started===true;
+    const completed=row.completed===true;
+    // Older collector exports omit started, but retain ESPN's live period-clock
+    // shortDetail (e.g. "9:42 - 2nd"). A scheduled time is not a game clock.
+    const livePeriodClock=typeof row.started!=='boolean'&&typeof row.statusText==='string'
+      &&/^(?:[0-9]|1[0-5]):[0-5][0-9] - (?:1st|2nd|3rd|4th|OT|[2-9]OT)$/.test(row.statusText.trim());
+    const started=completed||row.started===true||livePeriodClock;
     const prior=evidence.get(key);
     if(started)evidence.set(key,{started:true,completed:completed||prior?.completed===true});
   }
