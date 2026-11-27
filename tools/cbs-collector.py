@@ -63,6 +63,72 @@ def team_token(line):
     first=str(line or '').strip().upper().split(' ')[0]
     if first in TEAM_ALIASES: return TEAM_ALIASES[first]
     return first if re.fullmatch(r'[A-Z]{2,3}',first) else ''
+def assess_weekly_standings_evidence(week, account_name, current_entry, standings, games, open_games=()):
+    """Local diagnostic classifier; not called by the collector or publisher.
+
+    Inputs must come from structured, already-observed CBS UI, not inferred
+    from flattened body text. current_entry is a separate CBS-owned signal
+    identifying the authenticated entry and week. standings carries the
+    observed week and full table rows; games is the ordered matchup headers.
+    Each nonempty cell must identify its own matchup; an explicit missed
+    marker must be established from CBS semantics before mapping it to
+    explicit_missed. open_games contains matchup pairs with an enabled
+    control on the same authenticated Picks surface. The result contains no
+    identity, picks, confidence values, URLs, or raw content.
+    """
+    report={'identity':'unknown','alignment':False,'locked_exact':0,
+            'locked_missed_explicit':0,'locked_unknown':0,
+            'scheduled_exact':0,'open_confirmed':0}
+    def label(value):
+        return ' '.join(value.split()).casefold() if isinstance(value,str) else ''
+    def key(value):
+        if not isinstance(value,dict): return None
+        a,h=value.get('away'),value.get('home')
+        if not isinstance(a,str) or not isinstance(h,str): return None
+        a,h=a.strip().upper(),h.strip().upper()
+        if not re.fullmatch(r'[A-Z]{2,3}',a) or not re.fullmatch(r'[A-Z]{2,3}',h) or a==h: return None
+        return a,h
+
+    if type(week) is not int or not isinstance(current_entry,dict) or not isinstance(standings,dict): return report
+    if current_entry.get('week')!=week or standings.get('week')!=week: return report
+    account=label(account_name)
+    # A profile/row name match alone is not a separate owner-entry signal.
+    if not account or current_entry.get('authenticated_own_entry') is not True or label(current_entry.get('label'))!=account:
+        return report
+    rows=standings.get('rows')
+    if not isinstance(rows,list): return report
+    matched=[r for r in rows if isinstance(r,dict) and label(r.get('label'))==account]
+    if len(matched)!=1:
+        report['identity']='ambiguous' if matched else 'missing'
+        return report
+    report['identity']='verified'
+    cells=matched[0].get('cells')
+    if not isinstance(games,list) or not games or not isinstance(cells,list) or len(cells)!=len(games): return report
+    keys=[key(g) for g in games]
+    if None in keys or len(set(keys))!=len(keys): return report
+    if any(cell is not None and key(cell)!=game for cell,game in zip(cells,keys)): return report
+    report['alignment']=True
+
+    known_open={key(g) for g in open_games} if isinstance(open_games,(tuple,list)) else set()
+    valid=[]
+    for cell,game in zip(cells,keys):
+        pick,confidence=(cell.get('pick'),cell.get('confidence')) if cell else (None,None)
+        exact=(isinstance(pick,str) and pick in game and type(confidence) is int
+               and 1<=confidence<=len(games) and cell.get('explicit_missed') is not True)
+        valid.append(confidence if exact else None)
+    for header,game,cell,confidence in zip(games,keys,cells,valid):
+        phase=header.get('phase')
+        exact=confidence is not None and valid.count(confidence)==1
+        missed=(cell is not None and cell.get('explicit_missed') is True
+                and cell.get('pick') is None and cell.get('confidence') is None)
+        if phase in ('started','final'):
+            report['locked_exact' if exact else 'locked_missed_explicit' if missed else 'locked_unknown']+=1
+        elif phase=='scheduled':
+            if exact: report['scheduled_exact']+=1
+            if game in known_open: report['open_confirmed']+=1
+    return report
+
+
 def authenticated_self_block(text):
     """Recover the signed-in user's complete confidence card from Picks."""
     raw=str(text or '')
