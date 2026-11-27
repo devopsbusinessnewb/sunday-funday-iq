@@ -257,6 +257,10 @@ async function loadWeeklyProjections(){
 }
 function pointsFromProjectionMap(map,id){
   const x=map?.[String(id)];if(!x)return 0;const s=x.stats||x;
+  const rec=state.league?.scoring_settings?.rec;
+  const key=rec===0.5?'pts_half_ppr':rec===0?'pts_std':rec===1?'pts_ppr':null;
+  if(key&&s[key]!=null&&s[key]!==''&&Number.isFinite(Number(s[key])))return Number(s[key]);
+  // Retain the legacy fallback for missing provider fields or nonstandard scoring.
   for(const k of ['pts_ppr','pts_half_ppr','pts_std','fantasy_points']){const v=Number(s?.[k]);if(Number.isFinite(v)&&v!==0)return v}
   return 0;
 }
