@@ -45,26 +45,73 @@ function inputAgeWarning(state,now=Date.now()){
   if(!Number.isFinite(market)||market>12)return 'Market odds need refreshing';
   return '';
 }
-function strategySnapshot(state,live,now=Date.now()){
+function homeGameKey(away,home){
+  const aliases={JAC:'JAX',LA:'LAR',WSH:'WAS'};
+  const norm=x=>aliases[String(x||'').toUpperCase().trim()]||String(x||'').toUpperCase().trim();
+  const a=norm(away),b=norm(home);
+  return a&&b?a+'@'+b:'';
+}
+function homeGameEvidence(live,scoreboard){
+  const evidence=new Map();
+  for(const row of [...(Array.isArray(live?.gameState)?live.gameState:[]),...(Array.isArray(scoreboard)?scoreboard:[])]){
+    const key=homeGameKey(row?.away,row?.home);
+    if(!key)continue;
+    const completed=row.completed===true,started=completed||row.started===true;
+    const prior=evidence.get(key);
+    if(started)evidence.set(key,{started:true,completed:completed||prior?.completed===true});
+  }
+  return evidence;
+}
+function scoreboardGameStates(data){
+  return (Array.isArray(data?.events)?data.events:[]).flatMap(ev=>{
+    const comp=ev?.competitions?.[0],teams=comp?.competitors;
+    if(!Array.isArray(teams))return [];
+    const away=teams.find(x=>x.homeAway==='away')?.team?.abbreviation,home=teams.find(x=>x.homeAway==='home')?.team?.abbreviation;
+    const status=comp.status?.type||ev.status?.type;
+    if(!away||!home||!status)return [];
+    const completed=status.completed===true;
+    return [{away,home,completed,started:completed||String(status.state||'').toLowerCase()==='in'}];
+  });
+}
+async function fetchHomeScoreboard(season,week){
+  const controller=new AbortController();
+  const timeout=setTimeout(()=>controller.abort(),3500);
+  try{
+    const r=await fetch(`https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=${encodeURIComponent(season)}&seasontype=2&week=${encodeURIComponent(week)}`,{cache:'no-store',signal:controller.signal});
+    return r.ok?scoreboardGameStates(await r.json()):[];
+  }catch{return []}finally{clearTimeout(timeout)}
+}
+function strategySnapshot(state,live,now=Date.now(),scoreboard=[]){
   const opt=state?.optimization,week=Number(live?.week||state?.week||0),season=Number(live?.season||state?.season||2026);
   if(!opt||opt.modelBuild!==MODEL_BUILD||Number(state?.week)!==week||Number(state?.season||2026)!==season||!STRATEGIES.every(([key])=>opt.strategies?.[key]?.card&&opt.strategies[key]?.eval))return{status:'missing',week,cards:[]};
   const requiredTeams=Array.isArray(state.pickRules?.mustPick)?state.pickRules.mustPick:['DET'];
+  const evidence=homeGameEvidence(live,scoreboard);
+  const started=g=>!!(g.locked||g.completed||evidence.get(homeGameKey(g.away,g.home))?.started);
+  let kickoffChanged=false;
   for(const [i,g] of (state.games||[]).entries()){
     const required=requiredTeams.find(t=>t===g.away||t===g.home);
-    if(!required||g.locked||g.completed)continue;
+    if(!required||started(g))continue;
     const side=required===g.away?0:1;
     if(STRATEGIES.some(([key])=>opt.strategies[key].card.choices?.[i]!==side))return{status:'pick-rule-conflict',week,cards:[],message:`Your standing rule requires ${required}. Rebuild the four cards with that pick protected and its confidence optimized.`};
   }
   for(const [i,g] of (state.games||[]).entries()){
-    if(!(g.locked||g.completed||live?.gameState?.some(x=>x.away===g.away&&x.home===g.home&&x.completed)))continue;
+    if(!started(g))continue;
+    const observed=evidence.get(homeGameKey(g.away,g.home));
+    if((!g.locked&&!g.completed)||(observed?.completed&&!g.completed))kickoffChanged=true;
     const confirmed=(state.confirmedLockedPicks||[]).find(r=>Number(r.season)===season&&Number(r.week)===week&&r.away===g.away&&r.home===g.home);
-    const pick=confirmed?.pick||g.pick,weight=Number(confirmed?.weight??g.weight),side=pick===g.away?0:pick===g.home?1:null;
+    // IQ-only edits are not a CBS submission. For a new lock, use only a
+    // user-confirmed lock or a trusted submitted card, never a generated card.
+    const localActual=(g.locked||g.completed)
+      ?!state.applied&&!['placeholder','model_applied','user_adjusted','user_final'].includes(state.confidenceStatus)
+      :!state.applied&&state.confidenceStatus==='submitted'&&opt.currentSource==='submitted';
+    const pick=confirmed?.pick||(localActual?g.pick:null),weight=Number(confirmed?.weight??(localActual?g.weight:null)),side=pick===g.away?0:pick===g.home?1:null;
     const mismatch=side==null||!Number.isInteger(weight)||weight<1||weight>state.games.length||STRATEGIES.some(([key])=>opt.strategies[key].card.choices?.[i]!==side||opt.strategies[key].card.weights?.[i]!==weight);
     if(mismatch)return{status:'locked-conflict',week,cards:[],message:side!=null&&Number.isInteger(weight)&&weight>0?`${pick} is locked at ${weight}. The saved strategy cards disagree; rebuild them before using their picks or probabilities.`:`Your locked pick for ${g.away} @ ${g.home} needs confirmation before IQ can build valid cards.`};
   }
   const ran=Date.parse(opt.ranAt||''),cbs=Date.parse(state.cbsUpdatedAt||''),market=Date.parse(state.marketUpdatedAt||'');
-  const published=Date.parse(live?.exportedAt||''),stale=!Number.isFinite(ran)||now-ran>12*3600e3||now<ran||cbs>ran||market>ran||published>ran||live?.unavailable;
-  return{status:stale?'stale':'ready',inputWarning:inputAgeWarning(state,now),week,ranAt:opt.ranAt,provisional:!!opt.provisional,currentSource:opt.currentSource||'submitted',currentEval:opt.currentControl?.eval||opt.currentEval,fieldImpact:opt.currentControl?.fieldImpact||null,selectedStrategy:opt.selectedStrategy||'balanced',blankDecision:opt.blankDecision||null,cards:STRATEGIES.map(([key,label])=>({key,label,href:'./apps/pickem/?strategy='+key,eval:opt.strategies[key].eval,stability:opt.strategies[key].stability,changes:opt.strategies[key].changes,objective:opt.strategies[key].objective,equivalentTo:opt.strategies[key].equivalentTo}))};
+  const inputWarning=inputAgeWarning(state,now),published=Date.parse(live?.exportedAt||'');
+  const stale=kickoffChanged||!!inputWarning||!Number.isFinite(ran)||now-ran>12*3600e3||now<ran||cbs>ran||market>ran||published>ran||live?.unavailable;
+  return{status:stale?'stale':'ready',inputWarning,kickoffChanged,week,ranAt:opt.ranAt,provisional:!!opt.provisional,currentSource:opt.currentSource||'submitted',currentEval:opt.currentControl?.eval||opt.currentEval,fieldImpact:opt.currentControl?.fieldImpact||null,selectedStrategy:opt.selectedStrategy||'balanced',blankDecision:opt.blankDecision||null,cards:STRATEGIES.map(([key,label])=>({key,label,href:'./apps/pickem/?strategy='+key,eval:opt.strategies[key].eval,stability:opt.strategies[key].stability,changes:opt.strategies[key].changes,objective:opt.strategies[key].objective,equivalentTo:opt.strategies[key].equivalentTo}))};
 }
 function esc(s){return String(s??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]))}
 function pct(n,d=1){if(!Number.isFinite(n))return'—';if(n>0&&n<.001)return'<0.1%';return(n*100).toFixed(d)+'%'}
@@ -123,6 +170,7 @@ function dualGoalRecommendation(snapshot){
   return{choice,max,safest,reason,summary};
 }
 function strategyAdvice(snapshot){
+  if(snapshot?.status&&snapshot.status!=='ready')return null;
   const result=dualGoalRecommendation(snapshot);
   if(!result)return null;
   const {choice,safest}=result;
@@ -185,10 +233,15 @@ function strategyRecommendation(snapshot){
 }
 async function bootHome(){
   let state=null;try{state=JSON.parse(localStorage.getItem('sfiqPickemV04')||'null')}catch{}
-  let live=null;try{live=await fetchFreshLive()}catch{live={week:state?.week,season:state?.season,unavailable:true}}
-  const snapshot=strategySnapshot(state,live),$=id=>document.getElementById(id);
+  const week=Number(state?.week||0),season=Number(state?.season||2026);
+  const checkScoreboard=week>0&&state?.optimization&&state.games?.length;
+  const scoreboardCheck=checkScoreboard?fetchHomeScoreboard(season,week):[];
+  let live=null;try{live=await fetchFreshLive()}catch{live={week,season,unavailable:true}}
+  const evidence=await scoreboardCheck;
+  const scoreboard=Number(live.week)===week&&Number(live.season||season)===season?evidence:[];
+  const snapshot=strategySnapshot(state,live,Date.now(),scoreboard),$=id=>document.getElementById(id);
+  $('decision').classList.remove('show');
   $('week').textContent='Week '+(snapshot.week||'—');
-  const tb=tiebreakerRecommendation(live);if(tb){$('tiebreaker').classList.add('show');$('tiebreakerScore').textContent=tb.score+' points';$('tiebreakerDetail').textContent=`${tb.away} @ ${tb.home} · market total ${tb.total}. Same recommendation for all four strategy cards.`}
   if(snapshot.status==='pick-rule-conflict'){
     $('status').textContent=snapshot.message;
     $('strategies').innerHTML='<div class="empty">Your protected pick must appear on every strategy.<div class="actions"><a class="btn primary" href="./apps/pickem/?action=refresh-simulate">Rebuild protected-pick cards</a></div></div>';
@@ -204,10 +257,17 @@ async function bootHome(){
     $('strategies').innerHTML='<div class="empty">Your four strategies will appear here after a current-week simulation. IQ does not show last week’s card as a new recommendation.</div>';
     return;
   }
+  if(snapshot.status==='stale'){
+    $('status').textContent=snapshot.kickoffChanged?'Game status changed since the saved simulation.':snapshot.inputWarning||'Saved simulation no longer matches current inputs.';
+    const time=new Date(snapshot.ranAt).toLocaleString();
+    $('strategies').innerHTML='<div class="empty">No current recommendation. Refresh CBS and rerun the simulation before using these cards.</div>'+snapshot.cards.map(c=>`<div class="strategy stale"><strong>${esc(c.label)}</strong><span class="tag">OLD SIMULATION</span><div class="odds">${pct(c.eval.top2)} <span style="font-size:12px;font-weight:600;color:var(--muted)">Top 2</span></div><div class="secondary">Expected ${Number(c.eval.avg).toFixed(1)} points · Bottom-half risk ${pct(c.eval.bottomHalf,0)}</div><span class="foot">${esc(time)}</span></div>`).join('');
+    return;
+  }
+  const tb=tiebreakerRecommendation(live);if(tb){$('tiebreaker').classList.add('show');$('tiebreakerScore').textContent=tb.score+' points';$('tiebreakerDetail').textContent=`${tb.away} @ ${tb.home} · market total ${tb.total}. Same recommendation for all four strategy cards.`}
   const time=new Date(snapshot.ranAt).toLocaleTimeString([],{hour:'numeric',minute:'2-digit'});
   const impact=snapshot.fieldImpact,impactText=impact?.classification==='WIDELY_SHARED_LOSS'?` · ${pct(impact.samePickShare,0)} of observed entries shared the locked loss`:'';
   const protectedTeams=(state.pickRules?.mustPick||['DET']).filter(t=>state.games?.some(g=>g.away===t||g.home===t));
-  $('status').textContent=(snapshot.status==='stale'?'Refresh needed · ':'Simulated ')+time+(snapshot.inputWarning?' · '+snapshot.inputWarning:(snapshot.provisional?' · Estimated field':''))+(protectedTeams.length?' · '+protectedTeams.join('/')+' pick protected':'');
+  $('status').textContent='Simulated '+time+(snapshot.inputWarning?' · '+snapshot.inputWarning:(snapshot.provisional?' · Estimated field':''))+(protectedTeams.length?' · '+protectedTeams.join('/')+' pick protected':'');
   const recommendation=strategyAdvice(snapshot);
   if(recommendation){
     $('decision').classList.add('show');
@@ -221,9 +281,9 @@ async function bootHome(){
     $('modelRead').textContent=recommendation.summary;
   }
   const safest=snapshot.cards.find(c=>c.key==='safest');
-  $('strategies').innerHTML=snapshot.cards.map(c=>{const equivalent=c.equivalentTo?`Same card as ${STRATEGIES.find(x=>x[0]===c.equivalentTo)?.[1]||c.equivalentTo}`:null,trade=safest&&c.key!=='safest'?{top2:(c.eval.top2-safest.eval.top2)*100,win:(c.eval.win-safest.eval.win)*100,avg:c.eval.avg-safest.eval.avg,risk:(c.eval.bottomHalf-safest.eval.bottomHalf)*100}:null;return`<a class="strategy ${c.key===recommendation?.choice.key?'recommended':''} ${snapshot.status==='stale'?'stale':''}" href="${c.href}"><strong>${c.label}</strong>${c.key===recommendation?.choice.key?'<span class="rec-tag">RECOMMENDED</span>':''}${snapshot.status==='stale'?'<span class="tag">OLD SIMULATION</span>':''}<div class="odds">${pct(c.eval.top2)} <span style="font-size:12px;font-weight:600;color:var(--muted)">Top 2</span></div><div class="secondary">Win ${pct(c.eval.win)} · Avg score ${Number(c.eval.avg).toFixed(1)}<br>Bottom-half risk ${pct(c.eval.bottomHalf,0)}${equivalent?`<br>${equivalent}`:''}</div><span class="foot">View picks →</span></a>`}).join('');
+  $('strategies').innerHTML=snapshot.cards.map(c=>{const equivalent=c.equivalentTo?`Same card as ${STRATEGIES.find(x=>x[0]===c.equivalentTo)?.[1]||c.equivalentTo}`:null,trade=safest&&c.key!=='safest'?{top2:(c.eval.top2-safest.eval.top2)*100,win:(c.eval.win-safest.eval.win)*100,avg:c.eval.avg-safest.eval.avg,risk:(c.eval.bottomHalf-safest.eval.bottomHalf)*100}:null;return`<a class="strategy ${c.key===recommendation?.choice.key?'recommended':''}" href="${c.href}"><strong>${c.label}</strong>${c.key===recommendation?.choice.key?'<span class="rec-tag">RECOMMENDED</span>':''}<div class="odds">${pct(c.eval.top2)} <span style="font-size:12px;font-weight:600;color:var(--muted)">Top 2</span></div><div class="secondary">Win ${pct(c.eval.win)} · Avg score ${Number(c.eval.avg).toFixed(1)}<br>Bottom-half risk ${pct(c.eval.bottomHalf,0)}${equivalent?`<br>${equivalent}`:''}</div><span class="foot">View picks →</span></a>`}).join('');
 }
-globalThis.SFIQ_HOME_TEST={inputAgeWarning,MODEL_BUILD,strategySnapshot,strategyAdvice,strategyRecommendation,dualGoalRecommendation,validSeasonContext,seasonAwareRecommendation,tiebreakerRecommendation,chooseFreshLive,liveVersionKey};
+globalThis.SFIQ_HOME_TEST={inputAgeWarning,MODEL_BUILD,strategySnapshot,strategyAdvice,strategyRecommendation,dualGoalRecommendation,validSeasonContext,seasonAwareRecommendation,tiebreakerRecommendation,chooseFreshLive,liveVersionKey,scoreboardGameStates};
 if(!TESTING)bootHome();
 </script>
 </body>
