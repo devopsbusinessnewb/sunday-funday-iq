@@ -4,7 +4,10 @@ const path=require('path');
 const html=fs.readFileSync(path.join(__dirname,'../index.html'),'utf8');
 const js=html.split('<script>',2)[1]?.split('</script>',1)[0];
 if(!js)throw new Error('Home has no executable script');
-const context={console,globalThis:null,localStorage:{getItem:()=>null}};context.globalThis=context;context.__SFIQ_TESTING__=true;
+class TestDate extends Date{
+  static now(){return Date.parse('2026-09-27T12:30:00Z')}
+}
+const context={console,Date:TestDate,AbortController,setTimeout,clearTimeout,globalThis:null,localStorage:{getItem:()=>null}};context.globalThis=context;context.__SFIQ_TESTING__=true;
 vm.createContext(context);vm.runInContext(js.includes('if(!TESTING)bootHome()')?js:js.slice(0,js.lastIndexOf("\ndocument.querySelectorAll('.tile').forEach")),context);
 const home=context.SFIQ_HOME_TEST;
 if(!home?.strategySnapshot)throw new Error('Home does not expose saved CBS strategies');
@@ -41,6 +44,35 @@ if(home.chooseFreshLive([{season:2026,week:7,exportedAt:'2026-10-20T14:09:00Z'},
 if(home.strategySnapshot({...state,marketUpdatedAt:'2026-09-27T12:05:00Z'},{season:2026,week:3},Date.parse('2026-09-27T12:30:00Z')).status!=='stale')throw new Error('New market inputs did not stale the saved simulation');
 if(home.strategySnapshot(state,{season:2026,week:3,exportedAt:'2026-09-27T12:10:00Z'},Date.parse('2026-09-27T12:30:00Z')).status!=='stale')throw new Error('New published CBS picks did not stale the saved simulation');
 if(home.strategySnapshot(state,{season:2026,week:3},Date.parse('2026-09-29T12:00:00Z')).status!=='stale')throw new Error('Old simulation was presented as current');
+const now=Date.parse('2026-09-27T12:30:00Z');
+const publish={season:2026,week:3};
+const startedRaw={events:[{competitions:[{competitors:[
+  {homeAway:'away',team:{abbreviation:'JAC'}},{homeAway:'home',team:{abbreviation:'HOU'}}
+],status:{type:{state:'in',completed:false}}}]}]};
+const startedEvidence=home.scoreboardGameStates(startedRaw);
+if(startedEvidence.length!==1||!startedEvidence[0].started||startedEvidence[0].completed)throw Error('Authoritative live kickoff was not recognized before final');
+const newLock=JSON.parse(JSON.stringify(lockedState));
+newLock.games[0]={...newLock.games[0],away:'JAX',locked:false};
+newLock.confirmedLockedPicks=[];
+newLock.confidenceStatus='unsubmitted';
+newLock.optimization.currentSource='generated_baseline';
+if(home.strategySnapshot(newLock,publish,now,startedEvidence).status!=='locked-conflict')throw Error('Home treated an unsubmitted or generated pick as the actual newly locked pick');
+if(home.strategySnapshot(newLock,{...publish,gameState:[{away:'JAX',home:'HOU',started:true}]},now).status!=='locked-conflict')throw Error('Home missed an explicitly started game from current CBS data');
+const scheduledOnly={...publish,gameState:[{away:'JAX',home:'HOU',completed:false,statusText:'9/26 - 1:00 PM EST'}]};
+if(home.strategySnapshot(newLock,scheduledOnly,now).status!=='ready')throw Error('A schedule label alone must not lock a delayed game');
+newLock.confirmedLockedPicks=[{season:2026,week:3,away:'JAX',home:'HOU',pick:'HOU',weight:9}];
+const preKickoff=home.strategySnapshot(newLock,publish,now,startedEvidence);
+if(preKickoff.status!=='stale'||!preKickoff.kickoffChanged||home.strategyAdvice(preKickoff)!==null)throw Error('A simulation predating kickoff cannot be a current recommendation even if it matched the locked pick');
+newLock.games[0].locked=true;
+if(home.strategySnapshot(newLock,publish,now,startedEvidence).status!=='ready')throw Error('Home did not retain rebuilt strategies with the confirmed lock');
+newLock.games[0].locked=false;
+newLock.confirmedLockedPicks=[];
+newLock.confidenceStatus='submitted';
+newLock.optimization.currentSource='submitted';
+if(home.strategySnapshot(newLock,publish,now,startedEvidence).status!=='stale')throw Error('A genuinely submitted local locked pick should be retained, with a rebuild still required');
+newLock.applied=true;
+if(home.strategySnapshot(newLock,publish,now,startedEvidence).status!=='locked-conflict')throw Error('An applied IQ card masqueraded as a CBS submission');
+if(home.strategySnapshot({...state,cbsUpdatedAt:'2026-09-25T12:00:00Z'},publish,now).status!=='stale')throw Error('Do not recommend from a recent simulation that used stale CBS inputs');
 const tradeoff=home.strategyRecommendation({currentEval:{top2:.091,win:.055,bottomHalf:.45,avg:102},cards:[
   {key:'aggressive',label:'Aggressive',eval:{top2:.095,win:.06,bottomHalf:.45,avg:101.5}},
   {key:'maxUpside',label:'Max Upside',eval:{top2:.096,win:.061,bottomHalf:.47,avg:101.3}}
@@ -61,15 +93,22 @@ const seasonAware=home.seasonAwareRecommendation({week:9,cards:[
 ]},{rank:3,pointsBehindLeader:12,pointsAheadOfNext:7},9);
 if(!seasonAware?.seasonAware||seasonAware.choice.key!=='aggressive'||!seasonAware.reason.includes('Overall #3'))throw new Error('Home did not adapt recommendation to live season position');
 const nodes=Object.fromEntries(['week','status','strategies','leftDecisionLabel','rightDecisionLabel','currentOdds','currentDetail','bestStrategy','bestOdds','modelRead'].map(id=>[id,{textContent:'',innerHTML:''}]));
-nodes.decision={classList:{add:x=>nodes.decision.shown=x==='show'}};
+nodes.decision={classList:{add:x=>nodes.decision.shown=x==='show',remove:()=>nodes.decision.shown=false}};
 context.localStorage={getItem:()=>JSON.stringify(state)};
 context.fetch=async()=>({ok:true,json:async()=>({season:2026,week:3})});
 context.document={getElementById:id=>nodes[id]};
-vm.runInContext('bootHome()',context).then(()=>{
+vm.runInContext('bootHome()',context).then(async()=>{
   if(nodes.week.textContent!=='Week 3'||(nodes.strategies.innerHTML.match(/View picks/g)||[]).length!==4)throw new Error('Home does not present four usable complete-card links');
   if(!nodes.decision.shown||!nodes.currentOdds.textContent||nodes.currentOdds.textContent.includes('%')||!nodes.bestStrategy.textContent)throw new Error('Home does not show model-based season/weekly recommendation');
   if(!html.includes('href="./apps/pickem/?action=refresh-simulate"')||!html.includes('href="./legacy-home.html"')||!html.includes('href="./apps/pickem/?details=1"'))throw new Error('Home lost simulation action, focused data details, or paused fantasy access');
-  console.log('CBS home regression passed: four strategies, deep links, week and input freshness.');
+  context.fetch=async()=>({ok:true,json:async()=>({...publish,exportedAt:'2026-09-27T12:10:00Z'})});
+  await vm.runInContext('bootHome()',context);
+  if(nodes.decision.shown||!nodes.strategies.innerHTML.includes('OLD SIMULATION')||nodes.strategies.innerHTML.includes('RECOMMENDED')||nodes.strategies.innerHTML.includes('View picks'))throw Error('Stale Home must not promote or expose last-good picks as actionable');
+  context.localStorage={getItem:()=>JSON.stringify(newLock)};
+  context.fetch=async url=>({ok:true,json:async()=>url.includes('site.api.espn.com')?startedRaw:publish});
+  await vm.runInContext('bootHome()',context);
+  if(nodes.decision.shown||!nodes.strategies.innerHTML.includes('Verify locked picks')||nodes.strategies.innerHTML.includes('View picks'))throw Error('Home must block newly locked conflicts from the live scoreboard');
+  console.log('CBS home regression passed: four strategies, freshness, and live kickoff locks.');
 }).catch(e=>{console.error(e);process.exitCode=1});
 
 const screenshotAdvice=home.strategyAdvice({cards:[
