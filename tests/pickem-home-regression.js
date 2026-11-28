@@ -91,8 +91,12 @@ newLock.games[0].locked=false;
 newLock.confirmedLockedPicks=[];
 newLock.confidenceStatus='submitted';
 newLock.optimization.currentSource='submitted';
-if(home.strategySnapshot(newLock,publish,now,startedEvidence).status!=='stale')throw Error('A genuinely submitted local locked pick should be retained, with a rebuild still required');
+if(home.strategySnapshot(newLock,publish,now,startedEvidence).status!=='locked-conflict')throw Error('An unverified legacy submission label cannot authorize a new lock');
+newLock.verifiedCbsSubmission={season:2026,week:3,matchups:newLock.games.map(g=>g.away+'|'+g.home),card:newLock.optimization.strategies.safest.card};
+if(home.strategySnapshot(newLock,publish,now,startedEvidence).status!=='stale')throw Error('A genuinely verified locked pick should be retained, with a rebuild still required');
 newLock.applied=true;
+if(home.strategySnapshot(newLock,publish,now,startedEvidence).status!=='stale')throw Error('A separately verified lock should survive a local IQ application');
+delete newLock.verifiedCbsSubmission;
 if(home.strategySnapshot(newLock,publish,now,startedEvidence).status!=='locked-conflict')throw Error('An applied IQ card masqueraded as a CBS submission');
 if(home.strategySnapshot({...state,cbsUpdatedAt:'2026-09-25T12:00:00Z'},publish,now).status!=='stale')throw Error('Do not recommend from a recent simulation that used stale CBS inputs');
 const tradeoff=home.strategyRecommendation({currentEval:{top2:.091,win:.055,bottomHalf:.45,avg:102},cards:[

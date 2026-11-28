@@ -6,7 +6,7 @@ const html=fs.readFileSync(path.join(root,'apps/pickem/index.html'),'utf8');
 if(!html.includes('id="buildLabel"')) throw new Error('Pickem build label is not bound to MODEL_BUILD');
 if(!html.includes("POOL_HISTORY_URL='../../data/analysis/cbs-pool-history-report.json'"))throw new Error('Completed-pool history is not wired into the module');
 if(!html.includes('PROVISIONAL · PARTIAL POOL REVEAL')) throw new Error('Partial pool reveal label missing');
-if(!html.includes('CURRENT CARD STILL LEADS THIS SEARCH')||!html.includes('Safety → upside strategy frontier'))throw new Error('Risk-return frontier or current-card guardrail missing');
+if(!html.includes('VERIFIED CBS CARD STILL LEADS')&& !html.includes('LOCAL IQ BASELINE STILL LEADS')||!html.includes('Safety → upside strategy frontier'))throw new Error('Risk-return frontier or current-card guardrail missing');
 if(!html.includes("state.originalConfidenceStatus==='placeholder'"))throw new Error('Placeholder confidence must not be presented as a meaningful baseline');
 if(!html.includes("sfiqPickemV04")) throw new Error('Clean standings storage migration missing');
 if(!html.includes('fieldModelComplete(state)')) throw new Error('Partial field must remain provisional');
@@ -226,6 +226,42 @@ console.log('Field identity regression passed: 87 HOU-JAX observations resolve t
   if(staleIntent.status!=='unsubmitted'||staleIntent.picks.some(Boolean))throw new Error('Finished Thursday game legitimized an unverified Sunday card');
   marketCtx.importFixture.cardIntentConfirmed=true;
   await vm.runInContext('importScan(importFixture)',marketCtx);
+  if(vm.runInContext('simulationCurrentCard(state.games).source',marketCtx)!=='submitted')throw Error('Direct explicit-save CBS card was not independently verified');
+  const copy=vm.runInContext('JSON.parse(JSON.stringify(state))',marketCtx);
+  const local={};
+  const nodes=new Proxy({}, {get(o,k){return o[k]??=( {textContent:'',innerHTML:'',style:{},classList:{toggle(){},add(){},remove(){}}} )}});
+  const localCtx={console,globalThis:null,setTimeout,clearTimeout,__SFIQ_TESTING__:true,testState:copy,
+    localStorage:{getItem:k=>local[k]||null,setItem:(k,v)=>{local[k]=v}},document:{getElementById:k=>nodes[k],querySelectorAll:()=>[]}};
+  localCtx.globalThis=localCtx;
+  vm.createContext(localCtx);vm.runInContext(js,localCtx);
+  vm.runInContext(`
+    state=testState; render=()=>{}; show=()=>{}; refreshResults=async()=>true; refreshIqModel=async()=>true;
+    const scores={top2:.02,win:.01,avg:88};
+    runOptimizer=(games,poolSize,options)=>{
+      if(options.blankSlate)throw Error('Local comparison incorrectly changed optimizer math to blank mode');
+      return {recommended:options.currentCard,current:options.currentCard,currentEval:scores,recommendedEval:scores,
+        currentControl:{eval:scores},diagnostics:{material:false},strategies:{},fieldCalibration:{top2:.02}};
+    };
+    state.recommendedCard=clone(simulationCurrentCard(state.games).card);
+    [state.recommendedCard.weights[0],state.recommendedCard.weights[1]]=[state.recommendedCard.weights[1],state.recommendedCard.weights[0]];
+    applyRecommended();
+    if(simulationCurrentCard(state.games).source!=='iq_local'||!verifiedCbsCard(state.games))throw Error('Applying a recommendation lost the verified CBS reference or falsely marked the mutated card submitted');
+  `,localCtx);
+  await vm.runInContext('runSimulation()',localCtx);
+  vm.runInContext('state=loadState();renderDecision()',localCtx);
+  if(nodes.currentCardLabel.textContent!=='Local IQ baseline'||!nodes.calibrationNote.textContent.includes('CBS submission is not verified'))throw Error('Applied local baseline was mislabeled after rerun and reopen');
+  if(vm.runInContext("state.optimization.currentSource",localCtx)!=='iq_local')throw Error('Stored simulation falsely claims CBS submission');
+  vm.runInContext("state.verifiedCbsSubmission=null;state.optimization.currentSource='submitted';renderDecision()",localCtx);
+  if(nodes.currentCardLabel.textContent!=='Local IQ baseline')throw Error('Legacy cache without verification can falsely claim CBS submission');
+  localCtx.liveStatusFixture={events:[{competitions:[{competitors:[
+    {homeAway:'away',team:{abbreviation:copy.games[0].away}},
+    {homeAway:'home',team:{abbreviation:copy.games[0].home}},
+  ],status:{type:{state:'in',completed:false}}}]}]};
+  localCtx.fetch=async()=>({ok:true,json:async()=>localCtx.liveStatusFixture});
+  await vm.runInContext('state.games[0].locked=false; SFIQ_TEST.refreshResults()',localCtx);
+  if(vm.runInContext('state.games[0].weight!==null||state.games[0].pick!==null',localCtx))throw Error('Kickoff froze an IQ-only edit as an actual CBS pick');
+  vm.runInContext("state=testState;revertOriginal();state.games[0].pick=null;",localCtx);
+  if(!vm.runInContext('partialCardBlocksSimulation(state.games,state.confidenceStatus)',localCtx))throw Error('Partial local edit must still block simulation');
   vm.runInContext("Object.assign(state.games.find(g=>g.away==='SEA'&&g.home==='DEN'),{locked:true,completed:true,winner:1,pick:'DEN',weight:2});",marketCtx);
   const imported=JSON.parse(vm.runInContext('JSON.stringify(state.games)',marketCtx));
   if(imported.length!==14||imported[0].id!=='g1'||imported[0].away!=='HOU')throw new Error('Production-shaped import did not create HOU-JAX as g1');
