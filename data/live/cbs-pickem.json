@@ -5,23 +5,16 @@
   "week": 12,
   "slateSize": 16,
   "poolSize": 94,
-  "exportedAt": "2026-11-28T03:39:42.192098Z",
+  "exportedAt": "2026-11-28T05:54:39.864271Z",
   "source": "Automated local CBS browser capture",
   "privacy": "Raw CBS session/page data sanitized locally; pool/account identifiers and participant names not published.",
   "confidenceStatus": "unsubmitted",
   "cardIntentConfirmed": false,
   "cardIntentSource": null,
   "confidenceSource": "Complete CBS controls detected but no intentional save/submission confirmed",
-  "marketCapturedAt": "2026-11-28T03:39:42.192064Z",
+  "marketCapturedAt": "2026-11-28T05:54:39.864233Z",
   "marketSource": "CBS Sports odds \u2014 Week 12",
   "market": [
-    {
-      "away": "DEN",
-      "home": "PIT",
-      "awayML": -238,
-      "homeML": 205,
-      "total": 36.8
-    },
     {
       "away": "GB",
       "home": "LAR",
@@ -51,10 +44,17 @@
       "total": 46.0
     },
     {
+      "away": "DEN",
+      "home": "PIT",
+      "awayML": -238,
+      "homeML": 205,
+      "total": 36.8
+    },
+    {
       "away": "NO",
       "home": "CIN",
       "awayML": 460,
-      "homeML": -556,
+      "homeML": -549,
       "total": 48.5
     },
     {
@@ -82,7 +82,7 @@
       "away": "TEN",
       "home": "JAX",
       "awayML": 700,
-      "homeML": -943,
+      "homeML": -926,
       "total": 48.2
     },
     {
@@ -110,13 +110,13 @@
       "away": "SEA",
       "home": "SF",
       "awayML": -116,
-      "homeML": 100,
+      "homeML": 102,
       "total": 42.5
     },
     {
       "away": "LV",
       "home": "CLE",
-      "awayML": 199,
+      "awayML": 200,
       "homeML": -230,
       "total": 39.2
     },
@@ -129,13 +129,6 @@
     }
   ],
   "gameState": [
-    {
-      "away": "DEN",
-      "home": "PIT",
-      "completed": true,
-      "winner": "PIT",
-      "statusText": "Final"
-    },
     {
       "away": "GB",
       "home": "LAR",
@@ -162,6 +155,13 @@
       "home": "BUF",
       "completed": true,
       "winner": "BUF",
+      "statusText": "Final"
+    },
+    {
+      "away": "DEN",
+      "home": "PIT",
+      "completed": true,
+      "winner": "PIT",
       "statusText": "Final"
     },
     {
@@ -244,362 +244,9 @@
   ],
   "fieldModel": {
     "source": "Sanitized CBS revealed-pool observations",
-    "capturedAt": "2026-11-28T03:39:18.509554Z",
+    "capturedAt": "2026-11-28T05:54:18.376558Z",
     "observedEntries": 86,
     "locked": [
-      {
-        "key": "DEN|PIT",
-        "gameId": "DEN-PIT",
-        "away": "DEN",
-        "home": "PIT",
-        "observations": [
-          {
-            "pick": "DEN",
-            "weight": 12
-          },
-          {
-            "pick": "PIT",
-            "weight": 13
-          },
-          {
-            "pick": "PIT",
-            "weight": 12
-          },
-          {
-            "pick": "PIT",
-            "weight": 12
-          },
-          {
-            "pick": "DEN",
-            "weight": 13
-          },
-          {
-            "pick": "DEN",
-            "weight": 13
-          },
-          {
-            "pick": "DEN",
-            "weight": 6
-          },
-          {
-            "pick": "DEN",
-            "weight": 16
-          },
-          {
-            "pick": "DEN",
-            "weight": 13
-          },
-          {
-            "pick": "DEN",
-            "weight": 16
-          },
-          {
-            "pick": "DEN",
-            "weight": 7
-          },
-          {
-            "pick": "DEN",
-            "weight": 15
-          },
-          {
-            "pick": "DEN",
-            "weight": 12
-          },
-          {
-            "pick": "DEN",
-            "weight": 14
-          },
-          {
-            "pick": "DEN",
-            "weight": 15
-          },
-          {
-            "pick": "DEN",
-            "weight": 1
-          },
-          {
-            "pick": "DEN",
-            "weight": 7
-          },
-          {
-            "pick": "DEN",
-            "weight": 9
-          },
-          {
-            "pick": "DEN",
-            "weight": 12
-          },
-          {
-            "pick": "DEN",
-            "weight": 10
-          },
-          {
-            "pick": "DEN",
-            "weight": 13
-          },
-          {
-            "pick": "DEN",
-            "weight": 10
-          },
-          {
-            "pick": "PIT",
-            "weight": 2
-          },
-          {
-            "pick": "DEN",
-            "weight": 10
-          },
-          {
-            "pick": "DEN",
-            "weight": 9
-          },
-          {
-            "pick": "DEN",
-            "weight": 7
-          },
-          {
-            "pick": "DEN",
-            "weight": 14
-          },
-          {
-            "pick": "DEN",
-            "weight": 14
-          },
-          {
-            "pick": "DEN",
-            "weight": 12
-          },
-          {
-            "pick": "DEN",
-            "weight": 4
-          },
-          {
-            "pick": "DEN",
-            "weight": 6
-          },
-          {
-            "pick": "PIT",
-            "weight": 4
-          },
-          {
-            "pick": "DEN",
-            "weight": 9
-          },
-          {
-            "pick": "PIT",
-            "weight": 9
-          },
-          {
-            "pick": "DEN",
-            "weight": 13
-          },
-          {
-            "pick": "DEN",
-            "weight": 12
-          },
-          {
-            "pick": "DEN",
-            "weight": 14
-          },
-          {
-            "pick": "PIT",
-            "weight": 4
-          },
-          {
-            "pick": "DEN",
-            "weight": 16
-          },
-          {
-            "pick": "DEN",
-            "weight": 8
-          },
-          {
-            "pick": "DEN",
-            "weight": 7
-          },
-          {
-            "pick": "DEN",
-            "weight": 7
-          },
-          {
-            "pick": "DEN",
-            "weight": 5
-          },
-          {
-            "pick": "DEN",
-            "weight": 10
-          },
-          {
-            "pick": "DEN",
-            "weight": 12
-          },
-          {
-            "pick": "PIT",
-            "weight": 11
-          },
-          {
-            "pick": "DEN",
-            "weight": 10
-          },
-          {
-            "pick": "DEN",
-            "weight": 12
-          },
-          {
-            "pick": "DEN",
-            "weight": 6
-          },
-          {
-            "pick": "DEN",
-            "weight": 8
-          },
-          {
-            "pick": "DEN",
-            "weight": 12
-          },
-          {
-            "pick": "DEN",
-            "weight": 5
-          },
-          {
-            "pick": "PIT",
-            "weight": 4
-          },
-          {
-            "pick": "PIT",
-            "weight": 4
-          },
-          {
-            "pick": "DEN",
-            "weight": 8
-          },
-          {
-            "pick": "DEN",
-            "weight": 13
-          },
-          {
-            "pick": "DEN",
-            "weight": 16
-          },
-          {
-            "pick": "DEN",
-            "weight": 7
-          },
-          {
-            "pick": "DEN",
-            "weight": 8
-          },
-          {
-            "pick": "DEN",
-            "weight": 15
-          },
-          {
-            "pick": "DEN",
-            "weight": 8
-          },
-          {
-            "pick": "DEN",
-            "weight": 4
-          },
-          {
-            "pick": "DEN",
-            "weight": 8
-          },
-          {
-            "pick": "DEN",
-            "weight": 11
-          },
-          {
-            "pick": "DEN",
-            "weight": 8
-          },
-          {
-            "pick": "DEN",
-            "weight": 8
-          },
-          {
-            "pick": "DEN",
-            "weight": 16
-          },
-          {
-            "pick": "DEN",
-            "weight": 8
-          },
-          {
-            "pick": "DEN",
-            "weight": 5
-          },
-          {
-            "pick": "DEN",
-            "weight": 9
-          },
-          {
-            "pick": "DEN",
-            "weight": 6
-          },
-          {
-            "pick": "DEN",
-            "weight": 15
-          },
-          {
-            "pick": "DEN",
-            "weight": 9
-          },
-          {
-            "pick": "DEN",
-            "weight": 14
-          },
-          {
-            "pick": "DEN",
-            "weight": 13
-          },
-          {
-            "pick": "DEN",
-            "weight": 13
-          },
-          {
-            "pick": "DEN",
-            "weight": 10
-          },
-          {
-            "pick": "DEN",
-            "weight": 13
-          },
-          {
-            "pick": "DEN",
-            "weight": 9
-          },
-          {
-            "pick": "DEN",
-            "weight": 11
-          },
-          {
-            "pick": "DEN",
-            "weight": 11
-          },
-          {
-            "pick": "DEN",
-            "weight": 14
-          },
-          {
-            "pick": "DEN",
-            "weight": 10
-          },
-          {
-            "pick": "DEN",
-            "weight": 12
-          },
-          {
-            "pick": "DEN",
-            "weight": 14
-          },
-          {
-            "pick": "DEN",
-            "weight": 13
-          }
-        ],
-        "totalObserved": 86
-      },
       {
         "key": "GB|LAR",
         "gameId": "GB-LAR",
@@ -1939,6 +1586,359 @@
           }
         ],
         "totalObserved": 86
+      },
+      {
+        "key": "DEN|PIT",
+        "gameId": "DEN-PIT",
+        "away": "DEN",
+        "home": "PIT",
+        "observations": [
+          {
+            "pick": "DEN",
+            "weight": 12
+          },
+          {
+            "pick": "PIT",
+            "weight": 13
+          },
+          {
+            "pick": "PIT",
+            "weight": 12
+          },
+          {
+            "pick": "PIT",
+            "weight": 12
+          },
+          {
+            "pick": "DEN",
+            "weight": 13
+          },
+          {
+            "pick": "DEN",
+            "weight": 13
+          },
+          {
+            "pick": "DEN",
+            "weight": 6
+          },
+          {
+            "pick": "DEN",
+            "weight": 16
+          },
+          {
+            "pick": "DEN",
+            "weight": 13
+          },
+          {
+            "pick": "DEN",
+            "weight": 16
+          },
+          {
+            "pick": "DEN",
+            "weight": 7
+          },
+          {
+            "pick": "DEN",
+            "weight": 15
+          },
+          {
+            "pick": "DEN",
+            "weight": 12
+          },
+          {
+            "pick": "DEN",
+            "weight": 14
+          },
+          {
+            "pick": "DEN",
+            "weight": 15
+          },
+          {
+            "pick": "DEN",
+            "weight": 1
+          },
+          {
+            "pick": "DEN",
+            "weight": 7
+          },
+          {
+            "pick": "DEN",
+            "weight": 9
+          },
+          {
+            "pick": "DEN",
+            "weight": 12
+          },
+          {
+            "pick": "DEN",
+            "weight": 10
+          },
+          {
+            "pick": "DEN",
+            "weight": 13
+          },
+          {
+            "pick": "DEN",
+            "weight": 10
+          },
+          {
+            "pick": "PIT",
+            "weight": 2
+          },
+          {
+            "pick": "DEN",
+            "weight": 10
+          },
+          {
+            "pick": "DEN",
+            "weight": 9
+          },
+          {
+            "pick": "DEN",
+            "weight": 7
+          },
+          {
+            "pick": "DEN",
+            "weight": 14
+          },
+          {
+            "pick": "DEN",
+            "weight": 14
+          },
+          {
+            "pick": "DEN",
+            "weight": 12
+          },
+          {
+            "pick": "DEN",
+            "weight": 4
+          },
+          {
+            "pick": "DEN",
+            "weight": 6
+          },
+          {
+            "pick": "PIT",
+            "weight": 4
+          },
+          {
+            "pick": "DEN",
+            "weight": 9
+          },
+          {
+            "pick": "PIT",
+            "weight": 9
+          },
+          {
+            "pick": "DEN",
+            "weight": 13
+          },
+          {
+            "pick": "DEN",
+            "weight": 12
+          },
+          {
+            "pick": "DEN",
+            "weight": 14
+          },
+          {
+            "pick": "PIT",
+            "weight": 4
+          },
+          {
+            "pick": "DEN",
+            "weight": 16
+          },
+          {
+            "pick": "DEN",
+            "weight": 8
+          },
+          {
+            "pick": "DEN",
+            "weight": 7
+          },
+          {
+            "pick": "DEN",
+            "weight": 7
+          },
+          {
+            "pick": "DEN",
+            "weight": 5
+          },
+          {
+            "pick": "DEN",
+            "weight": 10
+          },
+          {
+            "pick": "DEN",
+            "weight": 12
+          },
+          {
+            "pick": "PIT",
+            "weight": 11
+          },
+          {
+            "pick": "DEN",
+            "weight": 10
+          },
+          {
+            "pick": "DEN",
+            "weight": 12
+          },
+          {
+            "pick": "DEN",
+            "weight": 6
+          },
+          {
+            "pick": "DEN",
+            "weight": 8
+          },
+          {
+            "pick": "DEN",
+            "weight": 12
+          },
+          {
+            "pick": "DEN",
+            "weight": 5
+          },
+          {
+            "pick": "PIT",
+            "weight": 4
+          },
+          {
+            "pick": "PIT",
+            "weight": 4
+          },
+          {
+            "pick": "DEN",
+            "weight": 8
+          },
+          {
+            "pick": "DEN",
+            "weight": 13
+          },
+          {
+            "pick": "DEN",
+            "weight": 16
+          },
+          {
+            "pick": "DEN",
+            "weight": 7
+          },
+          {
+            "pick": "DEN",
+            "weight": 8
+          },
+          {
+            "pick": "DEN",
+            "weight": 15
+          },
+          {
+            "pick": "DEN",
+            "weight": 8
+          },
+          {
+            "pick": "DEN",
+            "weight": 4
+          },
+          {
+            "pick": "DEN",
+            "weight": 8
+          },
+          {
+            "pick": "DEN",
+            "weight": 11
+          },
+          {
+            "pick": "DEN",
+            "weight": 8
+          },
+          {
+            "pick": "DEN",
+            "weight": 8
+          },
+          {
+            "pick": "DEN",
+            "weight": 16
+          },
+          {
+            "pick": "DEN",
+            "weight": 8
+          },
+          {
+            "pick": "DEN",
+            "weight": 5
+          },
+          {
+            "pick": "DEN",
+            "weight": 9
+          },
+          {
+            "pick": "DEN",
+            "weight": 6
+          },
+          {
+            "pick": "DEN",
+            "weight": 15
+          },
+          {
+            "pick": "DEN",
+            "weight": 9
+          },
+          {
+            "pick": "DEN",
+            "weight": 14
+          },
+          {
+            "pick": "DEN",
+            "weight": 13
+          },
+          {
+            "pick": "DEN",
+            "weight": 13
+          },
+          {
+            "pick": "DEN",
+            "weight": 10
+          },
+          {
+            "pick": "DEN",
+            "weight": 13
+          },
+          {
+            "pick": "DEN",
+            "weight": 9
+          },
+          {
+            "pick": "DEN",
+            "weight": 11
+          },
+          {
+            "pick": "DEN",
+            "weight": 11
+          },
+          {
+            "pick": "DEN",
+            "weight": 14
+          },
+          {
+            "pick": "DEN",
+            "weight": 10
+          },
+          {
+            "pick": "DEN",
+            "weight": 12
+          },
+          {
+            "pick": "DEN",
+            "weight": 14
+          },
+          {
+            "pick": "DEN",
+            "weight": 13
+          }
+        ],
+        "totalObserved": 86
       }
     ]
   },
@@ -1946,19 +1946,19 @@
     {
       "title": "NFL Football Tourney | Picks",
       "url": "sanitized://cbs-pickem/week-12",
-      "ts": "2026-11-28T03:39:12.142708Z",
-      "text": "CBS Pickem sanitized ownership\n0-0\nDEN\n91%\n0-0\nPIT\n9%\n0-0\nGB\n42%\n0-0\nLAR\n58%\n0-0\nCHI\n48%\n0-0\nDET\n52%\n0-0\nPHI\n7%\n0-0\nDAL\n93%\n0-0\nKC\n23%\n0-0\nBUF\n77%\n0-0\nNO\n1%\n0-0\nCIN\n99%\n0-0\nNYG\n96%\n0-0\nIND\n4%\n0-0\nNYJ\n85%\n0-0\nMIA\n15%\n0-0\nATL\n2%\n0-0\nMIN\n98%\n0-0\nTEN\n1%\n0-0\nJAX\n99%\n0-0\nBAL\n9%\n0-0\nHOU\n91%\n0-0\nNE\n69%\n0-0\nLAC\n31%\n0-0\nWAS\n93%\n0-0\nARI\n7%\n0-0\nSEA\n11%\n0-0\nSF\n89%\n0-0\nLV\n16%\n0-0\nCLE\n84%\n0-0\nCAR\n43%\n0-0\nTB\n57%"
+      "ts": "2026-11-28T05:54:10.765741Z",
+      "text": "CBS Pickem sanitized ownership\n0-0\nGB\n42%\n0-0\nLAR\n58%\n0-0\nCHI\n48%\n0-0\nDET\n52%\n0-0\nPHI\n7%\n0-0\nDAL\n93%\n0-0\nKC\n23%\n0-0\nBUF\n77%\n0-0\nDEN\n91%\n0-0\nPIT\n9%\n0-0\nNO\n1%\n0-0\nCIN\n99%\n0-0\nNYG\n96%\n0-0\nIND\n4%\n0-0\nNYJ\n85%\n0-0\nMIA\n15%\n0-0\nATL\n2%\n0-0\nMIN\n98%\n0-0\nTEN\n1%\n0-0\nJAX\n99%\n0-0\nBAL\n9%\n0-0\nHOU\n91%\n0-0\nNE\n69%\n0-0\nLAC\n31%\n0-0\nWAS\n93%\n0-0\nARI\n7%\n0-0\nSEA\n11%\n0-0\nSF\n89%\n0-0\nLV\n16%\n0-0\nCLE\n84%\n0-0\nCAR\n43%\n0-0\nTB\n57%"
     },
     {
       "title": "NFL Football Tourney | Weekly Standings",
       "url": "sanitized://cbs-pickem/week-12/standings/weekly",
-      "ts": "2026-11-28T03:39:18.509554Z",
-      "text": "Weekly Standings\nSanitized observations\nSUN\nDEN\nPIT\nSUN\nGB\nLAR\nSUN\nCHI\nDET\nSUN\nPHI\nDAL\nSUN\nKC\nBUF\nSUN\nNO\nCIN\nSUN\nNYG\nIND\nSUN\nNYJ\nMIA\nSUN\nATL\nMIN\nSUN\nTEN\nJAX\nSUN\nBAL\nHOU\nSUN\nNE\nLAC\nSUN\nWAS\nARI\nSUN\nSEA\nSF\nSUN\nLV\nCLE\nSUN\nCAR\nTB\nDEN\n(12)\nPIT\n(13)\nPIT\n(12)\nPIT\n(12)\nDEN\n(13)\nDEN\n(13)\nDEN\n(6)\nDEN\n(16)\nDEN\n(13)\nDEN\n(16)\nDEN\n(7)\nDEN\n(15)\nDEN\n(12)\nDEN\n(14)\nDEN\n(15)\nDEN\n(1)\nDEN\n(7)\nDEN\n(9)\nDEN\n(12)\nDEN\n(10)\nDEN\n(13)\nDEN\n(10)\nPIT\n(2)\nDEN\n(10)\nDEN\n(9)\nDEN\n(7)\nDEN\n(14)\nDEN\n(14)\nDEN\n(12)\nDEN\n(4)\nDEN\n(6)\nPIT\n(4)\nDEN\n(9)\nPIT\n(9)\nDEN\n(13)\nDEN\n(12)\nDEN\n(14)\nPIT\n(4)\nDEN\n(16)\nDEN\n(8)\nDEN\n(7)\nDEN\n(7)\nDEN\n(5)\nDEN\n(10)\nDEN\n(12)\nPIT\n(11)\nDEN\n(10)\nDEN\n(12)\nDEN\n(6)\nDEN\n(8)\nDEN\n(12)\nDEN\n(5)\nPIT\n(4)\nPIT\n(4)\nDEN\n(8)\nDEN\n(13)\nDEN\n(16)\nDEN\n(7)\nDEN\n(8)\nDEN\n(15)\nDEN\n(8)\nDEN\n(4)\nDEN\n(8)\nDEN\n(11)\nDEN\n(8)\nDEN\n(8)\nDEN\n(16)\nDEN\n(8)\nDEN\n(5)\nDEN\n(9)\nDEN\n(6)\nDEN\n(15)\nDEN\n(9)\nDEN\n(14)\nDEN\n(13)\nDEN\n(13)\nDEN\n(10)\nDEN\n(13)\nDEN\n(9)\nDEN\n(11)\nDEN\n(11)\nDEN\n(14)\nDEN\n(10)\nDEN\n(12)\nDEN\n(14)\nDEN\n(13)\nLAR\n(16)\nLAR\n(16)\nLAR\n(12)\nLAR\n(15)\nLAR\n(13)\nLAR\n(4)\nLAR\n(4)\nLAR\n(11)\nLAR\n(16)\nGB\n(16)\nLAR\n(13)\nLAR\n(9)\nLAR\n(1)\nGB\n(7)\nLAR\n(8)\nLAR\n(15)\nLAR\n(6)\nLAR\n(15)\nGB\n(5)\nLAR\n(9)\nLAR\n(14)\nLAR\n(8)\nGB\n(3)\nGB\n(16)\nLAR\n(5)\nGB\n(10)\nGB\n(3)\nLAR\n(14)\nGB\n(16)\nLAR\n(5)\nLAR\n(9)\nGB\n(6)\nLAR\n(1)\nLAR\n(4)\nLAR\n(3)\nGB\n(2)\nLAR\n(8)\nGB\n(14)\nLAR\n(9)\nGB\n(1)\nLAR\n(5)\nGB\n(2)\nLAR\n(4)\nGB\n(3)\nLAR\n(1)\nLAR\n(3)\nGB\n(9)\nLAR\n(2)\nLAR\n(5)\nLAR\n(3)\nGB\n(2)\nGB\n(1)\nGB\n(16)\nLAR\n(6)\nLAR\n(2)\nGB\n(5)\nGB\n(3)\nGB\n(4)\nGB\n(3)\nGB\n(7)\nLAR\n(1)\nGB\n(6)\nLAR\n(1)\nGB\n(16)\nGB\n(1)\nGB\n(1)\nGB\n(10)\nGB\n(2)\nGB\n(4)\nGB\n(16)\nGB\n(14)\nGB\n(16)\nCHI\n(15)\nCHI\n(16)\nDET\n(15)\nCHI\n(7)\nCHI\n(10)\nCHI\n(14)\nCHI\n(12)\nCHI\n(14)\nCHI\n(16)\nCHI\n(13)\nCHI\n(10)\nCHI\n(10)\nCHI\n(15)\nDET\n(9)\nCHI\n(16)\nDET\n(3)\nCHI\n(2)\nCHI\n(12)\nDET\n(9)\nDET\n(6)\nCHI\n(12)\nCHI\n(2)\nCHI\n(6)\nDET\n(2)\nDET\n(13)\nDET\n(16)\nDET\n(1)\nCHI\n(15)\nCHI\n(3)\nCHI\n(9)\nCHI\n(10)\nDET\n(10)\nDET\n(16)\nDET\n(15)\nCHI\n(8)\nDET\n(2)\nCHI\n(13)\nDET\n(2)\nCHI\n(2)\nCHI\n(4)\nDET\n(2)\nCHI\n(3)\nDET\n(5)\nCHI\n(1)\nCHI\n(4)\nDET\n(1)\nDET\n(3)\nCHI\n(2)\nDET\n(3)\nDET\n(2)\nCHI\n(5)\nCHI\n(5)\nCHI\n(1)\nDET\n(4)\nCHI\n(9)\nCHI\n(5)\nCHI\n(1)\nDET\n(2)\nDET\n(1)\nCHI\n(3)\nCHI\n(3)\nCHI\n(2)\nCHI\n(2)\nDET\n(3)\nCHI\n(1)\nCHI\n(6)\nDET\n(4)\nDET\n(12)\nCHI\n(5)\nCHI\n(5)\nDET\n(2)\nDET\n(1)\nDET\n(2)\nCHI\n(1)\nDET\n(2)\nDET\n(2)\nDET\n(7)\nDET\n(10)\nDET\n(12)\nDET\n(13)\nDET\n(13)\nDET\n(15)\nDET\n(16)\nDAL\n(14)\nDAL\n(15)\nDAL\n(14)\nPHI\n(9)\nPHI\n(3)\nDAL\n(12)\nDAL\n(10)\nDAL\n(15)\nDAL\n(15)\nDAL\n(3)\nDAL\n(9)\nDAL\n(5)\nDAL\n(14)\nDAL\n(16)\nDAL\n(12)\nDAL\n(16)\nPHI\n(15)\nDAL\n(11)\nDAL\n(11)\nDAL\n(12)\nDAL\n(9)\nDAL\n(7)\nDAL\n(15)\nDAL\n(12)\nDAL\n(11)\nDAL\n(15)\nDAL\n(16)\nDAL\n(16)\nDAL\n(14)\nDAL\n(14)\nDAL\n(12)\nDAL\n(13)\nDAL\n(11)\nDAL\n(15)\nDAL\n(14)\nDAL\n(11)\nDAL\n(3)\nDAL\n(12)\nDAL\n(3)\nDAL\n(14)\nDAL\n(14)\nDAL\n(11)\nDAL\n(16)\nDAL\n(16)\nDAL\n(13)\nDAL\n(13)\nDAL\n(11)\nDAL\n(13)\nDAL\n(14)\nDAL\n(13)\nDAL\n(12)\nDAL\n(15)\nDAL\n(14)\nDAL\n(11)\nDAL\n(14)\nDAL\n(15)\nDAL\n(14)\nDAL\n(11)\nDAL\n(11)\nDAL\n(11)\nDAL\n(14)\nDAL\n(12)\nDAL\n(7)\nDAL\n(6)\nDAL\n(14)\nDAL\n(12)\nDAL\n(13)\nDAL\n(14)\nDAL\n(10)\nDAL\n(14)\nDAL\n(6)\nDAL\n(10)\nDAL\n(16)\nDAL\n(5)\nDAL\n(14)\nDAL\n(11)\nDAL\n(16)\nDAL\n(15)\nDAL\n(14)\nDAL\n(16)\nDAL\n(12)\nDAL\n(12)\nDAL\n(14)\nDAL\n(16)\nDAL\n(15)\nBUF\n(13)\nBUF\n(14)\nBUF\n(13)\nBUF\n(10)\nBUF\n(9)\nBUF\n(4)\nBUF\n(7)\nBUF\n(13)\nBUF\n(14)\nBUF\n(12)\nBUF\n(8)\nBUF\n(3)\nBUF\n(13)\nBUF\n(12)\nBUF\n(9)\nBUF\n(15)\nBUF\n(4)\nBUF\n(10)\nBUF\n(13)\nBUF\n(5)\nKC\n(11)\nBUF\n(1)\nBUF\n(10)\nBUF\n(8)\nBUF\n(3)\nBUF\n(9)\nBUF\n(15)\nBUF\n(15)\nKC\n(13)\nBUF\n(6)\nBUF\n(5)\nKC\n(5)\nKC\n(3)\nBUF\n(5)\nBUF\n(14)\nBUF\n(13)\nKC\n(10)\nKC\n(1)\nKC\n(4)\nBUF\n(12)\nBUF\n(6)\nBUF\n(5)\nBUF\n(12)\nBUF\n(9)\nBUF\n(4)\nKC\n(12)\nBUF\n(7)\nBUF\n(2)\nBUF\n(11)\nBUF\n(3)\nBUF\n(10)\nBUF\n(6)\nBUF\n(1)\nKC\n(6)\nBUF\n(5)\nBUF\n(9)\nKC\n(5)\nBUF\n(4)\nBUF\n(5)\nBUF\n(3)\nBUF\n(5)\nBUF\n(5)\nBUF\n(4)\nBUF\n(5)\nBUF\n(4)\nKC\n(1)\nBUF\n(3)\nKC\n(4)\nBUF\n(6)\nBUF\n(6)\nKC\n(4)\nKC\n(4)\nBUF\n(4)\nBUF\n(2)\nKC\n(4)\nKC\n(4)\nKC\n(16)\nKC\n(15)\nKC\n(4)\nKC\n(3)\nKC\n(7)\nKC\n(11)\nKC\n(11)\nKC\n(13)\nKC\n(15)\nKC\n(14)"
+      "ts": "2026-11-28T05:54:18.376558Z",
+      "text": "Weekly Standings\nSanitized observations\nSUN\nGB\nLAR\nSUN\nCHI\nDET\nSUN\nPHI\nDAL\nSUN\nKC\nBUF\nSUN\nDEN\nPIT\nSUN\nNO\nCIN\nSUN\nNYG\nIND\nSUN\nNYJ\nMIA\nSUN\nATL\nMIN\nSUN\nTEN\nJAX\nSUN\nBAL\nHOU\nSUN\nNE\nLAC\nSUN\nWAS\nARI\nSUN\nSEA\nSF\nSUN\nLV\nCLE\nSUN\nCAR\nTB\nLAR\n(16)\nLAR\n(16)\nLAR\n(12)\nLAR\n(15)\nLAR\n(13)\nLAR\n(4)\nLAR\n(4)\nLAR\n(11)\nLAR\n(16)\nGB\n(16)\nLAR\n(13)\nLAR\n(9)\nLAR\n(1)\nGB\n(7)\nLAR\n(8)\nLAR\n(15)\nLAR\n(6)\nLAR\n(15)\nGB\n(5)\nLAR\n(9)\nLAR\n(14)\nLAR\n(8)\nGB\n(3)\nGB\n(16)\nLAR\n(5)\nGB\n(10)\nGB\n(3)\nLAR\n(14)\nGB\n(16)\nLAR\n(5)\nLAR\n(9)\nGB\n(6)\nLAR\n(1)\nLAR\n(4)\nLAR\n(3)\nGB\n(2)\nLAR\n(8)\nGB\n(14)\nLAR\n(9)\nGB\n(1)\nLAR\n(5)\nGB\n(2)\nLAR\n(4)\nGB\n(3)\nLAR\n(1)\nLAR\n(3)\nGB\n(9)\nLAR\n(2)\nLAR\n(5)\nLAR\n(3)\nGB\n(2)\nGB\n(1)\nGB\n(16)\nLAR\n(6)\nLAR\n(2)\nGB\n(5)\nGB\n(3)\nGB\n(4)\nGB\n(3)\nGB\n(7)\nLAR\n(1)\nGB\n(6)\nLAR\n(1)\nGB\n(16)\nGB\n(1)\nGB\n(1)\nGB\n(10)\nGB\n(2)\nGB\n(4)\nGB\n(16)\nGB\n(14)\nGB\n(16)\nCHI\n(15)\nCHI\n(16)\nDET\n(15)\nCHI\n(7)\nCHI\n(10)\nCHI\n(14)\nCHI\n(12)\nCHI\n(14)\nCHI\n(16)\nCHI\n(13)\nCHI\n(10)\nCHI\n(10)\nCHI\n(15)\nDET\n(9)\nCHI\n(16)\nDET\n(3)\nCHI\n(2)\nCHI\n(12)\nDET\n(9)\nDET\n(6)\nCHI\n(12)\nCHI\n(2)\nCHI\n(6)\nDET\n(2)\nDET\n(13)\nDET\n(16)\nDET\n(1)\nCHI\n(15)\nCHI\n(3)\nCHI\n(9)\nCHI\n(10)\nDET\n(10)\nDET\n(16)\nDET\n(15)\nCHI\n(8)\nDET\n(2)\nCHI\n(13)\nDET\n(2)\nCHI\n(2)\nCHI\n(4)\nDET\n(2)\nCHI\n(3)\nDET\n(5)\nCHI\n(1)\nCHI\n(4)\nDET\n(1)\nDET\n(3)\nCHI\n(2)\nDET\n(3)\nDET\n(2)\nCHI\n(5)\nCHI\n(5)\nCHI\n(1)\nDET\n(4)\nCHI\n(9)\nCHI\n(5)\nCHI\n(1)\nDET\n(2)\nDET\n(1)\nCHI\n(3)\nCHI\n(3)\nCHI\n(2)\nCHI\n(2)\nDET\n(3)\nCHI\n(1)\nCHI\n(6)\nDET\n(4)\nDET\n(12)\nCHI\n(5)\nCHI\n(5)\nDET\n(2)\nDET\n(1)\nDET\n(2)\nCHI\n(1)\nDET\n(2)\nDET\n(2)\nDET\n(7)\nDET\n(10)\nDET\n(12)\nDET\n(13)\nDET\n(13)\nDET\n(15)\nDET\n(16)\nDAL\n(14)\nDAL\n(15)\nDAL\n(14)\nPHI\n(9)\nPHI\n(3)\nDAL\n(12)\nDAL\n(10)\nDAL\n(15)\nDAL\n(15)\nDAL\n(3)\nDAL\n(9)\nDAL\n(5)\nDAL\n(14)\nDAL\n(16)\nDAL\n(12)\nDAL\n(16)\nPHI\n(15)\nDAL\n(11)\nDAL\n(11)\nDAL\n(12)\nDAL\n(9)\nDAL\n(7)\nDAL\n(15)\nDAL\n(12)\nDAL\n(11)\nDAL\n(15)\nDAL\n(16)\nDAL\n(16)\nDAL\n(14)\nDAL\n(14)\nDAL\n(12)\nDAL\n(13)\nDAL\n(11)\nDAL\n(15)\nDAL\n(14)\nDAL\n(11)\nDAL\n(3)\nDAL\n(12)\nDAL\n(3)\nDAL\n(14)\nDAL\n(14)\nDAL\n(11)\nDAL\n(16)\nDAL\n(16)\nDAL\n(13)\nDAL\n(13)\nDAL\n(11)\nDAL\n(13)\nDAL\n(14)\nDAL\n(13)\nDAL\n(12)\nDAL\n(15)\nDAL\n(14)\nDAL\n(11)\nDAL\n(14)\nDAL\n(15)\nDAL\n(14)\nDAL\n(11)\nDAL\n(11)\nDAL\n(11)\nDAL\n(14)\nDAL\n(12)\nDAL\n(7)\nDAL\n(6)\nDAL\n(14)\nDAL\n(12)\nDAL\n(13)\nDAL\n(14)\nDAL\n(10)\nDAL\n(14)\nDAL\n(6)\nDAL\n(10)\nDAL\n(16)\nDAL\n(5)\nDAL\n(14)\nDAL\n(11)\nDAL\n(16)\nDAL\n(15)\nDAL\n(14)\nDAL\n(16)\nDAL\n(12)\nDAL\n(12)\nDAL\n(14)\nDAL\n(16)\nDAL\n(15)\nBUF\n(13)\nBUF\n(14)\nBUF\n(13)\nBUF\n(10)\nBUF\n(9)\nBUF\n(4)\nBUF\n(7)\nBUF\n(13)\nBUF\n(14)\nBUF\n(12)\nBUF\n(8)\nBUF\n(3)\nBUF\n(13)\nBUF\n(12)\nBUF\n(9)\nBUF\n(15)\nBUF\n(4)\nBUF\n(10)\nBUF\n(13)\nBUF\n(5)\nKC\n(11)\nBUF\n(1)\nBUF\n(10)\nBUF\n(8)\nBUF\n(3)\nBUF\n(9)\nBUF\n(15)\nBUF\n(15)\nKC\n(13)\nBUF\n(6)\nBUF\n(5)\nKC\n(5)\nKC\n(3)\nBUF\n(5)\nBUF\n(14)\nBUF\n(13)\nKC\n(10)\nKC\n(1)\nKC\n(4)\nBUF\n(12)\nBUF\n(6)\nBUF\n(5)\nBUF\n(12)\nBUF\n(9)\nBUF\n(4)\nKC\n(12)\nBUF\n(7)\nBUF\n(2)\nBUF\n(11)\nBUF\n(3)\nBUF\n(10)\nBUF\n(6)\nBUF\n(1)\nKC\n(6)\nBUF\n(5)\nBUF\n(9)\nKC\n(5)\nBUF\n(4)\nBUF\n(5)\nBUF\n(3)\nBUF\n(5)\nBUF\n(5)\nBUF\n(4)\nBUF\n(5)\nBUF\n(4)\nKC\n(1)\nBUF\n(3)\nKC\n(4)\nBUF\n(6)\nBUF\n(6)\nKC\n(4)\nKC\n(4)\nBUF\n(4)\nBUF\n(2)\nKC\n(4)\nKC\n(4)\nKC\n(16)\nKC\n(15)\nKC\n(4)\nKC\n(3)\nKC\n(7)\nKC\n(11)\nKC\n(11)\nKC\n(13)\nKC\n(15)\nKC\n(14)\nDEN\n(12)\nPIT\n(13)\nPIT\n(12)\nPIT\n(12)\nDEN\n(13)\nDEN\n(13)\nDEN\n(6)\nDEN\n(16)\nDEN\n(13)\nDEN\n(16)\nDEN\n(7)\nDEN\n(15)\nDEN\n(12)\nDEN\n(14)\nDEN\n(15)\nDEN\n(1)\nDEN\n(7)\nDEN\n(9)\nDEN\n(12)\nDEN\n(10)\nDEN\n(13)\nDEN\n(10)\nPIT\n(2)\nDEN\n(10)\nDEN\n(9)\nDEN\n(7)\nDEN\n(14)\nDEN\n(14)\nDEN\n(12)\nDEN\n(4)\nDEN\n(6)\nPIT\n(4)\nDEN\n(9)\nPIT\n(9)\nDEN\n(13)\nDEN\n(12)\nDEN\n(14)\nPIT\n(4)\nDEN\n(16)\nDEN\n(8)\nDEN\n(7)\nDEN\n(7)\nDEN\n(5)\nDEN\n(10)\nDEN\n(12)\nPIT\n(11)\nDEN\n(10)\nDEN\n(12)\nDEN\n(6)\nDEN\n(8)\nDEN\n(12)\nDEN\n(5)\nPIT\n(4)\nPIT\n(4)\nDEN\n(8)\nDEN\n(13)\nDEN\n(16)\nDEN\n(7)\nDEN\n(8)\nDEN\n(15)\nDEN\n(8)\nDEN\n(4)\nDEN\n(8)\nDEN\n(11)\nDEN\n(8)\nDEN\n(8)\nDEN\n(16)\nDEN\n(8)\nDEN\n(5)\nDEN\n(9)\nDEN\n(6)\nDEN\n(15)\nDEN\n(9)\nDEN\n(14)\nDEN\n(13)\nDEN\n(13)\nDEN\n(10)\nDEN\n(13)\nDEN\n(9)\nDEN\n(11)\nDEN\n(11)\nDEN\n(14)\nDEN\n(10)\nDEN\n(12)\nDEN\n(14)\nDEN\n(13)"
     }
   ],
   "seasonContext": {
     "source": "Authenticated CBS overall standings",
-    "capturedAt": "2026-11-28T03:39:29.049473Z",
+    "capturedAt": "2026-11-28T05:54:29.105932Z",
     "rank": 6,
     "points": 91,
     "leaderPoints": 121,
